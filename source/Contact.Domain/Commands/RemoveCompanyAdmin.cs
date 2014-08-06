@@ -1,14 +1,12 @@
-﻿using System;
-using Contact.Domain.ValueTypes;
-
-namespace Contact.Domain.Commands
+﻿namespace Contact.Domain.Commands
 {
     public class RemoveCompanyAdmin : Command
     {
-        public RemoveCompanyAdmin(DateTime created, Person createdBy, String correlationId, Int32 basedOnVersion)
-            : base(created, createdBy, correlationId, basedOnVersion)
+        public string AdminId { get; private set; }
+
+        public RemoveCompanyAdmin(string adminId)
         {
-            //TODO: Implement
+            AdminId = adminId;
         }
     }
 }

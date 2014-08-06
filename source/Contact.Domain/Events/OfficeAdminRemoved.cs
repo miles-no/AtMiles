@@ -1,12 +1,8 @@
-﻿using System;
-using Contact.Domain.ValueTypes;
-
-namespace Contact.Domain.Events
+﻿namespace Contact.Domain.Events
 {
     public class OfficeAdminRemoved : Event
     {
-        public OfficeAdminRemoved(DateTime created, Person createdBy, String correlationId)
-            : base(created, createdBy, correlationId)
+        public OfficeAdminRemoved()
         {
             //TODO: Implement
         }

@@ -5,11 +5,16 @@ namespace Contact.Domain
 {
     public abstract class AggregateRoot
     {
-        public const int IgnoreVersion = -2;
+        //public const int IgnoreVersion = -2;
         private readonly List<Event> _changes = new List<Event>();
         private readonly List<Event> _history = new List<Event>();
 
-        public abstract Guid Id { get; }
+        //public abstract String Id { get; }
+        protected string _id;
+        public string Id
+        {
+            get { return _id; }
+        }
         public int Version { get; internal set; }
         public Event[] HistoryEvents { get { return _history.ToArray(); } }
 

@@ -5,10 +5,13 @@ namespace Contact.Domain.Commands
 {
     public class AddOfficeAdmin : Command
     {
-        public AddOfficeAdmin(DateTime created, Person createdBy, String correlationId, Int32 basedOnVersion)
-            : base(created, createdBy, correlationId, basedOnVersion)
+        public string AdminId { get; private set; }
+        public string OfficeId { get; private set; }
+
+        public AddOfficeAdmin(string adminId, string officeId)
         {
-            //TODO: Implement
+            AdminId = adminId;
+            OfficeId = officeId;
         }
     }
 }

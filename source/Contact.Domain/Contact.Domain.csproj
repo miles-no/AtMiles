@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRoot.cs" />
+    <Compile Include="Aggregates\Company.cs" />
+    <Compile Include="Aggregates\Employee.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandHandlers\CompanyCommandHandler.cs" />
     <Compile Include="Commands\AddCompanyAdmin.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
     <Compile Include="Commands\RemoveOfficeAdmin.cs" />
     <Compile Include="Commands\TerminateEmployee.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Events\CompanyAdminAdded.cs" />
     <Compile Include="Events\CompanyAdminRemoved.cs" />
@@ -64,10 +67,11 @@
     <Compile Include="Message.cs" />
     <Compile Include="PrivateReflectionDynamicObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueTypes\Address.cs" />
     <Compile Include="ValueTypes\Person.cs" />
+    <Compile Include="ValueTypes\Picture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Aggregates\" />
     <Folder Include="Entities\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>

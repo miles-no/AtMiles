@@ -1,14 +1,14 @@
-﻿using System;
-using Contact.Domain.ValueTypes;
-
-namespace Contact.Domain.Events
+﻿namespace Contact.Domain.Events
 {
     public class CompanyAdminAdded : Event
     {
-        public CompanyAdminAdded(DateTime created, Person createdBy, String correlationId)
-            : base(created, createdBy, correlationId)
+        public string NewAdminId { get; private set; }
+        public string Name { get; private set; }
+
+        public CompanyAdminAdded(string newAdminId, string name)
         {
-            //TODO: Implement
+            NewAdminId = newAdminId;
+            Name = name;
         }
     }
 }
