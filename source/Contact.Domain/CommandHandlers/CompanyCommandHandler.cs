@@ -33,6 +33,7 @@ namespace Contact.Domain.CommandHandlers
 
 
             company.AddCompanyAdmin(employeeToBeAdmin);
+            _companyRepository.Save(company,message.BasedOnVersion);
         }
 
         public void Handle(RemoveCompanyAdmin message)
@@ -45,36 +46,60 @@ namespace Contact.Domain.CommandHandlers
             //TODO: Implement
 
             company.RemoveCompanyAdmin(employeeToBeRemoved);
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(RemoveOfficeAdmin message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(Constants.SingleCompanyId);
+            if (!company.IsCompanyAdmin(message.CreatedBy.Identifier) &&
+                !company.IsOfficeAdmin(message.CreatedBy.Identifier, message.OfficeId))
+            {
+                throw new Exception("No access");
+
+            }
+
+
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(AddOfficeAdmin message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(Constants.SingleCompanyId);
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(OpenOffice message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(Constants.SingleCompanyId);
+
+            company.IsCompanyAdmin(message.CreatedBy.Identifier);
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(CloseOffice message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(Constants.SingleCompanyId);
+            company.IsCompanyAdmin(message.CreatedBy.Identifier);
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(AddEmployee message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(Constants.SingleCompanyId);
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(TerminateEmployee message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(Constants.SingleCompanyId);
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
     }
 }

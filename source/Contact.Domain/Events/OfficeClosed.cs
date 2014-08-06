@@ -2,9 +2,14 @@
 {
     public class OfficeClosed : Event
     {
-        public OfficeClosed()
+        public string OfficeId { get; private set; }
+
+        public string Name { get; private set; }
+
+        public OfficeClosed(string officeId, string name)
         {
-            //TODO: Implement
+            OfficeId = officeId;
+            Name = name;
         }
     }
 }

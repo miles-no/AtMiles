@@ -1,10 +1,20 @@
-﻿namespace Contact.Domain.Events
+﻿using Contact.Domain.ValueTypes;
+
+namespace Contact.Domain.Events
 {
     public class OfficeOpened : Event
     {
-        public OfficeOpened()
+        public string Id { get; private set; }
+
+        public string Name { get; private set; }
+
+        public Address Address { get; private set; }
+
+        public OfficeOpened(string id, string name, Address address)
         {
-            //TODO: Implement
+            Id = id;
+            Name = name;
+            Address = address;
         }
     }
 }
