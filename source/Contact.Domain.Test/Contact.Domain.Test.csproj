@@ -48,10 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Company\AddCompanyAdminAlreadyExistingTest.cs" />
     <Compile Include="Company\AddCompanyAdminUnknownFirstAdminTest.cs" />
     <Compile Include="Company\AddCompanyAdminUnknownTest.cs" />
     <Compile Include="Company\AddCompanyAdminWithoutPermissionTest.cs" />
     <Compile Include="Company\AddCompanyAdminWithPermissionTest.cs" />
+    <Compile Include="Company\AddOfficeAdminAlreadyExistingTest.cs" />
+    <Compile Include="Company\AddOfficeAdminAsCompanyAdminTest.cs" />
+    <Compile Include="Company\AddOfficeAdminAsOfficeAdminTest.cs" />
+    <Compile Include="Company\AddOfficeAdminUnknownFirstAdminTest.cs" />
+    <Compile Include="Company\AddOfficeAdminUnknownOfficeTest.cs" />
+    <Compile Include="Company\AddOfficeAdminUnknownTest.cs" />
+    <Compile Include="Company\AddOfficeAdminWithoutPermissionTest.cs" />
     <Compile Include="Company\CloseOfficeLastOfficeTest.cs" />
     <Compile Include="Company\CloseOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\CloseOfficeUnknownOfficeTest.cs" />
@@ -61,6 +69,12 @@
     <Compile Include="Company\OpenOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\OpenOfficeWithoutPermisionTest.cs" />
     <Compile Include="Company\OpenOfficeWithPermisionTest.cs" />
+    <Compile Include="Company\RemoveCompanyAdminLastAdmin.cs" />
+    <Compile Include="Company\RemoveCompanyAdminSelf.cs" />
+    <Compile Include="Company\RemoveCompanyAdminUnknown.cs" />
+    <Compile Include="Company\RemoveCompanyAdminUnknownFirstAdmin.cs" />
+    <Compile Include="Company\RemoveCompanyAdminWithoutPermission.cs" />
+    <Compile Include="Company\RemoveCompanyAdminWithPermission.cs" />
     <Compile Include="CompareObjects.cs" />
     <Compile Include="EventSpecification.cs" />
     <Compile Include="FakeRepository.cs" />

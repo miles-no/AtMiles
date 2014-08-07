@@ -49,8 +49,6 @@ namespace Contact.Domain.CommandHandlers
 
             var employeeToBeRemoved = _employeeRepository.GetById(message.AdminId);
             if (employeeToBeRemoved == null) throw new UnknownItemException();
-            
-            //TODO: Implement
 
             company.RemoveCompanyAdmin(employeeToBeRemoved, message.CreatedBy, message.CorrelationId);
             _companyRepository.Save(company, message.BasedOnVersion);
@@ -79,9 +77,12 @@ namespace Contact.Domain.CommandHandlers
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException();
 
-            var company = _companyRepository.GetById(message.CompanyId);
+            var newAdmin = _employeeRepository.GetById(message.AdminId);
+            if (newAdmin == null) throw new UnknownItemException();
 
-            //TODO: Implement
+            var company = _companyRepository.GetById(message.CompanyId);
+            
+            company.AddOfficeAdmin(message.OfficeId, newAdmin, message.CreatedBy, message.CorrelationId);
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }

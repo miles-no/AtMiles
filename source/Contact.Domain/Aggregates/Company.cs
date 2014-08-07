@@ -46,6 +46,8 @@ namespace Contact.Domain.Aggregates
 
         public void AddCompanyAdmin(Employee employeeToBeAdmin, Person createdBy, string correlationId)
         {
+            if(IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException();
+
             var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name)
                 .WithCorrelationId(correlationId)
                 .WithCreated(DateTime.UtcNow)
@@ -55,11 +57,19 @@ namespace Contact.Domain.Aggregates
 
         public void RemoveCompanyAdmin(Employee employeeToBeRemoved, Person createdBy, string correlationId)
         {
+            if(OnlyOneCompanyAdminLeft()) throw new LastItemException();
+            if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException();
+
             var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name)
                 .WithCorrelationId(correlationId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCreatedBy(createdBy);
             ApplyChange(ev);
+        }
+
+        private bool OnlyOneCompanyAdminLeft()
+        {
+            return _companyAdmins.Count == 1;
         }
 
         public void OpenOffice(string name, Address address, Person createdBy, string correlationId)
@@ -74,13 +84,30 @@ namespace Contact.Domain.Aggregates
 
         public void CloseOffice(string officeId, Person createdBy, string correlationId)
         {
-            if (OnlyOneOfficeLeft()) throw new LastOfficeException();
+            if (OnlyOneOfficeLeft()) throw new LastItemException();
 
             var office = GetOffice(officeId);
 
             if(!office.IsEmptyForEmployees()) throw new ExistingChildItemsException();
 
             var ev = new OfficeClosed(_id, _name, office.Id, office.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
+            ApplyChange(ev);
+        }
+
+        public void AddOfficeAdmin(string officeId, Employee newAdmin, Person createdBy, string correlationId)
+        {
+            if(!IsOffice(officeId)) throw new UnknownItemException();
+            
+            var office = GetOffice(officeId);
+
+            if (!HasOfficeAccess(createdBy.Identifier, office.Id)) throw new NoAccessException();
+
+            if(office.IsAdmin(newAdmin.Id)) throw new AlreadyExistingItemException();
+
+            var ev = new OfficeAdminAdded(_id, _name, office.Id, office.Name,newAdmin.Id, newAdmin.Name)
                 .WithCorrelationId(correlationId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCreatedBy(createdBy);
@@ -153,6 +180,13 @@ namespace Contact.Domain.Aggregates
             if (!IsOffice(ev.OfficeId)) return;
             var office = GetOffice(ev.OfficeId);
             office.RemoveEmployee(ev.Id);
+        }
+
+        private bool HasOfficeAccess(string employeeId, string officeId)
+        {
+            if (!IsOffice(officeId)) return false;
+
+            return IsCompanyAdmin(employeeId) || IsOfficeAdmin(employeeId, officeId);
         }
     }
 }
