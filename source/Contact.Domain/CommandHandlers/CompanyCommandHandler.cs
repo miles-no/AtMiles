@@ -59,15 +59,12 @@ namespace Contact.Domain.CommandHandlers
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException();
 
+            var adminToBeRemoved = _employeeRepository.GetById(message.AdminId);
+            if (adminToBeRemoved == null) throw new UnknownItemException();
+
             var company = _companyRepository.GetById(message.CompanyId);
-            if (!company.IsCompanyAdmin(message.CreatedBy.Identifier) &&
-                !company.IsOfficeAdmin(message.CreatedBy.Identifier, message.OfficeId))
-            {
-                throw new NoAccessException();
 
-            }
-
-            //TODO: Implement
+            company.RemoveOfficeAdmin(message.OfficeId, adminToBeRemoved, message.CreatedBy, message.CorrelationId);
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }

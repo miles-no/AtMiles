@@ -8,30 +8,32 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company
+namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
 {
     [TestFixture]
-    public class RemoveCompanyAdminLastAdmin : EventSpecification<RemoveCompanyAdmin>
+    public class RemoveOfficeAdminUnknonwAdmin : EventSpecification<RemoveOfficeAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
-        private const string companyId = "miles";
-        private const string companyName = "Miles";
+        private const string CompanyId = "miles";
+        private const string CompanyName = "Miles";
 
-        private const string existingAdminId = "old1";
-        private const string existingAdminFirstName = "Existing";
-        private const string existingAdminLastName = "Admin";
-        private static readonly DateTime existingAdminDateOfBirth = new DateTime(1980, 01, 01);
+        private readonly string _officeId = Guid.NewGuid().ToString();
+        private const string OfficeName = "Stavanger";
 
-        private const string officeId = "office1";
-        private const string officeName = "Stavanger";
+        private const string Admin1Id = "adm1";
+        private const string Admin1FirstName = "Admin";
+        private const string Admin1LastName = "Adminson";
+        private static readonly DateTime Admin1DateOfBirth = new DateTime(1980, 01, 01);
+
+        private const string Admin2Id = "adm2";
 
         [Test]
-        public void remove_company_admin_last_admin()
+        public void remove_office_admin_unknown_admin()
         {
-            ExpectedException = new LastItemException();
+            ExpectedException = new UnknownItemException();
             Setup();
         }
 
@@ -54,9 +56,10 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
-                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, officeId, officeName, null)),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, existingAdminId, existingAdminFirstName + " " + existingAdminLastName)),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, _officeId, OfficeName, null)),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, _officeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName))),
                 };
             return events;
         }
@@ -65,22 +68,22 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(existingAdminId, new EmployeeCreated(companyId, companyName, officeId, officeName, existingAdminId, existingAdminFirstName, existingAdminLastName, existingAdminDateOfBirth)),
+                    new FakeStreamEvent(Admin1Id, new EmployeeCreated(CompanyId, CompanyName, _officeId, OfficeName, Admin1Id, Admin1FirstName, Admin1LastName, Admin1DateOfBirth)),
                 };
             return events;
         }
 
-        public override RemoveCompanyAdmin When()
+        public override RemoveOfficeAdmin When()
         {
-            var cmd = new RemoveCompanyAdmin(companyId, existingAdminId)
+            var cmd = new RemoveOfficeAdmin(CompanyId, _officeId, Admin2Id)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(existingAdminId, existingAdminFirstName + " " + existingAdminLastName));
-            return (RemoveCompanyAdmin)cmd;
+                .WithBasedOnVersion(5)
+                .WithCreatedBy(new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)));
+            return (RemoveOfficeAdmin)cmd;
         }
 
-        public override Handles<RemoveCompanyAdmin> OnHandler()
+        public override Handles<RemoveOfficeAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

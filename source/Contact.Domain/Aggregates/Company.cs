@@ -114,6 +114,31 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
+        public void RemoveOfficeAdmin(string officeId, Employee adminToBeRemoved, Person createdBy, string correlationId)
+        {
+            if (!IsOffice(officeId)) throw new UnknownItemException();
+
+            var office = GetOffice(officeId);
+
+            if (!HasOfficeAccess(createdBy.Identifier, office.Id)) throw new NoAccessException();
+            
+            CheckIfTryingToDisconnectSelf(adminToBeRemoved, createdBy);
+
+            var ev = new OfficeAdminRemoved(_id, _name, office.Id, office.Name, adminToBeRemoved.Id, adminToBeRemoved.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
+            ApplyChange(ev);
+        }
+
+        private void CheckIfTryingToDisconnectSelf(Employee adminToBeRemoved, Person createdBy)
+        {
+            if (adminToBeRemoved.Id == createdBy.Identifier)
+            {
+                if (!IsCompanyAdmin(adminToBeRemoved.Id)) throw new NoAccessException();
+            }
+        }
+
         private bool OnlyOneOfficeLeft()
         {
             return _offices.Count == 1;

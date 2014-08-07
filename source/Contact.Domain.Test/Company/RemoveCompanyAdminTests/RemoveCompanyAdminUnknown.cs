@@ -4,14 +4,13 @@ using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events;
 using Contact.Domain.Exceptions;
-using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company
+namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 {
     [TestFixture]
-    public class RemoveCompanyAdminUnknownFirstAdmin : EventSpecification<RemoveCompanyAdmin>
+    public class RemoveCompanyAdminUnknown : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -23,17 +22,15 @@ namespace Contact.Domain.Test.Company
         private const string ExistingAdminId = "old1";
         private const string ExistingAdminFirstName = "Existing";
         private const string ExistingAdminLastName = "Admin";
+        private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
 
         private const string NewAdminId = "new1";
-        private const string NewAdminFirstName = "New";
-        private const string NewAdminLastName = "Admin";
-        private static readonly DateTime NewAdminDateOfBirth = new DateTime(1981, 01, 01);
 
         private const string OfficeId = "office1";
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_unknown_first_admin()
+        public void remove_company_admin_unknown_admin_to_remove()
         {
             ExpectedException = new UnknownItemException();
             Setup();
@@ -60,7 +57,7 @@ namespace Contact.Domain.Test.Company
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
-                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, ExistingAdminId, ExistingAdminFirstName + " " + ExistingAdminLastName)),
                 };
             return events;
         }
@@ -69,7 +66,7 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, NewAdminFirstName, NewAdminLastName, NewAdminDateOfBirth)),
+                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, ExistingAdminId, ExistingAdminFirstName, ExistingAdminLastName, ExistingAdminDateOfBirth)),
                 };
             return events;
         }
