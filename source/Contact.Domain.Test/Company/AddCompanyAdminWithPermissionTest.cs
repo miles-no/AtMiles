@@ -98,6 +98,7 @@ namespace Contact.Domain.Test.Company
             var events = new List<Event>
                 {
                     new CompanyAdminAdded(companyId, companyName, newAdminId, NameService.GetName(newAdminFirstName, newAdminLastName))
+                                        .WithCorrelationId(_correlationId)
                 };
             return events;
         }

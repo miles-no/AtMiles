@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Contact.Domain.Entities;
 using Contact.Domain.Events;
 using System.Linq;
+using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Aggregates
 {
@@ -41,15 +43,31 @@ namespace Contact.Domain.Aggregates
             return _offices.Any(item => item.Id == officeId);
         }
 
-        public void AddCompanyAdmin(Employee employeeToBeAdmin)
+        public void AddCompanyAdmin(Employee employeeToBeAdmin, Person createdBy, string correlationId)
         {
-            var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name);
+            var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
             ApplyChange(ev);
         }
 
-        public void RemoveCompanyAdmin(Employee employeeToBeRemoved)
+        public void RemoveCompanyAdmin(Employee employeeToBeRemoved, Person createdBy, string correlationId)
         {
-            var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name);
+            var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
+            ApplyChange(ev);
+        }
+
+        public void OpenOffice(string name, Address address, Person createdBy, string correlationId)
+        {
+            var officeId = Guid.NewGuid().ToString();
+            var ev = new OfficeOpened(_id, _name, officeId, name, address)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
             ApplyChange(ev);
         }
 
@@ -76,7 +94,7 @@ namespace Contact.Domain.Aggregates
         {
             if (IsOffice(ev.OfficeId)) return;
 
-            var office = new Office(ev.OfficeId);
+            var office = new Office(ev.OfficeId, ev.OfficeName);
             _offices.Add(office);
         }
 

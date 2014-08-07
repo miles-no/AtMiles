@@ -6,11 +6,13 @@ namespace Contact.Domain.Entities
     public class Office
     {
         public string Id { get; private set; }
+        public string Name { get; private set; }
         private readonly List<string> _officeAdmins; 
 
-        public Office(string id)
+        public Office(string id, string name)
         {
             Id = id;
+            Name = name;
             _officeAdmins = new List<string>();
             if (Id == null) Id = string.Empty;
         }
