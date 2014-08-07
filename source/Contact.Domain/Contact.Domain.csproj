@@ -66,6 +66,7 @@
     <Compile Include="Events\OfficeAdminRemoved.cs" />
     <Compile Include="Events\OfficeClosed.cs" />
     <Compile Include="Events\OfficeOpened.cs" />
+    <Compile Include="Exceptions\AlreadyExistingItemException.cs" />
     <Compile Include="Exceptions\DomainBaseException.cs" />
     <Compile Include="Exceptions\ExistingChildItemsException.cs" />
     <Compile Include="Exceptions\LastItemException.cs" />

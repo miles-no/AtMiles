@@ -48,10 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Company\AddCompanyAdminAlreadyExistingTest.cs" />
     <Compile Include="Company\AddCompanyAdminUnknownFirstAdminTest.cs" />
     <Compile Include="Company\AddCompanyAdminUnknownTest.cs" />
     <Compile Include="Company\AddCompanyAdminWithoutPermissionTest.cs" />
     <Compile Include="Company\AddCompanyAdminWithPermissionTest.cs" />
+    <Compile Include="Company\AddOfficeAdminAlreadyExistingTest.cs" />
+    <Compile Include="Company\AddOfficeAdminAsCompanyAdminTest.cs" />
+    <Compile Include="Company\AddOfficeAdminAsOfficeAdminTest.cs" />
+    <Compile Include="Company\AddOfficeAdminUnknownFirstAdminTest.cs" />
+    <Compile Include="Company\AddOfficeAdminUnknownOfficeTest.cs" />
+    <Compile Include="Company\AddOfficeAdminUnknownTest.cs" />
+    <Compile Include="Company\AddOfficeAdminWithoutPermissionTest.cs" />
     <Compile Include="Company\CloseOfficeLastOfficeTest.cs" />
     <Compile Include="Company\CloseOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\CloseOfficeUnknownOfficeTest.cs" />
