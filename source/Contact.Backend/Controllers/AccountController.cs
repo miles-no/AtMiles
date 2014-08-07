@@ -19,6 +19,9 @@ using Contact.Backend.Results;
 
 namespace Contact.Backend.Controllers
 {
+    /// <summary>
+    /// Web Api template interface for working OAUTH2/google magic
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
