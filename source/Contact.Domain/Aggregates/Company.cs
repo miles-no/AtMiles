@@ -55,11 +55,19 @@ namespace Contact.Domain.Aggregates
 
         public void RemoveCompanyAdmin(Employee employeeToBeRemoved, Person createdBy, string correlationId)
         {
+            if(OnlyOneCompanyAdminLeft()) throw new LastItemException();
+            if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException();
+
             var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name)
                 .WithCorrelationId(correlationId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCreatedBy(createdBy);
             ApplyChange(ev);
+        }
+
+        private bool OnlyOneCompanyAdminLeft()
+        {
+            return _companyAdmins.Count == 1;
         }
 
         public void OpenOffice(string name, Address address, Person createdBy, string correlationId)
@@ -74,7 +82,7 @@ namespace Contact.Domain.Aggregates
 
         public void CloseOffice(string officeId, Person createdBy, string correlationId)
         {
-            if (OnlyOneOfficeLeft()) throw new LastOfficeException();
+            if (OnlyOneOfficeLeft()) throw new LastItemException();
 
             var office = GetOffice(officeId);
 

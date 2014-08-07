@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company
 {
     [TestFixture]
-    public class CloseOfficeLastOfficeTest : EventSpecification<CloseOffice>
+    public class RemoveCompanyAdminLastAdmin : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -20,16 +20,16 @@ namespace Contact.Domain.Test.Company
         private const string companyId = "miles";
         private const string companyName = "Miles";
 
-        private readonly string officeId = Guid.NewGuid().ToString();
+        private const string existingAdminId = "old1";
+        private const string existingAdminFirstName = "Existing";
+        private const string existingAdminLastName = "Admin";
+        private static readonly DateTime existingAdminDateOfBirth = new DateTime(1980, 01, 01);
+
+        private const string officeId = "office1";
         private const string officeName = "Stavanger";
 
-        private const string adminId = "adm1";
-        private const string adminFirstName = "Admin";
-        private const string adminLastName = "Adminson";
-        private static readonly DateTime adminDateOfBirth = new DateTime(1980, 01, 01);
-
         [Test]
-        public void close_office_last_office()
+        public void remove_company_admin_last_admin()
         {
             ExpectedException = new LastItemException();
             Setup();
@@ -55,9 +55,8 @@ namespace Contact.Domain.Test.Company
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
-                    new FakeStreamEvent(companyId, new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, NameService.GetName(adminFirstName , adminLastName))),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, adminId, NameService.GetName(adminFirstName , adminLastName))),
                     new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, officeId, officeName, null)),
+                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, existingAdminId, existingAdminFirstName + " " + existingAdminLastName)),
                 };
             return events;
         }
@@ -66,22 +65,22 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(adminId, new EmployeeCreated(companyId, companyName, officeId, officeName, adminId, adminFirstName, adminLastName, adminDateOfBirth)),
+                    new FakeStreamEvent(existingAdminId, new EmployeeCreated(companyId, companyName, officeId, officeName, existingAdminId, existingAdminFirstName, existingAdminLastName, existingAdminDateOfBirth)),
                 };
             return events;
         }
 
-        public override CloseOffice When()
+        public override RemoveCompanyAdmin When()
         {
-            var cmd = new CloseOffice(companyId, officeId)
+            var cmd = new RemoveCompanyAdmin(companyId, existingAdminId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
                 .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(adminId, NameService.GetName(adminFirstName, adminLastName)));
-            return (CloseOffice)cmd;
+                .WithCreatedBy(new Person(existingAdminId, existingAdminFirstName + " " + existingAdminLastName));
+            return (RemoveCompanyAdmin)cmd;
         }
 
-        public override Handles<CloseOffice> OnHandler()
+        public override Handles<RemoveCompanyAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

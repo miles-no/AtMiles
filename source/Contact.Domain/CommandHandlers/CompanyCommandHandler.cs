@@ -49,8 +49,6 @@ namespace Contact.Domain.CommandHandlers
 
             var employeeToBeRemoved = _employeeRepository.GetById(message.AdminId);
             if (employeeToBeRemoved == null) throw new UnknownItemException();
-            
-            //TODO: Implement
 
             company.RemoveCompanyAdmin(employeeToBeRemoved, message.CreatedBy, message.CorrelationId);
             _companyRepository.Save(company, message.BasedOnVersion);

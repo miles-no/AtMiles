@@ -61,6 +61,12 @@
     <Compile Include="Company\OpenOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\OpenOfficeWithoutPermisionTest.cs" />
     <Compile Include="Company\OpenOfficeWithPermisionTest.cs" />
+    <Compile Include="Company\RemoveCompanyAdminLastAdmin.cs" />
+    <Compile Include="Company\RemoveCompanyAdminSelf.cs" />
+    <Compile Include="Company\RemoveCompanyAdminUnknown.cs" />
+    <Compile Include="Company\RemoveCompanyAdminUnknownFirstAdmin.cs" />
+    <Compile Include="Company\RemoveCompanyAdminWithoutPermission.cs" />
+    <Compile Include="Company\RemoveCompanyAdminWithPermission.cs" />
     <Compile Include="CompareObjects.cs" />
     <Compile Include="EventSpecification.cs" />
     <Compile Include="FakeRepository.cs" />
