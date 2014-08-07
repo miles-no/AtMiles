@@ -1,6 +1,7 @@
 ﻿using System;
 using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
+using Contact.Domain.Exceptions;
 
 namespace Contact.Domain.CommandHandlers
 {
@@ -26,10 +27,10 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(AddCompanyAdmin message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
-            if (!company.IsCompanyAdmin(message.CreatedBy.Identifier)) throw new Exception("Not allowed to");
+            if (!company.IsCompanyAdmin(message.CreatedBy.Identifier)) throw new NoAccessException();
 
             var employeeToBeAdmin = _employeeRepository.GetById(message.NewAdminId);
-            if(employeeToBeAdmin == null) throw new Exception("Unknown user");
+            if(employeeToBeAdmin == null) throw new UnknownItemException();
 
 
             company.AddCompanyAdmin(employeeToBeAdmin);
@@ -39,10 +40,10 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(RemoveCompanyAdmin message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
-            if (!company.IsCompanyAdmin(message.CreatedBy.Identifier)) throw new Exception("Not allowed to");
+            if (!company.IsCompanyAdmin(message.CreatedBy.Identifier)) throw new NoAccessException();
 
             var employeeToBeRemoved = _employeeRepository.GetById(message.AdminId);
-            if (employeeToBeRemoved == null) throw new Exception("Unknown user");
+            if (employeeToBeRemoved == null) throw new UnknownItemException();
             //TODO: Implement
 
             company.RemoveCompanyAdmin(employeeToBeRemoved);
@@ -55,11 +56,11 @@ namespace Contact.Domain.CommandHandlers
             if (!company.IsCompanyAdmin(message.CreatedBy.Identifier) &&
                 !company.IsOfficeAdmin(message.CreatedBy.Identifier, message.OfficeId))
             {
-                throw new Exception("No access");
+                throw new NoAccessException();
 
             }
 
-
+            //TODO: Implement
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }
@@ -67,6 +68,8 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(AddOfficeAdmin message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
+
+            //TODO: Implement
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }
@@ -77,6 +80,9 @@ namespace Contact.Domain.CommandHandlers
 
             company.IsCompanyAdmin(message.CreatedBy.Identifier);
 
+
+            //TODO: Implement
+
             _companyRepository.Save(company, message.BasedOnVersion);
         }
 
@@ -85,6 +91,8 @@ namespace Contact.Domain.CommandHandlers
             var company = _companyRepository.GetById(message.CompanyId);
             company.IsCompanyAdmin(message.CreatedBy.Identifier);
 
+            //TODO: Implement
+
             _companyRepository.Save(company, message.BasedOnVersion);
         }
 
@@ -92,12 +100,16 @@ namespace Contact.Domain.CommandHandlers
         {
             var company = _companyRepository.GetById(message.CompanyId);
 
+            //TODO: Implement
+
             _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(TerminateEmployee message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
+
+            //TODO: Implement
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }

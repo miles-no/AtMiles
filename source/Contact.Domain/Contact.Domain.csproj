@@ -67,6 +67,7 @@
     <Compile Include="Events\OfficeClosed.cs" />
     <Compile Include="Events\OfficeOpened.cs" />
     <Compile Include="Exceptions\DomainBaseException.cs" />
+    <Compile Include="Exceptions\NoAccessException.cs" />
     <Compile Include="Exceptions\UnknownItemException.cs" />
     <Compile Include="Handles.cs" />
     <Compile Include="IRepository.cs" />

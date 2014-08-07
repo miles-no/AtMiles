@@ -48,7 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Company\CompanyAdminTest.cs" />
+    <Compile Include="Company\AddCompanyAdminUnknownFirstAdminTest.cs" />
+    <Compile Include="Company\AddCompanyAdminUnknownTest.cs" />
+    <Compile Include="Company\AddCompanyAdminWithoutPermissionTest.cs" />
+    <Compile Include="Company\AddCompanyAdminWithPermissionTest.cs" />
     <Compile Include="CompareObjects.cs" />
     <Compile Include="EventSpecification.cs" />
     <Compile Include="FakeRepository.cs" />

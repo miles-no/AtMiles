@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events;
-using Contact.Domain.Services;
+using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
 namespace Contact.Domain.Test.Company
 {
-    [TestFixture]
-    public class CompanyAdminTest : EventSpecification<AddCompanyAdmin>
+    public class AddCompanyAdminWithoutPermissionTest : EventSpecification<AddCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -23,7 +21,7 @@ namespace Contact.Domain.Test.Company
         private const string existingAdminId = "old1";
         private const string existingAdminFirstName = "Existing";
         private const string existingAdminLastName = "Admin";
-        private static readonly DateTime existingAdminDateOfBirth = new DateTime(1980,01,01);
+        private static readonly DateTime existingAdminDateOfBirth = new DateTime(1980, 01, 01);
 
         private const string newAdminId = "new1";
         private const string newAdminFirstName = "New";
@@ -35,8 +33,9 @@ namespace Contact.Domain.Test.Company
 
 
         [Test]
-        public void add_company_admin_with_all_rights()
+        public void add_company_admin_without_permission()
         {
+            ExpectedException = new NoAccessException();
             Setup();
         }
 
@@ -61,7 +60,6 @@ namespace Contact.Domain.Test.Company
                 {
                     new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
                     new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, officeId, officeName, null)),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, existingAdminId, existingAdminFirstName + " " + existingAdminLastName)),
                     
                 };
             return events;
@@ -90,17 +88,13 @@ namespace Contact.Domain.Test.Company
         public override Handles<AddCompanyAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
-            _fakeEmployeeRepository = new FakeRepository<Employee>(GivenEmployee());
+            _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
         public override IEnumerable<Event> Expect()
         {
-            var events = new List<Event>
-                {
-                    new CompanyAdminAdded(companyId, companyName, newAdminId, NameService.GetName(newAdminFirstName, newAdminLastName))
-                };
-            return events;
+            yield break;
         }
     }
 }
