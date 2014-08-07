@@ -16,7 +16,7 @@ namespace Contact.Domain.Aggregates
 
         private void Apply(EmployeeCreated ev)
         {
-            _id = ev.Id;
+            _id = ev.GlobalId;
             _firstName = ev.FirstName;
             _middleName = ev.MiddleName;
             _lastName = ev.LastName;

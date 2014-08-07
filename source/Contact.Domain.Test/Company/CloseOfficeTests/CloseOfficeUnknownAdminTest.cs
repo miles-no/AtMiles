@@ -8,10 +8,10 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
+namespace Contact.Domain.Test.Company.CloseOfficeTests
 {
     [TestFixture]
-    public class RemoveOfficeAdminUnknonwAdmin : EventSpecification<RemoveOfficeAdmin>
+    public class CloseOfficeUnknownAdminTest : EventSpecification<CloseOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -20,18 +20,18 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
 
+        private const string ExistingOfficeId = "bgn";
+        private const string ExistingOfficeName = "Bergen";
+
         private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
-        private const string Admin1Id = "adm1";
-        private const string Admin1FirstName = "Admin";
-        private const string Admin1LastName = "Adminson";
-        private static readonly DateTime Admin1DateOfBirth = new DateTime(1980, 01, 01);
-
-        private const string Admin2Id = "adm2";
+        private const string AdminId = "adm1";
+        private const string AdminFirstName = "Admin";
+        private const string AdminLastName = "Adminson";
 
         [Test]
-        public void remove_office_admin_unknown_admin()
+        public void close_office_unknown_admin()
         {
             ExpectedException = new UnknownItemException();
             Setup();
@@ -57,33 +57,29 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, null)),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, AdminId, NameService.GetName(AdminFirstName , AdminLastName))),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName))),
-                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName))),
                 };
             return events;
         }
 
         public IEnumerable<FakeStreamEvent> GivenEmployee()
         {
-            var events = new List<FakeStreamEvent>
-                {
-                    new FakeStreamEvent(Admin1Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, Admin1FirstName, Admin1LastName, Admin1DateOfBirth)),
-                };
-            return events;
+            yield break;
         }
 
-        public override RemoveOfficeAdmin When()
+        public override CloseOffice When()
         {
-            var cmd = new RemoveOfficeAdmin(CompanyId, OfficeId, Admin2Id)
+            var cmd = new CloseOffice(CompanyId, OfficeId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(5)
-                .WithCreatedBy(new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)));
-            return (RemoveOfficeAdmin)cmd;
+                .WithBasedOnVersion(2)
+                .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)));
+            return (CloseOffice)cmd;
         }
 
-        public override Handles<RemoveOfficeAdmin> OnHandler()
+        public override Handles<CloseOffice> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

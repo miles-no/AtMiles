@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events;
+using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company
+namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 {
-    public class OpenOfficeWithPermisionTest : EventSpecification<OpenOffice>
+    public class AddCompanyAdminUnknownFirstAdminTest : EventSpecification<AddCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
-        private const string companyId = "miles";
-        private const string companyName = "Miles";
+        private const string CompanyId = "miles";
+        private const string CompanyName = "Miles";
 
-        private const string existingOfficeId = "bgn";
-        private const string existingOfficeName = "Bergen";
+        private const string ExistingAdminId = "old1";
+        private const string ExistingAdminFirstName = "Existing";
+        private const string ExistingAdminLastName = "Admin";
 
-        private string officeId = "UNKNOWN";
-        private const string officeName = "Stavanger";
+        private const string NewAdminId = "new1";
+        private const string NewAdminFirstName = "New";
+        private const string NewAdminLastName = "Admin";
+        private static readonly DateTime NewAdminDateOfBirth = new DateTime(1981, 01, 01);
 
-        private const string adminId = "adm1";
-        private const string adminFirstName = "Admin";
-        private const string adminLastName = "Adminson";
-        private static readonly DateTime adminDateOfBirth = new DateTime(1980, 01, 01);
+        private const string OfficeId = "office1";
+        private const string OfficeName = "Stavanger";
+
 
         [Test]
-        public void open_office_with_permission()
+        public void add_company_admin_unknown_first_admin()
         {
+            ExpectedException = new UnknownItemException();
             Setup();
         }
 
@@ -54,9 +58,8 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
-                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, existingOfficeId, existingOfficeName, null)),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, adminId, NameService.GetName(adminFirstName , adminLastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
                     
                 };
             return events;
@@ -66,22 +69,22 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(adminId, new EmployeeCreated(companyId, companyName, existingOfficeId, existingOfficeName, adminId, adminFirstName, adminLastName, adminDateOfBirth)),
+                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, NewAdminFirstName, NewAdminLastName, NewAdminDateOfBirth)),
                 };
             return events;
         }
 
-        public override OpenOffice When()
+        public override AddCompanyAdmin When()
         {
-            var cmd = new OpenOffice(companyId, officeName)
+            var cmd = new AddCompanyAdmin(CompanyId, NewAdminId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
                 .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(adminId, NameService.GetName(adminFirstName, adminLastName)));
-            return (OpenOffice)cmd;
+                .WithCreatedBy(new Person(ExistingAdminId, ExistingAdminFirstName + " " + ExistingAdminLastName));
+            return (AddCompanyAdmin)cmd;
         }
 
-        public override Handles<OpenOffice> OnHandler()
+        public override Handles<AddCompanyAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
@@ -92,9 +95,8 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<Event>
                 {
-                    new OfficeOpened(companyId, companyName, officeId, officeName, null)
+                    new CompanyAdminAdded(CompanyId, CompanyName, NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName))
                                         .WithCorrelationId(_correlationId)
-                                        .WithCreatedBy(new Person(adminId, NameService.GetName(adminFirstName, adminLastName)))
                 };
             return events;
         }

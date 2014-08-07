@@ -9,7 +9,7 @@ namespace Contact.Domain.Events
         public string CompanyName { get; private set; }
         public string OfficeId { get; private set; }
         public string OfficeName { get; private set; }
-        public string Id { get; private set; }
+        public string GlobalId { get; private set; }
         public string FirstName { get; private set; }
         public string MiddleName { get; private set; }
         public string LastName { get; private set; }
@@ -20,21 +20,21 @@ namespace Contact.Domain.Events
         public Address HomeAddress { get; private set; }
         public Picture Photo { get; private set; }
 
-        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string id, string firstName, string middleName, string lastName, DateTime dateOfBirth)
+        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
         {
             CompanyId = companyId;
             CompanyName = companyName;
             OfficeId = officeId;
             OfficeName = officeName;
-            Id = id;
+            GlobalId = globalId;
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
             DateOfBirth = dateOfBirth;
         }
 
-        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string id, string firstName, string lastName, DateTime dateOfBirth)
-            : this(companyId, companyName, officeId, officeName, id, firstName, string.Empty, lastName, dateOfBirth) { }
+        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string lastName, DateTime dateOfBirth)
+            : this(companyId, companyName, officeId, officeName, globalId, firstName, string.Empty, lastName, dateOfBirth) { }
 
          public EmployeeCreated WithJobTitle(string jobTitle)
         {

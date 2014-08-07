@@ -8,34 +8,32 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company
+namespace Contact.Domain.Test.Company.CloseOfficeTests
 {
     [TestFixture]
-    public class CloseOfficeWithEmployeesTest : EventSpecification<CloseOffice>
+    public class CloseOfficeUnknownOfficeTest : EventSpecification<CloseOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
-        private const string companyId = "miles";
-        private const string companyName = "Miles";
+        private const string CompanyId = "miles";
+        private const string CompanyName = "Miles";
 
-        private const string existingOfficeId = "bgn";
-        private const string existingOfficeName = "Bergen";
+        private const string ExistingOfficeId = "bgn";
+        private const string ExistingOfficeName = "Bergen";
 
-        private readonly string officeId = Guid.NewGuid().ToString();
-        private const string officeName = "Stavanger";
+        private const string OfficeId = "SVG";
 
-
-        private const string adminId = "adm1";
-        private const string adminFirstName = "Admin";
-        private const string adminLastName = "Adminson";
-        private static readonly DateTime adminDateOfBirth = new DateTime(1980, 01, 01);
+        private const string AdminId = "adm1";
+        private const string AdminFirstName = "Admin";
+        private const string AdminLastName = "Adminson";
+        private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
         [Test]
-        public void close_office_with_employees()
+        public void close_office_unknown_office()
         {
-            ExpectedException = new ExistingChildItemsException();
+            ExpectedException = new UnknownItemException();
             Setup();
         }
 
@@ -58,11 +56,10 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
-                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, existingOfficeId, existingOfficeName, null)),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, adminId, NameService.GetName(adminFirstName , adminLastName))),
-                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, officeId, officeName, null)),
-                    new FakeStreamEvent(companyId, new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, NameService.GetName(adminFirstName , adminLastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, null)),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, AdminId, NameService.GetName(AdminFirstName , AdminLastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName))),
                 };
             return events;
         }
@@ -71,18 +68,18 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(adminId, new EmployeeCreated(companyId, companyName, existingOfficeId, existingOfficeName, adminId, adminFirstName, adminLastName, adminDateOfBirth)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, AdminId, AdminFirstName, AdminLastName, AdminDateOfBirth)),
                 };
             return events;
         }
 
         public override CloseOffice When()
         {
-            var cmd = new CloseOffice(companyId, officeId)
+            var cmd = new CloseOffice(CompanyId, OfficeId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
                 .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(adminId, NameService.GetName(adminFirstName, adminLastName)));
+                .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)));
             return (CloseOffice)cmd;
         }
 

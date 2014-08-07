@@ -6,16 +6,16 @@
         public string CompanyName { get; private set; }
         public string OfficeId { get; private set; }
         public string OfficeName { get; private set; }
-        public string Id { get; private set; }
+        public string GlobalId { get; private set; }
         public string Name { get; private set; }
 
-        public EmployeeAdded(string companyId, string companyName, string officeId, string officeName, string id, string name)
+        public EmployeeAdded(string companyId, string companyName, string officeId, string officeName, string globalId, string name)
         {
             CompanyId = companyId;
             CompanyName = companyName;
             OfficeId = officeId;
             OfficeName = officeName;
-            Id = id;
+            GlobalId = globalId;
             Name = name;
         }
     }

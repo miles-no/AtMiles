@@ -7,32 +7,35 @@ using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company
+namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 {
-    public class AddCompanyAdminUnknownTest : EventSpecification<AddCompanyAdmin>
+    public class AddCompanyAdminWithoutPermissionTest : EventSpecification<AddCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
-        private const string companyId = "miles";
-        private const string companyName = "Miles";
+        private const string CompanyId = "miles";
+        private const string CompanyName = "Miles";
 
-        private const string existingAdminId = "old1";
-        private const string existingAdminFirstName = "Existing";
-        private const string existingAdminLastName = "Admin";
-        private static readonly DateTime existingAdminDateOfBirth = new DateTime(1980, 01, 01);
+        private const string ExistingAdminId = "old1";
+        private const string ExistingAdminFirstName = "Existing";
+        private const string ExistingAdminLastName = "Admin";
+        private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
 
-        private const string newAdminId = "new1";
+        private const string NewAdminId = "new1";
+        private const string NewAdminFirstName = "New";
+        private const string NewAdminLastName = "Admin";
+        private static readonly DateTime NewAdminDateOfBirth = new DateTime(1981, 01, 01);
 
-        private const string officeId = "office1";
-        private const string officeName = "Stavanger";
+        private const string OfficeId = "office1";
+        private const string OfficeName = "Stavanger";
 
 
         [Test]
-        public void add_company_admin_unknown_employee()
+        public void add_company_admin_without_permission()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new NoAccessException();
             Setup();
         }
 
@@ -55,9 +58,9 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
-                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, officeId, officeName, null)),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, existingAdminId, existingAdminFirstName + " " + existingAdminLastName))
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
+                    
                 };
             return events;
         }
@@ -66,18 +69,19 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(existingAdminId, new EmployeeCreated(companyId, companyName, officeId, officeName, existingAdminId, existingAdminFirstName, existingAdminLastName, existingAdminDateOfBirth))
+                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, ExistingAdminId, ExistingAdminFirstName, ExistingAdminLastName, ExistingAdminDateOfBirth)),
+                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, NewAdminFirstName, NewAdminLastName, NewAdminDateOfBirth)),
                 };
             return events;
         }
 
         public override AddCompanyAdmin When()
         {
-            var cmd = new AddCompanyAdmin(companyId, newAdminId)
+            var cmd = new AddCompanyAdmin(CompanyId, NewAdminId)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
                 .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(existingAdminId, existingAdminFirstName + " " + existingAdminLastName));
+                .WithCreatedBy(new Person(ExistingAdminId, ExistingAdminFirstName + " " + ExistingAdminLastName));
             return (AddCompanyAdmin)cmd;
         }
 

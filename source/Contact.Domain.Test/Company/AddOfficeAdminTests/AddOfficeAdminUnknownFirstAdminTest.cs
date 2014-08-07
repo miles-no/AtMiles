@@ -8,31 +8,32 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company
+namespace Contact.Domain.Test.Company.AddOfficeAdminTests
 {
     [TestFixture]
-    public class CloseOfficeUnknownOfficeTest : EventSpecification<CloseOffice>
+    public class AddOfficeAdminUnknownFirstAdminTest : EventSpecification<AddOfficeAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
-        private const string companyId = "miles";
-        private const string companyName = "Miles";
+        private const string CompanyId = "miles";
+        private const string CompanyName = "Miles";
 
-        private const string existingOfficeId = "bgn";
-        private const string existingOfficeName = "Bergen";
+        private readonly string _officeId = Guid.NewGuid().ToString();
+        private const string OfficeName = "Stavanger";
 
-        private readonly string officeId = Guid.NewGuid().ToString();
-        private const string officeName = "Stavanger";
+        private const string Admin1Id = "adm1";
+        private const string Admin1FirstName = "Admin";
+        private const string Admin1LastName = "Adminson";
 
-        private const string adminId = "adm1";
-        private const string adminFirstName = "Admin";
-        private const string adminLastName = "Adminson";
-        private static readonly DateTime adminDateOfBirth = new DateTime(1980, 01, 01);
+        private const string Admin2Id = "adm2";
+        private const string Admin2FirstName = "Adminsine";
+        private const string Admin2LastName = "Adminsen";
+        private static readonly DateTime Admin2DateOfBirth = new DateTime(1979, 01, 01);
 
         [Test]
-        public void close_office_unknown_office()
+        public void add_office_admin_unknown_first_admin()
         {
             ExpectedException = new UnknownItemException();
             Setup();
@@ -57,10 +58,10 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
-                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, existingOfficeId, existingOfficeName, null)),
-                    new FakeStreamEvent(companyId, new EmployeeAdded(companyId, companyName, existingOfficeId, existingOfficeName, adminId, NameService.GetName(adminFirstName , adminLastName))),
-                    new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, adminId, NameService.GetName(adminFirstName , adminLastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, _officeId, OfficeName, null)),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, _officeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName))),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, _officeId, OfficeName, null)),
                 };
             return events;
         }
@@ -69,22 +70,22 @@ namespace Contact.Domain.Test.Company
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(adminId, new EmployeeCreated(companyId, companyName, existingOfficeId, existingOfficeName, adminId, adminFirstName, adminLastName, adminDateOfBirth)),
+                    new FakeStreamEvent(Admin2Id, new EmployeeCreated(CompanyId, CompanyName, _officeId, OfficeName, Admin2Id, Admin2FirstName, Admin2LastName, Admin2DateOfBirth)),
                 };
             return events;
         }
 
-        public override CloseOffice When()
+        public override AddOfficeAdmin When()
         {
-            var cmd = new CloseOffice(companyId, officeId)
+            var cmd = new AddOfficeAdmin(CompanyId, _officeId, Admin2Id)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(adminId, NameService.GetName(adminFirstName, adminLastName)));
-            return (CloseOffice)cmd;
+                .WithBasedOnVersion(5)
+                .WithCreatedBy(new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)));
+            return (AddOfficeAdmin)cmd;
         }
 
-        public override Handles<CloseOffice> OnHandler()
+        public override Handles<AddOfficeAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

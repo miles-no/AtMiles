@@ -7,6 +7,7 @@ namespace Contact.Domain.Commands
     {
         public string CompanyId { get; private set; }
         public string OfficeId { get; private set; }
+        public string GlobalId { get; private set; }
         public string FirstName { get; private set; }
         public string MiddleName { get; private set; }
         public string LastName { get; private set; }
@@ -17,18 +18,19 @@ namespace Contact.Domain.Commands
         public Address HomeAddress { get; private set; }
         public Picture Photo { get; private set; }
 
-        public AddEmployee(string companyId, string officeId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
+        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
         {
             CompanyId = companyId;
             OfficeId = officeId;
+            GlobalId = globalId;
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
             DateOfBirth = dateOfBirth;
         }
 
-        public AddEmployee(string companyId, string officeId, string firstName, string lastName, DateTime dateOfBirth)
-            : this(companyId, officeId, firstName, string.Empty, lastName, dateOfBirth) { }
+        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string lastName, DateTime dateOfBirth)
+            : this(companyId, officeId, globalId, firstName, string.Empty, lastName, dateOfBirth) { }
 
         public AddEmployee WithJobTitle(string jobTitle)
         {

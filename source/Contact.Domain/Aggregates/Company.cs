@@ -19,7 +19,6 @@ namespace Contact.Domain.Aggregates
             _name = string.Empty;
             _companyAdmins = new List<string>();
             _offices = new List<Office>();
-            
         }
 
         public bool IsCompanyAdmin(string identifier)
@@ -197,7 +196,7 @@ namespace Contact.Domain.Aggregates
         {
             if (!IsOffice(ev.OfficeId)) return;
             var office = GetOffice(ev.OfficeId);
-            office.AddEmployee(ev.Id);
+            office.AddEmployee(ev.GlobalId);
         }
 
         private void Apply(EmployeeRemoved ev)
