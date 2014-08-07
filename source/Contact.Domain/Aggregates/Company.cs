@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Contact.Domain.Entities;
 using Contact.Domain.Events;
 using System.Linq;
+using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Aggregates
@@ -38,7 +39,7 @@ namespace Contact.Domain.Aggregates
             return _offices.First(item => item.Id == officeId);
         }
 
-        private bool IsOffice(string officeId)
+        public bool IsOffice(string officeId)
         {
             return _offices.Any(item => item.Id == officeId);
         }
@@ -69,6 +70,26 @@ namespace Contact.Domain.Aggregates
                 .WithCreated(DateTime.UtcNow)
                 .WithCreatedBy(createdBy);
             ApplyChange(ev);
+        }
+
+        public void CloseOffice(string officeId, Person createdBy, string correlationId)
+        {
+            if (OnlyOneOfficeLeft()) throw new LastOfficeException();
+
+            var office = GetOffice(officeId);
+
+            if(!office.IsEmptyForEmployees()) throw new ExistingChildItemsException();
+
+            var ev = new OfficeClosed(_id, _name, office.Id, office.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
+            ApplyChange(ev);
+        }
+
+        private bool OnlyOneOfficeLeft()
+        {
+            return _offices.Count == 1;
         }
 
 
@@ -118,6 +139,20 @@ namespace Contact.Domain.Aggregates
             if (!IsOffice(ev.OfficeId)) return;
             var office = GetOffice(ev.OfficeId);
             office.RemoveAdmin(ev.AdminId);
+        }
+
+        private void Apply(EmployeeAdded ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+            var office = GetOffice(ev.OfficeId);
+            office.AddEmployee(ev.Id);
+        }
+
+        private void Apply(EmployeeRemoved ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+            var office = GetOffice(ev.OfficeId);
+            office.RemoveEmployee(ev.Id);
         }
     }
 }

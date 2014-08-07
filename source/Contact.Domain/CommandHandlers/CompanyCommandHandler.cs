@@ -106,9 +106,11 @@ namespace Contact.Domain.CommandHandlers
             if (admin == null) throw new UnknownItemException();
 
             var company = _companyRepository.GetById(message.CompanyId);
-            company.IsCompanyAdmin(message.CreatedBy.Identifier);
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException();
 
-            //TODO: Implement
+            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
+
+            company.CloseOffice(message.OfficeId, message.CreatedBy, message.CorrelationId);
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }

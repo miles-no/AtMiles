@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company
 {
     [TestFixture]
-    public class CloseOfficeUnknownOfficeTest : EventSpecification<CloseOffice>
+    public class CloseOfficeWithEmployeesTest : EventSpecification<CloseOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -26,15 +26,16 @@ namespace Contact.Domain.Test.Company
         private readonly string officeId = Guid.NewGuid().ToString();
         private const string officeName = "Stavanger";
 
+
         private const string adminId = "adm1";
         private const string adminFirstName = "Admin";
         private const string adminLastName = "Adminson";
         private static readonly DateTime adminDateOfBirth = new DateTime(1980, 01, 01);
 
         [Test]
-        public void close_office_unknown_office()
+        public void close_office_with_employees()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new ExistingChildItemsException();
             Setup();
         }
 
@@ -59,8 +60,9 @@ namespace Contact.Domain.Test.Company
                 {
                     new FakeStreamEvent(companyId, new CompanyCreated(companyId, companyName)),
                     new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, existingOfficeId, existingOfficeName, null)),
-                    new FakeStreamEvent(companyId, new EmployeeAdded(companyId, companyName, existingOfficeId, existingOfficeName, adminId, NameService.GetName(adminFirstName , adminLastName))),
                     new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, adminId, NameService.GetName(adminFirstName , adminLastName))),
+                    new FakeStreamEvent(companyId, new OfficeOpened(companyId, companyName, officeId, officeName, null)),
+                    new FakeStreamEvent(companyId, new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, NameService.GetName(adminFirstName , adminLastName))),
                 };
             return events;
         }
