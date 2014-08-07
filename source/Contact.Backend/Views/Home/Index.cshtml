@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.Owin.Security
+<div class="jumbotron">
+    @{
+        // 
+        var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+        <div>
+            <p>This is a test page for the @@miles backend. For now this uses OAuth2 as authentication, and Google as provider</p>
+        </div>
+        <div id="login" >
+            <span>Log in with </span>
+            <a href="api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A56548%2F">Google</a>
+
+            @*  If more providers are added, we can loop through these like this:
+                <p>
+
+                @foreach (var p in loginProviders)
+                {
+                    <a href="api/Account/ExternalLogin?provider=@(p.AuthenticationType)&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A56548%2F">@p.AuthenticationType</a>
+                    <button type="submit" onclick="" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                }
+
+            </p>*@
+        </div>
+        <div id="authenticated" >
+            <h2 id="welcomemessage"></h2>
+        </div>
+    }
+            
+        
+    
+</div>
+<div class="row">
+    @User.Identity.GetUserName()
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h2>Autentisert!! @User.Identity.GetUserName()</h2>
+    }
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(new function() {
+            $.ajax(
+                    {
+                        url: "/api/test",
+                        type: "GET",
+                        dataType: "json",
+                        xhrFields: {
+                            withCredentials: true
+                        }
+                    }
+                )
+                .done(function(res) {
+                    $('#welcomemessage').text(res);
+                    $('#login').hide();
+                    $('#authenticated').show();
+
+                })
+                .fail(
+                    function(feilkode) {
+                        if (feilkode.status == 401) {
+                            $('#login').show();
+                            $('#authenticated').hide();
+                        } else {
+                            alert(feilkode);
+                        }
+                    });
+
+        });
+    </script>
+     
+
+}
