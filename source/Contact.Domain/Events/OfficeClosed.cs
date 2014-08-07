@@ -2,14 +2,18 @@
 {
     public class OfficeClosed : Event
     {
+        public string CompanyId { get; private set; }
+        public string CompanyName { get; private set; }
         public string OfficeId { get; private set; }
 
-        public string Name { get; private set; }
+        public string OfficeName { get; private set; }
 
-        public OfficeClosed(string officeId, string name)
+        public OfficeClosed(string companyId, string companyName, string officeId, string officeName)
         {
+            CompanyId = companyId;
+            CompanyName = companyName;
             OfficeId = officeId;
-            Name = name;
+            OfficeName = officeName;
         }
     }
 }

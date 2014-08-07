@@ -4,16 +4,20 @@ namespace Contact.Domain.Events
 {
     public class OfficeOpened : Event
     {
-        public string Id { get; private set; }
+        public string CompanyId { get; private set; }
+        public string CompanyName { get; private set; }
+        public string OfficeId { get; private set; }
 
-        public string Name { get; private set; }
+        public string OfficeName { get; private set; }
 
         public Address Address { get; private set; }
 
-        public OfficeOpened(string id, string name, Address address)
+        public OfficeOpened(string companyId, string companyName, string officeId, string officeName, Address address)
         {
-            Id = id;
-            Name = name;
+            CompanyId = companyId;
+            CompanyName = companyName;
+            OfficeId = officeId;
+            OfficeName = officeName;
             Address = address;
         }
     }

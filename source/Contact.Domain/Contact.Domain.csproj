@@ -57,24 +57,28 @@
     <Compile Include="Event.cs" />
     <Compile Include="Events\CompanyAdminAdded.cs" />
     <Compile Include="Events\CompanyAdminRemoved.cs" />
+    <Compile Include="Events\CompanyCreated.cs" />
     <Compile Include="Events\EmployeeAdded.cs" />
+    <Compile Include="Events\EmployeeCreated.cs" />
+    <Compile Include="Events\EmployeeRemoved.cs" />
     <Compile Include="Events\EmployeeTerminated.cs" />
     <Compile Include="Events\OfficeAdminAdded.cs" />
     <Compile Include="Events\OfficeAdminRemoved.cs" />
     <Compile Include="Events\OfficeClosed.cs" />
     <Compile Include="Events\OfficeOpened.cs" />
+    <Compile Include="Exceptions\DomainBaseException.cs" />
+    <Compile Include="Exceptions\UnknownItemException.cs" />
     <Compile Include="Handles.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="PrivateReflectionDynamicObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
     <Compile Include="ValueTypes\Person.cs" />
     <Compile Include="ValueTypes\Picture.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

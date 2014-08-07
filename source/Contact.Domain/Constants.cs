@@ -3,6 +3,6 @@
     public class Constants
     {
         public static int IgnoreVersion = -2;
-        public static string SingleCompanyId = "FIRSTCOMPANY";
+        //public static string SingleCompanyId = "FIRSTCOMPANY";
     }
 }

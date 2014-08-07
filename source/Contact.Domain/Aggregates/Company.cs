@@ -8,12 +8,15 @@ namespace Contact.Domain.Aggregates
     public class Company : AggregateRoot
     {
         private readonly List<string> _companyAdmins;
-        private readonly List<Office> _offices; 
+        private readonly List<Office> _offices;
+        private string _name;
 
         public Company()
         {
+            _name = string.Empty;
             _companyAdmins = new List<string>();
             _offices = new List<Office>();
+            
         }
 
         public bool IsCompanyAdmin(string identifier)
@@ -40,14 +43,21 @@ namespace Contact.Domain.Aggregates
 
         public void AddCompanyAdmin(Employee employeeToBeAdmin)
         {
-            var ev = new CompanyAdminAdded(employeeToBeAdmin.Id, employeeToBeAdmin.Name);
+            var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name);
             ApplyChange(ev);
         }
 
         public void RemoveCompanyAdmin(Employee employeeToBeRemoved)
         {
-            var ev = new CompanyAdminRemoved(employeeToBeRemoved.Id, employeeToBeRemoved.Name);
+            var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name);
             ApplyChange(ev);
+        }
+
+
+        private void Apply(CompanyCreated ev)
+        {
+            _id = ev.CompanyId;
+            _name = ev.CompanyName;
         }
 
         private void Apply(CompanyAdminAdded ev)
@@ -64,9 +74,9 @@ namespace Contact.Domain.Aggregates
 
         private void Apply(OfficeOpened ev)
         {
-            if (IsOffice(ev.Id)) return;
+            if (IsOffice(ev.OfficeId)) return;
 
-            var office = new Office(ev.Id);
+            var office = new Office(ev.OfficeId);
             _offices.Add(office);
         }
 
