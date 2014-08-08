@@ -2,6 +2,6 @@
 {
     public class AsyncResponseBase : ResponseBase
     {
-        public string StatusUrl { get; set; }
+
     }
 }
