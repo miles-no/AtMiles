@@ -3,7 +3,8 @@ using Contact.Backend.Models.Api;
 
 namespace Contact.Backend.Controllers
 {
-    
+
+    [Authorize]
     public class StatusController : ApiController
     {
         /// <summary>

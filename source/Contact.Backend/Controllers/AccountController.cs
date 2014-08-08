@@ -37,6 +37,13 @@ namespace Contact.Backend.Controllers
        
 
         // GET api/Account/ExternalLogin
+        /// <summary>
+        /// Logs in the user using an external provider. Supported provider is as of now Google. Use url result of api/account/externalogins for correct parameters
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="error"></param>
+        /// <param name="redirect_uri"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null, string redirect_uri = null)
@@ -73,7 +80,14 @@ namespace Contact.Backend.Controllers
             return Ok();
         }
 
+        
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
+        /// <summary>
+        /// Gets at list of available external login providers. 
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <param name="generateState"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("ExternalLogins")]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)

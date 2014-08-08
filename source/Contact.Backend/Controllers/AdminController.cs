@@ -7,6 +7,7 @@ namespace Contact.Backend.Controllers
     /// <summary>
     /// Administrative interface
     /// </summary>
+    [Authorize]
     public class AdminController : ApiController
     {
         /// <summary>

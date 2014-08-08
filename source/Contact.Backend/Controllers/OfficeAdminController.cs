@@ -8,6 +8,7 @@ namespace Contact.Backend.Controllers
     /// <summary>
     /// Interface for office administrators
     /// </summary>
+    [Authorize]
     public class OfficeAdminController : ApiController
     {
         /// <summary>

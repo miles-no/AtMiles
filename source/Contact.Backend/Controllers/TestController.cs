@@ -11,6 +11,10 @@ namespace Contact.Backend.Controllers
     [Authorize]
     public class TestController : ApiController
     {
+        /// <summary>
+        /// Simple test that returns your name if you are authenticated. 401 if you are not
+        /// </summary>
+        /// <returns></returns>
         public string Get()
         {
             string res = "Welcome {0}";
