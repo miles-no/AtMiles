@@ -14,6 +14,11 @@ namespace Contact.Domain.Aggregates
         private readonly List<Office> _offices;
         private string _name;
 
+        public string Name
+        {
+            get { return _name; }
+        }
+
         public Company()
         {
             _name = string.Empty;
@@ -33,7 +38,7 @@ namespace Contact.Domain.Aggregates
             return office.IsAdmin(identifier);
         }
 
-        private Office GetOffice(string officeId)
+        public Office GetOffice(string officeId)
         {
             return _offices.First(item => item.Id == officeId);
         }
@@ -211,6 +216,19 @@ namespace Contact.Domain.Aggregates
             if (!IsOffice(officeId)) return false;
 
             return IsCompanyAdmin(employeeId) || IsOfficeAdmin(employeeId, officeId);
+        }
+
+        public bool HasAccessToAddEmployeeToOffice(string adminId, string officeId)
+        {
+            return HasOfficeAccess(adminId, officeId);
+        }
+
+        public void AddNewEmployeeToOffice(string officeId, Employee employee)
+        {
+            var office = GetOffice(officeId);
+            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name);
+
+            ApplyChange(ev);
         }
     }
 }

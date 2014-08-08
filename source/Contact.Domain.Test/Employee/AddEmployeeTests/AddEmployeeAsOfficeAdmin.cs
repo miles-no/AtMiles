@@ -32,12 +32,18 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string EmployeeLastName = "Kurtson";
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
-
+        [Test]
+        public void add_employee_as_office_admin()
+        {
+            Setup();
+        }
 
         public override IEnumerable<Event> Produced()
         {
-            var events = _fakeCompanyRepository.GetThenEvents();
-            return events;
+            var events1 = _fakeEmployeeRepository.GetThenEvents();
+            var events2 = _fakeCompanyRepository.GetThenEvents();
+            events1.AddRange(events2);
+            return events1;
         }
 
         public override IEnumerable<FakeStreamEvent> Given()
@@ -55,8 +61,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
-                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName))),
-                    
+                    new FakeStreamEvent(CompanyId, new OfficeAdminAdded(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, NameService.GetName(AdminFirstName , AdminLastName)))
                 };
             return events;
         }
@@ -93,7 +98,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
                 {
                     new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, EmployeeFirstName, EmployeeLastName, EmployeeDateOfBirth)
                                         .WithCorrelationId(_correlationId)
-                                        .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)))
+                                        .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName))),
+                    new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName))
                 };
             return events;
         }

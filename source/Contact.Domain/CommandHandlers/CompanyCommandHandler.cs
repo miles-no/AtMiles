@@ -1,6 +1,7 @@
 ﻿using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
 using Contact.Domain.Exceptions;
+using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.CommandHandlers
 {
@@ -120,8 +121,29 @@ namespace Contact.Domain.CommandHandlers
 
             var company = _companyRepository.GetById(message.CompanyId);
 
-            //TODO: Implement
+            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
 
+            var office = company.GetOffice(message.OfficeId);
+
+            Employee existingUser = null;
+            try
+            {
+                existingUser = _employeeRepository.GetById(message.GlobalId);
+            }
+            catch (UnknownItemException){}
+
+            if(existingUser != null) throw new AlreadyExistingItemException();
+
+            if(!company.HasAccessToAddEmployeeToOffice(admin.Id, message.OfficeId)) throw new NoAccessException();
+
+            var newEmployee = new Employee();
+            newEmployee.CreateNew(company.Id, company.Name, office.Id, office.Name,
+                message.GlobalId, message.FirstName, message.MiddleName, message.LastName, message.DateOfBirth,
+                message.JobTitle, message.PhoneNumber, message.Email, message.HomeAddress, message.Photo, new Person(admin.Id, admin.Name), message.CorrelationId);
+
+            company.AddNewEmployeeToOffice(office.Id, newEmployee);
+
+            _employeeRepository.Save(newEmployee, Constants.NewVersion);
             _companyRepository.Save(company, message.BasedOnVersion);
         }
 

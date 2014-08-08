@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events;
+using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
@@ -32,7 +33,12 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string EmployeeLastName = "Kurtson";
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
-
+        [Test]
+        public void add_employee_unknown_office()
+        {
+            ExpectedException = new UnknownItemException();
+            Setup();
+        }
 
         public override IEnumerable<Event> Produced()
         {
@@ -54,9 +60,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
-                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName))),
-                    
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName)))
                 };
             return events;
         }
@@ -89,13 +93,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         public override IEnumerable<Event> Expect()
         {
-            var events = new List<Event>
-                {
-                    new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, EmployeeFirstName, EmployeeLastName, EmployeeDateOfBirth)
-                                        .WithCorrelationId(_correlationId)
-                                        .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)))
-                };
-            return events;
+            yield break;
         }
     }
 }

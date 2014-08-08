@@ -32,12 +32,18 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string EmployeeLastName = "Kurtson";
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
-
+        [Test]
+        public void add_employee_as_company_admin()
+        {
+            Setup();
+        }
 
         public override IEnumerable<Event> Produced()
         {
-            var events = _fakeCompanyRepository.GetThenEvents();
-            return events;
+            var events1 = _fakeEmployeeRepository.GetThenEvents();
+            var events2 = _fakeCompanyRepository.GetThenEvents();
+            events1.AddRange(events2);
+            return events1;
         }
 
         public override IEnumerable<FakeStreamEvent> Given()
@@ -93,7 +99,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
                 {
                     new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, EmployeeFirstName, EmployeeLastName, EmployeeDateOfBirth)
                                         .WithCorrelationId(_correlationId)
-                                        .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)))
+                                        .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName))),
+                    new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName))
                 };
             return events;
         }
