@@ -1,12 +1,14 @@
 ﻿using System;
 using Contact.Domain.ValueTypes;
 
-namespace Contact.Domain.Commands
+namespace Contact.Domain.Events.Employee
 {
-    public class AddEmployee : Command
+    public class EmployeeCreated : Event
     {
         public string CompanyId { get; private set; }
+        public string CompanyName { get; private set; }
         public string OfficeId { get; private set; }
+        public string OfficeName { get; private set; }
         public string GlobalId { get; private set; }
         public string FirstName { get; private set; }
         public string MiddleName { get; private set; }
@@ -18,10 +20,12 @@ namespace Contact.Domain.Commands
         public Address HomeAddress { get; private set; }
         public Picture Photo { get; private set; }
 
-        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
+        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
         {
             CompanyId = companyId;
+            CompanyName = companyName;
             OfficeId = officeId;
+            OfficeName = officeName;
             GlobalId = globalId;
             FirstName = firstName;
             MiddleName = middleName;
@@ -29,34 +33,34 @@ namespace Contact.Domain.Commands
             DateOfBirth = dateOfBirth;
         }
 
-        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string lastName, DateTime dateOfBirth)
-            : this(companyId, officeId, globalId, firstName, string.Empty, lastName, dateOfBirth) { }
+        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string lastName, DateTime dateOfBirth)
+            : this(companyId, companyName, officeId, officeName, globalId, firstName, string.Empty, lastName, dateOfBirth) { }
 
-        public AddEmployee WithJobTitle(string jobTitle)
+         public EmployeeCreated WithJobTitle(string jobTitle)
         {
             JobTitle = jobTitle;
             return this;
         }
 
-        public AddEmployee WithPhoneNumber(string phoneNumber)
+         public EmployeeCreated WithPhoneNumber(string phoneNumber)
         {
             PhoneNumber = phoneNumber;
             return this;
         }
 
-        public AddEmployee WithEmail(string email)
+         public EmployeeCreated WithEmail(string email)
         {
             Email = email;
             return this;
         }
 
-        public AddEmployee WithPhoto(Picture photo)
+         public EmployeeCreated WithPhoto(Picture photo)
         {
             Photo = photo;
             return this;
         }
 
-        public AddEmployee WithHomeAddress(Address homeAddress)
+         public EmployeeCreated WithHomeAddress(Address homeAddress)
         {
             HomeAddress = homeAddress;
             return this;
