@@ -6,6 +6,7 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
@@ -25,12 +26,32 @@ namespace Contact.Backend
         public void ConfigureAuth(IAppBuilder app)
         {
             PublicClientId = "self";
-           
+            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"), 
-            //    Provider = new OAuthAuthorizationServerProvider(),
-                Provider = new ApplicationOAuthProvider(PublicClientId),
+                //TODO: Add additional validation if necessary
+                Provider = new OAuthAuthorizationServerProvider
+                {
+                     OnValidateClientRedirectUri = async (context) =>
+                     {
+                         context.Validated(context.RedirectUri);
+                     },
+                     OnValidateClientAuthentication = async (context) =>
+                     {
+                         context.Validated(context.ClientId);
+                     },
+                     OnGrantResourceOwnerCredentials = async (context) =>
+                     {
+                         context.Validated(context.Ticket);
+                     },
+                     OnGrantClientCredentials = async (context) =>
+                     {
+                         context.Validated(context.Ticket);
+                     }
+                },
+             
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
                 AllowInsecureHttp = true

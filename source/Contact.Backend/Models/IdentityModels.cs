@@ -30,4 +30,6 @@ namespace Contact.Backend.Models
             return new ApplicationDbContext();
         }
     }
+
+    
 }
