@@ -9,8 +9,6 @@ using Microsoft.AspNet.Identity;
 namespace Contact.Backend.Controllers
 {
     [Authorize]
-    //[OverrideAuthentication]
-    //[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
     public class TestController : ApiController
     {
         public string Get()
@@ -36,11 +34,6 @@ namespace Contact.Backend.Controllers
 
 
             return res;
-        }
-
-        // POST api/values
-        public void Post([FromBody]string value)
-        {
         }
 
     }

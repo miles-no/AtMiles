@@ -1,9 +1,3 @@
-using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 using Contact.Backend.Models.Api;
 using Contact.Backend.Utilities;

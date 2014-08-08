@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using Contact.Backend.Providers;
-using Contact.Backend.Models;
 
 namespace Contact.Backend
 {
@@ -26,11 +19,11 @@ namespace Contact.Backend
         public void ConfigureAuth(IAppBuilder app)
         {
             PublicClientId = "self";
-            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-
+    
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"), 
+       
                 //TODO: Add additional validation if necessary
                 Provider = new OAuthAuthorizationServerProvider
                 {

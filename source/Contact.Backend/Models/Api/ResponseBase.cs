@@ -1,6 +1,4 @@
-﻿using Contact.Backend.Controllers;
-
-namespace Contact.Backend.Models.Api
+﻿namespace Contact.Backend.Models.Api
 {
     public class ResponseBase
     {
