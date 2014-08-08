@@ -15,7 +15,7 @@ namespace Contact.Backend.Utilities
         public static AsyncResponseBase CreateDummyResponse()
         {
             var id = CreateNewId();
-            return new AsyncResponseBase {Id = id, Status = "pending", Url = "http://some_url/" + HttpUtility.UrlEncode(id)};
+            return new AsyncResponseBase {RequestId = id, Status = new Status{Url = "http://status/" + HttpUtility.UrlEncode(id), Id = "pending"}};
         }
     }
 }

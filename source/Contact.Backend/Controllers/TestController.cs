@@ -9,8 +9,8 @@ using Microsoft.AspNet.Identity;
 namespace Contact.Backend.Controllers
 {
     [Authorize]
-    [OverrideAuthentication]
-    [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+    //[OverrideAuthentication]
+    //[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
     public class TestController : ApiController
     {
         public string Get()
