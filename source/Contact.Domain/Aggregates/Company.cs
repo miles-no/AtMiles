@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Contact.Domain.Annotations;
 using Contact.Domain.Entities;
-using Contact.Domain.Events;
 using System.Linq;
+using Contact.Domain.Events.Company;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 
@@ -148,69 +149,6 @@ namespace Contact.Domain.Aggregates
             return _offices.Count == 1;
         }
 
-
-        private void Apply(CompanyCreated ev)
-        {
-            _id = ev.CompanyId;
-            _name = ev.CompanyName;
-        }
-
-        private void Apply(CompanyAdminAdded ev)
-        {
-            if (_companyAdmins.Contains(ev.NewAdminId)) return;
-
-            _companyAdmins.Add(ev.NewAdminId);
-        }
-
-        private void Apply(CompanyAdminRemoved ev)
-        {
-            _companyAdmins.RemoveAll(item => item == ev.AdminId);
-        }
-
-        private void Apply(OfficeOpened ev)
-        {
-            if (IsOffice(ev.OfficeId)) return;
-
-            var office = new Office(ev.OfficeId, ev.OfficeName);
-            _offices.Add(office);
-        }
-
-        private void Apply(OfficeClosed ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-
-            _offices.RemoveAll(item => item.Id == ev.OfficeId);
-        }
-
-        private void Apply(OfficeAdminAdded ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-
-            var office = GetOffice(ev.OfficeId);
-            office.AddAdmin(ev.AdminId);
-        }
-
-        private void Apply(OfficeAdminRemoved ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-            var office = GetOffice(ev.OfficeId);
-            office.RemoveAdmin(ev.AdminId);
-        }
-
-        private void Apply(EmployeeAdded ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-            var office = GetOffice(ev.OfficeId);
-            office.AddEmployee(ev.GlobalId);
-        }
-
-        private void Apply(EmployeeRemoved ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-            var office = GetOffice(ev.OfficeId);
-            office.RemoveEmployee(ev.Id);
-        }
-
         private bool HasOfficeAccess(string employeeId, string officeId)
         {
             if (!IsOffice(officeId)) return false;
@@ -229,6 +167,77 @@ namespace Contact.Domain.Aggregates
             var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name);
 
             ApplyChange(ev);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(CompanyCreated ev)
+        {
+            _id = ev.CompanyId;
+            _name = ev.CompanyName;
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(CompanyAdminAdded ev)
+        {
+            if (_companyAdmins.Contains(ev.NewAdminId)) return;
+
+            _companyAdmins.Add(ev.NewAdminId);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(CompanyAdminRemoved ev)
+        {
+            _companyAdmins.RemoveAll(item => item == ev.AdminId);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(OfficeOpened ev)
+        {
+            if (IsOffice(ev.OfficeId)) return;
+
+            var office = new Office(ev.OfficeId, ev.OfficeName);
+            _offices.Add(office);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(OfficeClosed ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+
+            _offices.RemoveAll(item => item.Id == ev.OfficeId);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(OfficeAdminAdded ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+
+            var office = GetOffice(ev.OfficeId);
+            office.AddAdmin(ev.AdminId);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(OfficeAdminRemoved ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+            var office = GetOffice(ev.OfficeId);
+            office.RemoveAdmin(ev.AdminId);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(EmployeeAdded ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+            var office = GetOffice(ev.OfficeId);
+            office.AddEmployee(ev.GlobalId);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(EmployeeRemoved ev)
+        {
+            if (!IsOffice(ev.OfficeId)) return;
+            var office = GetOffice(ev.OfficeId);
+            office.RemoveEmployee(ev.Id);
         }
     }
 }

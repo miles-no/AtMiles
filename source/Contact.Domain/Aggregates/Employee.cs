@@ -1,5 +1,6 @@
 ﻿using System;
-using Contact.Domain.Events;
+using Contact.Domain.Annotations;
+using Contact.Domain.Events.Employee;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 
@@ -32,6 +33,7 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
+        [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeCreated ev)
         {
             _id = ev.GlobalId;
@@ -40,8 +42,10 @@ namespace Contact.Domain.Aggregates
             _lastName = ev.LastName;
         }
 
+        [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeTerminated ev)
         {
+            //Empty for now. Might be used for soft delete later.
         }
     }
 }

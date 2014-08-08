@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
-using Contact.Domain.Events;
+using Contact.Domain.Events.Company;
+using Contact.Domain.Events.Employee;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;

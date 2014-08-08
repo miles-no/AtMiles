@@ -1,4 +1,4 @@
-﻿namespace Contact.Domain.Events
+﻿namespace Contact.Domain.Events.Company
 {
     public class CompanyAdminRemoved : Event
     {

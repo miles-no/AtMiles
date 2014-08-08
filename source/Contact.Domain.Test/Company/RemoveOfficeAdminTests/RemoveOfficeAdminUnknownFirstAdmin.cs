@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
-using Contact.Domain.Events;
+using Contact.Domain.Events.Company;
+using Contact.Domain.Events.Employee;
 using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
@@ -61,7 +62,6 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)),
                     new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName))),
-                    //new FakeStreamEvent(companyId, new CompanyAdminAdded(companyId, companyName, admin1Id, NameService.GetName(admin1FirstName , admin1LastName))),
                     new FakeStreamEvent(CompanyId, new OfficeAdminAdded(CompanyId, CompanyName, OfficeId, OfficeName, Admin2Id, NameService.GetName(Admin2FirstName , Admin2LastName))),
                 };
             return events;
@@ -71,7 +71,6 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    //new FakeStreamEvent(admin1Id, new EmployeeCreated(companyId, companyName, officeId, officeName, admin1Id, admin1FirstName, admin1LastName, admin1DateOfBirth)),
                     new FakeStreamEvent(Admin2Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin2Id, Admin2FirstName, Admin2LastName, Admin2DateOfBirth)),
                 };
             return events;

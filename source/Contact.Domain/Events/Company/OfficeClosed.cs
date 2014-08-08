@@ -1,8 +1,6 @@
-﻿using Contact.Domain.ValueTypes;
-
-namespace Contact.Domain.Events
+﻿namespace Contact.Domain.Events.Company
 {
-    public class OfficeOpened : Event
+    public class OfficeClosed : Event
     {
         public string CompanyId { get; private set; }
         public string CompanyName { get; private set; }
@@ -10,15 +8,12 @@ namespace Contact.Domain.Events
 
         public string OfficeName { get; private set; }
 
-        public Address Address { get; private set; }
-
-        public OfficeOpened(string companyId, string companyName, string officeId, string officeName, Address address)
+        public OfficeClosed(string companyId, string companyName, string officeId, string officeName)
         {
             CompanyId = companyId;
             CompanyName = companyName;
             OfficeId = officeId;
             OfficeName = officeName;
-            Address = address;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Contact.Domain.ValueTypes;
 
-namespace Contact.Domain.Events
+namespace Contact.Domain.Events.Employee
 {
     public class EmployeeCreated : Event
     {

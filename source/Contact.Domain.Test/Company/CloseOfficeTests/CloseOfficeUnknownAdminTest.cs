@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
-using Contact.Domain.Events;
+using Contact.Domain.Events.Company;
 using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;

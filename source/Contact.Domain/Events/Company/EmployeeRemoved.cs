@@ -1,6 +1,7 @@
-﻿namespace Contact.Domain.Events
+﻿namespace Contact.Domain.Events.Company
 {
-    public class EmployeeTerminated : Event
+
+    public class EmployeeRemoved : Event
     {
         public string CompanyId { get; private set; }
         public string CompanyName { get; private set; }
@@ -9,7 +10,7 @@
         public string Id { get; private set; }
         public string Name { get; private set; }
 
-        public EmployeeTerminated(string companyId, string companyName, string officeId, string officeName, string id, string name)
+        public EmployeeRemoved(string companyId, string companyName, string officeId, string officeName, string id, string name)
         {
             CompanyId = companyId;
             CompanyName = companyName;
