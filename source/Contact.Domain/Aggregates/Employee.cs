@@ -33,6 +33,13 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
+        public void Terminate(string companyId, string companyName, string officeId, string officeName, Person person, string correlationId)
+        {
+            var ev = new EmployeeTerminated(companyId, companyName, officeId, officeName, _id,
+                NameService.GetName(_firstName, _middleName, _lastName));
+            ApplyChange(ev);
+        }
+
         [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeCreated ev)
         {

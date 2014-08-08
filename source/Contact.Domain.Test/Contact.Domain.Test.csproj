@@ -90,6 +90,13 @@
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeUnknownAdmin.cs" />
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeUnknownOffice.cs" />
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeWithoutPermission.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeAsCompanyAdminTest.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeAsOfficeAdminTest.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeSelfTest.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeUnknownAdminTest.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeUnknownEmployeeTest.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeUnknownOfficeTest.cs" />
+    <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeWithoutPermissionTest.cs" />
     <Compile Include="EventSpecification.cs" />
     <Compile Include="FakeRepository.cs" />
     <Compile Include="FakeStreamEvent.cs" />

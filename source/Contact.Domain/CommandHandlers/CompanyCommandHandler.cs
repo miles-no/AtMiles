@@ -134,14 +134,14 @@ namespace Contact.Domain.CommandHandlers
 
             if(existingUser != null) throw new AlreadyExistingItemException();
 
-            if(!company.HasAccessToAddEmployeeToOffice(admin.Id, message.OfficeId)) throw new NoAccessException();
+            if(!company.HasAccessToAddEmployeeToOffice(admin.Id, office.Id)) throw new NoAccessException();
 
             var newEmployee = new Employee();
             newEmployee.CreateNew(company.Id, company.Name, office.Id, office.Name,
                 message.GlobalId, message.FirstName, message.MiddleName, message.LastName, message.DateOfBirth,
                 message.JobTitle, message.PhoneNumber, message.Email, message.HomeAddress, message.Photo, new Person(admin.Id, admin.Name), message.CorrelationId);
 
-            company.AddNewEmployeeToOffice(office.Id, newEmployee);
+            company.AddNewEmployeeToOffice(office.Id, newEmployee, new Person(admin.Id, admin.Name), message.CorrelationId);
 
             _employeeRepository.Save(newEmployee, Constants.NewVersion);
             _companyRepository.Save(company, message.BasedOnVersion);
@@ -154,9 +154,27 @@ namespace Contact.Domain.CommandHandlers
 
             var company = _companyRepository.GetById(message.CompanyId);
 
-            //TODO: Implement
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
 
+            var office = company.GetOffice(message.OfficeId);
+
+            var employee = _employeeRepository.GetById(message.EmployeeId);
+            if(employee == null) throw new UnknownItemException();
+
+            CheckIfHandlingSelf(admin, employee);
+
+            if (!company.HasAccessToAddEmployeeToOffice(admin.Id, office.Id)) throw new NoAccessException();
+
+            company.RemoveEmployee(office.Id, employee, new Person(admin.Id, admin.Name), message.CorrelationId);
+            employee.Terminate(company.Id, company.Name, office.Id, office.Name, new Person(admin.Id, admin.Name), message.CorrelationId);
+
+            _employeeRepository.Save(employee, Constants.IgnoreVersion);
             _companyRepository.Save(company, message.BasedOnVersion);
+        }
+
+        private static void CheckIfHandlingSelf(Employee admin, Employee employee)
+        {
+            if (admin.Id == employee.Id) throw new NoAccessException();
         }
     }
 }

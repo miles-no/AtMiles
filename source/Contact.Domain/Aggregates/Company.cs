@@ -161,10 +161,24 @@ namespace Contact.Domain.Aggregates
             return HasOfficeAccess(adminId, officeId);
         }
 
-        public void AddNewEmployeeToOffice(string officeId, Employee employee)
+        public void AddNewEmployeeToOffice(string officeId, Employee employee, Person createdBy, string correlationId)
         {
             var office = GetOffice(officeId);
-            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name);
+            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
+
+            ApplyChange(ev);
+        }
+
+        public void RemoveEmployee(string officeId, Employee employee, Person createdBy, string correlationId)
+        {
+            var office = GetOffice(officeId);
+            var ev = new EmployeeRemoved(_id, _name, office.Id, office.Name, employee.Id, employee.Name)
+                .WithCorrelationId(correlationId)
+                .WithCreated(DateTime.UtcNow)
+                .WithCreatedBy(createdBy);
 
             ApplyChange(ev);
         }
