@@ -75,6 +75,8 @@
     <Compile Include="Exceptions\NoAccessException.cs" />
     <Compile Include="Exceptions\UnknownItemException.cs" />
     <Compile Include="Handles.cs" />
+    <Compile Include="ICommandSender.cs" />
+    <Compile Include="IEventPublisher.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="PrivateReflectionDynamicObject.cs" />
