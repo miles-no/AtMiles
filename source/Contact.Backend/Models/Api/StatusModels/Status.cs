@@ -1,4 +1,4 @@
-﻿namespace Contact.Backend.Models.Api
+﻿namespace Contact.Backend.Models.Api.StatusModels
 {
     public class Status
     {

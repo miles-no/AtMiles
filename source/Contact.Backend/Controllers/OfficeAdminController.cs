@@ -20,7 +20,7 @@ namespace Contact.Backend.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/company/{companyId}/office/{officeId}/admin")]
-        public AsyncResponseBase AddAdmin(string companyId, string officeId, [FromBody] string employeeId)
+        public Response AddAdmin(string companyId, string officeId, [FromBody] string employeeId)
         {
             return ControllerHelpers.CreateDummyResponse(Request);
         }
@@ -34,7 +34,7 @@ namespace Contact.Backend.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("api/company/{companyId}/office/{officeId}/admin")]
-        public AsyncResponseBase RemoveAdmin(string companyId, string officeId, [FromBody] string employeeId)
+        public Response RemoveAdmin(string companyId, string officeId, [FromBody] string employeeId)
         {
             return ControllerHelpers.CreateDummyResponse(Request);
         }
@@ -46,7 +46,7 @@ namespace Contact.Backend.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/company/{companyId}/employee")]
-        public AsyncResponseBase CreateEmployee(string companyId)
+        public Response CreateEmployee(string companyId)
         {
             return ControllerHelpers.CreateDummyResponse(Request);
         }
@@ -59,7 +59,7 @@ namespace Contact.Backend.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("api/company/{companyId}/employee")]
-        public AsyncResponseBase TerminateEmployee(string companyId)
+        public Response TerminateEmployee(string companyId)
         {
             return ControllerHelpers.CreateDummyResponse(Request);
         }

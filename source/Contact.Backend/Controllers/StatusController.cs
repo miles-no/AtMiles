@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Contact.Backend.Models.Api;
+using Contact.Backend.Models.Api.StatusModels;
 
 namespace Contact.Backend.Controllers
 {
