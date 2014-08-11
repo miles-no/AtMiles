@@ -2,6 +2,6 @@
 {
     public interface ICommandSender
     {
-        void Send<T>(T command) where T : Command;
+        bool Send<T>(T command) where T : Command;
     }
 }
