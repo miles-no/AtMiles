@@ -55,7 +55,7 @@ namespace Contact.Infrastructure
                         {"correlationid", command.CorrelationId}
                     };
                     string routingKey = GetRoutingKey();
-                    byte[] body = Encoding.Unicode.GetBytes(JsonConvert.SerializeObject(command));
+                    byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(command));
                     try
                     {
                         _model.BasicPublish(_exchangeName, routingKey, false, true, properties, body);
