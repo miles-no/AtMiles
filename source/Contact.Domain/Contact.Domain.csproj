@@ -44,7 +44,7 @@
     <Compile Include="Aggregates\Employee.cs" />
     <Compile Include="Aggregates\Global.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="CommandHandlers\CompanyCommandHandler.cs" />
+    <Compile Include="CommandHandlers\CommandHandler.cs" />
     <Compile Include="Commands\AddCompanyAdmin.cs" />
     <Compile Include="Commands\AddEmployee.cs" />
     <Compile Include="Commands\AddOfficeAdmin.cs" />
