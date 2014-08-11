@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.AspNet.Identity;
+using System.Security.Principal;
 
 namespace Contact.Backend.Infrastructure
 {
     public interface IMediator
     {
-        void Subscribe<TFrom, TTo>(Func<TFrom, IUser, TTo> handler);
-        TTo Send<TFrom, TTo>(TFrom from, IUser user);
+        void Subscribe<TFrom, TTo>(Func<TFrom, IIdentity, TTo> handler);
+        TTo Send<TFrom, TTo>(TFrom from, IIdentity user);
     }
     
 }

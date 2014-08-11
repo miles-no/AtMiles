@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using NUnit.Framework;
 
@@ -8,13 +9,13 @@ namespace Contact.Backend.Infrastructure
     public class Mediator : IMediator
     {
         Dictionary<Tuple<Type, Type>,dynamic> subscribed = new Dictionary<Tuple<Type, Type>, dynamic>();
-       
-        public void Subscribe<TFrom, TTo>(Func<TFrom, IUser, TTo> handler)
+
+        public void Subscribe<TFrom, TTo>(Func<TFrom, IIdentity, TTo> handler)
         {
             subscribed[new Tuple<Type,Type>(typeof(TFrom),typeof(TTo))]  = handler;
         }
 
-        public TTo Send<TFrom, TTo>(TFrom @from, IUser user)
+        public TTo Send<TFrom, TTo>(TFrom @from, IIdentity user)
         {
             var test = new Tuple<Type, Type>(typeof (TFrom), typeof (TTo));
             if (subscribed.ContainsKey(test) == false)
@@ -30,10 +31,11 @@ namespace Contact.Backend.Infrastructure
 
     public class MediatorTest
     {
-        class UserMock : IUser
+        class UserMock : IIdentity
         {
-            public string Id { get; private set; }
-            public string UserName { get; set; }
+            public string Name { get; private set; }
+            public string AuthenticationType { get; private set; }
+            public bool IsAuthenticated { get; private set; }
         }
         [Test]
         public void SubscribeTest()

@@ -1,6 +1,4 @@
-﻿using Contact.Backend.Models.Api.StatusModels;
-
-namespace Contact.Backend.Models.Api
+﻿namespace Contact.Backend.Models.Api
 {
     public class Response
     {

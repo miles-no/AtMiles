@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Contact.Backend.Models
+namespace Contact.Backend.Models.Api
 {
-    public class Employee
+    public class AddEmployeeRequest
     {
         public string CompanyId { get; set; }
         public string OfficeId { get; set; }
@@ -15,9 +15,8 @@ namespace Contact.Backend.Models
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public Address HomeAddress { get; set; }
-        public Picture Photo { get; set; } 
+        public Picture Photo { get; set; }  
     }
-
     public class Address
     {
         public string Street { get; set; }

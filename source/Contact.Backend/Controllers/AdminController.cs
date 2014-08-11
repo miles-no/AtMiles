@@ -1,4 +1,5 @@
 using System.Web.Http;
+using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api;
 using Contact.Backend.Utilities;
 
@@ -10,29 +11,39 @@ namespace Contact.Backend.Controllers
     [Authorize]
     public class AdminController : ApiController
     {
+        private readonly IMediator mediator;
+
+        public AdminController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
+
         /// <summary>
         /// Adds an office to a company
         /// </summary>
         /// <param name="companyId"></param>
+        /// <param name="officeName"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("api/company/{companyId}/office")]
-        public Response AddOffice(string companyId)
+        public Response OpenOffice(string companyId, string officeName)
         {
-            return ControllerHelpers.CreateDummyResponse(Request);
+            var openOfficeRequest = new OpenOfficeRequest {CompanyId = companyId, Name = officeName};
+            return mediator.Send<OpenOfficeRequest, Response>(openOfficeRequest, User.Identity);
         }
 
         /// <summary>
-        /// Removes an office in a company
+        /// Closes an office in a company
         /// </summary>
         /// <param name="companyId"></param>
         /// <param name="officeId"></param>
         /// <returns></returns>
         [HttpDelete]
         [Route("api/company/{companyId}/office/{officeId}")]
-        public Response RemoveOffice(string companyId, string officeId)
+        public Response CloseOffice(string companyId, string officeId)
         {
-            return ControllerHelpers.CreateDummyResponse(Request);
+            var closeOfficeRequest = new CloseOfficeRequest { CompanyId = companyId, OfficeId = officeId};
+            return mediator.Send<CloseOfficeRequest, Response>(closeOfficeRequest, User.Identity);
         }
 
         /// <summary>
@@ -45,20 +56,23 @@ namespace Contact.Backend.Controllers
         [Route("api/company/{companyId}/admin/{employeeId}")]
         public Response AddAdmin(string companyId, string employeeId)
         {
-            return ControllerHelpers.CreateDummyResponse(Request);
+            var addCompanyAdminRequest = new AddCompanyAdminRequest {CompanyId = companyId, NewAdminId = employeeId};
+            return mediator.Send<AddCompanyAdminRequest, Response>(addCompanyAdminRequest, User.Identity);
         }
 
         /// <summary>
         /// Removes administrative rights for a employee in a company
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="employeeId"></param>
+        /// <param name="adminId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("api/company/{companyId}/admin/{employeeId}")]
-        public Response RemoveAdmin(string companyId, string employeeId)
+        [Route("api/company/{companyId}/admin/{adminId}")]
+        public Response RemoveAdmin(string companyId, string adminId)
         {
-            return ControllerHelpers.CreateDummyResponse(Request);
+            var removeCompanyAdminRequest = new RemoveCompanyAdminRequest { CompanyId = companyId, AdminId = adminId };
+            return mediator.Send<RemoveCompanyAdminRequest, Response>(removeCompanyAdminRequest, User.Identity);
+        
         }
         
    
