@@ -6,12 +6,13 @@ namespace Contact.Backend.Infrastructure
 {
     public class CommandSenderMock : ICommandSender
     {
-        public void Send<T>(T command) where T : Command
+        public bool Send<T>(T command) where T : Command
         {
             Debug.WriteLine("#####################################");    
             Debug.WriteLine("Command:\n");    
             Debug.WriteLine(JsonConvert.SerializeObject(command));
-            Debug.WriteLine("\n#####################################");    
+            Debug.WriteLine("\n#####################################");
+            return true;
         }
     }
 }
