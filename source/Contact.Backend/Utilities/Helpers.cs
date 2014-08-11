@@ -17,7 +17,7 @@ namespace Contact.Backend.Utilities
     {
         public static string CreateNewId()
         {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray().Take(14).ToArray());
+            return Convert.ToBase64String(Guid.NewGuid().ToByteArray().ToArray()).Replace("=", string.Empty);
         }
 
         public static Response CreateResponse(string id = null, string message = null)

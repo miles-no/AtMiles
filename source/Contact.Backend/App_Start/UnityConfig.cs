@@ -1,3 +1,4 @@
+using Contact.Backend.Controllers;
 using Contact.Backend.Infrastructure;
 using Contact.Domain;
 using Microsoft.Practices.Unity;
@@ -11,8 +12,16 @@ namespace Contact.Backend
         public static void RegisterComponents()
         {
 			var container = new UnityContainer();
-            container.RegisterInstance<IMediator>(new Mediator());
+         
+            container.RegisterType<AdminController>();
+            container.RegisterType<OfficeAdminController>();
+            container.RegisterType<StatusController>();
+            container.RegisterType<AccountController>();
+            container.RegisterType<TestController>();
+            container.RegisterType<HomeController>();
+            container.RegisterInstance(MediatorConfig.Create(container));
             container.RegisterType<ICommandSender, CommandSenderMock>();
+            
             
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
