@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -8,16 +7,11 @@ using Contact.Backend.Models.Api;
 
 namespace Contact.Backend.Utilities
 {
-    public class Config
-    {
-        public static readonly string StatusEndpoint = ConfigurationManager.AppSettings["statusEndpoint"];
-    }
-
     public class Helpers
     {
         public static string CreateNewId()
         {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray().ToArray()).Replace("=", string.Empty);
+            return Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("=", string.Empty);
         }
 
         public static Response CreateResponse(string id = null, string message = null)
