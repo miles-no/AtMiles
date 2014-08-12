@@ -58,7 +58,7 @@ namespace Contact.Infrastructure
                     try
                     {
                         byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(command));
-                        _model.BasicPublish(_exchangeName, routingKey, false, true, properties, body);
+                        _model.BasicPublish(_exchangeName, routingKey, properties, body);
                     }
                     catch (Exception error)
                     {
