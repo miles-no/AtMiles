@@ -49,8 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILog.cs" />
+    <Compile Include="LongRunningProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueWorker.cs" />
     <Compile Include="RabbitMqCommandSender.cs" />
+    <Compile Include="RabbitMqCommandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

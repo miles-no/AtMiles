@@ -30,7 +30,7 @@ namespace Contact.Infrastructure
             _useSsl = useSsl;
             _heartbeatInterval = 30;
 
-            //TODO: Initialize connection
+            Connect();
         }
 
         public void Dispose()

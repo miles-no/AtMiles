@@ -157,3 +157,7 @@ $RECYCLE.BIN/
 source/Contact.Backend/App_Data/XmlDocument.xml
 source/Contact.Backend/App_Data/aspnet-Contact.Backend-20140806024328.mdf
 source/Contact.Backend/App_Data/aspnet-Contact.Backend-20140806024328_log.ldf
+
+# Vim
+*.swp
+*.swo
