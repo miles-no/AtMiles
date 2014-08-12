@@ -15,9 +15,6 @@ build/
 [Bb]in/
 [Oo]bj/
 
-# Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
-!packages/*/build/
-
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -157,3 +154,7 @@ $RECYCLE.BIN/
 source/Contact.Backend/App_Data/XmlDocument.xml
 source/Contact.Backend/App_Data/aspnet-Contact.Backend-20140806024328.mdf
 source/Contact.Backend/App_Data/aspnet-Contact.Backend-20140806024328_log.ldf
+
+# Vim
+*.swp
+*.swo
