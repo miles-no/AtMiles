@@ -29,7 +29,13 @@ namespace Contact.Backend
             }
             else
             {
-                container.RegisterType<ICommandSender, RabbitMqCommandSender>();
+                container.RegisterInstance(typeof(ICommandSender), 
+                    new RabbitMqCommandSender(
+                        Config.Rabbit.Host, 
+                        Config.Rabbit.Username, 
+                        Config.Rabbit.Password, 
+                        Config.Rabbit.ExchangeName, 
+                        Config.Rabbit.UseSsl));
             }
             
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
