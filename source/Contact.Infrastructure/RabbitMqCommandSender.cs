@@ -38,7 +38,7 @@ namespace Contact.Infrastructure
             Disconnect();
         }
 
-        public bool Send<T>(T command) where T : Command
+        public void Send<T>(T command) where T : Command
         {
             if (!IsConnected())
             {
@@ -55,21 +55,17 @@ namespace Contact.Infrastructure
                         {"correlationid", command.CorrelationId}
                     };
                     string routingKey = GetRoutingKey();
-                    byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(command));
                     try
                     {
+                        byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(command));
                         _model.BasicPublish(_exchangeName, routingKey, false, true, properties, body);
-                        return true;
                     }
                     catch (Exception error)
                     {
-                        //TODO: Log exception
+                        throw new Exception("Not able to send to queue", error);
                     }
                 }
             }
-            //TODO: Log error
-            return false;
-            
         }
 
         private string GetRoutingKey()
