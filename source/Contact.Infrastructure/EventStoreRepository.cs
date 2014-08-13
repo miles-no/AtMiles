@@ -36,7 +36,7 @@ namespace Contact.Infrastructure
                 foreach (var @event in events)
                 {
                     var stringVersion = Newtonsoft.Json.JsonConvert.SerializeObject(@event);
-                    var eventType = @event.GetType().AssemblyQualifiedName;
+                    var eventType = @event.GetType().Name;
                     var metadata = new byte[0];
 
                     var eventId = Guid.NewGuid();

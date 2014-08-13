@@ -19,7 +19,7 @@ namespace Contact.Infrastructure
         private IConnection _brokerConnection;
         private IModel _brokerChannel;
         private readonly Action<string, byte[], string, IDictionary<string, object>> _messageHandler;
-        private const string MessageTypeDefinition = "type";
+        private const string MessageTypeDefinition = "clrtype";
         private ConnectionFactory _factory;
 
         public QueueWorker(string rabbitMqHostname, string rabbitMqUsername, string rabbitMqPassword, string rabbitMqQueueName, ILog log, Action<string, byte[], string, IDictionary<string, object>> messageHandler)
