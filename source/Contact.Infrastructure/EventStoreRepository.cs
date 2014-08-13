@@ -128,14 +128,7 @@ namespace Contact.Infrastructure
         {
             if (expectedVersion != -2)
             {
-                if (expectedVersion == -1)
-                {
-                    expectedVersion = 1;
-                }
-                else
-                {
-                    expectedVersion++;
-                }
+                expectedVersion++;
             }
             return expectedVersion;
         }

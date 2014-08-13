@@ -82,6 +82,7 @@
     <Compile Include="PrivateReflectionDynamicObject.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IdService.cs" />
     <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
     <Compile Include="ValueTypes\Person.cs" />
