@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Contact.Backend.Models.Api
+namespace Contact.Backend.Models.Api.Tasks
 {
     public class AddEmployeeRequest
     {

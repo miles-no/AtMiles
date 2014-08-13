@@ -46,7 +46,7 @@ namespace Contact.Backend
                 },
              
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
                 AllowInsecureHttp = true
             };
 

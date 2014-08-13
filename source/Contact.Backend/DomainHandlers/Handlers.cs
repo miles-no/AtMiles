@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Security.Principal;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api;
+using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
 using Contact.Domain;
 using Contact.Domain.Commands;
@@ -30,6 +32,7 @@ namespace Contact.Backend.DomainHandlers
 
         }
 
+      
         private static void RegisterAddEmployee(IMediator mediator, IUnityContainer container)
         {
             mediator.Subscribe<AddEmployeeRequest, Response>((req, user) =>
@@ -208,7 +211,7 @@ namespace Contact.Backend.DomainHandlers
             IIdentity user)
         {
             command.WithCorrelationId(correlationId);
-            command.WithCreatedBy(new Person(user.GetUserId(), user.GetUserName()));
+            command.WithCreatedBy(new Person(GetIdFromIdentity(user), user.GetUserName()));
 
             var sender = container.Resolve<ICommandSender>();
 
@@ -216,6 +219,19 @@ namespace Contact.Backend.DomainHandlers
 
             return Helpers.CreateResponse(correlationId);
         }
+
+        private static string GetIdFromIdentity(IIdentity user)
+        {
+            var identity = user as ClaimsIdentity;
+            if (identity != null)
+            {
+                var claims = identity;
+                var id = claims.FindFirst(ClaimTypes.NameIdentifier);
+                return id.Issuer + "::" + id.Value;
+            }
+            return user.GetUserId();
+        }
+
     }
 }
 

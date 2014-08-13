@@ -206,7 +206,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\OfficeAdminController.cs" />
+    <Compile Include="Controllers\EmployeeQueryController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="DomainHandlers\Handlers.cs" />
@@ -214,19 +216,22 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\CommandSenderMock.cs" />
+    <Compile Include="Infrastructure\FulltextSearchEngineMock.cs" />
     <Compile Include="Infrastructure\IMediator.cs" />
     <Compile Include="Infrastructure\Mediator.cs" />
-    <Compile Include="Models\Api\AddCompanyAdminRequest.cs" />
-    <Compile Include="Models\Api\AddEmployeeRequest.cs" />
-    <Compile Include="Models\Api\AddOfficeAdminRequest.cs" />
-    <Compile Include="Models\Api\CloseOfficeRequest.cs" />
-    <Compile Include="Models\Api\OpenOfficeRequest.cs" />
-    <Compile Include="Models\Api\RemoveCompanyAdminRequest.cs" />
-    <Compile Include="Models\Api\RemoveOfficeAdminRequest.cs" />
-    <Compile Include="Models\Api\TerminateEmployeeRequest.cs" />
+    <Compile Include="Models\Api\Metadata\MetadataModel.cs" />
+    <Compile Include="Models\Api\Tasks\AddCompanyAdminRequest.cs" />
+    <Compile Include="Models\Api\Tasks\AddEmployeeRequest.cs" />
+    <Compile Include="Models\Api\Tasks\AddOfficeAdminRequest.cs" />
+    <Compile Include="Models\Api\Tasks\CloseOfficeRequest.cs" />
+    <Compile Include="Models\Api\Tasks\OpenOfficeRequest.cs" />
+    <Compile Include="Models\Api\Queries\EmployeeFulltextSearchResponse.cs" />
+    <Compile Include="Models\Api\Tasks\RemoveCompanyAdminRequest.cs" />
+    <Compile Include="Models\Api\Tasks\RemoveOfficeAdminRequest.cs" />
+    <Compile Include="Models\Api\Tasks\TerminateEmployeeRequest.cs" />
     <Compile Include="Models\ExternalLoginViewModel.cs" />
-    <Compile Include="Models\Api\Status.cs" />
-    <Compile Include="Models\Api\Response.cs" />
+    <Compile Include="Models\Api\Tasks\Status.cs" />
+    <Compile Include="Models\Api\Tasks\Response.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />

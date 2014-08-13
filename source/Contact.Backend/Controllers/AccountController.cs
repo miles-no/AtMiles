@@ -141,7 +141,7 @@ namespace Contact.Backend.Controllers
             public string LoginProvider { get; set; }
             public string ProviderKey { get; set; }
             public string UserName { get; set; }
-
+         
             public IList<Claim> GetClaims()
             {
                 IList<Claim> claims = new List<Claim>();
@@ -179,9 +179,10 @@ namespace Contact.Backend.Controllers
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name)
+                    UserName = identity.FindFirstValue(ClaimTypes.Name),
                 };
             }
+            
         }
 
         private static class RandomOAuthStateGenerator

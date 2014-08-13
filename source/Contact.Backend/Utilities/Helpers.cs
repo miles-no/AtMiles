@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http.Results;
 using Contact.Backend.Models.Api;
+using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Utilities
 {
