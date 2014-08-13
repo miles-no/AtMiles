@@ -82,12 +82,8 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
 
         public override AddOfficeAdmin When()
         {
-            var cmd = new AddOfficeAdmin(CompanyId, Office2Id, Admin2Id)
-                .WithCreated(DateTime.UtcNow)
-                .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(5)
-                .WithCreatedBy(new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)));
-            return (AddOfficeAdmin)cmd;
+            var cmd = new AddOfficeAdmin(CompanyId, Office2Id, Admin2Id, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)), _correlationId, 5);
+            return cmd;
         }
 
         public override Handles<AddOfficeAdmin> OnHandler()

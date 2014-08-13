@@ -1,4 +1,5 @@
-﻿using Contact.Domain.ValueTypes;
+﻿using System;
+using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Commands
 {
@@ -8,7 +9,8 @@ namespace Contact.Domain.Commands
         public string Name { get; private set; }
         public Address Address { get; private set; }
 
-        public OpenOffice(string companyId, string name)
+        public OpenOffice(string companyId, string name, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
+            : base(created, createdBy, correlationId, basedOnVersion)
         {
             CompanyId = companyId;
             Name = name;

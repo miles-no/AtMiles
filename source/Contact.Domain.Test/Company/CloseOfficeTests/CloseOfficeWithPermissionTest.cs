@@ -77,12 +77,8 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
 
         public override CloseOffice When()
         {
-            var cmd = new CloseOffice(CompanyId, OfficeId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(5)
-                .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)));
-            return (CloseOffice)cmd;
+            var cmd = new CloseOffice(CompanyId, OfficeId, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            return cmd;
         }
 
         public override Handles<CloseOffice> OnHandler()

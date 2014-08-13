@@ -153,7 +153,7 @@ namespace Contact.Domain.CommandHandlers
             if (admin == null) throw new UnknownItemException();
 
             var company = _companyRepository.GetById(message.CompanyId);
-
+            if (company == null) throw new UnknownItemException();
             if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
 
             var office = company.GetOffice(message.OfficeId);

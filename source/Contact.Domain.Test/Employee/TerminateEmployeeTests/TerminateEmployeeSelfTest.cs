@@ -76,12 +76,8 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
 
         public override TerminateEmployee When()
         {
-            var cmd = new TerminateEmployee(CompanyId, OfficeId, AdminId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)));
-            return (TerminateEmployee)cmd;
+            var cmd = new TerminateEmployee(CompanyId, OfficeId, AdminId, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            return cmd;
         }
 
         public override Handles<TerminateEmployee> OnHandler()

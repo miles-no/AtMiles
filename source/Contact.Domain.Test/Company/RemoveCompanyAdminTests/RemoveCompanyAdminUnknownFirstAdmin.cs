@@ -77,12 +77,8 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 
         public override RemoveCompanyAdmin When()
         {
-            var cmd = new RemoveCompanyAdmin(CompanyId, NewAdminId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(ExistingAdminId, ExistingAdminFirstName + " " + ExistingAdminLastName));
-            return (RemoveCompanyAdmin)cmd;
+            var cmd = new RemoveCompanyAdmin(CompanyId, NewAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
+            return cmd;
         }
 
         public override Handles<RemoveCompanyAdmin> OnHandler()

@@ -18,7 +18,8 @@ namespace Contact.Domain.Commands
         public Address HomeAddress { get; private set; }
         public Picture Photo { get; private set; }
 
-        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
+        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
+            :base(created, createdBy, correlationId, basedOnVersion)
         {
             CompanyId = companyId;
             OfficeId = officeId;
@@ -27,39 +28,14 @@ namespace Contact.Domain.Commands
             MiddleName = middleName;
             LastName = lastName;
             DateOfBirth = dateOfBirth;
-        }
-
-        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string lastName, DateTime dateOfBirth)
-            : this(companyId, officeId, globalId, firstName, string.Empty, lastName, dateOfBirth) { }
-
-        public AddEmployee WithJobTitle(string jobTitle)
-        {
             JobTitle = jobTitle;
-            return this;
-        }
-
-        public AddEmployee WithPhoneNumber(string phoneNumber)
-        {
             PhoneNumber = phoneNumber;
-            return this;
-        }
-
-        public AddEmployee WithEmail(string email)
-        {
             Email = email;
-            return this;
-        }
-
-        public AddEmployee WithPhoto(Picture photo)
-        {
-            Photo = photo;
-            return this;
-        }
-
-        public AddEmployee WithHomeAddress(Address homeAddress)
-        {
             HomeAddress = homeAddress;
-            return this;
+            Photo = photo;
         }
+
+        public AddEmployee(string companyId, string officeId, string globalId, string firstName, string lastName, DateTime dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
+            : this(companyId, officeId, globalId, firstName, string.Empty, lastName, dateOfBirth, jobTitle, phoneNumber, email, homeAddress, photo, created, createdBy, correlationId, basedOnVersion) { }
     }
 }

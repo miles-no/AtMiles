@@ -83,12 +83,8 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
 
         public override RemoveOfficeAdmin When()
         {
-            var cmd = new RemoveOfficeAdmin(CompanyId, Office2Id, Admin2Id)
-                .WithCreated(DateTime.UtcNow)
-                .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(5)
-                .WithCreatedBy(new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)));
-            return (RemoveOfficeAdmin)cmd;
+            var cmd = new RemoveOfficeAdmin(CompanyId, Office2Id, Admin2Id, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)), _correlationId, 5);
+            return cmd;
         }
 
         public override Handles<RemoveOfficeAdmin> OnHandler()

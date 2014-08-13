@@ -10,7 +10,8 @@ namespace Contact.Domain.Commands
         public string AdminId { get; private set; }
 
 
-        public AddOfficeAdmin(string companyId, string officeId, string adminId)
+        public AddOfficeAdmin(string companyId, string officeId, string adminId, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
+            : base(created, createdBy, correlationId, basedOnVersion)
         {
             CompanyId = companyId;
             OfficeId = officeId;
