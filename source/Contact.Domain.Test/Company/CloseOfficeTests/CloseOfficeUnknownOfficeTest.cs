@@ -88,7 +88,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            return new CommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
+            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
         public override IEnumerable<Event> Expect()

@@ -44,7 +44,9 @@
     <Compile Include="Aggregates\Employee.cs" />
     <Compile Include="Aggregates\Global.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="CommandHandlers\CommandHandler.cs" />
+    <Compile Include="CommandHandlers\CompanyCommandHandler.cs" />
+    <Compile Include="CommandHandlers\MainCommandHandler.cs" />
+    <Compile Include="CommandHandlers\MainCommandHandlerFactory.cs" />
     <Compile Include="Commands\AddCompanyAdmin.cs" />
     <Compile Include="Commands\AddEmployee.cs" />
     <Compile Include="Commands\AddOfficeAdmin.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Commands\RemoveOfficeAdmin.cs" />
     <Compile Include="Commands\TerminateEmployee.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DelegateAdjuster.cs" />
     <Compile Include="Entities\Office.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Events\Company\CompanyAdminAdded.cs" />

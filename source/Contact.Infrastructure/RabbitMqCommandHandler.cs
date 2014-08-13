@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using RabbitMQ.Client.Impl;
+using Contact.Domain.CommandHandlers;
 
 namespace Contact.Infrastructure
 {
     public class RabbitMqCommandHandler
     {
-        private CommandHandler _handler;
-        public RabbitMqCommandHandler(CommandHandler handler)
+        private MainCommandHandler _handler;
+        public RabbitMqCommandHandler(MainCommandHandler handler)
         {
             _handler = handler;
         }
@@ -23,6 +23,16 @@ namespace Contact.Infrastructure
             //TODO: deserialize
 
             //TODO: Handle
+        }
+
+        public void StartReceiving()
+        {
+            //TODO: Implement
+        }
+
+        public void StopReceiving()
+        {
+            //TODO: Implement
         }
     }
 }

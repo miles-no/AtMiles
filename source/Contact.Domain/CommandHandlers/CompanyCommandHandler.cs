@@ -5,7 +5,7 @@ using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.CommandHandlers
 {
-    public class CommandHandler :
+    public class CompanyCommandHandler :
         Handles<AddCompanyAdmin>,
         Handles<RemoveCompanyAdmin>,
         Handles<RemoveOfficeAdmin>,
@@ -18,7 +18,7 @@ namespace Contact.Domain.CommandHandlers
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
 
-        public CommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository)
+        public CompanyCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository)
         {
             _companyRepository = companyRepository;
             _employeeRepository = employeeRepository;

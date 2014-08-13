@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
+using Contact.Domain.CommandHandlers;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 
@@ -11,6 +11,7 @@ namespace Contact.TestApp
     {
         static void Main(string[] args)
         {
+            RabbitMqCommandHandler cmdHandler = null;
             bool quit = false;
 
             while (!quit)
@@ -20,8 +21,9 @@ namespace Contact.TestApp
                 Console.WriteLine("Miles Contact TestApp");
                 Console.WriteLine("Select action:");
                 Console.WriteLine("Quit: <q>");
-                Console.WriteLine("Test1: <1>");
-                //Console.WriteLine("Test2: <2>");
+                Console.WriteLine("Prepare EventStore with initial data: <1>");
+                Console.WriteLine("Start command-handler: <2>");
+                Console.WriteLine("Stop command-handler: <3>");
 
                 var key = Console.ReadKey(true);
 
@@ -39,10 +41,14 @@ namespace Contact.TestApp
                     case ConsoleKey.NumPad1:
                         Test1();
                         break;
-                    //case ConsoleKey.D2:
-                    //case ConsoleKey.NumPad2:
-                    //    Test2();
-                    //    break;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        cmdHandler = Test2();
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        Test3(cmdHandler);
+                        break;
 
                     //Add more functions here
 
@@ -54,6 +60,32 @@ namespace Contact.TestApp
                 Console.WriteLine();
             }
             Console.WriteLine("Exited");
+        }
+
+        private static void Test3(RabbitMqCommandHandler cmdHandler)
+        {
+            if (cmdHandler != null)
+            {
+                cmdHandler.StopReceiving();
+            }
+        }
+
+        private static RabbitMqCommandHandler Test2()
+        {
+            const string host = "milescontact.cloudapp.net";
+            const string username = "admin";
+            const string password = "GoGoMilesContact";
+
+            var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
+            var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
+
+            var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository);
+            
+            RabbitMqCommandHandler cmdReceiver = new RabbitMqCommandHandler(cmdHandler);
+
+            cmdReceiver.StartReceiving();
+
+            return cmdReceiver;
         }
 
         private static void Test1()
@@ -68,7 +100,7 @@ namespace Contact.TestApp
             const string officeName = "Stavanger";
             var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
 
-            const string adminId = "114551968215191716757";
+            const string adminId = "Google::114551968215191716757";
             const string adminFirstName = "Roy";
             const string adminLastName = "Veshovda";
             var adminDateOfBirth = new DateTime(1977, 1, 7);
