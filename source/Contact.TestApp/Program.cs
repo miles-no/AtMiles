@@ -4,8 +4,6 @@ using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
-using EventStore.ClientAPI;
-using EventStore.ClientAPI.SystemData;
 
 namespace Contact.TestApp
 {
