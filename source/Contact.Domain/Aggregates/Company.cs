@@ -27,6 +27,19 @@ namespace Contact.Domain.Aggregates
             _offices = new List<Office>();
         }
 
+        public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName)
+        {
+            //Security must be maintained outside this method
+            var ev1 = new CompanyCreated(companyId, companyName);
+            var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress);
+            var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName);
+            var ev4 = new CompanyAdminAdded(companyId, companyName, adminId, adminName);
+            ApplyChange(ev1);
+            ApplyChange(ev2);
+            ApplyChange(ev3);
+            ApplyChange(ev4);
+        }
+
         public bool IsCompanyAdmin(string identifier)
         {
             return _companyAdmins.Contains(identifier);
