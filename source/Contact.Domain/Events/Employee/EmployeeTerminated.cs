@@ -1,4 +1,7 @@
-﻿namespace Contact.Domain.Events.Employee
+﻿using System;
+using Contact.Domain.ValueTypes;
+
+namespace Contact.Domain.Events.Employee
 {
     public class EmployeeTerminated : Event
     {
@@ -9,7 +12,8 @@
         public string Id { get; private set; }
         public string Name { get; private set; }
 
-        public EmployeeTerminated(string companyId, string companyName, string officeId, string officeName, string id, string name)
+        public EmployeeTerminated(string companyId, string companyName, string officeId, string officeName, string id, string name, DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;

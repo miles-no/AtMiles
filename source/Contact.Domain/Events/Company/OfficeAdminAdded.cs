@@ -1,4 +1,7 @@
-﻿namespace Contact.Domain.Events.Company
+﻿using System;
+using Contact.Domain.ValueTypes;
+
+namespace Contact.Domain.Events.Company
 {
     public class OfficeAdminAdded : Event
     {
@@ -11,7 +14,8 @@
 
 
 
-        public OfficeAdminAdded(string companyId, string companyName, string officeId, string officeName, string adminId, string adminName)
+        public OfficeAdminAdded(string companyId, string companyName, string officeId, string officeName, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;

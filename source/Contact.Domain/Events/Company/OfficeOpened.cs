@@ -1,4 +1,5 @@
-﻿using Contact.Domain.ValueTypes;
+﻿using System;
+using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Events.Company
 {
@@ -12,7 +13,8 @@ namespace Contact.Domain.Events.Company
 
         public Address Address { get; private set; }
 
-        public OfficeOpened(string companyId, string companyName, string officeId, string officeName, Address address)
+        public OfficeOpened(string companyId, string companyName, string officeId, string officeName, Address address, DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;

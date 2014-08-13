@@ -1,4 +1,7 @@
-﻿namespace Contact.Domain.Events.Company
+﻿using System;
+using Contact.Domain.ValueTypes;
+
+namespace Contact.Domain.Events.Company
 {
     public class OfficeClosed : Event
     {
@@ -8,7 +11,8 @@
 
         public string OfficeName { get; private set; }
 
-        public OfficeClosed(string companyId, string companyName, string officeId, string officeName)
+        public OfficeClosed(string companyId, string companyName, string officeId, string officeName, DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;

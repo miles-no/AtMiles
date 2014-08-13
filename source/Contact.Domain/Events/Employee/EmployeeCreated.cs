@@ -20,7 +20,12 @@ namespace Contact.Domain.Events.Employee
         public Address HomeAddress { get; private set; }
         public Picture Photo { get; private set; }
 
-        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth)
+        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId,
+            string firstName, string middleName, string lastName,
+            DateTime dateOfBirth, string jobTitle, string phoneNumber, string email,
+            Picture photo, Address homeAddress,
+            DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;
@@ -31,39 +36,11 @@ namespace Contact.Domain.Events.Employee
             MiddleName = middleName;
             LastName = lastName;
             DateOfBirth = dateOfBirth;
-        }
-
-        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string lastName, DateTime dateOfBirth)
-            : this(companyId, companyName, officeId, officeName, globalId, firstName, string.Empty, lastName, dateOfBirth) { }
-
-         public EmployeeCreated WithJobTitle(string jobTitle)
-        {
             JobTitle = jobTitle;
-            return this;
-        }
-
-         public EmployeeCreated WithPhoneNumber(string phoneNumber)
-        {
             PhoneNumber = phoneNumber;
-            return this;
-        }
-
-         public EmployeeCreated WithEmail(string email)
-        {
             Email = email;
-            return this;
-        }
-
-         public EmployeeCreated WithPhoto(Picture photo)
-        {
             Photo = photo;
-            return this;
-        }
-
-         public EmployeeCreated WithHomeAddress(Address homeAddress)
-        {
             HomeAddress = homeAddress;
-            return this;
         }
     }
 }

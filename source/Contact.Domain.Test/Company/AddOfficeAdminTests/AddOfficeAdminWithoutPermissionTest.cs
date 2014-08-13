@@ -21,7 +21,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
 
-        private readonly string _officeId = Guid.NewGuid().ToString();
+        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
         private const string Admin1Id = "adm1";
@@ -60,8 +60,8 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, _officeId, OfficeName, null)),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
                 };
             return events;
         }
@@ -70,15 +70,15 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(Admin1Id, new EmployeeCreated(CompanyId, CompanyName, _officeId, OfficeName, Admin1Id, Admin1FirstName, Admin1LastName, Admin1DateOfBirth)),
-                    new FakeStreamEvent(Admin2Id, new EmployeeCreated(CompanyId, CompanyName, _officeId, OfficeName, Admin2Id, Admin2FirstName, Admin2LastName, Admin2DateOfBirth)),
+                    new FakeStreamEvent(Admin1Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, Admin1FirstName, string.Empty, Admin1LastName, Admin1DateOfBirth, string.Empty,string.Empty,string.Empty,null,null,DateTime.UtcNow,new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)), _correlationId)),
+                    new FakeStreamEvent(Admin2Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin2Id, Admin2FirstName, string.Empty, Admin2LastName, Admin2DateOfBirth, string.Empty,string.Empty,string.Empty,null,null,DateTime.UtcNow,new Person(Admin2Id, NameService.GetName(Admin2FirstName, Admin2LastName)), _correlationId)),
                 };
             return events;
         }
 
         public override AddOfficeAdmin When()
         {
-            var cmd = new AddOfficeAdmin(CompanyId, _officeId, Admin2Id)
+            var cmd = new AddOfficeAdmin(CompanyId, OfficeId, Admin2Id)
                 .WithCreated(DateTime.UtcNow)
                 .WithCorrelationId(_correlationId)
                 .WithBasedOnVersion(5)

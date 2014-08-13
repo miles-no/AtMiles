@@ -133,10 +133,10 @@ namespace Contact.TestApp
             admin2.CreateNew(companyId, companyName, officeId, officeName, admin2Id, admin2FirstName, string.Empty, admin2LastName, admin2DateOfBirth, admin2JobTitle, admin2PhoneNumber, admin2Email, admin2Address, null, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
             var company = new Company();
-            company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, admin1.Id, admin1.Name);
+            company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, admin1.Id, admin1.Name, DateTime.UtcNow, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
             company.AddCompanyAdmin(admin2, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
-            global.AddCompany(company);
+            global.AddCompany(company, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
             try
             {

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Contact.Domain.Annotations;
 using Contact.Domain.Events.Global;
+using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Aggregates
 {
@@ -21,9 +23,9 @@ namespace Contact.Domain.Aggregates
             _companies = new List<string>();
         }
 
-        public void AddCompany(Company company)
+        public void AddCompany(Company company, Person createdBy, string correlationId)
         {
-            var ev = new CompanyCreated(company.Id, company.Name);
+            var ev = new CompanyCreated(company.Id, company.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
