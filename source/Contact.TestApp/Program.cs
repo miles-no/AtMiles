@@ -112,12 +112,12 @@ namespace Contact.TestApp
             var admin1Address = new Address("Korvettveien 7", "4374", "Egersund");
 
 
-            const string admin2Id = "Google::114551968215191716757";
+            const string admin2Id = "Google::110095646841016563805";
             const string admin2FirstName = "Stian";
             const string admin2LastName = "Galapate-Edvardsen";
             var admin2DateOfBirth = new DateTime(1977, 1, 7);
             const string admin2JobTitle = "Senior Consultant";
-            const string admin2PhoneNumber = "+47";
+            const string admin2PhoneNumber = "+4712345678";
             const string admin2Email = "stian.edvardsen@miles.no";
             Address admin2Address = null;
 
