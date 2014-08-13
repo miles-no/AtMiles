@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Principal;
-using Microsoft.AspNet.Identity;
 using NUnit.Framework;
 
 namespace Contact.Backend.Infrastructure
@@ -17,15 +16,13 @@ namespace Contact.Backend.Infrastructure
 
         public TTo Send<TFrom, TTo>(TFrom @from, IIdentity user)
         {
-            var test = new Tuple<Type, Type>(typeof (TFrom), typeof (TTo));
-            if (subscribed.ContainsKey(test) == false)
+            var subscription = new Tuple<Type, Type>(typeof (TFrom), typeof (TTo));
+            if (subscribed.ContainsKey(subscription) == false)
             {
                 throw new NotSupportedException("No subscription for " + typeof(TFrom) + "-" + typeof(TTo));
             }
-            else
-            {
-                return subscribed[test](from, user);
-            }
+            
+            return subscribed[subscription](@from, user);
         }
     }
 
@@ -33,9 +30,9 @@ namespace Contact.Backend.Infrastructure
     {
         class UserMock : IIdentity
         {
-            public string Name { get; private set; }
-            public string AuthenticationType { get; private set; }
-            public bool IsAuthenticated { get; private set; }
+            public string Name { get; set; }
+            public string AuthenticationType { get; set; }
+            public bool IsAuthenticated { get; set; }
         }
         [Test]
         public void SubscribeTest()
@@ -43,7 +40,7 @@ namespace Contact.Backend.Infrastructure
             var m = new Mediator();
             m.Subscribe<int, string>((number, user) => number.ToString());
 
-            var res = m.Send<int, string>(789,new UserMock());
+            var res = m.Send<int, string>(789,new UserMock{AuthenticationType = "None", IsAuthenticated = true, Name = "test"});
             
             Assert.AreEqual("789", res);
         }
