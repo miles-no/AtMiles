@@ -1,4 +1,4 @@
-﻿namespace Contact.Backend.Models.Api
+﻿namespace Contact.Backend.Models.Api.Tasks
 {
     public class CloseOfficeRequest
     {

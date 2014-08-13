@@ -8,7 +8,7 @@ namespace Contact.Backend.Infrastructure
     public class Mediator : IMediator
     {
         readonly Dictionary<Tuple<Type, Type>,dynamic> subscribed = new Dictionary<Tuple<Type, Type>, dynamic>();
-
+        
         public void Subscribe<TFrom, TTo>(Func<TFrom, IIdentity, TTo> handler)
         {
             subscribed[new Tuple<Type,Type>(typeof(TFrom),typeof(TTo))]  = handler;
