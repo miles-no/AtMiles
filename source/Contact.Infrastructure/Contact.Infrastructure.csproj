@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventStoreRepository.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="LongRunningProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
