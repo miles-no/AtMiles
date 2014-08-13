@@ -11,7 +11,7 @@ namespace Contact.TestApp
     {
         static void Main(string[] args)
         {
-            RabbitMqCommandHandler cmdHandler = null;
+            LongRunningProcess cmdWorker = null;
             bool quit = false;
 
             while (!quit)
@@ -43,11 +43,11 @@ namespace Contact.TestApp
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        cmdHandler = Test2();
+                        cmdWorker = Test2();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        Test3(cmdHandler);
+                        Test3(cmdWorker);
                         break;
 
                     //Add more functions here
@@ -62,15 +62,15 @@ namespace Contact.TestApp
             Console.WriteLine("Exited");
         }
 
-        private static void Test3(RabbitMqCommandHandler cmdHandler)
+        private static void Test3(LongRunningProcess worker)
         {
-            if (cmdHandler != null)
+            if (worker != null)
             {
-                cmdHandler.StopReceiving();
+                worker.Stop();
             }
         }
 
-        private static RabbitMqCommandHandler Test2()
+        private static LongRunningProcess Test2()
         {
             const string host = "milescontact.cloudapp.net";
             const string username = "admin";
@@ -80,12 +80,14 @@ namespace Contact.TestApp
             var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
 
             var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository);
-            
-            RabbitMqCommandHandler cmdReceiver = new RabbitMqCommandHandler(cmdHandler);
 
-            cmdReceiver.StartReceiving();
+            var cmdReceiver = new RabbitMqCommandHandler(cmdHandler);
 
-            return cmdReceiver;
+            var worker = new QueueWorker(host, "miles", password,"Commands",null, cmdReceiver.MessageHandler);
+
+            worker.Start();
+
+            return worker;
         }
 
         private static void Test1()
@@ -100,32 +102,46 @@ namespace Contact.TestApp
             const string officeName = "Stavanger";
             var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
 
-            const string adminId = "Google::114551968215191716757";
-            const string adminFirstName = "Roy";
-            const string adminLastName = "Veshovda";
-            var adminDateOfBirth = new DateTime(1977, 1, 7);
-            const string adminJobTitle = "Senior Consultant";
-            const string adminPhoneNumber = "+4740102040";
-            const string adminEmail = "roy.veshovda@miles.no";
-            var adminAddress = new Address("Korvettveien 7", "4374", "Egersund");
+            const string admin1Id = "Google::114551968215191716757";
+            const string admin1FirstName = "Roy";
+            const string admin1LastName = "Veshovda";
+            var admin1DateOfBirth = new DateTime(1977, 1, 7);
+            const string admin1JobTitle = "Senior Consultant";
+            const string admin1PhoneNumber = "+4740102040";
+            const string admin1Email = "roy.veshovda@miles.no";
+            var admin1Address = new Address("Korvettveien 7", "4374", "Egersund");
+
+
+            const string admin2Id = "Google::114551968215191716757";
+            const string admin2FirstName = "Stian";
+            const string admin2LastName = "Galapate-Edvardsen";
+            var admin2DateOfBirth = new DateTime(1977, 1, 7);
+            const string admin2JobTitle = "Senior Consultant";
+            const string admin2PhoneNumber = "+47";
+            const string admin2Email = "stian.edvardsen@miles.no";
+            Address admin2Address = null;
 
 
             var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
             var globalRepository = new EventStoreRepository<Global>(host, null, username, password);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
             var global = new Global();
-            var admin = new Employee();
-            admin.CreateNew(companyId, companyName, officeId, officeName, adminId, adminFirstName, string.Empty, adminLastName, adminDateOfBirth, adminJobTitle, adminPhoneNumber, adminEmail, adminAddress, null, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
+            var admin1 = new Employee();
+            admin1.CreateNew(companyId, companyName, officeId, officeName, admin1Id, admin1FirstName, string.Empty, admin1LastName, admin1DateOfBirth, admin1JobTitle, admin1PhoneNumber, admin1Email, admin1Address, null, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
+
+            var admin2 = new Employee();
+            admin2.CreateNew(companyId, companyName, officeId, officeName, admin2Id, admin2FirstName, string.Empty, admin2LastName, admin2DateOfBirth, admin2JobTitle, admin2PhoneNumber, admin2Email, admin2Address, null, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
             var company = new Company();
-            company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, admin.Id, admin.Name);
+            company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, admin1.Id, admin1.Name);
+            company.AddCompanyAdmin(admin2, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
             global.AddCompany(company);
 
             try
             {
                 globalRepository.Save(global, Constants.NewVersion);
-                employeeRepository.Save(admin, Constants.NewVersion);
+                employeeRepository.Save(admin1, Constants.NewVersion);
                 companyRepository.Save(company, Constants.NewVersion);
                 Console.WriteLine("Success!");
             }
