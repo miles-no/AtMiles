@@ -4,20 +4,39 @@ using EventStore.ClientAPI.SystemData;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Contact.Infrastructure
 {
     public class EventStoreRepository<T> : IRepository<T> where T : AggregateRoot, new()
     {
+        private const string EventClrTypeHeader = "EventClrTypeName";
+        private const string AggregateClrTypeHeader = "AggregateClrTypeName";
+        //private const string CommitIdHeader = "CommitId";
+        //private const int WritePageSize = 500;
+        //private const int ReadPageSize = 500;
+
+        private readonly Func<Type, string, string> _aggregateIdToStreamName;
+
         private readonly System.Net.IPEndPoint _endPoint;
         private readonly IEventPublisher[] _publishers;
         private readonly UserCredentials _credentials;
 
+
+        
+
         public EventStoreRepository(string serverName, IEventPublisher[] publishers, string username, string password)
+            : this(serverName, publishers, username, password, (t, g) => string.Format("{0}-{1}", char.ToLower(t.Name[0]) + t.Name.Substring(1), g))
+        {
+        }
+
+        public EventStoreRepository(string serverName, IEventPublisher[] publishers, string username, string password, Func<Type, string, string> aggregateIdToStreamName)
         {
             _publishers = publishers;
             _endPoint = GetIpEndPoint(serverName);
             _credentials = new UserCredentials(username, password);
+            _aggregateIdToStreamName = aggregateIdToStreamName;
         }
 
         public EventStoreRepository(string serverName, int portNumber, IEventPublisher[] publishers)
@@ -29,15 +48,21 @@ namespace Contact.Infrastructure
         public void Save(T aggregate, int expectedVersion)
         {
             var events = aggregate.GetUncommittedChanges();
-            var streamName = typeof(T).Name + "--" + aggregate.Id;
+            var streamName = _aggregateIdToStreamName(typeof(T), aggregate.Id);
+
+            var headers = new Dictionary<string, object>
+            {   
+                {AggregateClrTypeHeader, aggregate.GetType().AssemblyQualifiedName}
+            };
+
             using (var connection = EventStoreConnection.Create(_endPoint))
             {
                 connection.Connect();
                 foreach (var @event in events)
                 {
-                    var stringVersion = Newtonsoft.Json.JsonConvert.SerializeObject(@event);
+                    var stringVersion = JsonConvert.SerializeObject(@event);
                     var eventType = @event.GetType().Name;
-                    var metadata = new byte[0];
+                    var metadata = AddEventClrTypeHeaderAndSerializeMetadata(@event, headers);
 
                     var eventId = Guid.NewGuid();
                     var data = Encoding.UTF8.GetBytes(stringVersion);
@@ -52,6 +77,22 @@ namespace Contact.Infrastructure
             aggregate.MarkChangesAsCommitted();
         }
 
+        private static byte[] AddEventClrTypeHeaderAndSerializeMetadata(object evnt, IDictionary<string, object> headers)
+        {
+            var eventHeaders = new Dictionary<string, object>(headers)
+                {
+                    {EventClrTypeHeader, evnt.GetType().AssemblyQualifiedName}
+                };
+
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders));
+        }
+
+        public object DeserializeEvent(byte[] metadata, byte[] data)
+        {
+            var eventClrTypeName = JObject.Parse(Encoding.UTF8.GetString(metadata)).Property(EventClrTypeHeader).Value;
+            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data), Type.GetType((string)eventClrTypeName));
+        }
+
         public T GetById(string id)
         {
             return GetById(id, false);
@@ -63,7 +104,7 @@ namespace Contact.Infrastructure
             {
                 return null;
             }
-            var streamName = typeof(T).Name + "--" + id;
+            var streamName = _aggregateIdToStreamName(typeof(T), id);
             const int batchSize = 50;
             var startPosition = 0;
             var obj = new T();
@@ -85,19 +126,19 @@ namespace Contact.Infrastructure
                     var events = new List<Event>();
                     foreach (var ev in evStream.Events)
                     {
-                        var stringVersion = Encoding.UTF8.GetString(ev.Event.Data);
+                        //DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data);
+                        //var stringVersion = Encoding.UTF8.GetString(ev.Event.Data);
 
-                        //TODO: Fix EventType here. Maybe include CLR-type
-
-                        var t = Type.GetType(ev.Event.EventType);
-                        if (t != null)
-                        {
-                            var deserializedEvent = Newtonsoft.Json.JsonConvert.DeserializeObject(stringVersion, t);
+                        //var t = Type.GetType(ev.Event.EventType);
+                        //if (t != null)
+                        //{
+                            //var deserializedEvent = Newtonsoft.Json.JsonConvert.DeserializeObject(stringVersion, t);
+                            var deserializedEvent = DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data);
                             if (deserializedEvent is Event)
                             {
                                 events.Add((Event)deserializedEvent);
                             }
-                        }
+                        //}
                     }
                     obj.LoadsFromHistory(events, keepHistory);
                     startPosition += batchSize;
