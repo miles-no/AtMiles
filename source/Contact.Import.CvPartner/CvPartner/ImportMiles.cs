@@ -13,12 +13,10 @@ namespace Contact.Import.CvPartner.CvPartner
 {
     public class ImportMiles
     {
-        private readonly ICommandSender commandSender;
 
-        public ImportMiles(ICommandSender commandSender)
-        {
-            this.commandSender = commandSender;
-        }
+        public List<AddEmployee> AddEmployeesCommands { get; set; }
+        public List<OpenOffice> OpenOfficeCommands { get; set; }
+
 
         /// <summary>
         /// Import the entire miles cv-base to @miles. Should be run only once (no checks if employees are already added)
@@ -26,14 +24,16 @@ namespace Contact.Import.CvPartner.CvPartner
         /// <param name="accessToken">Super secret access token to the CVPartner api</param>
         /// <param name="createdBy">Employee with admin rights</param>
         /// <param name="sendContinuously">send commands as soon as they are constructed (if set to false, all will be sent as the last thing)</param>
-        public void ImportMilesComplete(string accessToken, Person createdBy, bool sendContinuously = true)
+        /// <param name="openOfficeCreated">action when openoffice command is created</param>
+        /// <param name="addEmployeeAction">action when addEmployee command is created </param>
+        public bool ImportMilesComplete(string accessToken, Person createdBy, Action<OpenOffice> openOfficeCreated, Action<AddEmployee> addEmployeeAction)
         {
             if (string.IsNullOrEmpty(accessToken))
             {
                 throw new ArgumentException("Access token must be set!");
             }
 
-            var addEmployeesCommands = new List<AddEmployee>();
+            AddEmployeesCommands = new List<AddEmployee>();
 
             var converter = new Converters.Convert("miles", createdBy, Log);
             var client = new WebClient();
@@ -45,54 +45,39 @@ namespace Contact.Import.CvPartner.CvPartner
             
             var offices = employees.Select(s => s.OfficeName).Distinct().ToList();
 
-            var officeCommands = offices.Select(converter.ToOpenOffice).ToList();
-            Log(officeCommands.Count() + " offices found");
-            
-            foreach (var office in officeCommands)
-            {
-                SendOrAdd(sendContinuously, office, officeCommands);
-            }
+            OpenOfficeCommands = offices.Select(converter.ToOpenOffice).ToList();
 
+            if (openOfficeCreated != null)
+            {
+                foreach (var openOfficeCommand in OpenOfficeCommands)
+                {
+                    openOfficeCreated(openOfficeCommand);
+                }
+            }
+            
+            Log(OpenOfficeCommands.Count() + " offices found");
+            
             foreach (var employee in employees)
             {
                 var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
                 Log("Downloading CV for " + employee.Name);
                 var cv = JsonConvert.DeserializeObject<Cv>(client.DownloadString(url));
-                SendOrAdd(sendContinuously, converter.ToAddEmployee(cv, employee), addEmployeesCommands);
-            }
-
-            if (sendContinuously == false)
-            {
-                foreach (var officeCommand in officeCommands)
+                var addEmployee = converter.ToAddEmployee(cv, employee);
+                Add(addEmployee, AddEmployeesCommands);
+               
+                if (addEmployeeAction != null)
                 {
-                    Send(officeCommand);
-                }
-                
-                foreach (var addEmployeesCommand in addEmployeesCommands)
-                {
-                    Send(addEmployeesCommand);
+                    addEmployeeAction(addEmployee);
                 }
             }
+            return true;
         }
 
-        public void SendOrAdd<T>(bool sendNow, T command, List<T> commands) where T:Command
+        public void Add<T>(T command, List<T> commands) where T:Command
         {
-            if (sendNow)
-            {
-                Send(command);   
-            }
-            else
-            {
-                commands.Add(command);
-            }
+              commands.Add(command);
         }
 
-        public void Send<T>(T command) where T : Command
-        {
-            Log("Sending command " + command.GetType().Name);
-            commandSender.Send(command);
-        }
-        
         public void Log(string message)
         {
             Console.WriteLine(message);

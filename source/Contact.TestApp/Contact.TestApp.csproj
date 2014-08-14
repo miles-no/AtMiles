@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;testing</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -51,6 +51,10 @@
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Contact.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contact.Import.CvPartner\Contact.Import.CvPartner.csproj">
+      <Project>{b544efbd-81e6-44a0-9423-84abcf1c0b46}</Project>
+      <Name>Contact.Import.CvPartner</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contact.Infrastructure\Contact.Infrastructure.csproj">
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>

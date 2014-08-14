@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.ValueTypes;
+using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
 
 namespace Contact.TestApp
@@ -142,6 +144,8 @@ namespace Contact.TestApp
             company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, admin1.Id, admin1.Name, DateTime.UtcNow, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
             company.AddCompanyAdmin(admin2, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
+            
+
             global.AddCompany(company, new Person("SYSTEM", "SYSTEM"), "SYSTEM");
 
             try
@@ -155,7 +159,18 @@ namespace Contact.TestApp
             catch (Exception error)
             {
                 Console.WriteLine("Exception: " + error);
+                return;
             }
+
+            string cvPartnerToken = null;
+#if testing
+            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
+#endif
+            var import = new ImportMiles();
+            var companyCommandHandler = new CompanyCommandHandler(companyRepository, employeeRepository);
+
+            //TODO fix office id
+            import.ImportMilesComplete(cvPartnerToken, new Person(admin1.Id, admin1.Name), companyCommandHandler.Handle, companyCommandHandler.Handle);
             
         }
     }

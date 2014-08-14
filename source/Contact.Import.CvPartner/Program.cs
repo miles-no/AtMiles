@@ -22,8 +22,8 @@ namespace Contact.Import.CvPartner
 #if testing
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
-            var import = new ImportMiles(new CommandSenderMock());
-            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"));
+            var import = new ImportMiles();
+            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"),null,null);
         }
     }
 
