@@ -20,23 +20,14 @@ namespace Contact.Domain.Aggregates
         public void CreateNew(string companyId, string companyName, string officeId, string officeName, string globalId, string firstName, string middleName, string lastName, DateTime dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, Person createdBy, string correlationId)
         {
             var ev = new EmployeeCreated(companyId, companyName, officeId, officeName, globalId, firstName, middleName,
-                lastName, dateOfBirth)
-                .WithEmail(email)
-                .WithHomeAddress(homeAddress)
-                .WithJobTitle(jobTitle)
-                .WithPhoneNumber(phoneNumber)
-                .WithPhoto(photo)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy)
-                .WithCorrelationId(correlationId);
-
+                lastName, dateOfBirth,jobTitle,phoneNumber,email,photo,homeAddress,DateTime.UtcNow,createdBy,correlationId);
             ApplyChange(ev);
         }
 
-        public void Terminate(string companyId, string companyName, string officeId, string officeName, Person person, string correlationId)
+        public void Terminate(string companyId, string companyName, string officeId, string officeName, Person createdBy, string correlationId)
         {
             var ev = new EmployeeTerminated(companyId, companyName, officeId, officeName, _id,
-                NameService.GetName(_firstName, _middleName, _lastName));
+                NameService.GetName(_firstName, _middleName, _lastName),DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 

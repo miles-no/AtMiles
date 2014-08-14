@@ -50,6 +50,7 @@ namespace Contact.Infrastructure
                     properties.Headers = new Dictionary<string, object>
                     {
                         {"type", command.GetType().Name},
+                        {"clrtype", command.GetType().AssemblyQualifiedName},
                         {"correlationid", command.CorrelationId}
                     };
                     string routingKey = GetRoutingKey();

@@ -5,7 +5,7 @@ using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.CommandHandlers
 {
-    public class CommandHandler :
+    public class CompanyCommandHandler :
         Handles<AddCompanyAdmin>,
         Handles<RemoveCompanyAdmin>,
         Handles<RemoveOfficeAdmin>,
@@ -18,7 +18,7 @@ namespace Contact.Domain.CommandHandlers
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
 
-        public CommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository)
+        public CompanyCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository)
         {
             _companyRepository = companyRepository;
             _employeeRepository = employeeRepository;
@@ -153,7 +153,7 @@ namespace Contact.Domain.CommandHandlers
             if (admin == null) throw new UnknownItemException();
 
             var company = _companyRepository.GetById(message.CompanyId);
-
+            if (company == null) throw new UnknownItemException();
             if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
 
             var office = company.GetOffice(message.OfficeId);

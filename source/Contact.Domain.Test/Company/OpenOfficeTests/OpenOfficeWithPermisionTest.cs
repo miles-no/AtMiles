@@ -13,6 +13,8 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
     public class OpenOfficeWithPermisionTest : EventSpecification<OpenOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp = DateTime.MinValue;
+
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -21,9 +23,10 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         private const string ExistingOfficeId = "bgn";
         private const string ExistingOfficeName = "Bergen";
-
-        private const string OfficeId = "UNKNOWN";
+        
+        private string OfficeId = "UNKNOWN";
         private const string OfficeName = "Stavanger";
+
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -39,6 +42,11 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
+            if (events.Count == 1)
+            {
+                OfficeId =  ((OfficeOpened) events[0]).OfficeId;
+                _timestamp = events[0].Created;
+            }
             return events;
         }
 
@@ -55,9 +63,9 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName)),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, null)),
-                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName))),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName), DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
                     
                 };
             return events;
@@ -67,35 +75,29 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, AdminId, AdminFirstName, AdminLastName, AdminDateOfBirth)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingOfficeId, ExistingOfficeName, AdminId, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty,string.Empty,string.Empty,null,null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
                 };
             return events;
         }
 
         public override OpenOffice When()
         {
-            var cmd = new OpenOffice(CompanyId, OfficeName)
-                .WithCreated(DateTime.UtcNow)
-                .WithCorrelationId(_correlationId)
-                .WithBasedOnVersion(2)
-                .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)));
-            return (OpenOffice)cmd;
+            var cmd = new OpenOffice(CompanyId, OfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            return cmd;
         }
 
         public override Handles<OpenOffice> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            return new CommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
+            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
         public override IEnumerable<Event> Expect()
         {
             var events = new List<Event>
                 {
-                    new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null)
-                                        .WithCorrelationId(_correlationId)
-                                        .WithCreatedBy(new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)))
+                    new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, _timestamp,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

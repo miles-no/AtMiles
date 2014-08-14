@@ -29,14 +29,14 @@ namespace Contact.Infrastructure
         public void Save(T aggregate, int expectedVersion)
         {
             var events = aggregate.GetUncommittedChanges();
-            var streamName = typeof(T).FullName + "--" + aggregate.Id;
+            var streamName = typeof(T).Name + "--" + aggregate.Id;
             using (var connection = EventStoreConnection.Create(_endPoint))
             {
                 connection.Connect();
                 foreach (var @event in events)
                 {
                     var stringVersion = Newtonsoft.Json.JsonConvert.SerializeObject(@event);
-                    var eventType = @event.GetType().AssemblyQualifiedName;
+                    var eventType = @event.GetType().Name;
                     var metadata = new byte[0];
 
                     var eventId = Guid.NewGuid();
@@ -63,7 +63,7 @@ namespace Contact.Infrastructure
             {
                 return null;
             }
-            var streamName = typeof(T).FullName + "--" + id;
+            var streamName = typeof(T).Name + "--" + id;
             const int batchSize = 50;
             var startPosition = 0;
             var obj = new T();
@@ -86,6 +86,9 @@ namespace Contact.Infrastructure
                     foreach (var ev in evStream.Events)
                     {
                         var stringVersion = Encoding.UTF8.GetString(ev.Event.Data);
+
+                        //TODO: Fix EventType here. Maybe include CLR-type
+
                         var t = Type.GetType(ev.Event.EventType);
                         if (t != null)
                         {

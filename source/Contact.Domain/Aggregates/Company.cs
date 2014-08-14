@@ -27,13 +27,12 @@ namespace Contact.Domain.Aggregates
             _offices = new List<Office>();
         }
 
-        public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName)
+        public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
         {
-            //Security must be maintained outside this method
-            var ev1 = new CompanyCreated(companyId, companyName);
-            var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress);
-            var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName);
-            var ev4 = new CompanyAdminAdded(companyId, companyName, adminId, adminName);
+            var ev1 = new CompanyCreated(companyId, companyName, created, createdBy, correlationId);
+            var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress, created, createdBy, correlationId);
+            var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName, created, createdBy, correlationId);
+            var ev4 = new CompanyAdminAdded(companyId, companyName, adminId, adminName, created, createdBy, correlationId);
             ApplyChange(ev1);
             ApplyChange(ev2);
             ApplyChange(ev3);
@@ -66,10 +65,7 @@ namespace Contact.Domain.Aggregates
         {
             if(IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException();
 
-            var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
+            var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name,DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -78,10 +74,7 @@ namespace Contact.Domain.Aggregates
             if(OnlyOneCompanyAdminLeft()) throw new LastItemException();
             if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException();
 
-            var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
+            var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -93,10 +86,7 @@ namespace Contact.Domain.Aggregates
         public void OpenOffice(string name, Address address, Person createdBy, string correlationId)
         {
             var officeId = Guid.NewGuid().ToString();
-            var ev = new OfficeOpened(_id, _name, officeId, name, address)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
+            var ev = new OfficeOpened(_id, _name, officeId, name, address, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -108,10 +98,7 @@ namespace Contact.Domain.Aggregates
 
             if(!office.IsEmptyForEmployees()) throw new ExistingChildItemsException();
 
-            var ev = new OfficeClosed(_id, _name, office.Id, office.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
+            var ev = new OfficeClosed(_id, _name, office.Id, office.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -125,10 +112,7 @@ namespace Contact.Domain.Aggregates
 
             if(office.IsAdmin(newAdmin.Id)) throw new AlreadyExistingItemException();
 
-            var ev = new OfficeAdminAdded(_id, _name, office.Id, office.Name,newAdmin.Id, newAdmin.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
+            var ev = new OfficeAdminAdded(_id, _name, office.Id, office.Name,newAdmin.Id, newAdmin.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -142,10 +126,7 @@ namespace Contact.Domain.Aggregates
             
             CheckIfTryingToDisconnectSelf(adminToBeRemoved, createdBy);
 
-            var ev = new OfficeAdminRemoved(_id, _name, office.Id, office.Name, adminToBeRemoved.Id, adminToBeRemoved.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
+            var ev = new OfficeAdminRemoved(_id, _name, office.Id, office.Name, adminToBeRemoved.Id, adminToBeRemoved.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -177,22 +158,14 @@ namespace Contact.Domain.Aggregates
         public void AddNewEmployeeToOffice(string officeId, Employee employee, Person createdBy, string correlationId)
         {
             var office = GetOffice(officeId);
-            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
-
+            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
         public void RemoveEmployee(string officeId, Employee employee, Person createdBy, string correlationId)
         {
             var office = GetOffice(officeId);
-            var ev = new EmployeeRemoved(_id, _name, office.Id, office.Name, employee.Id, employee.Name)
-                .WithCorrelationId(correlationId)
-                .WithCreated(DateTime.UtcNow)
-                .WithCreatedBy(createdBy);
-
+            var ev = new EmployeeRemoved(_id, _name, office.Id, office.Name, employee.Id, employee.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 

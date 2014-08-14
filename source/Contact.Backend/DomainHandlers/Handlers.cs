@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using Contact.Backend.Infrastructure;
-using Contact.Backend.Models.Api;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
 using Contact.Domain;
@@ -41,25 +40,25 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId, req.FirstName, req.LastName,
-                        req.DateOfBirth);
-
-                    command.WithEmail(req.Email).WithJobTitle(req.JobTitle).WithPhoneNumber(req.PhoneNumber);
-
+                    Domain.ValueTypes.Address homeAddress = null;
+                    Domain.ValueTypes.Picture photo = null;
                     if (req.HomeAddress != null)
                     {
-                        command.WithHomeAddress(new Domain.ValueTypes.Address(req.HomeAddress.Street,
-                            req.HomeAddress.PostalCode, req.HomeAddress.PostalName));
+                        homeAddress = new Domain.ValueTypes.Address(req.HomeAddress.Street,
+                            req.HomeAddress.PostalCode, req.HomeAddress.PostalName);
                     }
 
                     if (req.Photo != null)
                     {
-                        command.WithPhoto(new Domain.ValueTypes.Picture(req.Photo.Title, req.Photo.Extension,
-                            req.Photo.Content));
+                        photo = new Domain.ValueTypes.Picture(req.Photo.Title, req.Photo.Extension,
+                            req.Photo.Content);
                     }
 
-                    command.WithCorrelationId(correlationId);
+                    //TODO: Get version from readmodel
+                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId, req.FirstName, req.LastName,
+                        req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow,GetCreatedBy(user),correlationId,Domain.Constants.IgnoreVersion);
 
+                    
                     var sender = container.Resolve<ICommandSender>();
 
                     sender.Send(command);
@@ -81,9 +80,10 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new TerminateEmployee(req.CompanyId, req.OfficeId, req.EmployeeId);
+                    //TODO: Get version from readmodel
+                    var command = new TerminateEmployee(req.CompanyId, req.OfficeId, req.EmployeeId,DateTime.UtcNow,GetCreatedBy(user),correlationId,Domain.Constants.IgnoreVersion);
 
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -100,9 +100,10 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new AddCompanyAdmin(req.CompanyId, req.NewAdminId);
+                    //TODO: Get version from readmodel
+                    var command = new AddCompanyAdmin(req.CompanyId, req.NewAdminId,DateTime.UtcNow,GetCreatedBy(user),correlationId,Domain.Constants.IgnoreVersion);
                     
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -119,9 +120,10 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new RemoveCompanyAdmin(req.CompanyId, req.AdminId);
+                    //TODO: Get version from readmodel
+                    var command = new RemoveCompanyAdmin(req.CompanyId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user),correlationId,Domain.Constants.IgnoreVersion);
 
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -138,9 +140,10 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new AddOfficeAdmin(req.CompanyId, req.OfficeId, req.AdminId);
+                    //TODO: Get version from readmodel
+                    var command = new AddOfficeAdmin(req.CompanyId, req.OfficeId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -158,9 +161,10 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new RemoveOfficeAdmin(req.CompanyId, req.OfficeId,req.AdminId);
+                    //TODO: Get version from readmodel
+                    var command = new RemoveOfficeAdmin(req.CompanyId, req.OfficeId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -177,9 +181,17 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new OpenOffice(req.CompanyId, req.Name);
+                    //TODO: Include Address in request
+                    Domain.ValueTypes.Address address = null;
+                    //if (req.Address != null)
+                    //{
+                    //    Address = new Domain.ValueTypes.Address(req.Address.Street,
+                    //        req.Address.PostalCode, req.Address.PostalName);
+                    //}
+                    //TODO: Get version from readmodel
+                    var command = new OpenOffice(req.CompanyId, req.Name, address, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -196,9 +208,10 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var command = new CloseOffice(req.CompanyId, req.OfficeId);
+                    //TODO: Get version from readmodel
+                    var command = new CloseOffice(req.CompanyId, req.OfficeId, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
-                    return SetCorrelationAndSend(container, command, correlationId, user);
+                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {
@@ -207,17 +220,18 @@ namespace Contact.Backend.DomainHandlers
             });
         }
 
-        private static Response SetCorrelationAndSend(IUnityContainer container, Command command, string correlationId,
-            IIdentity user)
+        private static Person GetCreatedBy(IIdentity user)
         {
-            command.WithCorrelationId(correlationId);
-            command.WithCreatedBy(new Person(GetIdFromIdentity(user), user.GetUserName()));
+            return new Person(GetIdFromIdentity(user), user.GetUserName());
+        }
 
+        private static Response Send(IUnityContainer container, Command command)
+        {
             var sender = container.Resolve<ICommandSender>();
 
             sender.Send(command);
 
-            return Helpers.CreateResponse(correlationId);
+            return Helpers.CreateResponse(command.CorrelationId);
         }
 
         private static string GetIdFromIdentity(IIdentity user)
@@ -227,7 +241,7 @@ namespace Contact.Backend.DomainHandlers
             {
                 var claims = identity;
                 var id = claims.FindFirst(ClaimTypes.NameIdentifier);
-                return id.Issuer + "::" + id.Value;
+                return id.Issuer + Domain.Constants.IdentitySeparator + id.Value;
             }
             return user.GetUserId();
         }

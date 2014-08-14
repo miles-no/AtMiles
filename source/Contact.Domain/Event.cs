@@ -5,37 +5,15 @@ namespace Contact.Domain
 {
     public abstract class Event : Message
     {
-        private DateTime _created;
-        private Person _createdBy;
-        private String _correlationId;
+        public readonly DateTime Created;
+        public readonly Person CreatedBy;
+        public readonly String CorrelationId;
 
-        public DateTime Created { get { return _created; } }
-        public Person CreatedBy { get { return _createdBy; } }
-        public String CorrelationId { get { return _correlationId; } }
-
-        protected Event()
+        protected Event(DateTime created, Person createdBy, string correlationId)
         {
-            _created = DateTime.UtcNow;
-            _createdBy = new Person("?", "Unknown");
-            _correlationId = Guid.NewGuid().ToString();
-        }
-
-        public Event WithCreated(DateTime created)
-        {
-            _created = created;
-            return this;
-        }
-
-        public Event WithCreatedBy(Person createdBy)
-        {
-            _createdBy = createdBy;
-            return this;
-        }
-
-        public Event WithCorrelationId(string correlationId)
-        {
-            _correlationId = correlationId;
-            return this;
+            Created = created;
+            CreatedBy = createdBy;
+            CorrelationId = correlationId;
         }
     }
 }

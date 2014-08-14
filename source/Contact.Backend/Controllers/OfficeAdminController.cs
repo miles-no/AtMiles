@@ -1,6 +1,5 @@
 using System.Web.Http;
 using Contact.Backend.Infrastructure;
-using Contact.Backend.Models.Api;
 using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Controllers
@@ -12,11 +11,11 @@ namespace Contact.Backend.Controllers
     [Authorize]
     public class OfficeAdminController : ApiController
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public OfficeAdminController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -28,11 +27,11 @@ namespace Contact.Backend.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/company/{companyId}/office/{officeId}/admin/{employeeId}")]
-        public Response AddAdmin(string companyId, string officeId, string employeeId)
+        //[Route("api/company/{companyId}/office/{officeId}/admin")]
+        public Response AddAdmin(string companyId, string officeId, /*[FromBody]*/ string employeeId)
         {
             var addOfficeAdminRequest = new AddOfficeAdminRequest {CompanyId = companyId, OfficeId = officeId, AdminId = employeeId };
-            return mediator.Send<AddOfficeAdminRequest, Response>(addOfficeAdminRequest, User.Identity);
-       
+            return _mediator.Send<AddOfficeAdminRequest, Response>(addOfficeAdminRequest, User.Identity);
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace Contact.Backend.Controllers
         public Response RemoveAdmin(string companyId, string officeId, string adminId)
         {
             var removeOfficeAdminRequest = new RemoveOfficeAdminRequest { CompanyId = companyId, OfficeId = officeId, AdminId = adminId };
-            return mediator.Send<RemoveOfficeAdminRequest, Response>(removeOfficeAdminRequest, User.Identity);
+            return _mediator.Send<RemoveOfficeAdminRequest, Response>(removeOfficeAdminRequest, User.Identity);
   
         }
 
@@ -62,7 +61,7 @@ namespace Contact.Backend.Controllers
         public Response CreateEmployee(string companyId, AddEmployeeRequest request)
         {
             request.CompanyId = companyId;
-            return mediator.Send<AddEmployeeRequest, Response>(request, User.Identity);
+            return _mediator.Send<AddEmployeeRequest, Response>(request, User.Identity);
         }
 
 
@@ -78,7 +77,7 @@ namespace Contact.Backend.Controllers
         public Response TerminateEmployee(string companyId, string officeId, string employeeId)
         {
             var terminateEmployeeRequest = new TerminateEmployeeRequest { CompanyId = companyId, OfficeId = officeId, EmployeeId = employeeId};
-            return mediator.Send<TerminateEmployeeRequest, Response>(terminateEmployeeRequest, User.Identity);
+            return _mediator.Send<TerminateEmployeeRequest, Response>(terminateEmployeeRequest, User.Identity);
   
         }
         

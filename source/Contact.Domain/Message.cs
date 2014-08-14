@@ -1,12 +1,4 @@
-﻿using System;
-using Contact.Domain.ValueTypes;
-
-namespace Contact.Domain
+﻿namespace Contact.Domain
 {
-    public interface Message
-    {
-        DateTime Created { get; }
-        Person CreatedBy { get; }
-        String CorrelationId { get; }
-    }
+    public interface Message{}
 }

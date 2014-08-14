@@ -1,13 +1,17 @@
-﻿namespace Contact.Domain.Events.Company
+﻿using System;
+using Contact.Domain.ValueTypes;
+
+namespace Contact.Domain.Events.Company
 {
     public class CompanyAdminAdded : Event
     {
-        public string CompanyId { get; private set; }
-        public string CompanyName { get; private set; }
-        public string NewAdminId { get; private set; }
-        public string NewAdminName { get; private set; }
+        public readonly string CompanyId;
+        public readonly string CompanyName;
+        public readonly string NewAdminId;
+        public readonly string NewAdminName;
 
-        public CompanyAdminAdded(string companyId, string companyName, string newAdminId, string newAdminName)
+        public CompanyAdminAdded(string companyId, string companyName, string newAdminId, string newAdminName, DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;
