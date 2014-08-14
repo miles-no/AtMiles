@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Contact.Import.CvPartner.Cv
+namespace Contact.Import.CvPartner.CvPartner.Models.Cv
 {
     
     public class KeyQualification
@@ -31,7 +31,7 @@ namespace Contact.Import.CvPartner.Cv
         public object ModifierId { get; set; }
 
         [JsonProperty(PropertyName = "order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty(PropertyName = "starred")]
         public bool Starred { get; set; }
@@ -74,7 +74,7 @@ namespace Contact.Import.CvPartner.Cv
         public string Name { get; set; }
 
         [JsonProperty(PropertyName = "order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty(PropertyName = "starred")]
         public bool Starred { get; set; }
@@ -114,7 +114,7 @@ namespace Contact.Import.CvPartner.Cv
         public object Name { get; set; }
 
         [JsonProperty(PropertyName = "order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty(PropertyName = "starred")]
         public bool Starred { get; set; }
@@ -139,10 +139,10 @@ namespace Contact.Import.CvPartner.Cv
         public object CustomerValueProposition { get; set; }
 
         [JsonProperty(PropertyName = "description")]
-        public object Description { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty(PropertyName = "disabled")]
-        public bool Disabled { get; set; }
+        public bool? Disabled { get; set; }
 
         [JsonProperty(PropertyName = "exclude_tags")]
         public object[] ExcludeTags { get; set; }
@@ -238,7 +238,7 @@ namespace Contact.Import.CvPartner.Cv
         public object MonthTo { get; set; }
 
         [JsonProperty(PropertyName = "order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty(PropertyName = "related_work_experience_id")]
         public object RelatedWorkExperienceId { get; set; }
@@ -247,7 +247,7 @@ namespace Contact.Import.CvPartner.Cv
         public Role[] Roles { get; set; }
 
         [JsonProperty(PropertyName = "starred")]
-        public bool Starred { get; set; }
+        public bool? Starred { get; set; }
 
         [JsonProperty(PropertyName = "tags")]
         public object[] Tags { get; set; }
@@ -282,7 +282,7 @@ namespace Contact.Import.CvPartner.Cv
         public object ModifierId { get; set; }
 
         [JsonProperty(PropertyName = "order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty(PropertyName = "tags")]
         public Tags Tags { get; set; }
@@ -322,7 +322,7 @@ namespace Contact.Import.CvPartner.Cv
         public object ModifierId { get; set; }
 
         [JsonProperty(PropertyName = "order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty(PropertyName = "starred")]
         public object Starred { get; set; }
@@ -379,18 +379,55 @@ namespace Contact.Import.CvPartner.Cv
 
     public class Cv
     {
+        private int? bornYear;
+        private int? bornMonth;
+        private int? bornDay;
 
         [JsonProperty(PropertyName = "_id")]
         public string Id { get; set; }
 
         [JsonProperty(PropertyName = "born_day")]
-        public int BornDay { get; set; }
+        public int? BornDay
+        {
+            get
+            {
+                if (bornDay == null || bornDay == 0)
+                {
+                    bornDay = 26;
+                }
+                return bornDay;
+            }
+            set { bornDay = value; }
+        }
 
         [JsonProperty(PropertyName = "born_month")]
-        public int BornMonth { get; set; }
+        public int? BornMonth
+        {
+            get
+            {
+                if (bornMonth == null || bornMonth == 0)
+                {
+                    bornMonth = 5;
+                }
+                return bornMonth;
+            }
+            set { bornMonth = value; }
+        }
 
         [JsonProperty(PropertyName = "born_year")]
-        public int BornYear { get; set; }
+        public int? BornYear
+        {
+            get
+            {
+                if (bornYear == null || bornYear == 0)
+                {
+                    bornYear = 1926;
+                }
+                
+                return bornYear;
+            }
+            set { bornYear = value; }
+        }
 
         [JsonProperty(PropertyName = "bruker_id")]
         public string BrukerId { get; set; }

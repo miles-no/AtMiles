@@ -88,6 +88,7 @@
     <Compile Include="Services\IdService.cs" />
     <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
+    <Compile Include="ValueTypes\Login.cs" />
     <Compile Include="ValueTypes\Person.cs" />
     <Compile Include="ValueTypes\Picture.cs" />
   </ItemGroup>

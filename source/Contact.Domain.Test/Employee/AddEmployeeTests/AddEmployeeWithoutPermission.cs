@@ -29,7 +29,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string AdminLastName = "Adminson";
         private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
-        private const string EmployeeGlobalId = "google:mail@miles.no";
+        private readonly string employeeGlobalId = new Guid().ToString();
+        private readonly Login employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
@@ -77,7 +78,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         public override AddEmployee When()
         {
-            var cmd = new AddEmployee(CompanyId, OfficeId, EmployeeGlobalId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty, string.Empty, string.Empty,null,null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId,2);
+            var cmd = new AddEmployee(CompanyId, OfficeId, employeeGlobalId,employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty, string.Empty, string.Empty,null,null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId,2);
             return cmd;
         }
 

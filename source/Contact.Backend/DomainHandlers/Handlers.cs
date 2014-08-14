@@ -54,16 +54,13 @@ namespace Contact.Backend.DomainHandlers
                             req.Photo.Content);
                     }
 
+                    //TODO: Evaluate TODO below
                     //TODO: Get version from readmodel
-                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId, req.FirstName, req.LastName,
+                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, GetIdFromIdentity(user)), req.FirstName, req.LastName,
                         req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow,GetCreatedBy(user),correlationId,Domain.Constants.IgnoreVersion);
 
+                    return Send(container, command);
                     
-                    var sender = container.Resolve<ICommandSender>();
-
-                    sender.Send(command);
-
-                    return Helpers.CreateResponse(correlationId);
                 }
                 catch (Exception ex)
                 {
@@ -241,9 +238,28 @@ namespace Contact.Backend.DomainHandlers
             {
                 var claims = identity;
                 var id = claims.FindFirst(ClaimTypes.NameIdentifier);
-                return id.Issuer + Domain.Constants.IdentitySeparator + id.Value;
+                return id.Value;
             }
             return user.GetUserId();
+        }
+
+        private static string CreateNewGlobalId()
+        {
+            return new Guid().ToString();
+        }
+
+
+        private static string GetProviderFromIdentity(IIdentity user)
+        {
+            var identity = user as ClaimsIdentity;
+            if (identity != null)
+            {
+                var claims = identity;
+                var id = claims.FindFirst(ClaimTypes.NameIdentifier);
+                return id.Issuer;
+            }
+            
+            return null;
         }
 
     }
