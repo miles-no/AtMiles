@@ -14,6 +14,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
     public class AddEmployeeAsOfficeAdmin : EventSpecification<AddEmployee>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp1 = DateTime.MinValue;
+        private DateTime _timestamp2 = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -42,7 +44,15 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         public override IEnumerable<Event> Produced()
         {
             var events1 = _fakeEmployeeRepository.GetThenEvents();
+            if (events1.Count == 1)
+            {
+                _timestamp1 = events1[0].Created;
+            }
             var events2 = _fakeCompanyRepository.GetThenEvents();
+            if (events2.Count == 1)
+            {
+                _timestamp2 = events2[0].Created;
+            }
             events1.AddRange(events2);
             return events1;
         }
@@ -93,8 +103,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             var events = new List<Event>
                 {
-                    new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty, string.Empty, string.Empty,null,null, DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
-                    new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty, string.Empty, string.Empty,null,null, _timestamp1, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
+                    new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp2, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

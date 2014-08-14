@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using Contact.Backend.Infrastructure;
-using Contact.Backend.Models.Api;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
 using Contact.Domain;
@@ -182,8 +181,15 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
+                    //TODO: Include Address in request
+                    Domain.ValueTypes.Address address = null;
+                    //if (req.Address != null)
+                    //{
+                    //    Address = new Domain.ValueTypes.Address(req.Address.Street,
+                    //        req.Address.PostalCode, req.Address.PostalName);
+                    //}
                     //TODO: Get version from readmodel
-                    var command = new OpenOffice(req.CompanyId, req.Name, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new OpenOffice(req.CompanyId, req.Name, address, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                 }
@@ -235,7 +241,7 @@ namespace Contact.Backend.DomainHandlers
             {
                 var claims = identity;
                 var id = claims.FindFirst(ClaimTypes.NameIdentifier);
-                return id.Issuer + "::" + id.Value;
+                return id.Issuer + Domain.Constants.IdentitySeparator + id.Value;
             }
             return user.GetUserId();
         }

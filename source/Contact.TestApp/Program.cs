@@ -96,7 +96,8 @@ namespace Contact.TestApp
         {
             const string host = "milescontact.cloudapp.net";
             const string username = "admin";
-            const string password = "GoGoMilesContact";
+            //const string password = "GoGoMilesContact";
+            const string password = "changeit";
 
             const string companyId = "miles";
             const string companyName = "Miles";
@@ -104,7 +105,7 @@ namespace Contact.TestApp
             const string officeName = "Stavanger";
             var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
 
-            const string admin1Id = "Google::114551968215191716757";
+            const string admin1Id = "Google" + Constants.IdentitySeparator + "114551968215191716757";
             const string admin1FirstName = "Roy";
             const string admin1LastName = "Veshovda";
             var admin1DateOfBirth = new DateTime(1977, 1, 7);
@@ -114,7 +115,7 @@ namespace Contact.TestApp
             var admin1Address = new Address("Korvettveien 7", "4374", "Egersund");
 
 
-            const string admin2Id = "Google::110095646841016563805";
+            const string admin2Id = "Google" + Constants.IdentitySeparator + "110095646841016563805";
             const string admin2FirstName = "Stian";
             const string admin2LastName = "Galapate-Edvardsen";
             var admin2DateOfBirth = new DateTime(1977, 1, 7);
@@ -144,6 +145,7 @@ namespace Contact.TestApp
             {
                 globalRepository.Save(global, Constants.NewVersion);
                 employeeRepository.Save(admin1, Constants.NewVersion);
+                employeeRepository.Save(admin2, Constants.NewVersion);
                 companyRepository.Save(company, Constants.NewVersion);
                 Console.WriteLine("Success!");
             }

@@ -2,16 +2,13 @@
 {
     public class Person
     {
-        private readonly string _identifier;
-        private readonly string _name;
-
-        public string Identifier { get { return _identifier; } }
-        public string Name { get { return _name; } }
+        public readonly string Identifier;
+        public readonly string Name;
 
         public Person(string identifier, string name)
         {
-            _identifier = identifier;
-            _name = name;
+            Identifier = identifier;
+            Name = name;
         }
     }
 }

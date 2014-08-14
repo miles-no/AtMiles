@@ -14,6 +14,7 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
     public class RemoveOfficeAdminSelfAsCompanyAdmin : EventSpecification<RemoveOfficeAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -37,6 +38,10 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
+            if (events.Count == 1)
+            {
+                _timestamp = events[0].Created;
+            }
             return events;
         }
 
@@ -88,7 +93,7 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         {
             var events = new List<Event>
                 {
-                    new OfficeAdminRemoved(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName), DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)
+                    new OfficeAdminRemoved(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName), _timestamp, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)
                 };
             return events;
         }

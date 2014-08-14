@@ -5,22 +5,17 @@ namespace Contact.Domain
 {
     public abstract class Command : Message
     {
-        private readonly DateTime _created;
-        private readonly Person _createdBy;
-        private readonly String _correlationId;
-        private readonly Int32 _basedOnVersion;
-
-        public DateTime Created { get { return _created; } }
-        public Person CreatedBy { get { return _createdBy; } }
-        public String CorrelationId { get { return _correlationId; } }
-        public Int32 BasedOnVersion { get { return _basedOnVersion; } }
+        public readonly DateTime Created;
+        public readonly Person CreatedBy;
+        public readonly String CorrelationId;
+        public readonly Int32 BasedOnVersion;
 
         protected Command(DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
         {
-            _created = created;
-            _createdBy = createdBy;
-            _correlationId = correlationId;
-            _basedOnVersion = basedOnVersion;
+            Created = created;
+            CreatedBy = createdBy;
+            CorrelationId = correlationId;
+            BasedOnVersion = basedOnVersion;
         }
     }
 }

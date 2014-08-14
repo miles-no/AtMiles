@@ -29,7 +29,6 @@ namespace Contact.Domain.Aggregates
 
         public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
         {
-            //Security must be maintained outside this method
             var ev1 = new CompanyCreated(companyId, companyName, created, createdBy, correlationId);
             var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress, created, createdBy, correlationId);
             var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName, created, createdBy, correlationId);

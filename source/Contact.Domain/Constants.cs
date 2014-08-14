@@ -2,7 +2,8 @@
 {
     public class Constants
     {
-        public static int IgnoreVersion = -2;
-        public static int NewVersion = -1;
+        public const int IgnoreVersion = -2;
+        public const int NewVersion = -1;
+        public const string IdentitySeparator = "@@";
     }
 }

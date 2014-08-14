@@ -14,6 +14,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
     public class CloseOfficeWithPermissionTest : EventSpecification<CloseOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -41,6 +42,10 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
+            if (events.Count == 1)
+            {
+                _timestamp = events[0].Created;
+            }
             return events;
         }
 
@@ -92,7 +97,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         {
             var events = new List<Event>
                 {
-                    new OfficeClosed(CompanyId, CompanyName, OfficeId, OfficeName, DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new OfficeClosed(CompanyId, CompanyName, OfficeId, OfficeName, _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

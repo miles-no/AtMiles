@@ -5,8 +5,8 @@ namespace Contact.Domain.Commands
 {
     public class CloseOffice : Command
     {
-        public string CompanyId { get; private set; }
-        public string OfficeId { get; private set; }
+        public readonly string CompanyId;
+        public readonly string OfficeId;
 
         public CloseOffice(string companyId, string officeId, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
             : base(created, createdBy, correlationId, basedOnVersion)

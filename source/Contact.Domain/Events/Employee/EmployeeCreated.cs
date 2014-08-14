@@ -5,20 +5,20 @@ namespace Contact.Domain.Events.Employee
 {
     public class EmployeeCreated : Event
     {
-        public string CompanyId { get; private set; }
-        public string CompanyName { get; private set; }
-        public string OfficeId { get; private set; }
-        public string OfficeName { get; private set; }
-        public string GlobalId { get; private set; }
-        public string FirstName { get; private set; }
-        public string MiddleName { get; private set; }
-        public string LastName { get; private set; }
-        public DateTime DateOfBirth { get; private set; }
-        public string JobTitle { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public string Email { get; private set; }
-        public Address HomeAddress { get; private set; }
-        public Picture Photo { get; private set; }
+        public readonly string CompanyId;
+        public readonly string CompanyName;
+        public readonly string OfficeId;
+        public readonly string OfficeName;
+        public readonly string GlobalId;
+        public readonly string FirstName;
+        public readonly string MiddleName;
+        public readonly string LastName;
+        public readonly DateTime DateOfBirth;
+        public readonly string JobTitle;
+        public readonly string PhoneNumber;
+        public readonly string Email;
+        public readonly Address HomeAddress;
+        public readonly Picture Photo;
 
         public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId,
             string firstName, string middleName, string lastName,

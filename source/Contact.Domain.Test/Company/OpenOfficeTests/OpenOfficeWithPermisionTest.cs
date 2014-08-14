@@ -13,6 +13,8 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
     public class OpenOfficeWithPermisionTest : EventSpecification<OpenOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp = DateTime.MinValue;
+
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -21,9 +23,10 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         private const string ExistingOfficeId = "bgn";
         private const string ExistingOfficeName = "Bergen";
-
-        private const string OfficeId = "UNKNOWN";
+        
+        private string OfficeId = "UNKNOWN";
         private const string OfficeName = "Stavanger";
+
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -39,6 +42,11 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
+            if (events.Count == 1)
+            {
+                OfficeId =  ((OfficeOpened) events[0]).OfficeId;
+                _timestamp = events[0].Created;
+            }
             return events;
         }
 
@@ -74,7 +82,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         public override OpenOffice When()
         {
-            var cmd = new OpenOffice(CompanyId, OfficeName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new OpenOffice(CompanyId, OfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
         }
 
@@ -89,7 +97,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         {
             var events = new List<Event>
                 {
-                    new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, _timestamp,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

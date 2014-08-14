@@ -73,7 +73,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         public override OpenOffice When()
         {
-            var cmd = new OpenOffice(CompanyId, OfficeName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new OpenOffice(CompanyId, OfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
         }
 
