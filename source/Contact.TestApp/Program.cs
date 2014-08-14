@@ -67,6 +67,7 @@ namespace Contact.TestApp
             if (worker != null)
             {
                 worker.Stop();
+                Console.WriteLine("Command-worker Stopped");
             }
         }
 
@@ -87,6 +88,7 @@ namespace Contact.TestApp
 
             worker.Start();
 
+            Console.WriteLine("Command-worker Started");
             return worker;
         }
 

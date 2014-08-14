@@ -27,8 +27,9 @@ namespace Contact.Backend.Controllers
         /// <param name="employeeId"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("api/company/{companyId}/office/{officeId}/admin/{employeeId}")]
-        public Response AddAdmin(string companyId, string officeId, string employeeId)
+        //[Route("api/company/{companyId}/office/{officeId}/admin/{employeeId}")]
+        [Route("api/company/{companyId}/office/{officeId}/admin")]
+        public Response AddAdmin(string companyId, string officeId, [FromBody] string employeeId)
         {
             var addOfficeAdminRequest = new AddOfficeAdminRequest {CompanyId = companyId, OfficeId = officeId, AdminId = employeeId };
             return mediator.Send<AddOfficeAdminRequest, Response>(addOfficeAdminRequest, User.Identity);
