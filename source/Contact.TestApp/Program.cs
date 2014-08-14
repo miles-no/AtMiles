@@ -74,17 +74,20 @@ namespace Contact.TestApp
         private static LongRunningProcess Test2()
         {
             const string host = "milescontact.cloudapp.net";
-            const string username = "admin";
-            const string password = "GoGoMilesContact";
+            const string eSUsername = "admin";
+            const string eSPassword = "changeit";
 
-            var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
-            var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
+            const string rMQUsername = "miles";
+            const string rMQPassword = "GoGoMilesContact";
+
+            var companyRepository = new EventStoreRepository<Company>(host, null, eSUsername, eSPassword);
+            var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
 
             var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository);
 
             var cmdReceiver = new RabbitMqCommandHandler(cmdHandler);
 
-            var worker = new QueueWorker(host, "miles", password,"Commands",null, cmdReceiver.MessageHandler);
+            var worker = new QueueWorker(host, rMQUsername, rMQPassword, "Commands", null, cmdReceiver.MessageHandler);
 
             worker.Start();
 
