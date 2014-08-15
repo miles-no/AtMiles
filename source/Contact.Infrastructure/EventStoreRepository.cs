@@ -11,8 +11,6 @@ namespace Contact.Infrastructure
 {
     public class EventStoreRepository<T> : IRepository<T> where T : AggregateRoot, new()
     {
-        private const string EventClrTypeHeader = "EventClrTypeName";
-        private const string AggregateClrTypeHeader = "AggregateClrTypeName";
         //private const string CommitIdHeader = "CommitId";
         //private const int WritePageSize = 500;
         //private const int ReadPageSize = 500;
@@ -20,29 +18,29 @@ namespace Contact.Infrastructure
         private readonly Func<Type, string, string> _aggregateIdToStreamName;
 
         private readonly System.Net.IPEndPoint _endPoint;
-        private readonly IEventPublisher[] _publishers;
+        private readonly IEventPublisher _publisher;
         private readonly UserCredentials _credentials;
 
 
         
 
-        public EventStoreRepository(string serverName, IEventPublisher[] publishers, string username, string password)
-            : this(serverName, publishers, username, password, (t, g) => string.Format("{0}-{1}", char.ToLower(t.Name[0]) + t.Name.Substring(1), g))
+        public EventStoreRepository(string serverName, IEventPublisher publisher, string username, string password)
+            : this(serverName, publisher, username, password, (t, g) => string.Format("{0}-{1}", char.ToLower(t.Name[0]) + t.Name.Substring(1), g))
         {
         }
 
-        public EventStoreRepository(string serverName, IEventPublisher[] publishers, string username, string password, Func<Type, string, string> aggregateIdToStreamName)
+        public EventStoreRepository(string serverName, IEventPublisher publisher, string username, string password, Func<Type, string, string> aggregateIdToStreamName)
         {
-            _publishers = publishers;
+            _publisher = publisher;
             _endPoint = GetIpEndPoint(serverName);
             _credentials = new UserCredentials(username, password);
             _aggregateIdToStreamName = aggregateIdToStreamName;
         }
 
-        public EventStoreRepository(string serverName, int portNumber, IEventPublisher[] publishers)
+        public EventStoreRepository(string serverName, int portNumber, IEventPublisher publisher)
         {
             _endPoint = GetIpEndPoint(serverName, portNumber);
-            _publishers = publishers;
+            _publisher = publisher;
         }
 
         public void Save(T aggregate, int expectedVersion)
@@ -52,7 +50,7 @@ namespace Contact.Infrastructure
 
             var headers = new Dictionary<string, object>
             {   
-                {AggregateClrTypeHeader, aggregate.GetType().AssemblyQualifiedName}
+                {Constants.EventStoreAggregateClrTypeHeader, aggregate.GetType().AssemblyQualifiedName}
             };
 
             using (var connection = EventStoreConnection.Create(_endPoint))
@@ -81,7 +79,7 @@ namespace Contact.Infrastructure
         {
             var eventHeaders = new Dictionary<string, object>(headers)
                 {
-                    {EventClrTypeHeader, evnt.GetType().AssemblyQualifiedName}
+                    {Constants.EventStoreEventClrTypeHeader, evnt.GetType().AssemblyQualifiedName}
                 };
 
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders));
@@ -89,7 +87,7 @@ namespace Contact.Infrastructure
 
         public object DeserializeEvent(byte[] metadata, byte[] data)
         {
-            var eventClrTypeName = JObject.Parse(Encoding.UTF8.GetString(metadata)).Property(EventClrTypeHeader).Value;
+            var eventClrTypeName = JObject.Parse(Encoding.UTF8.GetString(metadata)).Property(Constants.EventStoreEventClrTypeHeader).Value;
             return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data), Type.GetType((string)eventClrTypeName));
         }
 
@@ -161,11 +159,8 @@ namespace Contact.Infrastructure
 
         private void PublishEvent(Event @event)
         {
-            if (_publishers == null) return;
-            foreach (var eventPublisher in _publishers)
-            {
-                if (eventPublisher != null) eventPublisher.Publish(@event);
-            }
+            if (_publisher == null) return;
+            _publisher.Publish(@event);
         }
 
         private static int ChangeExpectedVersion(int expectedVersion)

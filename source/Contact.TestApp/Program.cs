@@ -4,6 +4,7 @@ using System.IO;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
+using Contact.Domain.Events.Employee;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
@@ -15,6 +16,7 @@ namespace Contact.TestApp
         static void Main(string[] args)
         {
             LongRunningProcess cmdWorker = null;
+            LongRunningProcess readModelDemo = null;
             bool quit = false;
 
             while (!quit)
@@ -27,6 +29,7 @@ namespace Contact.TestApp
                 Console.WriteLine("Prepare EventStore with initial data: <1>");
                 Console.WriteLine("Start command-handler: <2>");
                 Console.WriteLine("Stop command-handler: <3>");
+                Console.WriteLine("ReadModel demo: <R>");
 
                 var key = Console.ReadKey(true);
 
@@ -51,6 +54,12 @@ namespace Contact.TestApp
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
                         Test3(cmdWorker);
+                        break;
+                    case ConsoleKey.R:
+                        readModelDemo = ReadModelDemo();
+                        break;
+                    case ConsoleKey.S:
+                        if(readModelDemo != null) readModelDemo.Stop();
                         break;
 
                     //Add more functions here
@@ -196,6 +205,29 @@ namespace Contact.TestApp
             //TODO: Promote list of users to admin after import
             //Maybe based on email
 
+        }
+
+        private static LongRunningProcess ReadModelDemo()
+        {
+            const string host = "milescontact.cloudapp.net";
+            const string username = "admin";
+            //const string password = "GoGoMilesContact";
+            const string password = "changeit";
+
+            var demo = new ReadModelDemo(host, username, password, new ConsoleLogger());
+            demo.Start();
+
+            return demo;
+
+            //var handler = new ReadModelHandler();
+
+            //var allUsersHandler = new AllUsersReadModelHandler();
+
+            //handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
+
+            //var dispatcher = new EventStoreDispatcher(host, username, password, handler, null, (e) => allUsersHandler.PrintAllUsersToConsole());
+            //dispatcher.Start();
+            //return dispatcher;
         }
     }
 }

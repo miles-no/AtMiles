@@ -5,5 +5,7 @@
         public const int IgnoreVersion = -2;
         public const int NewVersion = -1;
         public const string IdentitySeparator = "@@";
+        public const string EventStoreEventClrTypeHeader = "EventClrTypeName";
+        public const string EventStoreAggregateClrTypeHeader = "AggregateClrTypeName";
     }
 }
