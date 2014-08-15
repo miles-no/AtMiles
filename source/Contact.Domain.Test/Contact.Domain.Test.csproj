@@ -66,6 +66,7 @@
     <Compile Include="Company\CloseOfficeTests\CloseOfficeWithEmployeesTest.cs" />
     <Compile Include="Company\CloseOfficeTests\CloseOfficeWithoutPermissionTest.cs" />
     <Compile Include="Company\CloseOfficeTests\CloseOfficeWithPermissionTest.cs" />
+    <Compile Include="Company\OpenOfficeTests\OpenOfficeExistingOfficeIdTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeWithoutPermisionTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeWithPermisionTest.cs" />

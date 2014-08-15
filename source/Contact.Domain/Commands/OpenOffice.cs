@@ -6,14 +6,16 @@ namespace Contact.Domain.Commands
     public class OpenOffice : Command
     {
         public readonly string CompanyId;
-        public readonly string Name;
+        public readonly string OfficeId;
+        public readonly string OfficeName;
         public readonly Address Address;
 
-        public OpenOffice(string companyId, string name, Address address, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
+        public OpenOffice(string companyId, string officeId, string officeName, Address address, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
             : base(created, createdBy, correlationId, basedOnVersion)
         {
             CompanyId = companyId;
-            Name = name;
+            OfficeId = officeId;
+            OfficeName = officeName;
             Address = address;
         }
     }

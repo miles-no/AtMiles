@@ -30,12 +30,12 @@ namespace Contact.Domain.Aggregates
         public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
         {
             var ev1 = new CompanyCreated(companyId, companyName, created, createdBy, correlationId);
-            var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress, created, createdBy, correlationId);
-            var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName, created, createdBy, correlationId);
+            //var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress, created, createdBy, correlationId);
+            //var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName, created, createdBy, correlationId);
             var ev4 = new CompanyAdminAdded(companyId, companyName, adminId, adminName, created, createdBy, correlationId);
             ApplyChange(ev1);
-            ApplyChange(ev2);
-            ApplyChange(ev3);
+            //ApplyChange(ev2);
+            //ApplyChange(ev3);
             ApplyChange(ev4);
         }
 
@@ -83,10 +83,9 @@ namespace Contact.Domain.Aggregates
             return _companyAdmins.Count == 1;
         }
 
-        public void OpenOffice(string name, Address address, Person createdBy, string correlationId)
+        public void OpenOffice(string officeId, string officeName, Address address, Person createdBy, string correlationId)
         {
-            var officeId = Guid.NewGuid().ToString();
-            var ev = new OfficeOpened(_id, _name, officeId, name, address, DateTime.UtcNow, createdBy, correlationId);
+            var ev = new OfficeOpened(_id, _name, officeId, officeName, address, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 

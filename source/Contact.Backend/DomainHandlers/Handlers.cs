@@ -186,7 +186,7 @@ namespace Contact.Backend.DomainHandlers
                     //        req.Address.PostalCode, req.Address.PostalName);
                     //}
                     //TODO: Get version from readmodel
-                    var command = new OpenOffice(req.CompanyId, req.Name, address, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new OpenOffice(req.CompanyId, req.OfficeName, req.OfficeName, address, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                 }

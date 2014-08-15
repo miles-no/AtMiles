@@ -23,7 +23,7 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
         }
 
 
-        public AddEmployee ToAddEmployee(Cv cv, Employee employee)
+        public AddEmployee ToAddEmployee(string id, Cv cv, Employee employee)
         {
             string givenName = string.Empty, middleName = string.Empty;
 
@@ -58,7 +58,7 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
             
             var res = new AddEmployee(company,
                 employee.OfficeName,
-                new Guid().ToString(), new Login("Google", employee.Email, null), givenName, middleName, familyName,
+                id, new Login("Google", employee.Email, null), givenName, middleName, familyName,
                 bornDate,
                 cv.Title, cv.Telefon, employee.Email, null, employeePhoto, DateTime.UtcNow, createdBy,
                 new Guid().ToString(), Domain.Constants.IgnoreVersion);
@@ -74,9 +74,8 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
         public OpenOffice ToOpenOffice(string officeName)
         {
-            return new OpenOffice(company, officeName, null, DateTime.UtcNow, createdBy, Guid.NewGuid().ToString(), Domain.Constants.IgnoreVersion);
+            return new OpenOffice(company, officeName, officeName, null, DateTime.UtcNow, createdBy, Guid.NewGuid().ToString(), Domain.Constants.IgnoreVersion);
         }
-
     }
 
 }

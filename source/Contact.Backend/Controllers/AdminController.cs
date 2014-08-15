@@ -27,9 +27,9 @@ namespace Contact.Backend.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/company/{companyId}/office")]
-        public Response OpenOffice(string companyId, string officeName)
+        public Response OpenOffice(string companyId, string officeId, string officeName)
         {
-            var openOfficeRequest = new OpenOfficeRequest {CompanyId = companyId, Name = officeName};
+            var openOfficeRequest = new OpenOfficeRequest {CompanyId = companyId, OfficeIdName = officeId, OfficeName = officeName};
             return mediator.Send<OpenOfficeRequest, Response>(openOfficeRequest, User.Identity);
         }
 

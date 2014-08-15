@@ -3,6 +3,7 @@
     public class OpenOfficeRequest
     {
         public string CompanyId { get; set; }
-        public string Name { get; set; }
+        public string OfficeIdName { get; set; }
+        public string OfficeName { get; set; }
     }
 }

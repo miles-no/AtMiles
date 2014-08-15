@@ -94,7 +94,9 @@ namespace Contact.Domain.CommandHandlers
 
             if(!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException();
 
-            company.OpenOffice(message.Name, message.Address, message.CreatedBy, message.CorrelationId);
+            if (company.IsOffice(message.OfficeId)) throw new AlreadyExistingItemException();
+
+            company.OpenOffice(message.OfficeId, message.OfficeName, message.Address, message.CreatedBy, message.CorrelationId);
 
             _companyRepository.Save(company, message.BasedOnVersion);
         }

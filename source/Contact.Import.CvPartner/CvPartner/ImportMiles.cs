@@ -16,6 +16,9 @@ namespace Contact.Import.CvPartner.CvPartner
 
         public List<AddEmployee> AddEmployeesCommands { get; set; }
         public List<OpenOffice> OpenOfficeCommands { get; set; }
+        public List<AddCompanyAdmin> AddCompanyAdminsCommands { get; set; }
+
+        
 
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace Contact.Import.CvPartner.CvPartner
         /// <param name="sendContinuously">send commands as soon as they are constructed (if set to false, all will be sent as the last thing)</param>
         /// <param name="openOfficeCreated">action when openoffice command is created</param>
         /// <param name="addEmployeeAction">action when addEmployee command is created </param>
-        public bool ImportMilesComplete(string accessToken, Person createdBy, Action<OpenOffice> openOfficeCreated, Action<AddEmployee> addEmployeeAction)
+        public bool ImportMilesComplete(string accessToken, Person createdBy, Action<OpenOffice> openOfficeCreated, Action<AddEmployee> addEmployeeAction, Action<AddCompanyAdmin> addCompanyAdmin, List<string> emailToAdminUsers)
         {
             if (string.IsNullOrEmpty(accessToken))
             {
@@ -59,18 +62,42 @@ namespace Contact.Import.CvPartner.CvPartner
             
             foreach (var employee in employees)
             {
+                //TODO: Create syntetic ID
+                var id = Domain.Services.IdService.CreateNewId();
+
+
                 var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
                 Log("Downloading CV for " + employee.Name);
                 var cv = JsonConvert.DeserializeObject<Cv>(client.DownloadString(url));
-                var addEmployee = converter.ToAddEmployee(cv, employee);
+                var addEmployee = converter.ToAddEmployee(id, cv, employee);
                 Add(addEmployee, AddEmployeesCommands);
                
                 if (addEmployeeAction != null)
                 {
                     addEmployeeAction(addEmployee);
                 }
+
+                CheckIfShouldAddAsAdmin(addEmployee, addCompanyAdmin, emailToAdminUsers);
             }
             return true;
+        }
+
+        private void CheckIfShouldAddAsAdmin(AddEmployee addEmployee, Action<AddCompanyAdmin> addCompanyAdmin, List<string> emailToAdminUsers)
+        {
+            if (emailToAdminUsers != null)
+            {
+                if (emailToAdminUsers.Contains(addEmployee.Email))
+                {
+                    var cmd = new AddCompanyAdmin(addEmployee.CompanyId, addEmployee.GlobalId, DateTime.UtcNow,
+                        addEmployee.CreatedBy, addEmployee.CorrelationId, Domain.Constants.IgnoreVersion);
+
+                    Add(cmd, AddCompanyAdminsCommands);
+                    if (addCompanyAdmin != null)
+                    {
+                        addCompanyAdmin(cmd);
+                    }
+                }
+            }
         }
 
         public void Add<T>(T command, List<T> commands) where T:Command

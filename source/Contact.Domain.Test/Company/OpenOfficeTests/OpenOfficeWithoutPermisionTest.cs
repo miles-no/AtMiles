@@ -23,6 +23,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         private const string ExistingOfficeId = "bgn";
         private const string ExistingOfficeName = "Bergen";
 
+        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
@@ -73,7 +74,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         public override OpenOffice When()
         {
-            var cmd = new OpenOffice(CompanyId, OfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new OpenOffice(CompanyId, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
         }
 

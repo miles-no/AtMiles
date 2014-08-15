@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
+using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
 namespace Contact.Domain.Test.Company.OpenOfficeTests
 {
-    public class OpenOfficeWithPermisionTest : EventSpecification<OpenOffice>
+    [TestFixture]
+    public class OpenOfficeExistingOfficeIdTest : EventSpecification<OpenOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private DateTime _timestamp = DateTime.MinValue;
@@ -21,11 +26,11 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
 
-        private const string ExistingOfficeId = "bgn";
-        private const string ExistingOfficeName = "Bergen";
+        private const string ExistingOfficeId = "SVG";
+        private const string ExistingOfficeName = "Stavanger 1";
 
         private const string OfficeId = "SVG";
-        private const string OfficeName = "Stavanger";
+        private const string OfficeName = "Stavanger 2";
 
 
         private const string AdminId = "adm1";
@@ -36,16 +41,13 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         [Test]
         public void open_office_with_permission()
         {
+            ExpectedException = new AlreadyExistingItemException();
             Setup();
         }
 
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
-            if (events.Count == 1)
-            {
-                _timestamp = events[0].Created;
-            }
             return events;
         }
 
@@ -94,11 +96,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         public override IEnumerable<Event> Expect()
         {
-            var events = new List<Event>
-                {
-                    new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, _timestamp,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
-                };
-            return events;
+            yield break;
         }
     }
 }

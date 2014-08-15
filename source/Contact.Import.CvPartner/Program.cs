@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner;
-using Contact.Import.CvPartner.CvPartner.Models.Cv;
-using Contact.Import.CvPartner.CvPartner.Models.Employee;
-using Contact.Infrastructure;
-using Newtonsoft.Json;
 
 namespace Contact.Import.CvPartner
 {
@@ -23,7 +14,7 @@ namespace Contact.Import.CvPartner
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
             var import = new ImportMiles();
-            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"),null,null);
+            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"),null,null, null, new List<string>());
         }
     }
 
