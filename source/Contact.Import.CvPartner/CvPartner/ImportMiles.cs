@@ -37,6 +37,7 @@ namespace Contact.Import.CvPartner.CvPartner
             }
 
             AddEmployeesCommands = new List<AddEmployee>();
+            AddCompanyAdminsCommands = new List<AddCompanyAdmin>();
 
             var converter = new Converters.Convert("miles", createdBy, Log);
             var client = new WebClient();
@@ -62,10 +63,7 @@ namespace Contact.Import.CvPartner.CvPartner
             
             foreach (var employee in employees)
             {
-                //TODO: Create syntetic ID
                 var id = Domain.Services.IdService.CreateNewId();
-
-
                 var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
                 Log("Downloading CV for " + employee.Name);
                 var cv = JsonConvert.DeserializeObject<Cv>(client.DownloadString(url));

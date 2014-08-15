@@ -55,7 +55,6 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                 log("Found image of " + "." + extension + " format");
                 employeePhoto = new Picture(employee.Name,extension,picture);
             }
-            
             var res = new AddEmployee(company,
                 employee.OfficeName,
                 id, new Login("Google", employee.Email, null), givenName, middleName, familyName,
