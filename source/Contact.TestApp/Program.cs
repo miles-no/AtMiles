@@ -29,6 +29,7 @@ namespace Contact.TestApp
                 Console.WriteLine("Prepare EventStore with initial data: <1>");
                 Console.WriteLine("Start command-handler: <2>");
                 Console.WriteLine("Stop command-handler: <3>");
+                Console.WriteLine("ReadModel super-simple demo: <A>");
                 Console.WriteLine("ReadModel demo: <R>");
 
                 var key = Console.ReadKey(true);
@@ -57,6 +58,9 @@ namespace Contact.TestApp
                         break;
                     case ConsoleKey.R:
                         readModelDemo = ReadModelDemo();
+                        break;
+                    case ConsoleKey.A:
+                        new ReadModelTesting().TestSubscription();
                         break;
                     case ConsoleKey.S:
                         if(readModelDemo != null) readModelDemo.Stop();
