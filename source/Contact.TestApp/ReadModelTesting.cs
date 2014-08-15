@@ -23,8 +23,8 @@ namespace Contact.TestApp
             connection.SubscribeToAllFrom(null, false,
                 (subscription, @event) => Console.WriteLine(@event.Event.EventType),
                 subscription =>{},
-                (subscription, reason, ex) => Console.WriteLine("Dropped. Reason:" + reason),
-                new UserCredentials("admin", "changeit"), 1);
+                (subscription, reason, ex) => Console.WriteLine("Dropped. Reason:" + reason)
+                ,null, 10);
         }
 
     }
