@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandSenderMock.cs" />
+    <Compile Include="EventStoreDispatcher.cs" />
     <Compile Include="EventStoreRepository.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPersistGetEventStorePosition.cs" />

@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Contact.Domain;
-using Contact.Infrastructure;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Contact.TestApp
+namespace Contact.Infrastructure
 {
-    public class ReadModelDemo : LongRunningProcess
+    public class EventStoreDispatcher : LongRunningProcess
     {
         private EventStoreCatchUpSubscription _subscription;
         private IEventStoreConnection _eventStoreConnection;
@@ -20,7 +19,7 @@ namespace Contact.TestApp
         private readonly string _eventStorePassword;
         private readonly IEventPublisher _publisher;
 
-        public ReadModelDemo(string eventStoreServer, string eventStoreUsername, string eventStorePassword, IEventPublisher publisher, ILog log)
+        public EventStoreDispatcher(string eventStoreServer, string eventStoreUsername, string eventStorePassword, IEventPublisher publisher, ILog log)
             : base(log)
         {
             _eventStoreServer = eventStoreServer;
@@ -29,14 +28,9 @@ namespace Contact.TestApp
             _publisher = publisher;
         }
 
-        public ReadModelDemo(ILog log) : base(log)
-        {
-
-        }
-
         protected override void Initialize()
         {
-            var settings = ConnectionSettings.Create().SetHeartbeatInterval(TimeSpan.FromSeconds(2));
+            var settings = ConnectionSettings.Create();
             var endPoint = GetIpEndPoint(_eventStoreServer);
             _eventStoreConnection = EventStoreConnection.Create(settings, endPoint);
             _eventStoreConnection.Connect();
@@ -94,7 +88,10 @@ namespace Contact.TestApp
                 {
                     _publisher.Publish(domainEvent);
                 }
-                catch { }  //TODO: Log error here
+                catch (Exception error)
+                {
+                    Log.Warn("Not able to publish event", error);
+                }
             }
         }
 
@@ -105,11 +102,11 @@ namespace Contact.TestApp
 
             if (exception != null)
             {
-                Log.Warn("Connection to EventStore dropped. Reason: " + dropReason.ToString(), exception);
+                Log.Warn("Connection to EventStore dropped. Reason: " + dropReason, exception);
             }
             else
             {
-                Log.Warn("Connection to EventStore dropped. Reason: " + dropReason.ToString());
+                Log.Warn("Connection to EventStore dropped. Reason: " + dropReason);
             }
             Thread.Sleep(10000);
             RecoverSubscription();
@@ -132,7 +129,7 @@ namespace Contact.TestApp
             return new System.Net.IPEndPoint(addresses[0], portNumber);
         }
 
-        private static bool TryDeserializeAggregateEvent(ResolvedEvent rawEvent, out Event deserializedEvent)
+        private bool TryDeserializeAggregateEvent(ResolvedEvent rawEvent, out Event deserializedEvent)
         {
             deserializedEvent = null;
 
@@ -157,8 +154,9 @@ namespace Contact.TestApp
             {
                 deserializeTo = Type.GetType((string)metadata[Constants.EventStoreEventClrTypeHeader], true);
             }
-            catch (Exception) //TODO: Log error here
+            catch (Exception error)
             {
+                Log.Warn("Exception deserializing event", error);
                 return false;
             }
 

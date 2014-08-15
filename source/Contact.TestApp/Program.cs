@@ -220,19 +220,10 @@ namespace Contact.TestApp
             var handler = new ReadModelHandler();
             handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
 
-            var demo = new ReadModelDemo(host, username, password, handler, new ConsoleLogger());
+            var demo = new EventStoreDispatcher(host, username, password, handler, new ConsoleLogger());
             demo.Start();
 
             return demo;
-
-            
-
-            
-
-            //var dispatcher = new EventStoreDispatcher(host, username, password, handler, null, (e) => allUsersHandler.PrintAllUsersToConsole());
-            //dispatcher.Start();
-            //return dispatcher;
         }
-
     }
 }
