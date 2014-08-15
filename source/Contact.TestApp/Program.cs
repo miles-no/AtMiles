@@ -215,16 +215,19 @@ namespace Contact.TestApp
             //const string password = "GoGoMilesContact";
             const string password = "changeit";
 
-            var demo = new ReadModelDemo(host, username, password, new ConsoleLogger());
+            var allUsersHandler = new AllUsersReadModelHandler();
+
+            var handler = new ReadModelHandler();
+            handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
+
+            var demo = new ReadModelDemo(host, username, password, handler, new ConsoleLogger());
             demo.Start();
 
             return demo;
 
-            //var handler = new ReadModelHandler();
+            
 
-            //var allUsersHandler = new AllUsersReadModelHandler();
-
-            //handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
+            
 
             //var dispatcher = new EventStoreDispatcher(host, username, password, handler, null, (e) => allUsersHandler.PrintAllUsersToConsole());
             //dispatcher.Start();

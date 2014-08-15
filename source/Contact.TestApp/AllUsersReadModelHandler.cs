@@ -15,16 +15,11 @@ namespace Contact.TestApp
         }
         public void Handle(EmployeeCreated message)
         {
-            _userList.Add(message.GlobalId + ": " +Domain.Services.NameService.GetName(message.FirstName, message.MiddleName, message.LastName));
-        }
-
-        public void PrintAllUsersToConsole()
-        {
-            Console.WriteLine("Users ({0})", _userList.Count);
-            foreach (var user in _userList)
-            {
-                Console.WriteLine(user);
-            }
+            string userInfo = message.GlobalId + ": " +
+                              Domain.Services.NameService.GetName(message.FirstName, message.MiddleName,
+                                  message.LastName);
+            _userList.Add(userInfo);
+            Console.WriteLine("User {0} : {1}", _userList.Count, userInfo);
         }
     }
 }
