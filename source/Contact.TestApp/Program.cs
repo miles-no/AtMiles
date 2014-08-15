@@ -190,12 +190,10 @@ namespace Contact.TestApp
             var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
 
             import.ImportMilesComplete(cvPartnerToken, systemAsPerson, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
-            
-
 
             //TODO: Promote list of users to admin after import
             //Maybe based on email
-
         }
+
     }
 }

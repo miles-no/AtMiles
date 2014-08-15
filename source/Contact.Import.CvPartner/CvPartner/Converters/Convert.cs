@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Odbc;
 using System.Linq;
 using System.Net;
 using Contact.Domain.Commands;
@@ -46,14 +47,29 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
             var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
 
             Picture employeePhoto = null;
-            if (employee.Image != null && employee.Image.Url != null)
+            if (cv.Image != null && cv.Image.Url != null)
             {
-                var picture = new WebClient().DownloadData(employee.Image.Url);
-                var urlWithoutQueryParameters = employee.Image.Url.Substring(0, employee.Image.Url.IndexOf("?"));
-                var extension = urlWithoutQueryParameters.Substring(employee.Image.Url.LastIndexOf(".")).Replace(".",string.Empty);
-                
-                log("Found image of " + "." + extension + " format");
-                employeePhoto = new Picture(employee.Name,extension,picture);
+                byte[] picture = null;
+                string extension = null;
+
+                try
+                {
+                    picture = new WebClient().DownloadData(cv.Image.Url);
+                    var urlWithoutQueryParameters = cv.Image.Url.Substring(0, cv.Image.Url.IndexOf("?"));
+                    extension = urlWithoutQueryParameters.Substring(cv.Image.Url.LastIndexOf("."))
+                        .Replace(".", string.Empty);
+
+                    log("Found image of " + "." + extension + " format");
+                }
+                catch (Exception ex)
+                {
+                    log("Error downloading image:\n\n " + ex);
+
+                }
+                if (picture != null)
+                {
+                    employeePhoto = new Picture(employee.Name,extension,picture);
+                }
             }
             var res = new AddEmployee(company,
                 employee.OfficeName,

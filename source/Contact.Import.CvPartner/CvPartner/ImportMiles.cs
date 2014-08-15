@@ -55,7 +55,14 @@ namespace Contact.Import.CvPartner.CvPartner
             {
                 foreach (var openOfficeCommand in OpenOfficeCommands)
                 {
-                    openOfficeCreated(openOfficeCommand);
+                    try
+                    {
+                        openOfficeCreated(openOfficeCommand);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log("OpenOffice handler failed:\n\n " + ex);
+                    }
                 }
             }
             
@@ -65,14 +72,22 @@ namespace Contact.Import.CvPartner.CvPartner
             {
                 var id = Domain.Services.IdService.CreateNewId();
                 var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
-                Log("Downloading CV for " + employee.Name);
+                Log("Downloading CV for " + employee.Name + " on url " + url);
+                
                 var cv = JsonConvert.DeserializeObject<Cv>(client.DownloadString(url));
                 var addEmployee = converter.ToAddEmployee(id, cv, employee);
                 Add(addEmployee, AddEmployeesCommands);
                
                 if (addEmployeeAction != null)
                 {
-                    addEmployeeAction(addEmployee);
+                    try
+                    {
+                        addEmployeeAction(addEmployee);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log("AddEmployee handler failed:\n\n " + ex);
+                    }
                 }
 
                 CheckIfShouldAddAsAdmin(addEmployee, addCompanyAdmin, emailToAdminUsers);
