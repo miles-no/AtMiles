@@ -46,6 +46,7 @@ namespace Contact.TestApp
 
                     case ConsoleKey.Q:
                         Console.WriteLine("Quiting...");
+                        StopReadModel(readModelDemo);
                         quit = true;
                         break;
                     case ConsoleKey.D1:
@@ -61,13 +62,14 @@ namespace Contact.TestApp
                         Test3(cmdWorker);
                         break;
                     case ConsoleKey.R:
+                        Console.WriteLine("Starting Readmodel processing");
                         readModelDemo = ReadModelDemo();
                         break;
                     case ConsoleKey.A:
                         new ReadModelTesting().TestSubscription();
                         break;
                     case ConsoleKey.S:
-                        if(readModelDemo != null) readModelDemo.Stop();
+                        StopReadModel(readModelDemo);
                         break;
 
                     //Add more functions here
@@ -81,6 +83,17 @@ namespace Contact.TestApp
             }
             Console.WriteLine("Exited");
         }
+
+        private static void StopReadModel(LongRunningProcess readModelDemo)
+        {
+            if (readModelDemo != null)
+            {
+                Console.WriteLine("Stopping readmodel...");
+                readModelDemo.Stop();
+                Console.WriteLine("ReadModel Stopped");
+            }
+        }
+
 
         private static void Test3(LongRunningProcess worker)
         {
@@ -185,9 +198,6 @@ namespace Contact.TestApp
             //const string password = "GoGoMilesContact";
             const string password = "changeit";
 
-            //var allUsersHandler = new AllUsersReadModelHandler();
-            //handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
-
             var handler = new ReadModelHandler();
 
             var repository = new InMemoryRepository();
@@ -221,16 +231,18 @@ namespace Contact.TestApp
             Console.WriteLine("Employees: {0}", repository.Employees.Count);
 
             Console.WriteLine("Companies: {0}",repository.Companies.Count);
+            Console.WriteLine();
             foreach (var company in repository.Companies)
             {
-                Console.WriteLine("\tCompany: {0}:",company.Name);
-                Console.WriteLine("\t\t{0} Admins", company.Admins.Count);
-                Console.WriteLine("\t\t{0} Offices", company.Offices.Count);
+                Console.WriteLine("Company: {0}:",company.Name);
+                Console.WriteLine("\t{0} Admins", company.Admins.Count);
+                Console.WriteLine("\t{0} Offices", company.Offices.Count);
+                Console.WriteLine();
                 foreach (var office in company.Offices)
                 {
-                    Console.WriteLine("\t\t\tOffice: {0}:", office.Name);
-                    Console.WriteLine("\t\t\t\tAdmins: {0}:", office.Admins.Count);
-                    Console.WriteLine("\t\t\t\tEmployees: {0}:", office.Employees.Count);
+                    Console.WriteLine("\tOffice: {0}:", office.Name);
+                    Console.WriteLine("\t\tAdmins: {0}:", office.Admins.Count);
+                    Console.WriteLine("\t\tEmployees: {0}:", office.Employees.Count);
                 }
             }
             int breakPointMarker = 0;
