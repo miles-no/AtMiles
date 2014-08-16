@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Contact.Domain;
 using Contact.Domain.Events.Company;
 

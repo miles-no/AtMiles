@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Contact.Domain;
+﻿using Contact.Domain;
 using Contact.Domain.Events.Employee;
 
 namespace Contact.TestApp.InMemoryReadModel

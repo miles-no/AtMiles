@@ -17,7 +17,7 @@ namespace Contact.TestApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             LongRunningProcess cmdWorker = null;
             LongRunningProcess readModelDemo = null;
@@ -110,8 +110,8 @@ namespace Contact.TestApp
             const string eSUsername = "admin";
             const string eSPassword = "changeit";
 
-            const string rMQUsername = "miles";
-            const string rMQPassword = "GoGoMilesContact";
+            const string rMqUsername = "miles";
+            const string rMqPassword = "GoGoMilesContact";
 
             var companyRepository = new EventStoreRepository<Company>(host, null, eSUsername, eSPassword);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
@@ -120,7 +120,7 @@ namespace Contact.TestApp
 
             var cmdReceiver = new RabbitMqCommandHandler(cmdHandler);
 
-            var worker = new QueueWorker(host, rMQUsername, rMQPassword, "Commands", null, cmdReceiver.MessageHandler);
+            var worker = new QueueWorker(host, rMqUsername, rMqPassword, "Commands", null, cmdReceiver.MessageHandler);
 
             worker.Start();
 
@@ -178,7 +178,7 @@ namespace Contact.TestApp
 
             Console.WriteLine("Starting to import data from CVpartner");
 
-            string cvPartnerToken = null;
+            string cvPartnerToken;
 #if testing
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
@@ -245,7 +245,7 @@ namespace Contact.TestApp
                     Console.WriteLine("\t\tEmployees: {0}:", office.Employees.Count);
                 }
             }
-            int breakPointMarker = 0;
+            Console.WriteLine("***********************************************************");
         }
     }
 }
