@@ -4,10 +4,14 @@ using System.IO;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
+using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
+using Contact.TestApp.InMemoryReadModel;
+using Company = Contact.Domain.Aggregates.Company;
+using Employee = Contact.Domain.Aggregates.Employee;
 
 namespace Contact.TestApp
 {
@@ -129,26 +133,6 @@ namespace Contact.TestApp
             var systemDateOfBirth = new DateTime(2014, 9, 1);
             const string systemJobTitle = "System";
 
-            //const string admin1Id = "Google" + Constants.IdentitySeparator + "114551968215191716757";
-            //const string admin1FirstName = "Roy";
-            //const string admin1LastName = "Veshovda";
-            //var admin1DateOfBirth = new DateTime(1977, 1, 7);
-            //const string admin1JobTitle = "Senior Consultant";
-            //const string admin1PhoneNumber = "+4740102040";
-            //const string admin1Email = "roy.veshovda@miles.no";
-            //var admin1Address = new Address("Korvettveien 7", "4374", "Egersund");
-
-
-            //const string admin2Id = "Google" + Constants.IdentitySeparator + "110095646841016563805";
-            //const string admin2FirstName = "Stian";
-            //const string admin2LastName = "Galapate-Edvardsen";
-            //var admin2DateOfBirth = new DateTime(1977, 1, 7);
-            //const string admin2JobTitle = "Senior Consultant";
-            //const string admin2PhoneNumber = "+4712345678";
-            //const string admin2Email = "stian.edvardsen@miles.no";
-            //Address admin2Address = null;
-
-
             var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
             var globalRepository = new EventStoreRepository<Global>(host, null, username, password);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
@@ -161,17 +145,8 @@ namespace Contact.TestApp
 
             var systemAsPerson = new Person(system.Id, system.Name);
 
-            //var admin1 = new Employee();
-            //admin1.CreateNew(companyId, companyName, officeId, officeName, admin1Id, admin1FirstName, string.Empty, admin1LastName, admin1DateOfBirth, admin1JobTitle, admin1PhoneNumber, admin1Email, admin1Address, null, systemAsPerson, initCorrelationId);
-
-            //var admin2 = new Employee();
-            //admin2.CreateNew(companyId, companyName, officeId, officeName, admin2Id, admin2FirstName, string.Empty, admin2LastName, admin2DateOfBirth, admin2JobTitle, admin2PhoneNumber, admin2Email, admin2Address, null, systemAsPerson, initCorrelationId);
-
             var company = new Company();
             company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, system.Id, system.Name, DateTime.UtcNow, systemAsPerson, initCorrelationId);
-
-            //company.AddCompanyAdmin(admin1, systemAsPerson, initCorrelationId);
-            //company.AddCompanyAdmin(admin2, systemAsPerson, initCorrelationId);
 
             global.AddCompany(company, systemAsPerson, initCorrelationId);
 
@@ -179,8 +154,6 @@ namespace Contact.TestApp
             {
                 globalRepository.Save(global, Constants.NewVersion);
                 employeeRepository.Save(system, Constants.NewVersion);
-                //employeeRepository.Save(admin1, Constants.NewVersion);
-                //employeeRepository.Save(admin2, Constants.NewVersion);
                 companyRepository.Save(company, Constants.NewVersion);
                 Console.WriteLine("Successfully created seed info");
             }
@@ -203,9 +176,6 @@ namespace Contact.TestApp
             var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
 
             import.ImportMilesComplete(cvPartnerToken, systemAsPerson, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
-
-            //TODO: Promote list of users to admin after import
-            //Maybe based on email
         }
 
         private static LongRunningProcess ReadModelDemo()
@@ -215,15 +185,55 @@ namespace Contact.TestApp
             //const string password = "GoGoMilesContact";
             const string password = "changeit";
 
-            var allUsersHandler = new AllUsersReadModelHandler();
+            //var allUsersHandler = new AllUsersReadModelHandler();
+            //handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
 
             var handler = new ReadModelHandler();
-            handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
 
-            var demo = new EventStoreDispatcher(host, username, password, handler, new ConsoleLogger());
+            var repository = new InMemoryRepository();
+
+            var employeeHandler = new EmployeeHandler(repository);
+            handler.RegisterHandler<EmployeeCreated>(employeeHandler.Handle);
+            handler.RegisterHandler<EmployeeTerminated>(employeeHandler.Handle);
+
+            var companyHandler = new CompanyHandler(repository);
+            handler.RegisterHandler<CompanyCreated>(companyHandler.Handle);
+            handler.RegisterHandler<CompanyAdminAdded>(companyHandler.Handle);
+            handler.RegisterHandler<CompanyAdminRemoved>(companyHandler.Handle);
+            handler.RegisterHandler<EmployeeAdded>(companyHandler.Handle);
+            handler.RegisterHandler<EmployeeRemoved>(companyHandler.Handle);
+            handler.RegisterHandler<OfficeAdminAdded>(companyHandler.Handle);
+            
+            handler.RegisterHandler<OfficeAdminRemoved>(companyHandler.Handle);
+            handler.RegisterHandler<OfficeClosed>(companyHandler.Handle);
+            handler.RegisterHandler<OfficeOpened>(companyHandler.Handle);
+
+            var demo = new EventStoreDispatcher(host, username, password, handler, new ConsoleLogger(), () => PrintInMemoRyRepository(repository));
             demo.Start();
 
             return demo;
+        }
+
+        private static void PrintInMemoRyRepository(InMemoryRepository repository)
+        {
+            Console.WriteLine("ReadModel contains:");
+
+            Console.WriteLine("Employees: {0}", repository.Employees.Count);
+
+            Console.WriteLine("Companies: {0}",repository.Companies.Count);
+            foreach (var company in repository.Companies)
+            {
+                Console.WriteLine("\tCompany: {0}:",company.Name);
+                Console.WriteLine("\t\t{0} Admins", company.Admins.Count);
+                Console.WriteLine("\t\t{0} Offices", company.Offices.Count);
+                foreach (var office in company.Offices)
+                {
+                    Console.WriteLine("\t\t\tOffice: {0}:", office.Name);
+                    Console.WriteLine("\t\t\t\tAdmins: {0}:", office.Admins.Count);
+                    Console.WriteLine("\t\t\t\tEmployees: {0}:", office.Employees.Count);
+                }
+            }
+            int breakPointMarker = 0;
         }
     }
 }

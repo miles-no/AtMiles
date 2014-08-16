@@ -18,14 +18,16 @@ namespace Contact.Infrastructure
         private readonly string _eventStoreUsername;
         private readonly string _eventStorePassword;
         private readonly IEventPublisher _publisher;
+        private readonly Action _liveProcessing;
 
-        public EventStoreDispatcher(string eventStoreServer, string eventStoreUsername, string eventStorePassword, IEventPublisher publisher, ILog log)
+        public EventStoreDispatcher(string eventStoreServer, string eventStoreUsername, string eventStorePassword, IEventPublisher publisher, ILog log, Action liveProcessing)
             : base(log)
         {
             _eventStoreServer = eventStoreServer;
             _eventStoreUsername = eventStoreUsername;
             _eventStorePassword = eventStorePassword;
             _publisher = publisher;
+            _liveProcessing = liveProcessing;
         }
 
         protected override void Initialize()
@@ -120,6 +122,10 @@ namespace Contact.Infrastructure
         private void LiveProcessingStarted(EventStoreCatchUpSubscription arg1)
         {
             Log.Info("TimeLine starting live processing.");
+            if (_liveProcessing != null)
+            {
+                _liveProcessing();
+            }
         }
 
         private static System.Net.IPEndPoint GetIpEndPoint(string serverName, int portNumber = 1113)
