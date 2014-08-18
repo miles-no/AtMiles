@@ -245,6 +245,7 @@ namespace Contact.TestApp
                     Console.WriteLine("\t\tEmployees: {0}:", office.Employees.Count);
                 }
             }
+            Console.WriteLine();
             Console.WriteLine("***********************************************************");
         }
     }
