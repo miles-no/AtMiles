@@ -22,5 +22,10 @@ namespace Contact.Backend.Utilities
             }
             return new Response { RequestId = id, Status = new Status { Id = "failed", Message = errorMessage } };
         }
+
+        public static string CreateNewId()
+        {
+            return Domain.Services.IdService.CreateNewId();
+        }
     }
 }
