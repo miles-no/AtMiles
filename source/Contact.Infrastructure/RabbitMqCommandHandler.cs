@@ -8,7 +8,7 @@ namespace Contact.Infrastructure
 {
     public class RabbitMqCommandHandler
     {
-        private MainCommandHandler _handler;
+        private readonly MainCommandHandler _handler;
         public RabbitMqCommandHandler(MainCommandHandler handler)
         {
             _handler = handler;
