@@ -8,7 +8,7 @@ namespace Contact.Domain.Aggregates
 {
     public class Global : AggregateRoot
     {
-        public const string GlobalId = "GLOBAL";
+        private const string GlobalId = "GLOBAL";
 
         private readonly List<string> _companies;
 

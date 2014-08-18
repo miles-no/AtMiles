@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using Contact.Domain;
+using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
+using Contact.Domain.Exceptions;
 
 namespace Contact.Infrastructure
 {
     public class RabbitMqCommandHandler
     {
         private readonly MainCommandHandler _handler;
-        public RabbitMqCommandHandler(MainCommandHandler handler)
+        private readonly IRepository<CommandSession> _commandSessionRepository;
+        public RabbitMqCommandHandler(MainCommandHandler handler, IRepository<CommandSession> commandSessionRepository)
         {
             _handler = handler;
+            _commandSessionRepository = commandSessionRepository;
         }
 
 
@@ -24,10 +28,25 @@ namespace Contact.Infrastructure
             var t = Type.GetType(messageType);
             if (t != null)
             {
-                var command = Newtonsoft.Json.JsonConvert.DeserializeObject(stringVersion, t);
-                if (command is Command)
+                var rawCommand = Newtonsoft.Json.JsonConvert.DeserializeObject(stringVersion, t);
+                var command = rawCommand as Command;
+                if (command != null)
                 {
-                    _handler.HandleCommand((Command)command, t);
+                    var session = new CommandSession();
+                    try
+                    {
+                        session.AddRequestCommand(command);
+                        _handler.HandleCommand(command, t);
+                        session.MarkCommandAsSuccess(command.CreatedBy, command.CorrelationId);
+                    }
+                    catch (DomainBaseException domainException)
+                    {
+                        session.AddException(domainException, command.CreatedBy, command.CorrelationId);
+                    }
+                    finally
+                    {
+                        _commandSessionRepository.Save(session, Constants.IgnoreVersion);
+                    }
                 }
             }
         }

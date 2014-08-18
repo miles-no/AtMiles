@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Contact.Backend.MockStore;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
@@ -55,15 +54,15 @@ namespace Contact.TestApp
                         break;
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        Test1();
+                        SeedEmptyEventStore();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        cmdWorker = Test2();
+                        cmdWorker = StartCommandHandler();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        Test3(cmdWorker);
+                        StopCommandHandler(cmdWorker);
                         break;
                     case ConsoleKey.R:
                         Console.WriteLine("Starting Readmodel processing");
@@ -111,7 +110,7 @@ namespace Contact.TestApp
         }
 
 
-        private static void Test3(LongRunningProcess worker)
+        private static void StopCommandHandler(LongRunningProcess worker)
         {
             if (worker != null)
             {
@@ -120,7 +119,7 @@ namespace Contact.TestApp
             }
         }
 
-        private static LongRunningProcess Test2()
+        private static LongRunningProcess StartCommandHandler()
         {
             const string host = "milescontact.cloudapp.net";
             const string eSUsername = "admin";
@@ -131,10 +130,11 @@ namespace Contact.TestApp
 
             var companyRepository = new EventStoreRepository<Company>(host, null, eSUsername, eSPassword);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
+            var commandSessionRepository = new EventStoreRepository<CommandSession>(host, null, eSUsername, eSPassword);
 
             var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository);
 
-            var cmdReceiver = new RabbitMqCommandHandler(cmdHandler);
+            var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
 
             var worker = new QueueWorker(host, rMqUsername, rMqPassword, "Commands", null, cmdReceiver.MessageHandler);
 
@@ -144,7 +144,7 @@ namespace Contact.TestApp
             return worker;
         }
 
-        private static void Test1()
+        private static void SeedEmptyEventStore()
         {
             const string host = "milescontact.cloudapp.net";
             const string username = "admin";

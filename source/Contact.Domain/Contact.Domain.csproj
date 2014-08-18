@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRoot.cs" />
+    <Compile Include="Aggregates\CommandSession.cs" />
     <Compile Include="Aggregates\Company.cs" />
     <Compile Include="Aggregates\Employee.cs" />
     <Compile Include="Aggregates\Global.cs" />
@@ -59,6 +60,9 @@
     <Compile Include="DelegateAdjuster.cs" />
     <Compile Include="Entities\Office.cs" />
     <Compile Include="Event.cs" />
+    <Compile Include="Events\CommandSession\CommandException.cs" />
+    <Compile Include="Events\CommandSession\CommandRequested.cs" />
+    <Compile Include="Events\CommandSession\CommandSucceded.cs" />
     <Compile Include="Events\Company\CompanyAdminAdded.cs" />
     <Compile Include="Events\Company\CompanyAdminRemoved.cs" />
     <Compile Include="Events\Company\CompanyCreated.cs" />
