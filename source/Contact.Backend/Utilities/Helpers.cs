@@ -1,25 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
-using System.Web.Http.Results;
-using Contact.Backend.Models.Api;
+﻿using System.Web;
 using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Utilities
 {
     public class Helpers
     {
-        public static string CreateNewId()
-        {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("=", string.Empty);
-        }
-
         public static Response CreateResponse(string id = null, string message = null)
         {
             if (string.IsNullOrEmpty(id))
             {
-                id = CreateNewId();
+                id = Domain.Services.IdService.CreateNewId();
             }
             return new Response { RequestId = id, Status = new Status { Url = Config.StatusEndpoint + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Message = message} };
         }
@@ -28,9 +18,14 @@ namespace Contact.Backend.Utilities
         {
             if (string.IsNullOrEmpty(id))
             {
-                id = CreateNewId();
+                id = Domain.Services.IdService.CreateNewId();
             }
             return new Response { RequestId = id, Status = new Status { Id = "failed", Message = errorMessage } };
+        }
+
+        public static string CreateNewId()
+        {
+            return Domain.Services.IdService.CreateNewId();
         }
     }
 }

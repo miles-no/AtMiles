@@ -22,7 +22,7 @@ namespace Contact.Infrastructure
         private readonly UserCredentials _credentials;
 
 
-        
+
 
         public EventStoreRepository(string serverName, IEventPublisher publisher, string username, string password)
             : this(serverName, publisher, username, password, (t, g) => string.Format("{0}-{1}", char.ToLower(t.Name[0]) + t.Name.Substring(1), g))
@@ -124,19 +124,11 @@ namespace Contact.Infrastructure
                     var events = new List<Event>();
                     foreach (var ev in evStream.Events)
                     {
-                        //DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data);
-                        //var stringVersion = Encoding.UTF8.GetString(ev.Event.Data);
-
-                        //var t = Type.GetType(ev.Event.EventType);
-                        //if (t != null)
-                        //{
-                            //var deserializedEvent = Newtonsoft.Json.JsonConvert.DeserializeObject(stringVersion, t);
-                            var deserializedEvent = DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data);
-                            if (deserializedEvent is Event)
-                            {
-                                events.Add((Event)deserializedEvent);
-                            }
-                        //}
+                        var deserializedEvent = DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data);
+                        if (deserializedEvent is Event)
+                        {
+                            events.Add((Event)deserializedEvent);
+                        }
                     }
                     obj.LoadsFromHistory(events, keepHistory);
                     startPosition += batchSize;

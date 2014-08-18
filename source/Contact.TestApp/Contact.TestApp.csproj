@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="InMemoryReadModel\Company.cs" />
     <Compile Include="InMemoryReadModel\CompanyHandler.cs" />
     <Compile Include="InMemoryReadModel\Employee.cs" />
@@ -61,13 +60,17 @@
     <Compile Include="InMemoryReadModel\SimpleOffice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadModelTesting.cs" />
+    <Compile Include="ReadModelSearchDemo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.MockStore.csproj">
+      <Project>{082EE311-417A-4509-A822-45D775919F1E}</Project>
+      <Name>Contact.Backend.MockStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Contact.Domain</Name>
@@ -79,6 +82,10 @@
     <ProjectReference Include="..\Contact.Infrastructure\Contact.Infrastructure.csproj">
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
       <Name>Contact.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.Test.csproj">
+      <Project>{DC681094-CE50-4E07-A14E-3CDA4554FFB1}</Project>
+      <Name>Contact.ReadStore.Test</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -74,7 +74,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         public override AddEmployee When()
         {
-            var cmd = new AddEmployee(CompanyId, OfficeId, employeeGlobalId, employeeLoginId, EmployeeFirstName, EmployeeLastName, EmployeeDateOfBirth, string.Empty, string.Empty, string.Empty, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new AddEmployee(CompanyId, OfficeId, employeeGlobalId, employeeLoginId, EmployeeFirstName, EmployeeLastName, EmployeeDateOfBirth, string.Empty, string.Empty, string.Empty, null, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
         }
 

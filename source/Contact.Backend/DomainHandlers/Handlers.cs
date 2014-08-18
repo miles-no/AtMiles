@@ -56,8 +56,12 @@ namespace Contact.Backend.DomainHandlers
 
                     //TODO: Evaluate TODO below
                     //TODO: Get version from readmodel
+
+                    //TODO: Consider to expose competence-tags on web-api
+                    CompetenceTag[] competence = null;
+
                     var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, GetIdFromIdentity(user)), req.FirstName, req.LastName,
-                        req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow,GetCreatedBy(user),correlationId,Domain.Constants.IgnoreVersion);
+                        req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, competence, DateTime.UtcNow, GetCreatedBy(user), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                     
