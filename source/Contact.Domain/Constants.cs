@@ -7,5 +7,6 @@
         public const string IdentitySeparator = "@@";
         public const string EventStoreEventClrTypeHeader = "EventClrTypeName";
         public const string EventStoreAggregateClrTypeHeader = "AggregateClrTypeName";
+        public const string GoogleIdProvider = "Google";
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Data.Odbc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Contact.Domain;
 using Contact.Domain.Commands;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner.Models.Cv;
@@ -71,14 +72,47 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                     employeePhoto = new Picture(employee.Name,extension,picture);
                 }
             }
+
+            //TODO: Include competence-tags
+
+            CompetenceTag[] competence = ConvertCvToCompetences(cv.Technologies);
             var res = new AddEmployee(company,
                 employee.OfficeName,
-                id, new Login("Google", employee.Email, null), givenName, middleName, familyName,
+                id, new Login(Constants.GoogleIdProvider, employee.Email, null), givenName, middleName, familyName,
                 bornDate,
-                cv.Title, cv.Telefon, employee.Email, null, employeePhoto, DateTime.UtcNow, createdBy,
+                cv.Title, cv.Telefon, employee.Email, null, employeePhoto, competence, DateTime.UtcNow, createdBy,
                 new Guid().ToString(), Domain.Constants.IgnoreVersion);
 
             return res;
+        }
+
+        private static CompetenceTag[] ConvertCvToCompetences(IEnumerable<Technology> technologies)
+        {
+            var competences = new List<CompetenceTag>();
+            foreach (var technology in technologies)
+            {
+                int intTagsCount = technology.IntTags != null ? technology.IntTags.Length : 0;
+                int localTagsCount = technology.LocalTags != null ? technology.LocalTags.Length : 0;
+
+                int max = Math.Max(intTagsCount, localTagsCount);
+
+                for (int i = 0; i < max; i++)
+                {
+                    string intTag = GetTagFromArray(i, technology.IntTags);
+                    string localTag = GetTagFromArray(i, technology.LocalTags);
+                    var tag = new CompetenceTag(technology.LocalCategory, technology.IntCategory, localTag, intTag);
+                    competences.Add(tag);
+                }
+            }
+
+            return competences.ToArray();
+        }
+
+        private static string GetTagFromArray(int position, string[] tags)
+        {
+            if (tags == null) return String.Empty;
+            if (position < 0 || position >= tags.Length - 1) return string.Empty;
+            return tags[position];
         }
 
         public byte[] GetPicture(string url)

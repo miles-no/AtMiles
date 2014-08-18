@@ -6,7 +6,14 @@ namespace Contact.Domain.Services
     {
         public static string CreateNewId()
         {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("=", string.Empty);
+            return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+                .Replace("=", string.Empty)
+                .Replace("/", string.Empty)
+                .Replace(":", string.Empty)
+                .Replace("&", string.Empty)
+                .Replace("%", string.Empty)
+                .Replace("?", string.Empty)
+                .Replace("\\", string.Empty);
         }
     }
 }
