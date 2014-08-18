@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Contact.Backend.MockStore;
+using EventStore.ClientAPI.Common.Log;
 
 namespace Contact.ReadStore.Test
 {
@@ -18,6 +19,18 @@ namespace Contact.ReadStore.Test
             //Search(test, "Banana");
             //Search(test, "Dessert Jack");
 
+            const string host = "milescontact.cloudapp.net";
+            const string username = "admin";
+            //const string password = "GoGoMilesContact";
+            const string password = "changeit";
+
+            var allUsersHandler = new AllUsersReadModelHandler();
+
+            var handler = new ReadModelHandler();
+            handler.RegisterHandler<EmployeeCreated>(allUsersHandler.Handle);
+
+            var demo = new ReadModelDemo(host, username, password, handler, new ConsoleLogger());
+            demo.Start();
             var fetcher = new EventFetcher();
             fetcher.Subscribe(async (e) =>
             {
@@ -84,7 +97,7 @@ namespace Contact.ReadStore.Test
             Console.WriteLine(msg);
         }
 
-        public static void Print(List<SearchTest.SearchMaterial> materials)
+        public static void Print(List<SearchTest.PersonSearchModel> materials)
         {
             Print("Results:\n");
             foreach (var searchMaterial in materials)

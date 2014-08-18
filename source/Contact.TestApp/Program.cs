@@ -60,7 +60,7 @@ namespace Contact.TestApp
                         readModelDemo = ReadModelDemo();
                         break;
                     case ConsoleKey.A:
-                        new ReadModelTesting().TestSubscription();
+                        new ReadModelSearchDemo().TestSubscription();
                         break;
                     case ConsoleKey.S:
                         if(readModelDemo != null) readModelDemo.Stop();

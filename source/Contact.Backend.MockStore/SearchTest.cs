@@ -9,15 +9,23 @@ namespace Contact.Backend.MockStore
     public class SearchTest
     {
         
-        public class SearchMaterial
+      
+//TODO: hekte på fra testapp-
+        public class PersonSearchModel
         {
             public string Id { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string[] Tags { get; set; }
+            public string CompanyId { get; set; }
+            public string OfficeId { get; set; }
+            public string GlobalId { get; set; }
+            public string Name { get; set; }
+            public DateTime DateOfBirth { get; set; }
+            public string JobTitle { get; set; }
+            public string PhoneNumber { get; set; }
+            public string Email { get; set; }
+            public string Thumb { get; set; }
         }
 
-        private const string SearchIndexName = "SearchMaterialByName";
+        private const string SearchIndexName = "SearchPerson";
 
         public SearchTest()
         {
@@ -26,15 +34,15 @@ namespace Contact.Backend.MockStore
 
         public IDocumentStore Store { get; set; }
 
-        public List<SearchMaterial> Search(string searchString)
+        public List<PersonSearchModel> Search(string searchString)
         {
-            List<SearchMaterial> results;
+            List<PersonSearchModel> results;
             using (var session = Store.OpenSession())
             {
-                results = session.Query<SearchMaterial>(SearchIndexName)
-                    .Search(x => x.FirstName, searchString, 10)
-                    .Search(x => x.LastName, searchString, 10)
-                    .Search(x => x.Tags, searchString)
+                results = session.Query<PersonSearchModel>(SearchIndexName)
+                    .Search(x => x.Name, searchString, 10)
+                    .Search(x => x.JobTitle, searchString)
+                    .Search(x => x.OfficeId, searchString)
                     .ToList();
 
             }
@@ -51,8 +59,8 @@ namespace Contact.Backend.MockStore
                 Indexes = { { "FirstName", FieldIndexing.Analyzed },{"LastName", FieldIndexing.Analyzed},{"Tags", FieldIndexing.Analyzed} }
             }, true);
 
-            var test1 = new SearchMaterial {Id = "SearchMaterials/1", FirstName = "Banana", LastName = "Split", Tags = new []{"Dessert","Old school"}};
-            var test2 = new SearchMaterial {Id = "SearchMaterials/2", FirstName = "Jack", LastName = "Black", Tags = new[] { "Actor", "Rock school","Banana fan" } };
+            var test1 = new PersonSearchModel {Id = "SearchMaterials/1", FirstName = "Banana", LastName = "Split", Tags = new []{"Dessert","Old school"}};
+            var test2 = new PersonSearchModel {Id = "SearchMaterials/2", FirstName = "Jack", LastName = "Black", Tags = new[] { "Actor", "Rock school","Banana fan" } };
 
             using (var session = Store.OpenSession())
             {
@@ -61,7 +69,7 @@ namespace Contact.Backend.MockStore
                 session.SaveChanges();
                 // just be sure its indexed
                 var results =
-                    session.Query<SearchMaterial>(SearchIndexName)
+                    session.Query<PersonSearchModel>(SearchIndexName)
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(2)))
                         .ToList();
             }
