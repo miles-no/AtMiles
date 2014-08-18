@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Contact.Backend.MockStore;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
@@ -9,6 +10,7 @@ using Contact.Domain.Events.Employee;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
+using Contact.ReadStore.Test;
 using Contact.TestApp.InMemoryReadModel;
 using Company = Contact.Domain.Aggregates.Company;
 using Employee = Contact.Domain.Aggregates.Employee;
@@ -35,6 +37,8 @@ namespace Contact.TestApp
                 Console.WriteLine("Stop command-handler: <3>");
                 Console.WriteLine("ReadModel super-simple demo: <A>");
                 Console.WriteLine("ReadModel demo: <R>");
+                Console.WriteLine("Fill RavenDb read store demo: <F>");
+                Console.WriteLine("Query RavenDb read store demo: <G>");
 
                 var key = Console.ReadKey(true);
 
@@ -65,9 +69,21 @@ namespace Contact.TestApp
                         Console.WriteLine("Starting Readmodel processing");
                         readModelDemo = ReadModelDemo();
                         break;
-                    case ConsoleKey.A:
-                        new ReadModelSearchDemo().TestSubscription();
+                    case ConsoleKey.F:
+                        new FillReadStore().FillAndPrepare();
                         break;
+
+                    case ConsoleKey.G:
+                        
+                        Console.WriteLine("Write query:");
+                        var query = Console.ReadLine();
+                        var res = new SearchEngine().FulltextSearch(query,10);
+                        foreach (var personSearchModel in res)
+                        {
+                            Console.WriteLine(personSearchModel.Name);
+                        }
+                        break;
+
                     case ConsoleKey.S:
                         StopReadModel(readModelDemo);
                         break;

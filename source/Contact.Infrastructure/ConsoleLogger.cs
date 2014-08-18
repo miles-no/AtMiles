@@ -1,7 +1,6 @@
 ﻿using System;
-using Contact.Infrastructure;
 
-namespace Contact.TestApp
+namespace Contact.Infrastructure
 {
     public class ConsoleLogger : ILog
     {

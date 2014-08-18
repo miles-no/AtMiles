@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DC681094-CE50-4E07-A14E-3CDA4554FFB1}</ProjectGuid>
+    <ProjectGuid>{72C5EE3B-9C34-45EE-8CAA-BCBDE6D49FF4}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.ReadStore.Test</RootNamespace>
-    <AssemblyName>Contact.ReadStore.Test</AssemblyName>
+    <RootNamespace>Contact.TestApp</RootNamespace>
+    <AssemblyName>Contact.TestApp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;testing</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -32,27 +32,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Net4">
-      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="EventStore.ClientAPI">
+    <Reference Include="EventStore.ClientAPI, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EventStore.Client.3.0.0-rc2\lib\net40\EventStore.ClientAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.5.2910\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.5.2910\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,34 +49,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventFetcher.cs" />
-    <Compile Include="FillReadStore.cs" />
-    <Compile Include="PersonSearchModel.cs" />
+    <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="InMemoryReadModel\Company.cs" />
+    <Compile Include="InMemoryReadModel\CompanyHandler.cs" />
+    <Compile Include="InMemoryReadModel\Employee.cs" />
+    <Compile Include="InMemoryReadModel\EmployeeHandler.cs" />
+    <Compile Include="InMemoryReadModel\InMemoryRepository.cs" />
+    <Compile Include="InMemoryReadModel\Office.cs" />
+    <Compile Include="InMemoryReadModel\SimpleCompany.cs" />
+    <Compile Include="InMemoryReadModel\SimpleEmployee.cs" />
+    <Compile Include="InMemoryReadModel\SimpleOffice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchEngine.cs" />
-    <Compile Include="Tag.cs" />
+<<<<<<< HEAD
+    <Compile Include="ReadModelDemo.cs" />
+    <Compile Include="ReadModelSearchDemo.cs" />
+=======
+    <Compile Include="ReadModelTesting.cs" />
+>>>>>>> 9400be88a8f0ccbba5dec4fb42cb9137ea4186a1
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.MockStore.csproj">
-      <Project>{082ee311-417a-4509-a822-45d775919f1e}</Project>
-      <Name>Contact.Backend.MockStore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
-      <Project>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</Project>
+      <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Contact.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Contact.Import.CvPartner\Contact.Import.CvPartner.csproj">
+      <Project>{b544efbd-81e6-44a0-9423-84abcf1c0b46}</Project>
+      <Name>Contact.Import.CvPartner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contact.Infrastructure\Contact.Infrastructure.csproj">
-      <Project>{1994013E-7C31-4057-9793-DAF0F1BE40B2}</Project>
+      <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
       <Name>Contact.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

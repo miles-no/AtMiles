@@ -29,19 +29,22 @@ namespace Contact.TestApp
         //        (subscription, reason, ex) => Console.WriteLine("Dropped. Reason:" + reason)
         //        ,null, 10);
         //}
+      
+
         public void Fill(string eventStoreServer, string eventStoreUsername, string eventStorePassword)
         {
+            
             var handler = new ReadModelHandler();
             handler.RegisterHandler<EmployeeCreated>(FillRaven);
-
-            var demo = new ReadModelDemo(eventStoreServer, eventStoreUsername, eventStorePassword, , new ConsoleLogger());
+            var demo = new EventStoreDispatcher(eventStoreServer, eventStoreUsername, eventStorePassword, handler, new ConsoleLogger(), () => {});
+        
             demo.Start();
 
         }
 
         private void FillRaven(EmployeeCreated emp)
         {
-            throw new NotImplementedException();
+             
         }
 
       
