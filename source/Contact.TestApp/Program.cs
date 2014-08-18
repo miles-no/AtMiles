@@ -154,7 +154,7 @@ namespace Contact.TestApp
             const string initCorrelationId = "SYSTEM INIT";
 
             var system = new Employee();
-            system.CreateNew(companyId, companyName, officeId, officeName, systemId, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
+            system.CreateNew(companyId, companyName, officeId, officeName, systemId, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
 
             var systemAsPerson = new Person(system.Id, system.Name);
 
