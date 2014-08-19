@@ -2,7 +2,7 @@
 {
     public class DummyAndHardCodedIdentityReseolver : IResolveUserIdentity
     {
-        public string ResolveUserIdentity(string provider, string providerId)
+        public string ResolveUserIdentityByProviderId(string provider, string providerId)
         {
             if (provider == Domain.Constants.GoogleIdProvider)
             {
@@ -14,6 +14,25 @@
 
                 //Stian
                 if (providerId == "110095646841016563805")
+                {
+                    return "1auJVoQuq0uTASAL5BG4XQ";
+                }
+            }
+            return string.Empty;
+        }
+
+        public string ResolveUserIdentityByEmail(string provider, string email)
+        {
+            if (provider == Domain.Constants.GoogleIdProvider)
+            {
+                //Roy
+                if (email == "roy.veshovda@miles.no")
+                {
+                    return "m8IpkYKl0OgZ6MDGtXIfg";
+                }
+
+                //Stian
+                if (email == "stian.edvardsen@miles.no")
                 {
                     return "1auJVoQuq0uTASAL5BG4XQ";
                 }
