@@ -20,12 +20,7 @@ namespace Contact.ReadStore.Test
           
         public void FillAndPrepare()
         {
-            //var test = new SearchTest();
-            //test.Setup();
-            //Search(test,"Jack");
-            //Search(test, "Banana");
-            //Search(test, "Dessert Jack");
-
+         
             Mapper.CreateMap<EmployeeCreated, PersonSearchModel>()
                 .ForMember(dest => dest.Competency, source => source.MapFrom(s => CreateRandomCompetency(2)))
                 .ForMember(dest => dest.Id, source => source.MapFrom(s=>s.GlobalId))
@@ -37,7 +32,6 @@ namespace Contact.ReadStore.Test
 
             const string host = "milescontact.cloudapp.net";
             const string username = "admin";
-            //const string password = "GoGoMilesContact";
             const string password = "changeit";
 
             var handler = new ReadModelHandler();
