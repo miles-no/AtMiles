@@ -13,7 +13,8 @@ namespace Contact.Domain.Services
                 .Replace("&", string.Empty)
                 .Replace("%", string.Empty)
                 .Replace("?", string.Empty)
-                .Replace("\\", string.Empty);
+                .Replace("\\", string.Empty)
+                .Replace("+", string.Empty);
         }
     }
 }
