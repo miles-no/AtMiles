@@ -20,6 +20,7 @@ namespace Contact.Infrastructure
         private readonly System.Net.IPEndPoint _endPoint;
         private readonly IEventPublisher _publisher;
         private readonly UserCredentials _credentials;
+        private readonly ConnectionSettings _connectionSettings;
 
 
 
@@ -35,6 +36,10 @@ namespace Contact.Infrastructure
             _endPoint = GetIpEndPoint(serverName);
             _credentials = new UserCredentials(username, password);
             _aggregateIdToStreamName = aggregateIdToStreamName;
+            _connectionSettings = ConnectionSettings.Create()
+                .KeepReconnecting()
+                .KeepRetrying()
+                .LimitRetriesForOperationTo(20);
         }
 
         public EventStoreRepository(string serverName, int portNumber, IEventPublisher publisher)
@@ -53,7 +58,7 @@ namespace Contact.Infrastructure
                 {Constants.EventStoreAggregateClrTypeHeader, aggregate.GetType().AssemblyQualifiedName}
             };
 
-            using (var connection = EventStoreConnection.Create(_endPoint))
+            using (var connection = EventStoreConnection.Create(_connectionSettings, _endPoint))
             {
                 connection.Connect();
                 foreach (var @event in events)
@@ -106,7 +111,8 @@ namespace Contact.Infrastructure
             const int batchSize = 50;
             var startPosition = 0;
             var obj = new T();
-            using (var connection = EventStoreConnection.Create(_endPoint))
+
+            using (var connection = EventStoreConnection.Create(_connectionSettings, _endPoint))
             {
                 connection.Connect();
                 StreamEventsSlice evStream;

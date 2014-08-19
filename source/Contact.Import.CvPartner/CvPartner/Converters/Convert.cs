@@ -73,8 +73,6 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                 }
             }
 
-            //TODO: Include competence-tags
-
             CompetenceTag[] competence = ConvertCvToCompetences(cv.Technologies);
             var res = new AddEmployee(company,
                 employee.OfficeName,

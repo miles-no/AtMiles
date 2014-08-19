@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Web.UI;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
@@ -8,6 +9,7 @@ using Contact.Domain;
 using Contact.Domain.Commands;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Practices.Unity;
 
@@ -249,7 +251,11 @@ namespace Contact.Backend.DomainHandlers
             {
                 var claims = identity;
                 var id = claims.FindFirst(ClaimTypes.NameIdentifier);
-                return identityResolver.ResolveUserIdentity(id.Issuer, id.Value);
+                var globalIdentity = identityResolver.ResolveUserIdentityByProviderId(id.Issuer, id.Value);
+                if (!string.IsNullOrEmpty(globalIdentity)) return globalIdentity;
+
+                var email = claims.FindFirst(ClaimTypes.Email);
+                return identityResolver.ResolveUserIdentityByEmail(email.Issuer, email.Value);
             }
             //return user.GetUserId();
             return string.Empty;

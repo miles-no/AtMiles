@@ -1,13 +1,16 @@
-﻿namespace Contact.Domain.Events.CommandSession
+﻿using System;
+using Contact.Domain.ValueTypes;
+
+namespace Contact.Domain.Events.CommandSession
 {
     public class CommandRequested : Event
     {
-        public readonly Command Command;
+        public readonly string CommandName;
 
-        public CommandRequested(Command command)
-            : base(command.Created, command.CreatedBy, command.CorrelationId)
+        public CommandRequested(string commandName, DateTime created, Person createdBy, string correlationId)
+            : base(created, createdBy, correlationId)
         {
-            Command = command;
+            CommandName = commandName;
         }
     }
 }

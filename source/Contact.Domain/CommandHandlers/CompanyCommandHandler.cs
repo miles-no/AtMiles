@@ -153,7 +153,7 @@ namespace Contact.Domain.CommandHandlers
 
             var newEmployee = new Employee();
             newEmployee.CreateNew(company.Id, company.Name, office.Id, office.Name,
-                message.GlobalId, message.FirstName, message.MiddleName, message.LastName, message.DateOfBirth,
+                message.GlobalId, message.LoginId, message.FirstName, message.MiddleName, message.LastName, message.DateOfBirth,
                 message.JobTitle, message.PhoneNumber, message.Email, message.HomeAddress, message.Photo, message.Competence, new Person(admin.Id, admin.Name), message.CorrelationId);
 
             company.AddNewEmployeeToOffice(office.Id, newEmployee, new Person(admin.Id, admin.Name), message.CorrelationId);

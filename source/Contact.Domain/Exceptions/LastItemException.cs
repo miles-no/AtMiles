@@ -6,5 +6,10 @@ namespace Contact.Domain.Exceptions
     {
         public LastItemException(string message) : base(message) { }
         public LastItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public override string GetExceptionName()
+        {
+            return "Last item";
+        }
     }
 }

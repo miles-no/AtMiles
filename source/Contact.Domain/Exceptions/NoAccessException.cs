@@ -6,5 +6,10 @@ namespace Contact.Domain.Exceptions
     {
         public NoAccessException(string message) : base(message) { }
         public NoAccessException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public override string GetExceptionName()
+        {
+            return "No Access";
+        }
     }
 }

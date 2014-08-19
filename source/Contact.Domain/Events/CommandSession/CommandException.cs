@@ -6,13 +6,27 @@ namespace Contact.Domain.Events.CommandSession
 {
     public class CommandException : Event
     {
-        public readonly DomainBaseException Exception;
+        public readonly string ExceptionName;
+        public readonly string ExceptionMessage;
+
+        public CommandException(string exceptionName, string exceptionMessage, DateTime created, Person createdBy,
+            string correlationId)
+            : base(created, createdBy, correlationId)
+        {
+            ExceptionName = exceptionName;
+            ExceptionMessage = exceptionMessage;
+        }
 
         public CommandException(DomainBaseException exception, DateTime created, Person createdBy,
             string correlationId)
             : base(created, createdBy, correlationId)
         {
-            Exception = exception;
+            if (exception != null)
+            {
+                ExceptionName = exception.GetExceptionName();
+                ExceptionMessage = exception.Message;
+            }
         }
     }
 }
+

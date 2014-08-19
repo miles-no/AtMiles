@@ -17,7 +17,7 @@ namespace Contact.Domain.Aggregates
 
         public void AddRequestCommand(Command command)
         {
-            var ev = new CommandRequested(command);
+            var ev = new CommandRequested(command.GetType().Name, DateTime.UtcNow, command.CreatedBy, command.CorrelationId);
             ApplyChange(ev);
         }
 
