@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Raven.Client.Linq.Indexing;
 
 namespace Contact.ReadStore.Test
 {
@@ -15,11 +16,7 @@ namespace Contact.ReadStore.Test
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Thumb { get; set; }
-        public string Query { get
-        {
-            return Name + " " + OfficeId + " " + " " + JobTitle + " " + Email + " " +
-                   (Competency != null ? string.Join(" ",Competency.Select(s => s.Category + " " + s.Competency))  : string.Empty);
-        } }
+      
         public Tag[] Competency { get; set; }
     }
 }

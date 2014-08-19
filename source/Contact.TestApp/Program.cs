@@ -74,13 +74,14 @@ namespace Contact.TestApp
                         break;
 
                     case ConsoleKey.G:
-                        
+
+                        var engine = new SearchEngine();
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
-                        var res = new SearchEngine().FulltextSearch(query,10);
+                        var res = engine.FulltextSearch(query,10);
                         foreach (var personSearchModel in res)
                         {
-                            Console.WriteLine(personSearchModel.Name);
+                            Console.WriteLine(personSearchModel.Name + " Score: " +  personSearchModel.Score);
                         }
                         break;
 

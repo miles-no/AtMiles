@@ -26,8 +26,6 @@ namespace Contact.ReadStore.Test
             //Search(test, "Banana");
             //Search(test, "Dessert Jack");
 
-          
-
             Mapper.CreateMap<EmployeeCreated, PersonSearchModel>()
                 .ForMember(dest => dest.Competency, source => source.MapFrom(s => CreateRandomCompetency(2)))
                 .ForMember(dest => dest.Id, source => source.MapFrom(s=>s.GlobalId))
@@ -46,7 +44,6 @@ namespace Contact.ReadStore.Test
             handler.RegisterHandler<EmployeeCreated>(FillRaven);
             var demo = new EventStoreDispatcher(host, username, password, handler, new ConsoleLogger(), () => { });
             demo.Start();
-            new SearchEngine().SetupIndexes();
             
             Console.ReadLine();
         }
