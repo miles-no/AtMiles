@@ -6,5 +6,10 @@ namespace Contact.Domain.Exceptions
     {
         public ExistingChildItemsException(string message) : base(message) { }
         public ExistingChildItemsException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public override string GetExceptionName()
+        {
+            return "Existing child item(s)";
+        }
     }
 }

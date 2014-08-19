@@ -6,5 +6,10 @@ namespace Contact.Domain.Exceptions
     {
         public AlreadyExistingItemException(string message) : base(message) { }
         public AlreadyExistingItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public override string GetExceptionName()
+        {
+            return "Already existing item";
+        }
     }
 }
