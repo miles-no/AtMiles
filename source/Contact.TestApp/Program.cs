@@ -80,7 +80,7 @@ namespace Contact.TestApp
                         var res = engine.FulltextSearch(query,10);
                         foreach (var personSearchModel in res)
                         {
-                            Console.WriteLine(personSearchModel.Name + " Score: " +  personSearchModel.Score);
+                            //Console.WriteLine(personSearchModel.Name + " Score: " +  personSearchModel.Score);
                         }
                         break;
 
@@ -171,7 +171,7 @@ namespace Contact.TestApp
             const string initCorrelationId = "SYSTEM INIT";
 
             var system = new Employee();
-            system.CreateNew(companyId, companyName, officeId, officeName, systemId, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
+            system.CreateNew(companyId, companyName, officeId, officeName, systemId, null, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
 
             var systemAsPerson = new Person(system.Id, system.Name);
 

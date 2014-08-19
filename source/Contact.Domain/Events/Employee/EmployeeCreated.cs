@@ -10,6 +10,7 @@ namespace Contact.Domain.Events.Employee
         public readonly string OfficeId;
         public readonly string OfficeName;
         public readonly string GlobalId;
+        public readonly Login LoginId;
         public readonly string FirstName;
         public readonly string MiddleName;
         public readonly string LastName;
@@ -22,7 +23,7 @@ namespace Contact.Domain.Events.Employee
         public readonly CompetenceTag[] Competence;
 
         public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId,
-            string firstName, string middleName, string lastName,
+            Login loginId, string firstName, string middleName, string lastName,
             DateTime dateOfBirth, string jobTitle, string phoneNumber, string email,
             Address homeAddress, Picture photo, CompetenceTag[] competence,
             DateTime created, Person createdBy, string correlationId)
@@ -33,6 +34,7 @@ namespace Contact.Domain.Events.Employee
             OfficeId = officeId;
             OfficeName = officeName;
             GlobalId = globalId;
+            LoginId = loginId;
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;

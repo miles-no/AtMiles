@@ -9,13 +9,13 @@
                 //Roy
                 if (providerId == "114551968215191716757")
                 {
-                    return "m8IpkYKl0OgZ6MDGtXIfg";
+                    return "NjIsRmTxxkKbTGPDrs4kvQ";
                 }
 
                 //Stian
                 if (providerId == "110095646841016563805")
                 {
-                    return "1auJVoQuq0uTASAL5BG4XQ";
+                    return "83J2cBApjkeMqgDt2mkKXQ";
                 }
             }
             return string.Empty;

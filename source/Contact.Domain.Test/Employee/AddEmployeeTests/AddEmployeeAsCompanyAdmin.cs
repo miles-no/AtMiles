@@ -84,7 +84,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty,string.Empty,string.Empty,null,null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty,string.Empty,string.Empty,null,null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
                 };
             return events;
         }
@@ -106,7 +106,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             var events = new List<Event>
                 {
-                    new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, employeeGlobalId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty,string.Empty,string.Empty,null,null, null, _timestamp1,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
+                    new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, employeeGlobalId, employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty,string.Empty,string.Empty,null,null, null, _timestamp1,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
                     new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, employeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp2,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
