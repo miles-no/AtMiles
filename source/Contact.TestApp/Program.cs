@@ -77,7 +77,9 @@ namespace Contact.TestApp
                         var engine = new SearchEngine();
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
-                        var res = engine.FulltextSearch(query,100);
+                        int total;
+                        var res = engine.FulltextSearch(query,10, 0, out total);
+                        Console.WriteLine(total + " treff ");
                         foreach (var personSearchModel in res)
                         {
                           
