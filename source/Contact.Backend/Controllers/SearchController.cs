@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Contact.Backend.Controllers
 {
+    [Authorize]
     public class SearchController : ApiController
     {
         private readonly IMediator mediator;
