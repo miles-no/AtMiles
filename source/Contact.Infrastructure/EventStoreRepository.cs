@@ -39,7 +39,7 @@ namespace Contact.Infrastructure
             _connectionSettings = ConnectionSettings.Create()
                 .KeepReconnecting()
                 .KeepRetrying()
-                .LimitRetriesForOperationTo(15);
+                .LimitRetriesForOperationTo(20);
         }
 
         public EventStoreRepository(string serverName, int portNumber, IEventPublisher publisher)
