@@ -2,8 +2,8 @@
 {
     public class DummyAndHardCodedIdentityReseolver : IResolveUserIdentity
     {
-        private const string IdRoy = "cuEhnrDMrU+Oi3RApT70JA";
-        private const string IdStian = "RVgYYRLtSE6+u+JleUoFQg";
+        private const string IdRoy = "iaeRaej2UKNfXaGw7XwUA";
+        private const string IdStian = "kHBA9PUhREqPImf6iSCG7A";
         public string ResolveUserIdentityByProviderId(string provider, string providerId)
         {
             if (provider == Domain.Constants.GoogleIdProvider)
