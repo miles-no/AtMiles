@@ -1,4 +1,5 @@
 ﻿using Raven.Client;
+using Raven.Client.Document;
 using Raven.Client.Embedded;
 
 namespace Contact.Backend.MockStore
@@ -10,7 +11,7 @@ namespace Contact.Backend.MockStore
 
         static MockStore()
         {
-            DocumentStore = new EmbeddableDocumentStore();
+            DocumentStore = new DocumentStore(){Url = "http://localhost:8080", DefaultDatabase = "Contact"};
             DocumentStore.Initialize();
         }
         
