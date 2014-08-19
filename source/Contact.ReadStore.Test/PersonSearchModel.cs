@@ -16,7 +16,9 @@ namespace Contact.ReadStore.Test
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Thumb { get; set; }
-      
         public Tag[] Competency { get; set; }
+        public double Score { get; set; }
     }
+    
+   
 }

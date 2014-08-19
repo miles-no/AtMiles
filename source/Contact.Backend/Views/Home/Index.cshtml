@@ -23,22 +23,37 @@
             </p>*@
         </div>
         <div id="authenticated" >
-            <h2 id="welcomemessage"></h2>
+            <b><p id="welcomemessage"></p></b>
+            <div ng-app>
+                <div ng-controller="homepageController">
+                   
+                    <input class="input-lg" ng-keyup="search()" ng-model="queryTerm" type="text" placeholder="Search for employee..">
+                  
+                    <table class="table table-striped">
+                        <tr ng-repeat="item in searchResult.Results">
+                            <td>
+                                <img src="{{item.Thumb}}" />
+                            </td>
+                            <td>
+                                <strong>{{item.Name}}</strong> <br />
+                                {{item.OfficeId}} - {{item.JobTitle}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+            </div>
+            
         </div>
     }
             
         
     
 </div>
-<div class="row">
-    @User.Identity.GetUserName()
-    @if (User.Identity.IsAuthenticated)
-    {
-        <h2>Autentisert!! @User.Identity.GetUserName()</h2>
-    }
-</div>
+
 @section scripts
 {
+    <script src="~/Scripts/homepageController.js"></script>
     <script type="text/javascript">
         $(document).ready(new function() {
             $.ajax(

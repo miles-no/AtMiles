@@ -16,13 +16,11 @@ namespace Contact.ReadStore.Test
 {
     public class FillReadStore
     {
-        Random random = new Random(6846);
-          
         public void FillAndPrepare()
         {
-         
             Mapper.CreateMap<EmployeeCreated, PersonSearchModel>()
-                .ForMember(dest => dest.Competency, source => source.MapFrom(s => CreateRandomCompetency(2)))
+                .ForMember(dest => dest.Competency, source => 
+                    source.MapFrom(s => s.Competence != null ? s.Competence.Select(competenceTag=>new Tag{Category = competenceTag.LocalCategory, Competency = competenceTag.LocalSubject, InternationalCategory = competenceTag.InternationalCategory, InternationalCompentency = competenceTag.InternationalSubject}) : null))
                 .ForMember(dest => dest.Id, source => source.MapFrom(s=>s.GlobalId))
                 .ForMember(dest => dest.Name, source => source.MapFrom(
                     m => m.FirstName + " " +
@@ -42,33 +40,6 @@ namespace Contact.ReadStore.Test
             Console.ReadLine();
         }
 
-
-        private List<Tag> CreateRandomCompetency(int howMany)
-        {
-            List<Tag> randomCompetency = new List<Tag>
-            {
-                new Tag{Category = "Development", Competency = "C#"},
-                new Tag{Category = "Development", Competency = "Java"},
-                new Tag{Category = "Development", Competency = ".Net"},
-                new Tag{Category = "Development", Competency = "Php"},
-                new Tag{Category = "Management", Competency = "Test leader"},
-                new Tag{Category = "Management", Competency = "Project leader"},
-                new Tag{Category = "Design", Competency = "Ux"},
-                new Tag{Category = "Design", Competency = "Design"},
-                new Tag{Category = "Design", Competency = "Fancy buttons"},
-                new Tag{Category = "Counseling", Competency = "Business analyst"},
-            };
-
-            var res = new List<Tag>();
-
-            for (int i = 0; i < howMany; i++)
-            {
-                res.Add(randomCompetency[this.random.Next() % (randomCompetency.Count - 1)]);
-            }
-
-            return res.Distinct().ToList();
-        }
-
         private static string CreateThumb(Domain.ValueTypes.Picture photo, int width, int height)
         {
             if (photo == null)
@@ -76,7 +47,6 @@ namespace Contact.ReadStore.Test
                 return null;
             }
             Stream stream = new MemoryStream(photo.Content);
-            Stream outStream = new MemoryStream();
             using (var srcImage = Image.FromStream(stream))
             {
                 using (var newImage = new Bitmap(width, height))
@@ -98,7 +68,7 @@ namespace Contact.ReadStore.Test
                         {
                             newImage.Save(ms, ImageFormat.Jpeg);
                         }
-                        //dpgraphic.image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+               
                         imageBytes = ms.ToArray();
                         var res = "data:image/" + photo.Extension + ";base64," + Convert.ToBase64String(imageBytes);
                         Debug.WriteLine(res);

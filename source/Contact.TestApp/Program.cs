@@ -77,10 +77,10 @@ namespace Contact.TestApp
                         var engine = new SearchEngine();
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
-                        var res = engine.FulltextSearch(query,10);
+                        var res = engine.FulltextSearch(query,100);
                         foreach (var personSearchModel in res)
                         {
-                            Console.WriteLine(personSearchModel.Name + " Score: " +  personSearchModel.Score);
+                            Console.WriteLine(personSearchModel.Name + " score: " + personSearchModel.Score);
                         }
                         break;
 

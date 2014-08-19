@@ -19,6 +19,7 @@ namespace Contact.Backend
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             UnityConfig.RegisterComponents();
+            MapperConfig.Configure();
 
         }
     }

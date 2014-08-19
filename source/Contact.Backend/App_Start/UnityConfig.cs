@@ -2,6 +2,7 @@ using Contact.Backend.Controllers;
 using Contact.Backend.Utilities;
 using Contact.Domain;
 using Contact.Infrastructure;
+using Contact.ReadStore.Test;
 using Microsoft.Practices.Unity;
 using System.Web.Http;
 using Unity.WebApi;
@@ -20,10 +21,13 @@ namespace Contact.Backend
             container.RegisterType<AccountController>();
             container.RegisterType<TestController>();
             container.RegisterType<HomeController>();
+            container.RegisterType<SearchController>();
             container.RegisterInstance(MediatorConfig.Create(container));
+            container.RegisterInstance(new SearchEngine());
 
             //TODO: Get a proper IdentityResolver
             container.RegisterInstance<IResolveUserIdentity>(new DummyAndHardCodedIdentityReseolver());
+            
 
             if (Config.UseMockCommandHandler)
             {

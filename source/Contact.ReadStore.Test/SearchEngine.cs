@@ -21,8 +21,12 @@ namespace Contact.ReadStore.Test
         }
 
 
-        public List<PersonSearchModel> FulltextSearch(string searchString, int take)
+        public List<PersonSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {
+            searchString = searchString ?? string.Empty;
+            //Maybe more special character handling is needed here
+            searchString = searchString.Replace("#", "sharp");
+            
             RavenQueryStatistics stats;
             var search = searchString
                 .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
@@ -41,9 +45,16 @@ namespace Contact.ReadStore.Test
 
          
                 results = tmp
-                         .OrderByScore()
-                         .Take(take)
-                         .As<PersonSearchModel>().ToList();
+                        .Skip(skip) 
+                        .Take(take)
+                        .As<PersonSearchModel>().ToList();
+                
+                foreach (var personSearchModel in results)
+                {
+                    personSearchModel.Score = session.Advanced.GetMetadataFor(personSearchModel).Value<double>("Temp-Index-Score");
+                }
+                
+                total = stats.TotalResults;
             }
 
             return results;
@@ -61,19 +72,14 @@ namespace Contact.ReadStore.Test
 
         public PersonSearchModelIndex()
         {
-            
+          
             AddMap<PersonSearchModel>(personSearchModels =>
                 from person in personSearchModels
                 select new
                 {
-                    Content = person.Competency.Select(s => s.Competency)
-                });
-
-            AddMap<PersonSearchModel>(personSearchModels =>
-                from person in personSearchModels
-                select new
-                {
-                    Content = new[] { person.Name, person.Name, person.OfficeId, person.JobTitle, person.Email }
+                    Content = new[] { person.Name, person.Name, person.OfficeId, person.JobTitle, person.Email, 
+                        string.Join(" ", person.Competency.Select(s => s.InternationalCompentency)).Replace("#","sharp"), 
+                        string.Join(" ", person.Competency.Select(s => s.Competency)).Replace("#","sharp") }
                 });
 
             Index(p => p.Content, FieldIndexing.Analyzed);
