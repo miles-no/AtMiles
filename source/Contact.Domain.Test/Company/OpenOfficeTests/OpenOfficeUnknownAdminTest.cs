@@ -32,7 +32,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         [Test]
         public void open_office_unknown_admin()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

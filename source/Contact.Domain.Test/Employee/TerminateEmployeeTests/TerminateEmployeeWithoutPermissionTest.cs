@@ -37,7 +37,7 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
         [Test]
         public void terminate_employee_without_permission()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

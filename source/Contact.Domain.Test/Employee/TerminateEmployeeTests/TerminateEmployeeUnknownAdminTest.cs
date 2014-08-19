@@ -37,7 +37,7 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
         [Test]
         public void terminate_employee_unknown_admin()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

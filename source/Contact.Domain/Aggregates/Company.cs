@@ -30,12 +30,8 @@ namespace Contact.Domain.Aggregates
         public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
         {
             var ev1 = new CompanyCreated(companyId, companyName, created, createdBy, correlationId);
-            //var ev2 = new OfficeOpened(companyId, companyName, officeId, officeName, officeAddress, created, createdBy, correlationId);
-            //var ev3 = new EmployeeAdded(companyId, companyName, officeId, officeName, adminId, adminName, created, createdBy, correlationId);
             var ev4 = new CompanyAdminAdded(companyId, companyName, adminId, adminName, created, createdBy, correlationId);
             ApplyChange(ev1);
-            //ApplyChange(ev2);
-            //ApplyChange(ev3);
             ApplyChange(ev4);
         }
 
@@ -63,7 +59,7 @@ namespace Contact.Domain.Aggregates
 
         public void AddCompanyAdmin(Employee employeeToBeAdmin, Person createdBy, string correlationId)
         {
-            if(IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException();
+            if(IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException("Already company admin");
 
             var ev = new CompanyAdminAdded(_id, _name, employeeToBeAdmin.Id, employeeToBeAdmin.Name,DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
@@ -71,8 +67,8 @@ namespace Contact.Domain.Aggregates
 
         public void RemoveCompanyAdmin(Employee employeeToBeRemoved, Person createdBy, string correlationId)
         {
-            if(OnlyOneCompanyAdminLeft()) throw new LastItemException();
-            if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException();
+            if(OnlyOneCompanyAdminLeft()) throw new LastItemException("Cannot remove last admin");
+            if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException("Cannot remove self");
 
             var ev = new CompanyAdminRemoved(_id, _name, employeeToBeRemoved.Id, employeeToBeRemoved.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
@@ -91,11 +87,11 @@ namespace Contact.Domain.Aggregates
 
         public void CloseOffice(string officeId, Person createdBy, string correlationId)
         {
-            if (OnlyOneOfficeLeft()) throw new LastItemException();
+            if (OnlyOneOfficeLeft()) throw new LastItemException("Cannot close last office");
 
             var office = GetOffice(officeId);
 
-            if(!office.IsEmptyForEmployees()) throw new ExistingChildItemsException();
+            if(!office.IsEmptyForEmployees()) throw new ExistingChildItemsException("Cannot close non-empty office");
 
             var ev = new OfficeClosed(_id, _name, office.Id, office.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
@@ -103,13 +99,13 @@ namespace Contact.Domain.Aggregates
 
         public void AddOfficeAdmin(string officeId, Employee newAdmin, Person createdBy, string correlationId)
         {
-            if(!IsOffice(officeId)) throw new UnknownItemException();
+            if(!IsOffice(officeId)) throw new UnknownItemException("Unknown ID for Office");
             
             var office = GetOffice(officeId);
 
-            if (!HasOfficeAccess(createdBy.Identifier, office.Id)) throw new NoAccessException();
+            if (!HasOfficeAdminAccess(createdBy.Identifier, office.Id)) throw new NoAccessException("No access to complete this operation");
 
-            if(office.IsAdmin(newAdmin.Id)) throw new AlreadyExistingItemException();
+            if(office.IsAdmin(newAdmin.Id)) throw new AlreadyExistingItemException("Already admin in this office");
 
             var ev = new OfficeAdminAdded(_id, _name, office.Id, office.Name,newAdmin.Id, newAdmin.Name, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
@@ -117,11 +113,11 @@ namespace Contact.Domain.Aggregates
 
         public void RemoveOfficeAdmin(string officeId, Employee adminToBeRemoved, Person createdBy, string correlationId)
         {
-            if (!IsOffice(officeId)) throw new UnknownItemException();
+            if (!IsOffice(officeId)) throw new UnknownItemException("Unknown ID for Office");
 
             var office = GetOffice(officeId);
 
-            if (!HasOfficeAccess(createdBy.Identifier, office.Id)) throw new NoAccessException();
+            if (!HasOfficeAdminAccess(createdBy.Identifier, office.Id)) throw new NoAccessException("No access to complete this operation");
             
             CheckIfTryingToDisconnectSelf(adminToBeRemoved, createdBy);
 
@@ -133,7 +129,7 @@ namespace Contact.Domain.Aggregates
         {
             if (adminToBeRemoved.Id == createdBy.Identifier)
             {
-                if (!IsCompanyAdmin(adminToBeRemoved.Id)) throw new NoAccessException();
+                if (!IsCompanyAdmin(adminToBeRemoved.Id)) throw new NoAccessException("Cannot remove self");
             }
         }
 
@@ -142,16 +138,11 @@ namespace Contact.Domain.Aggregates
             return _offices.Count == 1;
         }
 
-        private bool HasOfficeAccess(string employeeId, string officeId)
+        public bool HasOfficeAdminAccess(string employeeId, string officeId)
         {
             if (!IsOffice(officeId)) return false;
 
             return IsCompanyAdmin(employeeId) || IsOfficeAdmin(employeeId, officeId);
-        }
-
-        public bool HasAccessToAddEmployeeToOffice(string adminId, string officeId)
-        {
-            return HasOfficeAccess(adminId, officeId);
         }
 
         public void AddNewEmployeeToOffice(string officeId, Employee employee, Person createdBy, string correlationId)

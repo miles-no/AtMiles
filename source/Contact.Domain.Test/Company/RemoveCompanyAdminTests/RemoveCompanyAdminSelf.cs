@@ -37,7 +37,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         [Test]
         public void remove_company_admin_self()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

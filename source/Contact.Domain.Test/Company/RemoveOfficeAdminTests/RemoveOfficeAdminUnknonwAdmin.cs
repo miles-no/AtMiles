@@ -34,7 +34,7 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         [Test]
         public void remove_office_admin_unknown_admin()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

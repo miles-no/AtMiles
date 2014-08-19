@@ -36,7 +36,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         [Test]
         public void remove_company_admin_unknown_first_admin()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

@@ -4,7 +4,7 @@ namespace Contact.Domain.Exceptions
 {
     public class LastItemException : DomainBaseException
     {
-        public LastItemException(){}
+        public LastItemException(string message) : base(message) { }
         public LastItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

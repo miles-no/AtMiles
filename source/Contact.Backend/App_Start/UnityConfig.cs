@@ -1,5 +1,4 @@
 using Contact.Backend.Controllers;
-using Contact.Backend.Infrastructure;
 using Contact.Backend.Utilities;
 using Contact.Domain;
 using Contact.Infrastructure;
@@ -22,6 +21,9 @@ namespace Contact.Backend
             container.RegisterType<TestController>();
             container.RegisterType<HomeController>();
             container.RegisterInstance(MediatorConfig.Create(container));
+
+            //TODO: Get a proper IdentityResolver
+            container.RegisterInstance<IResolveUserIdentity>(new DummyAndHardCodedIdentityReseolver());
 
             if (Config.UseMockCommandHandler)
             {

@@ -38,7 +38,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         [Test]
         public void add_employee_unknown_admin()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

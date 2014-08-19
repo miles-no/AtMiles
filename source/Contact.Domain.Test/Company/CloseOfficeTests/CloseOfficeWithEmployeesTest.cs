@@ -36,7 +36,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         [Test]
         public void close_office_with_employees()
         {
-            ExpectedException = new ExistingChildItemsException();
+            ExpectedException = new ExistingChildItemsException(string.Empty);
             Setup();
         }
 

@@ -32,7 +32,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         [Test]
         public void remove_company_admin_last_admin()
         {
-            ExpectedException = new LastItemException();
+            ExpectedException = new LastItemException(string.Empty);
             Setup();
         }
 

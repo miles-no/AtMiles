@@ -34,7 +34,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         [Test]
         public void close_office_unknown_office()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

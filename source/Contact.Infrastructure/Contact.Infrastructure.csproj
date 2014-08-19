@@ -51,10 +51,12 @@
   <ItemGroup>
     <Compile Include="CommandSenderMock.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="DummyAndHardCodedIdentityReseolver.cs" />
     <Compile Include="EventStoreDispatcher.cs" />
     <Compile Include="EventStoreRepository.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPersistGetEventStorePosition.cs" />
+    <Compile Include="IResolveUserIdentity.cs" />
     <Compile Include="LongRunningProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueWorker.cs" />

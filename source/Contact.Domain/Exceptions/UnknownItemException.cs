@@ -4,7 +4,7 @@ namespace Contact.Domain.Exceptions
 {
     public class UnknownItemException : DomainBaseException
     {
-        public UnknownItemException() { }
+        public UnknownItemException(string message) : base(message) { }
         public UnknownItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

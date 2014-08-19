@@ -34,7 +34,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         [Test]
         public void remove_company_admin_unknown_admin_to_remove()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

@@ -41,7 +41,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         [Test]
         public void open_office_with_permission()
         {
-            ExpectedException = new AlreadyExistingItemException();
+            ExpectedException = new AlreadyExistingItemException(string.Empty);
             Setup();
         }
 

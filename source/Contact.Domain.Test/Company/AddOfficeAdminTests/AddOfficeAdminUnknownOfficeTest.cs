@@ -39,7 +39,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         [Test]
         public void add_office_admin_unknown_office()
         {
-            ExpectedException = new UnknownItemException();
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 

@@ -38,7 +38,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         [Test]
         public void add_employee_without_permission()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

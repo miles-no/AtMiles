@@ -37,7 +37,7 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
         [Test]
         public void add_company_admin_without_permission()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 
