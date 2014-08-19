@@ -34,7 +34,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         [Test]
         public void open_office_without_permission()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

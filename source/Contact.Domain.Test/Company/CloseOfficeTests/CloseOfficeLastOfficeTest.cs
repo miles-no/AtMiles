@@ -32,7 +32,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         [Test]
         public void close_office_last_office()
         {
-            ExpectedException = new LastItemException();
+            ExpectedException = new LastItemException(string.Empty);
             Setup();
         }
 

@@ -4,7 +4,7 @@ namespace Contact.Domain.Exceptions
 {
     public class AlreadyExistingItemException : DomainBaseException
     {
-        public AlreadyExistingItemException() { }
+        public AlreadyExistingItemException(string message) : base(message) { }
         public AlreadyExistingItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

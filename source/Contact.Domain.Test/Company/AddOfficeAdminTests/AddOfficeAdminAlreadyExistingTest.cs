@@ -37,7 +37,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         [Test]
         public void add_office_admin_already_existing()
         {
-            ExpectedException = new AlreadyExistingItemException();
+            ExpectedException = new AlreadyExistingItemException(string.Empty);
             Setup();
         }
 

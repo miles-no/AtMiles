@@ -37,7 +37,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         [Test]
         public void add_office_admin_without_permission()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

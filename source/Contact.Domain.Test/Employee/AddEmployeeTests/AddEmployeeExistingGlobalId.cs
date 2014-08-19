@@ -38,7 +38,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         [Test]
         public void add_employee_existing_global_id()
         {
-            ExpectedException = new AlreadyExistingItemException();
+            ExpectedException = new AlreadyExistingItemException(string.Empty);
             Setup();
         }
 

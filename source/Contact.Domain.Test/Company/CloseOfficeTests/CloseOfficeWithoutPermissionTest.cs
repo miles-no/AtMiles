@@ -35,7 +35,7 @@ namespace Contact.Domain.Test.Company.CloseOfficeTests
         [Test]
         public void close_office_without_permission()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

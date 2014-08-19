@@ -32,7 +32,7 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         [Test]
         public void remove_office_admin_self_without_being_company_admin()
         {
-            ExpectedException = new NoAccessException();
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 

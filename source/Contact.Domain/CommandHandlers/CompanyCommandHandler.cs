@@ -1,5 +1,6 @@
 ﻿using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
+using Contact.Domain.Entities;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 
@@ -27,13 +28,14 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(AddCompanyAdmin message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var company = _companyRepository.GetById(message.CompanyId);
-            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException();
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
             var employeeToBeAdmin = _employeeRepository.GetById(message.NewAdminId);
-            if(employeeToBeAdmin == null) throw new UnknownItemException();
+            if(employeeToBeAdmin == null) throw new UnknownItemException("Unknown ID for employee to be admin");
 
 
             company.AddCompanyAdmin(employeeToBeAdmin, message.CreatedBy, message.CorrelationId);
@@ -43,13 +45,14 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(RemoveCompanyAdmin message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var company = _companyRepository.GetById(message.CompanyId);
-            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException();
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
             var employeeToBeRemoved = _employeeRepository.GetById(message.AdminId);
-            if (employeeToBeRemoved == null) throw new UnknownItemException();
+            if (employeeToBeRemoved == null) throw new UnknownItemException("Unknown ID for admin to be removed");
 
             company.RemoveCompanyAdmin(employeeToBeRemoved, message.CreatedBy, message.CorrelationId);
             _companyRepository.Save(company, message.BasedOnVersion);
@@ -58,12 +61,16 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(RemoveOfficeAdmin message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var adminToBeRemoved = _employeeRepository.GetById(message.AdminId);
-            if (adminToBeRemoved == null) throw new UnknownItemException();
+            if (adminToBeRemoved == null) throw new UnknownItemException("Unknown ID for admin to be removed");
 
             var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+
+            //TODO: Check access
+
 
             company.RemoveOfficeAdmin(message.OfficeId, adminToBeRemoved, message.CreatedBy, message.CorrelationId);
 
@@ -73,13 +80,16 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(AddOfficeAdmin message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var newAdmin = _employeeRepository.GetById(message.AdminId);
-            if (newAdmin == null) throw new UnknownItemException();
+            if (newAdmin == null) throw new UnknownItemException("Unknown ID for admin to be added");
 
             var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
             
+            //TODO: Check access
+
             company.AddOfficeAdmin(message.OfficeId, newAdmin, message.CreatedBy, message.CorrelationId);
 
             _companyRepository.Save(company, message.BasedOnVersion);
@@ -88,13 +98,14 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(OpenOffice message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
 
-            if(!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException();
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
-            if (company.IsOffice(message.OfficeId)) throw new AlreadyExistingItemException();
+            if (company.IsOffice(message.OfficeId)) throw new AlreadyExistingItemException("Office ID already existing");
 
             company.OpenOffice(message.OfficeId, message.OfficeName, message.Address, message.CreatedBy, message.CorrelationId);
 
@@ -104,12 +115,13 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(CloseOffice message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var company = _companyRepository.GetById(message.CompanyId);
-            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException();
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
-            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
+            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for office");
 
             company.CloseOffice(message.OfficeId, message.CreatedBy, message.CorrelationId);
 
@@ -119,11 +131,12 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(AddEmployee message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
 
-            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
+            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
 
             var office = company.GetOffice(message.OfficeId);
 
@@ -134,9 +147,9 @@ namespace Contact.Domain.CommandHandlers
             }
             catch (UnknownItemException){}
 
-            if(existingUser != null) throw new AlreadyExistingItemException();
+            if(existingUser != null) throw new AlreadyExistingItemException("User with same ID already exists");
 
-            if(!company.HasAccessToAddEmployeeToOffice(admin.Id, office.Id)) throw new NoAccessException();
+            if (!company.HasOfficeAdminAccess(admin.Id, office.Id)) throw new NoAccessException("No access to complete this operation");
 
             var newEmployee = new Employee();
             newEmployee.CreateNew(company.Id, company.Name, office.Id, office.Name,
@@ -152,20 +165,20 @@ namespace Contact.Domain.CommandHandlers
         public void Handle(TerminateEmployee message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException();
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
             var company = _companyRepository.GetById(message.CompanyId);
-            if (company == null) throw new UnknownItemException();
-            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException();
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
 
             var office = company.GetOffice(message.OfficeId);
 
             var employee = _employeeRepository.GetById(message.EmployeeId);
-            if(employee == null) throw new UnknownItemException();
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
 
             CheckIfHandlingSelf(admin, employee);
 
-            if (!company.HasAccessToAddEmployeeToOffice(admin.Id, office.Id)) throw new NoAccessException();
+            if (!company.HasOfficeAdminAccess(admin.Id, office.Id)) throw new NoAccessException("No access to complete this operation");
 
             company.RemoveEmployee(office.Id, employee, new Person(admin.Id, admin.Name), message.CorrelationId);
             employee.Terminate(company.Id, company.Name, office.Id, office.Name, new Person(admin.Id, admin.Name), message.CorrelationId);
@@ -176,7 +189,7 @@ namespace Contact.Domain.CommandHandlers
 
         private static void CheckIfHandlingSelf(Employee admin, Employee employee)
         {
-            if (admin.Id == employee.Id) throw new NoAccessException();
+            if (admin.Id == employee.Id) throw new NoAccessException("Cannot perform operation on self");
         }
     }
 }
