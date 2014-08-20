@@ -17,7 +17,7 @@ namespace Contact.ReadStore.Test
 
         public void StartListening()
         {
-            var demo = new EventStoreDispatcher(Constants.host, Constants.username, Constants.password, handlers, new ConsoleLogger(), () => { });
+            var demo = new EventStoreDispatcher(ReadStoreConstants.Host, ReadStoreConstants.Username, ReadStoreConstants.Password, handlers, new ConsoleLogger(), () => { });
             demo.Start();
             Console.WriteLine("Listening...");
             

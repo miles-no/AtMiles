@@ -60,7 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="ReadStoreConstants.cs" />
     <Compile Include="SearchStore\EmployeeSearchStore.cs" />
     <Compile Include="SearchStore\EmployeeSearchModel.cs" />
     <Compile Include="Program.cs" />
