@@ -1,6 +1,7 @@
 ﻿using System;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
+using Newtonsoft.Json;
 
 namespace Contact.Domain.Events.CommandSession
 {
@@ -9,6 +10,7 @@ namespace Contact.Domain.Events.CommandSession
         public readonly string ExceptionName;
         public readonly string ExceptionMessage;
 
+        [JsonConstructor]
         public CommandException(string exceptionName, string exceptionMessage, DateTime created, Person createdBy,
             string correlationId)
             : base(created, createdBy, correlationId)
