@@ -11,7 +11,8 @@ namespace Contact.ReadStore.Test.SessionStore
             CommandStatus res;
             using (var session = MockStore.DocumentStore.OpenSession())
             {
-                res = session.Query<CommandStatus>().FirstOrDefault(w => w.Id == CommandStatusConstants.Prefix + commandId);
+                var id = CommandStatusConstants.Prefix + commandId;
+                res = session.Load<CommandStatus>(id);
             }
             if (res == null)
             {
