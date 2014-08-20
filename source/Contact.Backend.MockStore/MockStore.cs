@@ -11,7 +11,7 @@ namespace Contact.Backend.MockStore
 
         static MockStore()
         {
-            DocumentStore = new DocumentStore(){Url = "http://localhost:8080", DefaultDatabase = "Contact"};
+            DocumentStore = new DocumentStore(){Url = "http://milescontact.cloudapp.net:8080", DefaultDatabase = "Contact"};
             DocumentStore.Initialize();
         }
         
