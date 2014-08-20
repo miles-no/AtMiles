@@ -1,5 +1,7 @@
 ﻿using System.Web.Http;
+using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api;
+using Contact.Backend.Models.Api.Status;
 using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Controllers
@@ -8,17 +10,20 @@ namespace Contact.Backend.Controllers
     [Authorize]
     public class StatusController : ApiController
     {
+        private readonly IMediator mediator;
+
+        public StatusController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
+
         /// <summary>
         /// Gets the status of a request
         /// </summary>
         /// <param name="id"></param>
-        public Status Get(string id)
+        public StatusResponse Get(string id)
         {
-            return new Status
-            {
-                Id = "stillPending",
-                Url = Request.RequestUri.AbsoluteUri
-            };
+            return mediator.Send<StatusRequest, StatusResponse>(new StatusRequest {Id = id, SenderUrl = Request.RequestUri.AbsoluteUri}, User.Identity);
         }
          
     }

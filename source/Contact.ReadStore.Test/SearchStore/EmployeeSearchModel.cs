@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
-using Raven.Client.Linq.Indexing;
 
-namespace Contact.ReadStore.Test
+namespace Contact.ReadStore.Test.SearchStore
 {
-    public class PersonSearchModel
+    public class EmployeeSearchModel
     {
         public string Id { get; set; }
         public string CompanyId { get; set; }

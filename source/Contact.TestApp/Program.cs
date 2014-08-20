@@ -10,6 +10,7 @@ using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
 using Contact.ReadStore.Test;
+using Contact.ReadStore.Test.SearchStore;
 using Contact.TestApp.InMemoryReadModel;
 using Company = Contact.Domain.Aggregates.Company;
 using Employee = Contact.Domain.Aggregates.Employee;
@@ -69,12 +70,14 @@ namespace Contact.TestApp
                         readModelDemo = ReadModelDemo();
                         break;
                     case ConsoleKey.F:
-                        new FillReadStore().FillAndPrepare();
+                        var admin = new ReadStoreAdmin();
+                        admin.PrepareHandlers();
+                        admin.StartListening();
                         break;
 
                     case ConsoleKey.G:
 
-                        var engine = new SearchEngine();
+                        var engine = new EmployeeSearchEngine();
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
                         int total;
