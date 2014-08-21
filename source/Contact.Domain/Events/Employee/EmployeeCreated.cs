@@ -14,7 +14,7 @@ namespace Contact.Domain.Events.Employee
         public readonly string FirstName;
         public readonly string MiddleName;
         public readonly string LastName;
-        public readonly DateTime DateOfBirth;
+        public readonly DateTime? DateOfBirth;
         public readonly string JobTitle;
         public readonly string PhoneNumber;
         public readonly string Email;
@@ -24,7 +24,7 @@ namespace Contact.Domain.Events.Employee
 
         public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId,
             Login loginId, string firstName, string middleName, string lastName,
-            DateTime dateOfBirth, string jobTitle, string phoneNumber, string email,
+            DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email,
             Address homeAddress, Picture photo, CompetenceTag[] competence,
             DateTime created, Person createdBy, string correlationId)
             : base(created, createdBy, correlationId)

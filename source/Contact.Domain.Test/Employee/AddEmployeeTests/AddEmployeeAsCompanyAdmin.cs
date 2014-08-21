@@ -18,6 +18,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private DateTime _timestamp2 = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
+        private FakeCvPartnerImporter _fakeCvPartnerImporter;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
@@ -99,7 +100,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
+            _fakeCvPartnerImporter = new FakeCvPartnerImporter();
+            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeCvPartnerImporter);
         }
 
         public override IEnumerable<Event> Expect()
@@ -107,7 +109,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
             var events = new List<Event>
                 {
                     new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, employeeGlobalId, employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty,string.Empty,string.Empty,null,null, null, _timestamp1,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
-                    new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, employeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp2,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, employeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), employeeLoginId, _timestamp2,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

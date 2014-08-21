@@ -1,17 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Search;
 using Contact.Backend.Models.Api.Status;
-using Contact.ReadStore.Test;
 using Contact.ReadStore.Test.SearchStore;
 using Contact.ReadStore.Test.SessionStore;
 using Microsoft.Practices.Unity;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace Contact.Backend
 {

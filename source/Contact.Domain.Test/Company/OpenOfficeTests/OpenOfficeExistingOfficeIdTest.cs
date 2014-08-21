@@ -22,6 +22,7 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
 
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
+        private FakeCvPartnerImporter _fakeCvPartnerImporter;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
@@ -91,7 +92,8 @@ namespace Contact.Domain.Test.Company.OpenOfficeTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
+            _fakeCvPartnerImporter = new FakeCvPartnerImporter();
+            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeCvPartnerImporter);
         }
 
         public override IEnumerable<Event> Expect()

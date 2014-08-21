@@ -1,6 +1,6 @@
-﻿using Contact.Domain.Aggregates;
+﻿using System.Collections.Generic;
+using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
-using Contact.Domain.Entities;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 
@@ -14,15 +14,18 @@ namespace Contact.Domain.CommandHandlers
         Handles<OpenOffice>,
         Handles<CloseOffice>,
         Handles<AddEmployee>,
-        Handles<TerminateEmployee>
+        Handles<TerminateEmployee>,
+        Handles<ImportDataFromCvPartner>
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
+        private readonly IImportDataFromCvPartner _cvPartnerImporter;
 
-        public CompanyCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository)
+        public CompanyCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository, IImportDataFromCvPartner cvPartnerImporter)
         {
             _companyRepository = companyRepository;
             _employeeRepository = employeeRepository;
+            _cvPartnerImporter = cvPartnerImporter;
         }
 
         public void Handle(AddCompanyAdmin message)
@@ -35,11 +38,11 @@ namespace Contact.Domain.CommandHandlers
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
             var employeeToBeAdmin = _employeeRepository.GetById(message.NewAdminId);
-            if(employeeToBeAdmin == null) throw new UnknownItemException("Unknown ID for employee to be admin");
+            if (employeeToBeAdmin == null) throw new UnknownItemException("Unknown ID for employee to be admin");
 
 
             company.AddCompanyAdmin(employeeToBeAdmin, message.CreatedBy, message.CorrelationId);
-            _companyRepository.Save(company,message.BasedOnVersion);
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(RemoveCompanyAdmin message)
@@ -87,8 +90,6 @@ namespace Contact.Domain.CommandHandlers
 
             var company = _companyRepository.GetById(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
-            
-            //TODO: Check access
 
             company.AddOfficeAdmin(message.OfficeId, newAdmin, message.CreatedBy, message.CorrelationId);
 
@@ -121,7 +122,7 @@ namespace Contact.Domain.CommandHandlers
             if (company == null) throw new UnknownItemException("Unknown ID for company");
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
-            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for office");
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for office");
 
             company.CloseOffice(message.OfficeId, message.CreatedBy, message.CorrelationId);
 
@@ -136,7 +137,7 @@ namespace Contact.Domain.CommandHandlers
             var company = _companyRepository.GetById(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
 
-            if(!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
 
             var office = company.GetOffice(message.OfficeId);
 
@@ -145,9 +146,9 @@ namespace Contact.Domain.CommandHandlers
             {
                 existingUser = _employeeRepository.GetById(message.GlobalId);
             }
-            catch (UnknownItemException){}
+            catch (UnknownItemException) { }
 
-            if(existingUser != null) throw new AlreadyExistingItemException("User with same ID already exists");
+            if (existingUser != null) throw new AlreadyExistingItemException("User with same ID already exists");
 
             if (!company.HasOfficeAdminAccess(admin.Id, office.Id)) throw new NoAccessException("No access to complete this operation");
 
@@ -185,6 +186,48 @@ namespace Contact.Domain.CommandHandlers
 
             _employeeRepository.Save(employee, Constants.IgnoreVersion);
             _companyRepository.Save(company, message.BasedOnVersion);
+        }
+
+        public void Handle(ImportDataFromCvPartner message)
+        {
+            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
+
+            var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
+
+            List<CvPartnerImportData> importData = _cvPartnerImporter.GetImportData().Result;
+
+            if (importData != null)
+            {
+                foreach (var cvPartnerImportData in importData)
+                {
+                    string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
+                    var employee = _employeeRepository.GetById(userId);
+
+                    if (employee == null)
+                    {
+                        employee = new Employee();
+
+                        var office = company.GetOfficeByName(cvPartnerImportData.OfficeName);
+                        if (office == null)
+                        {
+                            company.OpenOffice(cvPartnerImportData.OfficeName, cvPartnerImportData.OfficeName, null, message.CreatedBy, message.CorrelationId);
+                            office = company.GetOffice(cvPartnerImportData.OfficeName);
+                        }
+
+                        employee.CreateNew(company.Id, company.Name,office.Id, office.Name,Domain.Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider,cvPartnerImportData.Email,string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,cvPartnerImportData.DateOfBirth,cvPartnerImportData.Title, cvPartnerImportData.Phone,cvPartnerImportData.Email,null,cvPartnerImportData.Photo,null,message.CreatedBy, message.CorrelationId );
+
+                        company.AddNewEmployeeToOffice(office.Id,employee,message.CreatedBy, message.CorrelationId);
+                        _companyRepository.Save(company, Constants.IgnoreVersion);
+                    }
+
+                    employee.ImportData(cvPartnerImportData, message.CreatedBy, message.CorrelationId);
+
+                    _employeeRepository.Save(employee, Constants.IgnoreVersion);
+                }
+            }
         }
 
         private static void CheckIfHandlingSelf(Employee admin, Employee employee)
