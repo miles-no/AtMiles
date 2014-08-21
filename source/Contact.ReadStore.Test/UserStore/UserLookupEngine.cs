@@ -34,11 +34,12 @@ namespace Contact.ReadStore.Test.UserStore
             //    return false;
             //}
 
-            var globalId = IdService.IdsToSingle(companyid, provider, providerId);
+            var loginId = IdService.IdsToSingleLoginId(companyid, provider, providerId);
 
             
 
             User user;
+            string globalId;
             using (var session = store.OpenSession())
             {
                 user = session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.CompanyId == companyid && w.Email == email);
@@ -46,16 +47,18 @@ namespace Contact.ReadStore.Test.UserStore
             
             if (user != null)
             {
+                globalId = user.GlobalId;
                 store.DatabaseCommands.Patch(user.Id, new[]
                 {
                     new PatchRequest
                     {
                         Type = PatchCommandType.Set,
-                        Name = "GlobalId",
-                        Value = globalId
+                        Name = "LoginId",
+                        Value = loginId
                     }
                 });
                 message = "Goodie";
+                
                 return globalId;
             }
 
@@ -85,15 +88,15 @@ namespace Contact.ReadStore.Test.UserStore
 
         public string ResolveUserIdentityByProviderId(string companyId, string provider, string providerId)
         {
-            var fullId = IdService.IdsToSingle(companyId, provider, providerId);
-            bool res;
+            var loginId = IdService.IdsToSingleLoginId(companyId, provider, providerId);
+            User res;
             using (var session = store.OpenSession())
             {
-               res = session.Query<User, UserLookupIndex>().Any(w => w.GlobalId == fullId);
+               res = session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.LoginId == loginId);
             }
-            if (res)
+            if (res != null)
             {
-                return fullId;
+                return res.GlobalId;
             }
             return null;
         }

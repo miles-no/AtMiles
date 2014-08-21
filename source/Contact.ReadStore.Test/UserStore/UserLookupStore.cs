@@ -3,6 +3,7 @@ using AutoMapper;
 using Contact.Backend.MockStore;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
+using Contact.Domain.Events.Import;
 using Contact.Domain.Services;
 using Contact.Infrastructure;
 using Raven.Abstractions.Data;
@@ -11,13 +12,23 @@ namespace Contact.ReadStore.Test.UserStore
 {
     public class UserLookupStore
     {
+        private readonly UserLookupEngine engine;
+
+        public UserLookupStore(UserLookupEngine engine)
+        {
+            this.engine = engine;
+        }
+
         public void PrepareHandler(ReadModelHandler handler)
         {
             Mapper.CreateMap<EmployeeCreated, User>()
                 .ForMember(dest => dest.Name, source => source.MapFrom(m => CreateName(m)))
-                .ForMember(dest => dest.GlobalId, source => source.MapFrom(s => CreateGlobalId(s)));
-                
+                .ForMember(dest => dest.LoginId, source => source.MapFrom(s => CreateGlobalId(s)));
 
+            //Mapper.CreateMap<ImportedFromCvPartner, User>()
+            //   .ForMember(dest => dest.Name, source => source.MapFrom(m => CreateName(m)))
+            //   .ForMember(dest => dest.LoginId, source => source.MapFrom(s => CreateGlobalId(s)));
+           
             handler.RegisterHandler<EmployeeCreated>(HandleCreated);
             handler.RegisterHandler<EmployeeTerminated>(HandleTerminated);
             handler.RegisterHandler<CompanyAdminAdded>(HandleCompanyAdminAdded);
@@ -25,15 +36,26 @@ namespace Contact.ReadStore.Test.UserStore
             handler.RegisterHandler<OfficeAdminAdded>(HandleOfficeAdminAdded);
             handler.RegisterHandler<OfficeAdminRemoved>(HandleOfficeAdminRemoved);
             handler.RegisterHandler<OfficeClosed>(HandleOfficeClosed);
+            //handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
 
            
+        }
+
+        private void HandleImportCvPartner(ImportedFromCvPartner person)
+        {
+            var searchModel = Mapper.Map<ImportedFromCvPartner, User>(person);
+            using (var session = MockStore.DocumentStore.OpenSession())
+            {
+                session.Store(searchModel);
+                session.SaveChanges();
+            }
         }
 
         private static string CreateGlobalId(EmployeeCreated employee)
         {
             if (employee.LoginId != null)
             {
-                return IdService.IdsToSingle(employee.CompanyId, employee.LoginId.Provider, employee.LoginId.Id);
+                return IdService.IdsToSingleLoginId(employee.CompanyId, employee.LoginId.Provider, employee.LoginId.Id);
             }
             return null;
         }
@@ -136,10 +158,19 @@ namespace Contact.ReadStore.Test.UserStore
         private static void HandleCreated(EmployeeCreated employee)
         {
 
-            var searchModel = Mapper.Map<EmployeeCreated, User>(employee);
             using (var session = MockStore.DocumentStore.OpenSession())
             {
-                session.Store(searchModel);
+                var existing =
+                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == employee.GlobalId);
+                if (existing != null)
+                {
+                    Mapper.Map(employee, existing);
+                }
+                else
+                {
+                    existing = Mapper.Map<EmployeeCreated, User>(employee);
+                }
+                session.Store(existing);
                 session.SaveChanges();
             }
         }

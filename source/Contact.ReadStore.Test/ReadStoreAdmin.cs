@@ -13,7 +13,7 @@ namespace Contact.ReadStore.Test
         {
             new EmployeeSearchStore().PrepareHandler(handlers);
             new CommandStatusStore().PrepareHandler(handlers);
-            new UserLookupStore().PrepareHandler(handlers);
+            new UserLookupStore(new UserLookupEngine()).PrepareHandler(handlers);
 
         }
 

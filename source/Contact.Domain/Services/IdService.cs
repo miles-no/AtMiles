@@ -17,7 +17,7 @@ namespace Contact.Domain.Services
                 .Replace("+", string.Empty);
         }
 
-        public static string IdsToSingle(string companyId, string providerId, string id)
+        public static string IdsToSingleLoginId(string companyId, string providerId, string id)
         {
             return companyId + "/" + providerId + "/" + id;
         }
