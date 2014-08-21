@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Contact.Backend.Models.Api.Status;
 using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Utilities
@@ -11,7 +12,7 @@ namespace Contact.Backend.Utilities
             {
                 id = Domain.Services.IdService.CreateNewId();
             }
-            return new Response { RequestId = id, Status = new Status { Url = Config.StatusEndpoint + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Message = message} };
+            return new Response { RequestId = id, Status = new StatusResponse { Url = Config.StatusEndpoint + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
         }
 
         public static Response CreateErrorResponse(string id, string errorMessage)
@@ -20,7 +21,7 @@ namespace Contact.Backend.Utilities
             {
                 id = Domain.Services.IdService.CreateNewId();
             }
-            return new Response { RequestId = id, Status = new Status { Id = "failed", Message = errorMessage } };
+            return new Response { RequestId = id, Status = new StatusResponse { Id = "failed", Status = errorMessage } };
         }
 
         public static string CreateNewId()

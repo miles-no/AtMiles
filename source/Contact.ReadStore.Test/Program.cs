@@ -8,7 +8,9 @@ namespace Contact.ReadStore.Test
     {
         private static void Main(string[] args)
         {
-            new FillReadStore().FillAndPrepare();
+            var admin = new ReadStoreAdmin();
+            admin.PrepareHandlers();
+            admin.StartListening();
         }
 
         //TODO

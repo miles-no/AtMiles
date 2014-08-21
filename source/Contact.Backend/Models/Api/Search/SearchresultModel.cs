@@ -30,7 +30,6 @@ namespace Contact.Backend.Models.Api.Search
         public string Email { get; set; }
         public string Thumb { get; set; }
         public Tag[] Competency { get; set; }
-        public double Score { get; set; }
     }
     public class Tag
     {

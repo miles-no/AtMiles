@@ -3,6 +3,6 @@
     public class Response
     {
         public string RequestId { get; set; }
-        public Status Status { get; set; }
+        public Status.StatusResponse Status { get; set; }
     }
 }

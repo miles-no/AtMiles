@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Contact.Backend.Models.Api.Search;
 using Contact.ReadStore.Test;
-using Tag = Contact.ReadStore.Test.Tag;
+using Contact.ReadStore.Test.SearchStore;
+using Tag = Contact.ReadStore.Test.SearchStore.Tag;
 
 namespace Contact.Backend
 {
@@ -21,7 +22,8 @@ namespace Contact.Backend
     {
         protected override void Configure()
         {
-            Mapper.CreateMap<PersonSearchModel, Result>(); Mapper.CreateMap<Tag, Models.Api.Search.Tag>();
+            Mapper.CreateMap<EmployeeSearchModel, Result>(); 
+            Mapper.CreateMap<Tag, Models.Api.Search.Tag>();
         }
     }
 }

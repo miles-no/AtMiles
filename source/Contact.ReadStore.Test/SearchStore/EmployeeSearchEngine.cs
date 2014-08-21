@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Contact.Backend.MockStore;
-using Contact.Domain.ValueTypes;
-using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Indexes;
-using Raven.Client.Linq.Indexing;
 
-namespace Contact.ReadStore.Test
+namespace Contact.ReadStore.Test.SearchStore
 {
-    public class SearchEngine
+    public class EmployeeSearchEngine
     {
         private readonly IDocumentStore store = MockStore.DocumentStore;
 
-        public SearchEngine()
+        public EmployeeSearchEngine()
         {
             IndexCreation.CreateIndexes(typeof(PersonSearchModelIndex).Assembly, store);
         }
 
 
-        public List<PersonSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
+        public List<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {
             searchString = searchString ?? string.Empty;
             //Maybe more special character handling is needed here
@@ -31,7 +28,7 @@ namespace Contact.ReadStore.Test
             var search = searchString
                 .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => string.Format("{0}* ", x)).ToList();
-            List<PersonSearchModel> results;
+            List<EmployeeSearchModel> results;
             using (var session = store.OpenSession())
             {
                 
@@ -47,7 +44,7 @@ namespace Contact.ReadStore.Test
                 results = tmp
                         .Skip(skip) 
                         .Take(take)
-                        .As<PersonSearchModel>().ToList();
+                        .As<EmployeeSearchModel>().ToList();
                 
                 foreach (var personSearchModel in results)
                 {
@@ -73,7 +70,7 @@ namespace Contact.ReadStore.Test
         public PersonSearchModelIndex()
         {
           
-            AddMap<PersonSearchModel>(personSearchModels =>
+            AddMap<EmployeeSearchModel>(personSearchModels =>
                 from person in personSearchModels
                 select new
                 {

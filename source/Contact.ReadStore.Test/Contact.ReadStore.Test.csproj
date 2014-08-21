@@ -60,13 +60,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventFetcher.cs" />
-    <Compile Include="FillReadStore.cs" />
-    <Compile Include="PersonSearchModel.cs" />
+    <Compile Include="ReadStoreConstants.cs" />
+    <Compile Include="SearchStore\EmployeeSearchStore.cs" />
+    <Compile Include="SearchStore\EmployeeSearchModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchEngine.cs" />
-    <Compile Include="Tag.cs" />
+    <Compile Include="ReadStoreAdmin.cs" />
+    <Compile Include="SearchStore\EmployeeSearchEngine.cs" />
+    <Compile Include="SessionStore\CommandStatus.cs" />
+    <Compile Include="SessionStore\CommandStatusConstants.cs" />
+    <Compile Include="SessionStore\CommandStatusEngine.cs" />
+    <Compile Include="SessionStore\CommandStatusStore.cs" />
+    <Compile Include="SearchStore\Tag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
