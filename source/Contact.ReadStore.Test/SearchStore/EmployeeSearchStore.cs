@@ -17,8 +17,8 @@ namespace Contact.ReadStore.Test.SearchStore
         public void AddFillAndPrepareHandler(ReadModelHandler handler)
         {
             Mapper.CreateMap<EmployeeCreated, EmployeeSearchModel>()
-                .ForMember(dest => dest.Competency, source => 
-                    source.MapFrom(s => s.Competence != null ? s.Competence.Select(competenceTag=>new Tag{Category = competenceTag.LocalCategory, Competency = competenceTag.LocalSubject, InternationalCategory = competenceTag.InternationalCategory, InternationalCompentency = competenceTag.InternationalSubject}) : null))
+                //.ForMember(dest => dest.Competency, source => 
+                //    source.MapFrom(s => s.Competence != null ? s.Competence.Select(competenceTag=>new Tag{Category = competenceTag.LocalCategory, Competency = competenceTag.LocalSubject, InternationalCategory = competenceTag.InternationalCategory, InternationalCompentency = competenceTag.InternationalSubject}) : null))
                 .ForMember(dest => dest.Id, source => source.MapFrom(s=>s.GlobalId))
                 .ForMember(dest => dest.Name, source => source.MapFrom(
                     m => m.FirstName + " " +

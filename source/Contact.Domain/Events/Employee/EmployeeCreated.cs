@@ -20,13 +20,11 @@ namespace Contact.Domain.Events.Employee
         public readonly string Email;
         public readonly Address HomeAddress;
         public readonly Picture Photo;
-        public readonly CompetenceTag[] Competence;
 
         public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId,
             Login loginId, string firstName, string middleName, string lastName,
             DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email,
-            Address homeAddress, Picture photo, CompetenceTag[] competence,
-            DateTime created, Person createdBy, string correlationId)
+            Address homeAddress, Picture photo, DateTime created, Person createdBy, string correlationId)
             : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
@@ -44,7 +42,6 @@ namespace Contact.Domain.Events.Employee
             Email = email;
             HomeAddress = homeAddress;
             Photo = photo;
-            Competence = competence;
         }
     }
 }

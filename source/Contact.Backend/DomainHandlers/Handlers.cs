@@ -84,8 +84,6 @@ namespace Contact.Backend.DomainHandlers
                     //TODO: Evaluate TODO below
                     //TODO: Get version from readmodel
 
-                    //TODO: Consider to expose competence-tags on web-api
-                    CompetenceTag[] competence = null;
 
                     var identityResolver = container.Resolve<IResolveUserIdentity>();
 
@@ -94,7 +92,7 @@ namespace Contact.Backend.DomainHandlers
                     //new Login is not the same as the user requesting the command
                     
                     var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, GetIdFromIdentity(user, identityResolver)), req.FirstName, req.LastName,
-                        req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, competence, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
+                        req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                     

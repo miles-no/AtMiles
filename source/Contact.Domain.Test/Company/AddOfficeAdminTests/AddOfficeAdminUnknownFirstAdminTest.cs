@@ -72,7 +72,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(Admin2Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin2Id, null, Admin2FirstName, string.Empty, Admin2LastName, Admin2DateOfBirth, string.Empty,string.Empty,string.Empty,null,null, null,DateTime.UtcNow,new Person(Admin2Id, NameService.GetName(Admin2FirstName, Admin2LastName)), _correlationId)),
+                    new FakeStreamEvent(Admin2Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin2Id, null, Admin2FirstName, string.Empty, Admin2LastName, Admin2DateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Admin2Id, NameService.GetName(Admin2FirstName, Admin2LastName)), _correlationId)),
                 };
             return events;
         }
