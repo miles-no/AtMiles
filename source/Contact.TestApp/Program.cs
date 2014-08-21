@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
+using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.ValueTypes;
@@ -34,11 +35,10 @@ namespace Contact.TestApp
                 Console.WriteLine("Miles Contact TestApp");
                 Console.WriteLine("Select action:");
                 Console.WriteLine("Quit: <q>");
-                Console.WriteLine("Prepare EventStore with initial data: <1>");
+                Console.WriteLine("Prepare EventStore with initial data: <I>");
                 Console.WriteLine("Start command-handler: <2>");
                 Console.WriteLine("Stop command-handler: <3>");
                 Console.WriteLine("ReadModel super-simple demo: <A>");
-                Console.WriteLine("Import: <I>");
                 Console.WriteLine("ReadModel demo: <R>");
                 Console.WriteLine("Fill RavenDb read store demo: <F>");
                 Console.WriteLine("Query RavenDb read store demo: <G>");
@@ -56,8 +56,7 @@ namespace Contact.TestApp
                         StopReadModel(readModelDemo);
                         quit = true;
                         break;
-                    case ConsoleKey.D1:
-                    case ConsoleKey.NumPad1:
+                    case ConsoleKey.I:
                         SeedEmptyEventStore().Wait();
                         break;
                     case ConsoleKey.D2:
@@ -84,21 +83,17 @@ namespace Contact.TestApp
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
                         int total;
-                        var res = engine.FulltextSearch(query,10, 0, out total);
+                        var res = engine.FulltextSearch(query, 10, 0, out total);
                         Console.WriteLine(total + " treff ");
                         foreach (var personSearchModel in res)
                         {
-                          
-                            Console.WriteLine(personSearchModel.Name + " Score: " +  personSearchModel.Score);
+
+                            Console.WriteLine(personSearchModel.Name + " Score: " + personSearchModel.Score);
                         }
                         break;
 
                     case ConsoleKey.S:
                         StopReadModel(readModelDemo);
-                        break;
-
-                    case ConsoleKey.I:
-                        ImportFromMiles().Wait();
                         break;
 
                     //Add more functions here
@@ -111,28 +106,6 @@ namespace Contact.TestApp
                 Console.WriteLine();
             }
             Console.WriteLine("Exited");
-        }
-
-        private static async Task ImportFromMiles()
-        {
-            const string host = "milescontact.cloudapp.net";
-            const string eSUsername = "admin";
-            const string eSPassword = "changeit";
-
-            var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
-            string correlationId = "SYSTEM IMPORT: " + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
-
-            var system = employeeRepository.GetById(Constants.SystemUserId);
-            var systemAsPerson = new Person(system.Id, system.Name);
-
-            string cvPartnerToken;
-#if testing
-            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
-#endif
-
-            var import = new ImportMiles(cvPartnerToken);
-            var data = await import.GetImportData();
-            int du = 0;
         }
 
         private static void StopReadModel(LongRunningProcess readModelDemo)
@@ -174,7 +147,7 @@ namespace Contact.TestApp
             var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
             var commandSessionRepository = new EventStoreRepository<CommandSession>(host, null, eSUsername, eSPassword);
 
-            
+
             var importer = new ImportMiles(cvPartnerToken);
 
             var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, importer);
@@ -198,6 +171,11 @@ namespace Contact.TestApp
             //const string password = "GoGoMilesContact";
             const string password = "changeit";
 
+            string cvPartnerToken;
+#if testing
+            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
+#endif
+
             const string companyId = "miles";
             const string companyName = "Miles";
             const string officeId = "SVG";
@@ -212,12 +190,17 @@ namespace Contact.TestApp
             var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
             var globalRepository = new EventStoreRepository<Global>(host, null, username, password);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
+
+            var importer = new ImportMiles(cvPartnerToken);
+
+            var commandHandler = new CompanyCommandHandler(companyRepository, employeeRepository, importer);
+
             var global = new Global();
 
             const string initCorrelationId = "SYSTEM INIT";
 
             var system = new Employee();
-            system.CreateNew(companyId, companyName, officeId, officeName, systemId, null, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
+            system.CreateNew(companyId, companyName, officeId, officeName, systemId, null, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
 
             var systemAsPerson = new Person(system.Id, system.Name);
 
@@ -241,17 +224,39 @@ namespace Contact.TestApp
 
             Console.WriteLine("Starting to import data from CVpartner");
 
-            string cvPartnerToken;
-#if testing
-            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
-#endif
-            var import = new ImportMiles(cvPartnerToken);
-            var companyCommandHandler = new CompanyCommandHandler(companyRepository, employeeRepository, import);
+
+            var importCommand = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, systemAsPerson,
+                initCorrelationId, Constants.IgnoreVersion);
 
             
-            var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
 
-            await import.ImportMilesComplete(systemAsPerson, initCorrelationId, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
+            try
+            {
+                commandHandler.Handle(importCommand);
+
+                //TODO: Fix so get twice is not needed
+                var company2 = companyRepository.GetById(companyId);
+
+                var admin1Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no", string.Empty));
+                var admin1 = employeeRepository.GetById(admin1Id);
+
+                company2.AddCompanyAdmin(admin1, systemAsPerson, initCorrelationId);
+
+                var admin2Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
+                var admin2 = employeeRepository.GetById(admin2Id);
+
+                company2.AddCompanyAdmin(admin2, systemAsPerson, initCorrelationId);
+
+                companyRepository.Save(company2, Constants.IgnoreVersion);
+
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Exception: " + error);
+                return;
+            }
+
+            //var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
         }
 
         private static LongRunningProcess ReadModelDemo()
@@ -276,7 +281,7 @@ namespace Contact.TestApp
             handler.RegisterHandler<EmployeeAdded>(companyHandler.Handle);
             handler.RegisterHandler<EmployeeRemoved>(companyHandler.Handle);
             handler.RegisterHandler<OfficeAdminAdded>(companyHandler.Handle);
-            
+
             handler.RegisterHandler<OfficeAdminRemoved>(companyHandler.Handle);
             handler.RegisterHandler<OfficeClosed>(companyHandler.Handle);
             handler.RegisterHandler<OfficeOpened>(companyHandler.Handle);
@@ -293,11 +298,11 @@ namespace Contact.TestApp
 
             Console.WriteLine("Employees: {0}", repository.Employees.Count);
 
-            Console.WriteLine("Companies: {0}",repository.Companies.Count);
+            Console.WriteLine("Companies: {0}", repository.Companies.Count);
             Console.WriteLine();
             foreach (var company in repository.Companies)
             {
-                Console.WriteLine("Company: {0}:",company.Name);
+                Console.WriteLine("Company: {0}:", company.Name);
                 Console.WriteLine("\t{0} Admins", company.Admins.Count);
                 Console.WriteLine("\t{0} Offices", company.Offices.Count);
                 Console.WriteLine();

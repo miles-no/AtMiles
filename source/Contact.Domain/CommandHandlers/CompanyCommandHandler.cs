@@ -155,7 +155,7 @@ namespace Contact.Domain.CommandHandlers
             var newEmployee = new Employee();
             newEmployee.CreateNew(company.Id, company.Name, office.Id, office.Name,
                 message.GlobalId, message.LoginId, message.FirstName, message.MiddleName, message.LastName, message.DateOfBirth,
-                message.JobTitle, message.PhoneNumber, message.Email, message.HomeAddress, message.Photo, message.Competence, new Person(admin.Id, admin.Name), message.CorrelationId);
+                message.JobTitle, message.PhoneNumber, message.Email, message.HomeAddress, message.Photo, new Person(admin.Id, admin.Name), message.CorrelationId);
 
             company.AddNewEmployeeToOffice(office.Id, newEmployee, new Person(admin.Id, admin.Name), message.CorrelationId);
 
@@ -217,7 +217,7 @@ namespace Contact.Domain.CommandHandlers
                             office = company.GetOffice(cvPartnerImportData.OfficeName);
                         }
 
-                        employee.CreateNew(company.Id, company.Name,office.Id, office.Name,Domain.Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider,cvPartnerImportData.Email,string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,cvPartnerImportData.DateOfBirth,cvPartnerImportData.Title, cvPartnerImportData.Phone,cvPartnerImportData.Email,null,cvPartnerImportData.Photo,null,message.CreatedBy, message.CorrelationId );
+                        employee.CreateNew(company.Id, company.Name,office.Id, office.Name,Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider,cvPartnerImportData.Email,string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,cvPartnerImportData.DateOfBirth,cvPartnerImportData.Title, cvPartnerImportData.Phone,cvPartnerImportData.Email,null, null,message.CreatedBy, message.CorrelationId);
 
                         company.AddNewEmployeeToOffice(office.Id,employee,message.CreatedBy, message.CorrelationId);
                         _companyRepository.Save(company, Constants.IgnoreVersion);

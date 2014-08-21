@@ -151,37 +151,14 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
             var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
 
-            CompetenceTag[] competence = ConvertCvToCompetences(cv.Technologies);
             var res = new AddEmployee(company,
                 employee.OfficeName,
                 id, new Login(Constants.GoogleIdProvider, employee.Email, null), givenName, middleName, familyName,
                 bornDate,
-                cv.Title, cv.Phone, employee.Email, null, employeePhoto, competence, DateTime.UtcNow, createdBy,
+                cv.Title, cv.Phone, employee.Email, null, employeePhoto, DateTime.UtcNow, createdBy,
                 new Guid().ToString(), Constants.IgnoreVersion);
 
             return res;
-        }
-
-        private static CompetenceTag[] ConvertCvToCompetences(IEnumerable<Technology> technologies)
-        {
-            var competences = new List<CompetenceTag>();
-            foreach (var technology in technologies)
-            {
-                int intTagsCount = technology.IntTags != null ? technology.IntTags.Length : 0;
-                int localTagsCount = technology.LocalTags != null ? technology.LocalTags.Length : 0;
-
-                int max = Math.Max(intTagsCount, localTagsCount);
-
-                for (int i = 0; i < max; i++)
-                {
-                    string intTag = GetTagFromArray(i, technology.IntTags);
-                    string localTag = GetTagFromArray(i, technology.LocalTags);
-                    var tag = new CompetenceTag(technology.LocalCategory, technology.IntCategory, localTag, intTag);
-                    competences.Add(tag);
-                }
-            }
-
-            return competences.ToArray();
         }
 
         private static string GetTagFromArray(int position, string[] tags)

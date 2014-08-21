@@ -22,10 +22,10 @@ namespace Contact.Domain.Aggregates
 
         public Login LoginId { get { return _loginId; } }
 
-        public void CreateNew(string companyId, string companyName, string officeId, string officeName, string globalId, Login loginId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, CompetenceTag[] competence, Person createdBy, string correlationId)
+        public void CreateNew(string companyId, string companyName, string officeId, string officeName, string globalId, Login loginId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, Person createdBy, string correlationId)
         {
             var ev = new EmployeeCreated(companyId, companyName, officeId, officeName, globalId, loginId, firstName, middleName,
-                lastName, dateOfBirth, jobTitle, phoneNumber, email, homeAddress, photo, competence, DateTime.UtcNow, createdBy, correlationId);
+                lastName, dateOfBirth, jobTitle, phoneNumber, email, homeAddress, photo, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -44,6 +44,7 @@ namespace Contact.Domain.Aggregates
                     import.DateOfBirth, import.Email, import.Phone, import.Title, import.UpdatedAt,
                     import.KeyQualifications, import.Technologies, import.Photo, DateTime.UtcNow, createdBy,
                     correlationId);
+                ApplyChange(ev);
             }
         }
 

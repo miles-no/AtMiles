@@ -77,8 +77,8 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, ExistingAdminDateOfBirth, string.Empty,string.Empty,string.Empty,null,null, null,DateTime.UtcNow,new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
-                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, NewAdminDateOfBirth, string.Empty,string.Empty,string.Empty,null,null, null,DateTime.UtcNow,new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, ExistingAdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, NewAdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
                 };
             return events;
         }
