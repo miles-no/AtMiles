@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
@@ -57,7 +58,7 @@ namespace Contact.TestApp
                         break;
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        SeedEmptyEventStore();
+                        SeedEmptyEventStore().Wait();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
@@ -92,14 +93,12 @@ namespace Contact.TestApp
                         }
                         break;
 
-
-
                     case ConsoleKey.S:
                         StopReadModel(readModelDemo);
                         break;
 
                     case ConsoleKey.I:
-                        ImportFromMiles();
+                        ImportFromMiles().Wait();
                         break;
 
                     //Add more functions here
@@ -114,14 +113,14 @@ namespace Contact.TestApp
             Console.WriteLine("Exited");
         }
 
-        private static void ImportFromMiles()
+        private static async Task ImportFromMiles()
         {
             const string host = "milescontact.cloudapp.net";
             const string eSUsername = "admin";
             const string eSPassword = "changeit";
 
             var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
-            string correlationId = "SYSTEM IMPORT" + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
+            string correlationId = "SYSTEM IMPORT: " + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
             var system = employeeRepository.GetById(Constants.SystemUserId);
             var systemAsPerson = new Person(system.Id, system.Name);
@@ -130,8 +129,9 @@ namespace Contact.TestApp
 #if testing
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
-            var import = new ImportMiles();
-            var data = import.GetImportData(cvPartnerToken, systemAsPerson, correlationId);
+
+            var import = new ImportMiles(cvPartnerToken);
+            var data = await import.GetImportData();
             int du = 0;
         }
 
@@ -164,11 +164,22 @@ namespace Contact.TestApp
             const string rMqUsername = "miles";
             const string rMqPassword = "GoGoMilesContact";
 
+            string cvPartnerToken;
+#if testing
+            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
+#endif
+
+
             var companyRepository = new EventStoreRepository<Company>(host, null, eSUsername, eSPassword);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
             var commandSessionRepository = new EventStoreRepository<CommandSession>(host, null, eSUsername, eSPassword);
 
-            var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository);
+            
+            var importer = new ImportMiles(cvPartnerToken);
+
+            var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, importer);
+
+
 
             var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
 
@@ -180,7 +191,7 @@ namespace Contact.TestApp
             return worker;
         }
 
-        private static void SeedEmptyEventStore()
+        private static async Task SeedEmptyEventStore()
         {
             const string host = "milescontact.cloudapp.net";
             const string username = "admin";
@@ -234,13 +245,13 @@ namespace Contact.TestApp
 #if testing
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
-            var import = new ImportMiles();
-            var companyCommandHandler = new CompanyCommandHandler(companyRepository, employeeRepository);
+            var import = new ImportMiles(cvPartnerToken);
+            var companyCommandHandler = new CompanyCommandHandler(companyRepository, employeeRepository, import);
 
             
             var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
 
-            import.ImportMilesComplete(cvPartnerToken, systemAsPerson, initCorrelationId, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
+            await import.ImportMilesComplete(systemAsPerson, initCorrelationId, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
         }
 
         private static LongRunningProcess ReadModelDemo()

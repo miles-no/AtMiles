@@ -33,6 +33,16 @@ namespace Contact.Backend.Controllers
             return mediator.Send<OpenOfficeRequest, Response>(openOfficeRequest, User.Identity);
         }
 
+
+        [HttpPost]
+        [Route("api/company/{companyId}/importCvPartner")]
+        public Response ImportFromCvPartner(string companyId)
+        {
+            var importRequest = new ImportFromCvPartnerRequest { CompanyId = companyId };
+            return mediator.Send<ImportFromCvPartnerRequest, Response>(importRequest, User.Identity);
+        }
+
+
         /// <summary>
         /// Closes an office in a company
         /// </summary>

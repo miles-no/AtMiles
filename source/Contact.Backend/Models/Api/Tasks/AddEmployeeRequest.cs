@@ -29,5 +29,6 @@ namespace Contact.Backend.Models.Api.Tasks
         public string Title { get; set; }
         public string Extension { get; set; }
         public byte[] Content { get; set; }
+        public string ContentType { get; set; }
     }
 }

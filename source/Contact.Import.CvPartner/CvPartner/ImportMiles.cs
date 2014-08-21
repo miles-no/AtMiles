@@ -6,57 +6,62 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Contact.Domain;
 using Contact.Domain.Commands;
-using Contact.Domain.Events.Import;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner.Models.Cv;
 using Contact.Import.CvPartner.CvPartner.Models.Employee;
-using Contact.Infrastructure;
 using Newtonsoft.Json;
 using Image = Contact.Import.CvPartner.CvPartner.Models.Cv.Image;
 
 namespace Contact.Import.CvPartner.CvPartner
 {
-    public class ImportMiles
+    public class ImportMiles : IImportDataFromCvPartner
     {
+        private readonly string _accessToken;
 
-        public List<AddEmployee> AddEmployeesCommands { get; set; }
-        public List<OpenOffice> OpenOfficeCommands { get; set; }
-        public List<AddCompanyAdmin> AddCompanyAdminsCommands { get; set; }
-
-
-        public async Task<List<ImportFromCvPartner>> GetImportData(string accessToken, Person createdBy, string correlationId)
+        public ImportMiles(string accessToken)
         {
             if (string.IsNullOrEmpty(accessToken))
             {
                 throw new ArgumentException("Access token must be set!");
             }
+            _accessToken = accessToken;
+        }
 
-            var importData = new List<ImportFromCvPartner>();
+        public List<AddEmployee> AddEmployeesCommands { get; set; }
+        public List<OpenOffice> OpenOfficeCommands { get; set; }
+        public List<AddCompanyAdmin> AddCompanyAdminsCommands { get; set; }
 
-            var converter = new Converters.Convert("miles", createdBy, Log);
+        public async Task<List<CvPartnerImportData>> GetImportData()
+        {
+            var importData = new List<CvPartnerImportData>();
+
+            var converter = new Converters.Convert("miles",null);
             var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + accessToken + "\"";
+            client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
             Log("Download users from CvPartner...");
-            string employeesRaw = client.DownloadString("https://miles.cvpartner.no/api/v1/users");
+            string employeesRaw = await client.DownloadStringTaskAsync("https://miles.cvpartner.no/api/v1/users");
             var employees = JsonConvert.DeserializeObject<List<Employee>>(employeesRaw);
             Log("Done - " + employees.Count + " users");
             
             foreach (var employee in employees)
             {
-                var id = Domain.Services.IdService.CreateNewId();
-                var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
-                Log("Downloading CV for " + employee.Name + " on url " + url);
+                var cv = await DownloadCv(employee, client);
+                Picture employeePhoto = await DownloadPhoto(cv.Image, cv.Name);
 
-                var cv = JsonConvert.DeserializeObject<Cv>(client.DownloadString(url));
-
-                //Picture employeePhoto = DownloadPhoto(cv.Image, cv.Name);
-                Picture employeePhoto = null;
-
-                var importEmployee = converter.ToImportFromCvPartner(id, cv, employee, employeePhoto, createdBy, correlationId);
+                var importEmployee = converter.ToImportFromCvPartner(cv, employee, employeePhoto);
                 importData.Add(importEmployee);
             }
             return importData;
+        }
+
+        private async Task<Cv> DownloadCv(Employee employee, WebClient client)
+        {
+            var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
+            Log("Downloading CV for " + employee.Name + " on url " + url);
+            string rawCv = await client.DownloadStringTaskAsync(url);
+            var cv = JsonConvert.DeserializeObject<Cv>(rawCv);
+            return cv;
         }
 
         /// <summary>
@@ -66,19 +71,14 @@ namespace Contact.Import.CvPartner.CvPartner
         /// <param name="createdBy">Employee with admin rights</param>
         /// <param name="openOfficeCreated">action when openoffice command is created</param>
         /// <param name="addEmployeeAction">action when addEmployee command is created </param>
-        public bool ImportMilesComplete(string accessToken, Person createdBy, string correlationId, Action<OpenOffice> openOfficeCreated, Action<AddEmployee> addEmployeeAction, Action<AddCompanyAdmin> addCompanyAdmin, List<string> emailToAdminUsers)
+        public async Task<bool> ImportMilesComplete(Person createdBy, string correlationId, Action<OpenOffice> openOfficeCreated, Action<AddEmployee> addEmployeeAction, Action<AddCompanyAdmin> addCompanyAdmin, List<string> emailToAdminUsers)
         {
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                throw new ArgumentException("Access token must be set!");
-            }
-
             AddEmployeesCommands = new List<AddEmployee>();
             AddCompanyAdminsCommands = new List<AddCompanyAdmin>();
 
-            var converter = new Converters.Convert("miles", createdBy, Log);
+            var converter = new Converters.Convert("miles", createdBy);
             var client = new WebClient();
-            client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + accessToken + "\"";
+            client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
             Log("Download users from CvPartner...");
             var employees = JsonConvert.DeserializeObject<List<Employee>>(client.DownloadString("https://miles.cvpartner.no/api/v1/users"));
@@ -113,7 +113,7 @@ namespace Contact.Import.CvPartner.CvPartner
                 
                 var cv = JsonConvert.DeserializeObject<Cv>(client.DownloadString(url));
 
-                Picture emplyeePhoto = DownloadPhoto(cv.Image, cv.Name);
+                Picture emplyeePhoto = await DownloadPhoto(cv.Image, cv.Name);
 
                 var addEmployee = converter.ToAddEmployee(id, cv, employee, emplyeePhoto);
 
@@ -136,7 +136,7 @@ namespace Contact.Import.CvPartner.CvPartner
             return true;
         }
 
-        private Picture DownloadPhoto(Image image, string name)
+        private async Task<Picture> DownloadPhoto(Image image, string name)
         {
             Picture photo = null;
             if (image != null && image.Url != null)
@@ -148,7 +148,7 @@ namespace Contact.Import.CvPartner.CvPartner
                 try
                 {
                     var client = new WebClient();
-                    picture = client.DownloadData(image.Url);
+                    picture = await client.DownloadDataTaskAsync(image.Url);
                     contentType = client.ResponseHeaders["Content-Type"];
 
                     var urlWithoutQueryParameters = image.Url.Substring(0, image.Url.IndexOf("?"));
@@ -166,7 +166,7 @@ namespace Contact.Import.CvPartner.CvPartner
                 if (picture != null)
                 {
                     var hash = MD5.Create().ComputeHash(picture);
-                    photo = new Picture(name, extension, picture, hash);
+                    photo = new Picture(name, extension, picture, contentType, hash);
                 }
             }
             return photo;

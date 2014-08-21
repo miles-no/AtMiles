@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Principal;
-using System.Web.UI;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
@@ -10,7 +9,6 @@ using Contact.Domain;
 using Contact.Domain.Commands;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Practices.Unity;
 
@@ -33,9 +31,33 @@ namespace Contact.Backend.DomainHandlers
             RegisterOpenOffice(mediator, container);
             RegisterCloseOffice(mediator, container);
 
+            RegisterImportFromCvPartner(mediator, container);
+
         }
 
-      
+        private static void RegisterImportFromCvPartner(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<ImportDataFromCvPartner, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+
+                    var command = new ImportDataFromCvPartner(req.CompanyId, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
+
+                    return Send(container, command);
+
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
+        }
+
+
         private static void RegisterAddEmployee(IMediator mediator, IUnityContainer container)
         {
             mediator.Subscribe<AddEmployeeRequest, Response>((req, user) =>
@@ -56,7 +78,7 @@ namespace Contact.Backend.DomainHandlers
                     {
                         var hash = MD5.Create().ComputeHash(req.Photo.Content);
                         photo = new Domain.ValueTypes.Picture(req.Photo.Title, req.Photo.Extension,
-                            req.Photo.Content, hash);
+                            req.Photo.Content, req.Photo.ContentType, hash);
                     }
 
                     //TODO: Evaluate TODO below

@@ -13,8 +13,8 @@ namespace Contact.Import.CvPartner
 #if testing
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
-            var import = new ImportMiles();
-            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"),string.Empty,null,null, null, new List<string>());
+            var import = new ImportMiles(cvPartnerToken);
+            import.ImportMilesComplete(new Person("tull","ball"),string.Empty,null,null, null, new List<string>()).Wait();
         }
     }
 

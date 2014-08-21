@@ -56,6 +56,7 @@
     <Compile Include="Commands\AddEmployee.cs" />
     <Compile Include="Commands\AddOfficeAdmin.cs" />
     <Compile Include="Commands\CloseOffice.cs" />
+    <Compile Include="Commands\ImportDataFromCvPartner.cs" />
     <Compile Include="Commands\OpenOffice.cs" />
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
     <Compile Include="Commands\RemoveOfficeAdmin.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Events\Company\OfficeClosed.cs" />
     <Compile Include="Events\Company\OfficeOpened.cs" />
     <Compile Include="Events\Global\CompanyCreated.cs" />
-    <Compile Include="Events\Import\ImportFromCvPartner.cs" />
+    <Compile Include="Events\Import\ImportedFromCvPartner.cs" />
     <Compile Include="Exceptions\AlreadyExistingItemException.cs" />
     <Compile Include="Exceptions\DomainBaseException.cs" />
     <Compile Include="Exceptions\ExistingChildItemsException.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Handles.cs" />
     <Compile Include="ICommandSender.cs" />
     <Compile Include="IEventPublisher.cs" />
+    <Compile Include="IImportDataFromCvPartner.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="PrivateReflectionDynamicObject.cs" />
@@ -98,10 +100,12 @@
     <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
     <Compile Include="ValueTypes\CompetenceTag.cs" />
+    <Compile Include="ValueTypes\CvPartnerImportData.cs" />
     <Compile Include="ValueTypes\CvPartnerKeyPoint.cs" />
     <Compile Include="ValueTypes\CvPartnerKeyQualification.cs" />
     <Compile Include="ValueTypes\CvPartnerTechnology.cs" />
     <Compile Include="ValueTypes\CvPartnerTechnologySkill.cs" />
+    <Compile Include="ValueTypes\EmployeeLoginInfo.cs" />
     <Compile Include="ValueTypes\Login.cs" />
     <Compile Include="ValueTypes\Person.cs" />
     <Compile Include="ValueTypes\Picture.cs" />

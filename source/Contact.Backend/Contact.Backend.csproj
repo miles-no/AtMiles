@@ -233,6 +233,7 @@
     <Compile Include="Models\Api\Tasks\AddEmployeeRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddOfficeAdminRequest.cs" />
     <Compile Include="Models\Api\Tasks\CloseOfficeRequest.cs" />
+    <Compile Include="Models\Api\Tasks\ImportFromCvPartnerRequest.cs" />
     <Compile Include="Models\Api\Tasks\OpenOfficeRequest.cs" />
     <Compile Include="Models\Api\Queries\EmployeeFulltextSearchResponse.cs" />
     <Compile Include="Models\Api\Tasks\RemoveCompanyAdminRequest.cs" />

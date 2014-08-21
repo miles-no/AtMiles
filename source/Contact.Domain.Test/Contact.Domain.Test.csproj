@@ -99,6 +99,7 @@
     <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeUnknownOfficeTest.cs" />
     <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeWithoutPermissionTest.cs" />
     <Compile Include="EventSpecification.cs" />
+    <Compile Include="FakeCvPartnerImporter.cs" />
     <Compile Include="FakeRepository.cs" />
     <Compile Include="FakeStreamEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

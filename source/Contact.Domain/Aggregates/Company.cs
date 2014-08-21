@@ -148,7 +148,7 @@ namespace Contact.Domain.Aggregates
         public void AddNewEmployeeToOffice(string officeId, Employee employee, Person createdBy, string correlationId)
         {
             var office = GetOffice(officeId);
-            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name, DateTime.UtcNow, createdBy, correlationId);
+            var ev = new EmployeeAdded(_id, _name, office.Id, office.Name, employee.Id, employee.Name, employee.LoginId, DateTime.UtcNow, createdBy, correlationId);
             ApplyChange(ev);
         }
 
@@ -219,7 +219,7 @@ namespace Contact.Domain.Aggregates
         {
             if (!IsOffice(ev.OfficeId)) return;
             var office = GetOffice(ev.OfficeId);
-            office.AddEmployee(ev.GlobalId);
+            office.AddEmployee(new EmployeeLoginInfo(ev.GlobalId, ev.Login));
         }
 
         [UsedImplicitly] //To keep resharper happy
@@ -228,6 +228,25 @@ namespace Contact.Domain.Aggregates
             if (!IsOffice(ev.OfficeId)) return;
             var office = GetOffice(ev.OfficeId);
             office.RemoveEmployee(ev.Id);
+        }
+
+        public string GetUserIdByLoginId(Login login)
+        {
+            foreach (var office in _offices)
+            {
+                if (office.HasUser(login))
+                {
+                    return office.GetUserId(login);
+                }
+            }
+
+            //Not found
+            return string.Empty;
+        }
+
+        public Office GetOfficeByName(string officeName)
+        {
+            return _offices.FirstOrDefault(o => o.Name == officeName);
         }
     }
 }

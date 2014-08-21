@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using Contact.Domain;
 using Contact.Domain.Commands;
-using Contact.Domain.Events.Import;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner.Models.Cv;
 using Contact.Import.CvPartner.CvPartner.Models.Employee;
@@ -17,16 +15,14 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
     {
         private readonly string company;
         private readonly Person createdBy;
-        private readonly Action<string> log;
 
-        public Convert(string company, Person createdBy, Action<string> log)
+        public Convert(string company, Person createdBy)
         {
             this.company = company;
             this.createdBy = createdBy;
-            this.log = log;
         }
 
-        public ImportFromCvPartner ToImportFromCvPartner(string id, Cv cv, Employee employee, Picture employeePhoto, Person createdBy, string correlationId)
+        public CvPartnerImportData ToImportFromCvPartner(Cv cv, Employee employee, Picture employeePhoto)
         {
             string givenName = string.Empty, middleName = string.Empty;
 
@@ -35,7 +31,6 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
             string familyName = names.Last();
 
             names = names.Take(names.Count() - 1).ToList();
-
 
             // If you have 3 or more names, lets assume the second-to-last is your middlename. And hope we don't offent to many...
             if (names.Count() > 2)
@@ -47,43 +42,57 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                 givenName = string.Join(" ", names);
             }
 
-            //TODO: Check for null
-            var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
+            DateTime? bornDate = null;
+            if (cv.BornYear != null && cv.BornMonth != null && cv.BornDay != null)
+            {
+                bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
+            }
 
             var technologies = ConvertCvTechnologies(cv.Technologies);
             var keyQualifications = ConvertCvKeyCompetence(cv.KeyQualifications);
-            var res = new ImportFromCvPartner(givenName, middleName, familyName, bornDate, employee.Email, cv.Phone,
-                cv.Title, DateTime.MinValue, keyQualifications, technologies, employeePhoto, DateTime.UtcNow, createdBy, correlationId);
-
+            var res = new CvPartnerImportData
+            {
+                FirstName = givenName,
+                MiddleName = middleName,
+                LastName = familyName,
+                DateOfBirth = bornDate,
+                Email = employee.Email,
+                Phone = cv.Phone,
+                Title = cv.Title,
+                UpdatedAt = cv.UpdatedAt,
+                KeyQualifications = keyQualifications,
+                Technologies = technologies,
+                Photo = employeePhoto,
+                OfficeName = employee.OfficeName
+            };
             return res;
         }
 
         private static CvPartnerKeyQualification[] ConvertCvKeyCompetence(IEnumerable<KeyQualification> keyQualifications)
         {
             var convertedQualifications = new List<CvPartnerKeyQualification>();
-            if (keyQualifications != null)
-            {
-                foreach (var keyQualification in keyQualifications)
-                {
-                    var internationalDescription = keyQualification.IntLongDescription;
-                    var localDescription = keyQualification.LocalLongDescription;
+            if (keyQualifications == null) return convertedQualifications.ToArray();
 
-                    var convertedKeyPoints = new List<CvPartnerKeyPoint>();
-                    if (keyQualification.KeyPoints != null)
+            foreach (var keyQualification in keyQualifications)
+            {
+                var internationalDescription = keyQualification.IntLongDescription;
+                var localDescription = keyQualification.LocalLongDescription;
+
+                var convertedKeyPoints = new List<CvPartnerKeyPoint>();
+                if (keyQualification.KeyPoints != null)
+                {
+                    foreach (var keyPoint in keyQualification.KeyPoints)
                     {
-                        foreach (var keyPoint in keyQualification.KeyPoints)
-                        {
-                            var kpIntName = keyPoint.IntName;
-                            var kpLocalName = keyPoint.LocalName;
-                            var kpIntDescription = keyPoint.IntDescription;
-                            var kpLocalDescription = keyPoint.LocalDescription;
-                            var convertedKeyPoint = new CvPartnerKeyPoint(kpIntName, kpLocalName,kpIntDescription, kpLocalDescription);
-                            convertedKeyPoints.Add(convertedKeyPoint);
-                        }
+                        var kpIntName = keyPoint.IntName;
+                        var kpLocalName = keyPoint.LocalName;
+                        var kpIntDescription = keyPoint.IntDescription;
+                        var kpLocalDescription = keyPoint.LocalDescription;
+                        var convertedKeyPoint = new CvPartnerKeyPoint(kpIntName, kpLocalName,kpIntDescription, kpLocalDescription);
+                        convertedKeyPoints.Add(convertedKeyPoint);
                     }
-                    var convertedQualification = new CvPartnerKeyQualification(internationalDescription,localDescription, convertedKeyPoints.ToArray());
-                    convertedQualifications.Add(convertedQualification);
                 }
+                var convertedQualification = new CvPartnerKeyQualification(internationalDescription,localDescription, convertedKeyPoints.ToArray());
+                convertedQualifications.Add(convertedQualification);
             }
             return convertedQualifications.ToArray();
         }

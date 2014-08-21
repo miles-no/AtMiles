@@ -17,6 +17,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
+        private FakeCvPartnerImporter _fakeCvPartnerImporter;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
@@ -64,7 +65,7 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, Office1Id, Office1Name, null, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, Office1Id, Office1Name, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName), DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, Office1Id, Office1Name, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName), null, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName), DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
                 };
             return events;
@@ -90,7 +91,8 @@ namespace Contact.Domain.Test.Company.AddOfficeAdminTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
+            _fakeCvPartnerImporter = new FakeCvPartnerImporter();
+            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeCvPartnerImporter);
         }
 
         public override IEnumerable<Event> Expect()
