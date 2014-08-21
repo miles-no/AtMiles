@@ -14,7 +14,7 @@ namespace Contact.Import.CvPartner
             cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
 #endif
             var import = new ImportMiles();
-            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"),null,null, null, new List<string>());
+            import.ImportMilesComplete(cvPartnerToken,new Person("tull","ball"),string.Empty,null,null, null, new List<string>());
         }
     }
 

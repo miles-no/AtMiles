@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Web.UI;
 using Contact.Backend.Infrastructure;
@@ -53,8 +54,9 @@ namespace Contact.Backend.DomainHandlers
 
                     if (req.Photo != null)
                     {
+                        var hash = MD5.Create().ComputeHash(req.Photo.Content);
                         photo = new Domain.ValueTypes.Picture(req.Photo.Title, req.Photo.Extension,
-                            req.Photo.Content);
+                            req.Photo.Content, hash);
                     }
 
                     //TODO: Evaluate TODO below

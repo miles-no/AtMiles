@@ -79,6 +79,7 @@
     <Compile Include="Events\Company\OfficeClosed.cs" />
     <Compile Include="Events\Company\OfficeOpened.cs" />
     <Compile Include="Events\Global\CompanyCreated.cs" />
+    <Compile Include="Events\Import\ImportFromCvPartner.cs" />
     <Compile Include="Exceptions\AlreadyExistingItemException.cs" />
     <Compile Include="Exceptions\DomainBaseException.cs" />
     <Compile Include="Exceptions\ExistingChildItemsException.cs" />
@@ -97,6 +98,10 @@
     <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
     <Compile Include="ValueTypes\CompetenceTag.cs" />
+    <Compile Include="ValueTypes\CvPartnerKeyPoint.cs" />
+    <Compile Include="ValueTypes\CvPartnerKeyQualification.cs" />
+    <Compile Include="ValueTypes\CvPartnerTechnology.cs" />
+    <Compile Include="ValueTypes\CvPartnerTechnologySkill.cs" />
     <Compile Include="ValueTypes\Login.cs" />
     <Compile Include="ValueTypes\Person.cs" />
     <Compile Include="ValueTypes\Picture.cs" />
