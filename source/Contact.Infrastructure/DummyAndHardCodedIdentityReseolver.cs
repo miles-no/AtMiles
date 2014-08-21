@@ -4,7 +4,7 @@
     {
         private const string IdRoy = "iaeRaej2UKNfXaGw7XwUA";
         private const string IdStian = "kHBA9PUhREqPImf6iSCG7A";
-        public string ResolveUserIdentityByProviderId(string provider, string providerId)
+        public string ResolveUserIdentityByProviderId(string companyId, string provider, string providerId)
         {
             if (provider == Domain.Constants.GoogleIdProvider)
             {
@@ -23,7 +23,7 @@
             return string.Empty;
         }
 
-        public string ResolveUserIdentityByEmail(string provider, string email)
+        public string ResolveUserIdentityByEmail(string companyId, string provider, string email)
         {
             if (provider == Domain.Constants.GoogleIdProvider)
             {

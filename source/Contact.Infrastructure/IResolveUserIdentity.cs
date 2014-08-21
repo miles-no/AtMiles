@@ -2,8 +2,8 @@
 {
     public interface IResolveUserIdentity
     {
-        string ResolveUserIdentityByProviderId(string provider, string providerId);
+        string ResolveUserIdentityByProviderId(string companyId, string provider, string providerId);
 
-        string ResolveUserIdentityByEmail(string provider, string email);
+        string ResolveUserIdentityByEmail(string companyId, string provider, string email);
     }
 }

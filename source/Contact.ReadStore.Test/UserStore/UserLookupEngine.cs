@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Contact.Backend.MockStore;
+using Contact.Infrastructure;
+using Contact.ReadStore.Test.SearchStore;
+using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Indexes;
 
-namespace Contact.ReadStore.Test.SearchStore
+namespace Contact.ReadStore.Test.UserStore
 {
-    public class EmployeeSearchEngine
+    public class UserLookupEngine : IResolveUserIdentity
     {
         private readonly IDocumentStore store = MockStore.DocumentStore;
 
-        public EmployeeSearchEngine()
+        public UserLookupEngine()
         {
-            IndexCreation.CreateIndexes(typeof(PersonSearchModelIndex).Assembly, store);
+       
         }
 
 
@@ -56,6 +59,20 @@ namespace Contact.ReadStore.Test.SearchStore
             return results;
         }
 
-     
+
+        public string ResolveUserIdentityByProviderId(string companyId, string provider, string providerId)
+        {
+            string res = null;
+            using (var session = store.OpenSession())
+            {
+                res = session.Query<User, UserLookupIndex>().Where(w=>)
+            }
+        }
+
+        public string ResolveUserIdentityByEmail(string companyId, string provider, string email)
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }

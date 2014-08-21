@@ -67,11 +67,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadStoreAdmin.cs" />
     <Compile Include="SearchStore\EmployeeSearchEngine.cs" />
+    <Compile Include="SearchStore\PersonSearchModelIndex.cs" />
     <Compile Include="SessionStore\CommandStatus.cs" />
     <Compile Include="SessionStore\CommandStatusConstants.cs" />
     <Compile Include="SessionStore\CommandStatusEngine.cs" />
     <Compile Include="SessionStore\CommandStatusStore.cs" />
     <Compile Include="SearchStore\Tag.cs" />
+    <Compile Include="UserStore\UserLookupIndex.cs" />
+    <Compile Include="UserStore\User.cs" />
+    <Compile Include="UserStore\UserLookupEngine.cs" />
+    <Compile Include="UserStore\UserLookupStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
