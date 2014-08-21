@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using Contact.Domain;
 using Contact.Domain.Commands;
+using Contact.Domain.Events.Import;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner.Models.Cv;
 using Contact.Import.CvPartner.CvPartner.Models.Employee;
@@ -24,12 +26,105 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
             this.log = log;
         }
 
-
-        public AddEmployee ToAddEmployee(string id, Cv cv, Employee employee)
+        public ImportFromCvPartner ToImportFromCvPartner(string id, Cv cv, Employee employee, Picture employeePhoto, Person createdBy, string correlationId)
         {
             string givenName = string.Empty, middleName = string.Empty;
 
-            var names = cv.Navn.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var names = cv.Name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            string familyName = names.Last();
+
+            names = names.Take(names.Count() - 1).ToList();
+
+
+            // If you have 3 or more names, lets assume the second-to-last is your middlename. And hope we don't offent to many...
+            if (names.Count() > 2)
+            {
+                middleName = names.Last();
+            }
+            else
+            {
+                givenName = string.Join(" ", names);
+            }
+
+            //TODO: Check for null
+            var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
+
+            var technologies = ConvertCvTechnologies(cv.Technologies);
+            var keyQualifications = ConvertCvKeyCompetence(cv.KeyQualifications);
+            var res = new ImportFromCvPartner(givenName, middleName, familyName, bornDate, employee.Email, cv.Phone,
+                cv.Title, DateTime.MinValue, keyQualifications, technologies, employeePhoto, DateTime.UtcNow, createdBy, correlationId);
+
+            return res;
+        }
+
+        private static CvPartnerKeyQualification[] ConvertCvKeyCompetence(IEnumerable<KeyQualification> keyQualifications)
+        {
+            var convertedQualifications = new List<CvPartnerKeyQualification>();
+            if (keyQualifications != null)
+            {
+                foreach (var keyQualification in keyQualifications)
+                {
+                    var internationalDescription = keyQualification.IntLongDescription;
+                    var localDescription = keyQualification.LocalLongDescription;
+
+                    var convertedKeyPoints = new List<CvPartnerKeyPoint>();
+                    if (keyQualification.KeyPoints != null)
+                    {
+                        foreach (var keyPoint in keyQualification.KeyPoints)
+                        {
+                            var kpIntName = keyPoint.IntName;
+                            var kpLocalName = keyPoint.LocalName;
+                            var kpIntDescription = keyPoint.IntDescription;
+                            var kpLocalDescription = keyPoint.LocalDescription;
+                            var convertedKeyPoint = new CvPartnerKeyPoint(kpIntName, kpLocalName,kpIntDescription, kpLocalDescription);
+                            convertedKeyPoints.Add(convertedKeyPoint);
+                        }
+                    }
+                    var convertedQualification = new CvPartnerKeyQualification(internationalDescription,localDescription, convertedKeyPoints.ToArray());
+                    convertedQualifications.Add(convertedQualification);
+                }
+            }
+            return convertedQualifications.ToArray();
+        }
+
+        private static CvPartnerTechnology[] ConvertCvTechnologies(IEnumerable<Technology> technologies)
+        {
+            var convertedTechologies = new List<CvPartnerTechnology>();
+            if (technologies == null) return convertedTechologies.ToArray();
+            
+            foreach (var technology in technologies)
+            {
+                var internationalCategory = technology.IntCategory;
+                var localCategory = technology.LocalCategory;
+
+                var skills = new List<CvPartnerTechnologySkill>();
+                if (technology.TechnologySkills != null)
+                {
+                    foreach (var tag in technology.TechnologySkills)
+                    {
+                        var intSkill = string.Empty;
+                        var localSkill = string.Empty;
+                        if (tag.Tags != null)
+                        {
+                            intSkill = tag.Tags.Int;
+                            localSkill = tag.Tags.No;
+                        }
+                        var skill = new CvPartnerTechnologySkill(intSkill, localSkill);
+                        skills.Add(skill);
+                    }
+                }
+                var convertedTechnology = new CvPartnerTechnology(internationalCategory, localCategory, skills.ToArray());
+                convertedTechologies.Add(convertedTechnology);
+            }
+            return convertedTechologies.ToArray();
+        }
+
+        public AddEmployee ToAddEmployee(string id, Cv cv, Employee employee, Picture employeePhoto)
+        {
+            string givenName = string.Empty, middleName = string.Empty;
+
+            var names = cv.Name.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             string familyName = names.Last();
 
@@ -47,38 +142,12 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
             var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
 
-            Picture employeePhoto = null;
-            if (cv.Image != null && cv.Image.Url != null)
-            {
-                byte[] picture = null;
-                string extension = null;
-
-                try
-                {
-                    picture = new WebClient().DownloadData(cv.Image.Url);
-                    var urlWithoutQueryParameters = cv.Image.Url.Substring(0, cv.Image.Url.IndexOf("?"));
-                    extension = urlWithoutQueryParameters.Substring(cv.Image.Url.LastIndexOf("."))
-                        .Replace(".", string.Empty);
-
-                    log("Found image of " + "." + extension + " format");
-                }
-                catch (Exception ex)
-                {
-                    log("Error downloading image:\n\n " + ex);
-
-                }
-                if (picture != null)
-                {
-                    employeePhoto = new Picture(employee.Name,extension,picture);
-                }
-            }
-
             CompetenceTag[] competence = ConvertCvToCompetences(cv.Technologies);
             var res = new AddEmployee(company,
                 employee.OfficeName,
                 id, new Login(Constants.GoogleIdProvider, employee.Email, null), givenName, middleName, familyName,
                 bornDate,
-                cv.Title, cv.Telefon, employee.Email, null, employeePhoto, competence, DateTime.UtcNow, createdBy,
+                cv.Title, cv.Phone, employee.Email, null, employeePhoto, competence, DateTime.UtcNow, createdBy,
                 new Guid().ToString(), Domain.Constants.IgnoreVersion);
 
             return res;

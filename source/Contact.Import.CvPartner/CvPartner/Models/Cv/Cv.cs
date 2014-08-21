@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Contact.Import.CvPartner.CvPartner.Models.Cv
 {
@@ -13,13 +14,16 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public bool Disabled { get; set; }
 
         [JsonProperty(PropertyName = "int_long_description")]
-        public object IntLongDescription { get; set; }
+        public string IntLongDescription { get; set; }
 
         [JsonProperty(PropertyName = "int_tag_line")]
         public object IntTagLine { get; set; }
 
+        [JsonProperty(PropertyName = "key_points")]
+        public KeyPoint[] KeyPoints { get; set; }
+
         [JsonProperty(PropertyName = "local_long_description")]
-        public object LocalLongDescription { get; set; }
+        public string LocalLongDescription { get; set; }
 
         [JsonProperty(PropertyName = "local_tag_line")]
         public object LocalTagLine { get; set; }
@@ -38,6 +42,28 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
 
         [JsonProperty(PropertyName = "tag_line")]
         public object TagLine { get; set; }
+
+        [JsonProperty(PropertyName = "version")]
+        public int Version { get; set; }
+    }
+
+    public class KeyPoint
+    {
+
+        [JsonProperty(PropertyName = "_id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "int_name")]
+        public string IntName { get; set; }
+
+        [JsonProperty(PropertyName = "local_name")]
+        public string LocalName { get; set; }
+
+        [JsonProperty(PropertyName = "int_long_description")]
+        public string IntDescription { get; set; }
+
+        [JsonProperty(PropertyName = "local_long_description")]
+        public string LocalDescription { get; set; }
 
         [JsonProperty(PropertyName = "version")]
         public int Version { get; set; }
@@ -430,7 +456,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         }
 
         [JsonProperty(PropertyName = "bruker_id")]
-        public string BrukerId { get; set; }
+        public string UserId { get; set; }
 
         [JsonProperty(PropertyName = "created_at")]
         public string CreatedAt { get; set; }
@@ -475,7 +501,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public string Nationality { get; set; }
 
         [JsonProperty(PropertyName = "navn")]
-        public string Navn { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "place_of_residence")]
         public string PlaceOfResidence { get; set; }
@@ -487,7 +513,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public Technology[] Technologies { get; set; }
 
         [JsonProperty(PropertyName = "telefon")]
-        public string Telefon { get; set; }
+        public string Phone { get; set; }
 
         [JsonProperty(PropertyName = "tilbud_id")]
         public object TilbudId { get; set; }
@@ -499,7 +525,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public object Twitter { get; set; }
 
         [JsonProperty(PropertyName = "updated_at")]
-        public string UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         [JsonProperty(PropertyName = "version")]
         public int Version { get; set; }

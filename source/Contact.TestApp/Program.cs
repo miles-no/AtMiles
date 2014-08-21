@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
@@ -36,6 +37,7 @@ namespace Contact.TestApp
                 Console.WriteLine("Start command-handler: <2>");
                 Console.WriteLine("Stop command-handler: <3>");
                 Console.WriteLine("ReadModel super-simple demo: <A>");
+                Console.WriteLine("Import: <I>");
                 Console.WriteLine("ReadModel demo: <R>");
                 Console.WriteLine("Fill RavenDb read store demo: <F>");
                 Console.WriteLine("Query RavenDb read store demo: <G>");
@@ -90,8 +92,14 @@ namespace Contact.TestApp
                         }
                         break;
 
+
+
                     case ConsoleKey.S:
                         StopReadModel(readModelDemo);
+                        break;
+
+                    case ConsoleKey.I:
+                        ImportFromMiles();
                         break;
 
                     //Add more functions here
@@ -104,6 +112,27 @@ namespace Contact.TestApp
                 Console.WriteLine();
             }
             Console.WriteLine("Exited");
+        }
+
+        private static void ImportFromMiles()
+        {
+            const string host = "milescontact.cloudapp.net";
+            const string eSUsername = "admin";
+            const string eSPassword = "changeit";
+
+            var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
+            string correlationId = "SYSTEM IMPORT" + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
+
+            var system = employeeRepository.GetById(Constants.SystemUserId);
+            var systemAsPerson = new Person(system.Id, system.Name);
+
+            string cvPartnerToken;
+#if testing
+            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
+#endif
+            var import = new ImportMiles();
+            var data = import.GetImportData(cvPartnerToken, systemAsPerson, correlationId);
+            int du = 0;
         }
 
         private static void StopReadModel(LongRunningProcess readModelDemo)
@@ -164,10 +193,10 @@ namespace Contact.TestApp
             const string officeName = "Stavanger";
             var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
 
-            const string systemId = "SYSTEM";
-            const string systemLastName = "SYSTEM";
-            var systemDateOfBirth = new DateTime(2014, 9, 1);
-            const string systemJobTitle = "System";
+            const string systemId = Constants.SystemUserId;
+            const string systemLastName = Constants.SystemUserId;
+            var systemDateOfBirth = new DateTime(2014, 1, 1);
+            const string systemJobTitle = Constants.SystemUserId;
 
             var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
             var globalRepository = new EventStoreRepository<Global>(host, null, username, password);
@@ -211,7 +240,7 @@ namespace Contact.TestApp
             
             var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
 
-            import.ImportMilesComplete(cvPartnerToken, systemAsPerson, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
+            import.ImportMilesComplete(cvPartnerToken, systemAsPerson, initCorrelationId, companyCommandHandler.Handle, companyCommandHandler.Handle, companyCommandHandler.Handle, userEmailsToPromotoToCompanyAdmin);
         }
 
         private static LongRunningProcess ReadModelDemo()

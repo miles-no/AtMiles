@@ -4,6 +4,10 @@
     {
         public const int IgnoreVersion = -2;
         public const int NewVersion = -1;
+<<<<<<< HEAD
+=======
+        //public const string IdentitySeparator = "@@";
+>>>>>>> b998d2af170e5cfb4ef94138eb072e119308abe1
         public const string EventStoreEventClrTypeHeader = "EventClrTypeName";
         public const string EventStoreAggregateClrTypeHeader = "AggregateClrTypeName";
         public const string GoogleIdProvider = "Google";
