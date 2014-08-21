@@ -12,4 +12,21 @@ namespace Contact.Domain.Exceptions
             return "Unknown Item";
         }
     }
+
+    public class UnknownUserException : DomainBaseException
+    {
+        public UnknownUserException(string message) : base(message)
+        {
+
+        }
+
+        public UnknownUserException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public override string GetExceptionName()
+        {
+            return "Unknown user";
+        }
+    }
 }

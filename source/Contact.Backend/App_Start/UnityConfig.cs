@@ -5,6 +5,7 @@ using Contact.Infrastructure;
 using Contact.ReadStore.Test;
 using Contact.ReadStore.Test.SearchStore;
 using Contact.ReadStore.Test.SessionStore;
+using Contact.ReadStore.Test.UserStore;
 using Microsoft.Practices.Unity;
 using System.Web.Http;
 using Unity.WebApi;
@@ -28,8 +29,8 @@ namespace Contact.Backend
             container.RegisterInstance(new EmployeeSearchEngine());
             container.RegisterInstance(new CommandStatusEngine());
 
-            //TODO: Get a proper IdentityResolver
-            container.RegisterInstance<IResolveUserIdentity>(new DummyAndHardCodedIdentityReseolver());
+            
+            container.RegisterInstance<IResolveUserIdentity>(new UserLookupEngine());
             
 
             if (Config.UseMockCommandHandler)

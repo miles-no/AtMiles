@@ -15,11 +15,17 @@ namespace Contact.ReadStore.Test.UserStore
                 select new
                 {
                     person.GlobalId,
-                    person.CompanyId
+                    person.CompanyId,
+                    person.Email,
+                    person.AdminForOffices,
+                    person.CompanyAdmin
                 };
 
             Index(p => p.CompanyId, FieldIndexing.NotAnalyzed);
             Index(p => p.GlobalId, FieldIndexing.NotAnalyzed);
+            Index(p => p.Email, FieldIndexing.NotAnalyzed);
+            Index(p => p.AdminForOffices, FieldIndexing.NotAnalyzed);
+            Index(p => p.CompanyAdmin, FieldIndexing.NotAnalyzed);
         }
     }
 }

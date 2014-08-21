@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Contact.Backend.Utilities;
+using Contact.Domain.Exceptions;
+using Contact.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -21,8 +25,14 @@ namespace Contact.Backend.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        
+        private readonly IResolveUserIdentity resolveUserIdentity;
+
         // POST api/Account/Logout
+        public AccountController(IResolveUserIdentity resolveUserIdentity)
+        {
+            this.resolveUserIdentity = resolveUserIdentity;
+        }
+
         /// <summary>
         /// Signs out the user
         /// </summary>
@@ -58,6 +68,7 @@ namespace Contact.Backend.Controllers
                 return new ChallengeResult(provider, this);
             }
 
+
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             if (externalLogin == null)
@@ -71,7 +82,18 @@ namespace Contact.Backend.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-           
+            try
+            {
+                Helpers.GetIdFromIdentity(User.Identity, resolveUserIdentity);
+            }
+            catch (UnknownUserException ex)
+            {
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                
+                //TODO serve a proper message for the user
+                Debug.WriteLine(ex.Message);
+               
+            }
 
             if (redirect_uri != null)
             {
@@ -174,13 +196,15 @@ namespace Contact.Backend.Controllers
                 {
                     return null;
                 }
-
+              
                 return new ExternalLoginData
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
                     UserName = identity.FindFirstValue(ClaimTypes.Name),
                 };
+
+                
             }
             
         }

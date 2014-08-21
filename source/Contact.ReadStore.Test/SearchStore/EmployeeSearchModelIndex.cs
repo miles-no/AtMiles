@@ -5,14 +5,14 @@ using Raven.Client.Indexes;
 
 namespace Contact.ReadStore.Test.SearchStore
 {
-    public class PersonSearchModelIndex : AbstractMultiMapIndexCreationTask<PersonSearchModelIndex.Result>
+    public class EmployeeSearchModelIndex : AbstractMultiMapIndexCreationTask<EmployeeSearchModelIndex.Result>
     {
         public class Result
         {
             public object Content { get; set; }
         }
 
-        public PersonSearchModelIndex()
+        public EmployeeSearchModelIndex()
         {
 
             AddMap<EmployeeSearchModel>(personSearchModels =>

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Contact.Backend.MockStore;
+using Contact.Domain.Services;
+using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 using Contact.ReadStore.Test.SearchStore;
+using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Indexes;
@@ -19,54 +23,79 @@ namespace Contact.ReadStore.Test.UserStore
        
         }
 
-
-        public List<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
+        public string AttachLoginToUser(string companyid, string provider, string providerId, string email, out string message)
         {
-            searchString = searchString ?? string.Empty;
-            //Maybe more special character handling is needed here
-            searchString = searchString.Replace("#", "sharp");
             
-            RavenQueryStatistics stats;
-            var search = searchString
-                .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => string.Format("{0}* ", x)).ToList();
-            List<EmployeeSearchModel> results;
+            
+            // Not necessary?
+            //if (login.Email.Contains("@" + companyid) == false)
+            //{
+            //    message = "Email address is not valid for this company";
+            //    return false;
+            //}
+
+            var globalId = IdService.IdsToSingle(companyid, provider, providerId);
+
+            
+
+            User user;
             using (var session = store.OpenSession())
             {
-                
-                var tmp = session.Query<PersonSearchModelIndex.Result, PersonSearchModelIndex>()
-                    .Statistics(out stats);
-
-                foreach (var s in search)
+                user = session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.CompanyId == companyid && w.Email == email);
+            }
+            
+            if (user != null)
+            {
+                store.DatabaseCommands.Patch(user.Id, new[]
                 {
-                    tmp = tmp.Search(x => x.Content, s, 1, SearchOptions.And, EscapeQueryOptions.AllowPostfixWildcard);
-                }
-
-         
-                results = tmp
-                        .Skip(skip) 
-                        .Take(take)
-                        .As<EmployeeSearchModel>().ToList();
-                
-                foreach (var personSearchModel in results)
-                {
-                    personSearchModel.Score = session.Advanced.GetMetadataFor(personSearchModel).Value<double>("Temp-Index-Score");
-                }
-                
-                total = stats.TotalResults;
+                    new PatchRequest
+                    {
+                        Type = PatchCommandType.Set,
+                        Name = "GlobalId",
+                        Value = globalId
+                    }
+                });
+                message = "Goodie";
+                return globalId;
             }
 
-            return results;
-        }
+            //TODO: This isnt working. And it should lead to a sign out
+            List<User> administrators;
+            using (var session = store.OpenSession())
+            {
+                administrators = session.Query<User, UserLookupIndex>().Where(w => w.CompanyId == companyid && w.AdminForOffices != null && w.AdminForOffices.Any()).ToList();
+            }
 
+            message = "You are not registered. Please ask an administrator to add you.";
+            if (administrators.Any())
+            {
+                var infoBuilder = new StringBuilder();
+                var offices = administrators.SelectMany(s => s.AdminForOffices).Distinct();
+                foreach (var office in offices)
+                {
+                    infoBuilder.AppendLine(office);
+                    infoBuilder.AppendLine(string.Join("\n", administrators.Where(w=>w.AdminForOffices.Any(a => a == office)).Select(s=>s.Name + "("+s.Email +")")));
+                }
+                message += "\nDepending where you are located you can contact one of these guys:\n" +infoBuilder;
+            }
+
+            return null;
+
+        }
 
         public string ResolveUserIdentityByProviderId(string companyId, string provider, string providerId)
         {
-            string res = null;
+            var fullId = IdService.IdsToSingle(companyId, provider, providerId);
+            bool res;
             using (var session = store.OpenSession())
             {
-                res = session.Query<User, UserLookupIndex>().Where(w=>)
+               res = session.Query<User, UserLookupIndex>().Any(w => w.GlobalId == fullId);
             }
+            if (res)
+            {
+                return fullId;
+            }
+            return null;
         }
 
         public string ResolveUserIdentityByEmail(string companyId, string provider, string email)

@@ -23,8 +23,12 @@
             return string.Empty;
         }
 
-        public string ResolveUserIdentityByEmail(string companyId, string provider, string email)
+        
+        public string AttachLoginToUser(string companyid, string provider, string providerId, string email, out string message)
         {
+            
+            message = "Everything is fine, roger roger";
+
             if (provider == Domain.Constants.GoogleIdProvider)
             {
                 //Roy
@@ -40,6 +44,7 @@
                 }
             }
             return string.Empty;
+            
         }
     }
 }

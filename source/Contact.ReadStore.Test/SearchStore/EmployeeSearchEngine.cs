@@ -13,7 +13,7 @@ namespace Contact.ReadStore.Test.SearchStore
 
         public EmployeeSearchEngine()
         {
-            IndexCreation.CreateIndexes(typeof(PersonSearchModelIndex).Assembly, store);
+            IndexCreation.CreateIndexes(typeof(EmployeeSearchModelIndex).Assembly, store);
         }
 
 
@@ -31,7 +31,7 @@ namespace Contact.ReadStore.Test.SearchStore
             using (var session = store.OpenSession())
             {
                 
-                var tmp = session.Query<PersonSearchModelIndex.Result, PersonSearchModelIndex>()
+                var tmp = session.Query<EmployeeSearchModelIndex.Result, EmployeeSearchModelIndex>()
                     .Statistics(out stats);
 
                 foreach (var s in search)

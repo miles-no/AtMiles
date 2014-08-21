@@ -1,28 +1,22 @@
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using AutoMapper;
 using Contact.Backend.MockStore;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
+using Contact.Domain.Services;
 using Contact.Infrastructure;
-using Contact.ReadStore.Test.SearchStore;
 using Raven.Abstractions.Data;
 
 namespace Contact.ReadStore.Test.UserStore
 {
     public class UserLookupStore
     {
-        public void AddFillAndPrepareHandler(ReadModelHandler handler)
+        public void PrepareHandler(ReadModelHandler handler)
         {
             Mapper.CreateMap<EmployeeCreated, User>()
-                .ForMember(dest => dest.Name, source => source.MapFrom(m => createName(m)));
+                .ForMember(dest => dest.Name, source => source.MapFrom(m => CreateName(m)))
+                .ForMember(dest => dest.GlobalId, source => source.MapFrom(s => CreateGlobalId(s)));
                 
-             
 
             handler.RegisterHandler<EmployeeCreated>(HandleCreated);
             handler.RegisterHandler<EmployeeTerminated>(HandleTerminated);
@@ -33,6 +27,15 @@ namespace Contact.ReadStore.Test.UserStore
             handler.RegisterHandler<OfficeClosed>(HandleOfficeClosed);
 
            
+        }
+
+        private static string CreateGlobalId(EmployeeCreated employee)
+        {
+            if (employee.LoginId != null)
+            {
+                return IdService.IdsToSingle(employee.CompanyId, employee.LoginId.Provider, employee.LoginId.Id);
+            }
+            return null;
         }
 
         private void HandleOfficeClosed(OfficeClosed office)
@@ -141,7 +144,7 @@ namespace Contact.ReadStore.Test.UserStore
             }
         }
 
-        private static string createName(EmployeeCreated employee)
+        private static string CreateName(EmployeeCreated employee)
         {
             return employee.FirstName + " " + (string.IsNullOrEmpty(employee.MiddleName) ? string.Empty : (employee.MiddleName + " ")) + employee.LastName;
         }

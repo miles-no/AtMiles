@@ -8,7 +8,7 @@ namespace Contact.ReadStore.Test.SessionStore
     public class CommandStatusStore
     {
        
-        public void AddCommandStatusStoreUpdatedHandler(ReadModelHandler handler)
+        public void PrepareHandler(ReadModelHandler handler)
         {
             handler.RegisterHandler<CommandRequested>(HandleRequested);
             handler.RegisterHandler<CommandException>(HandleException);

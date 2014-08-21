@@ -148,7 +148,7 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                 id, new Login(Constants.GoogleIdProvider, employee.Email, null), givenName, middleName, familyName,
                 bornDate,
                 cv.Title, cv.Phone, employee.Email, null, employeePhoto, competence, DateTime.UtcNow, createdBy,
-                new Guid().ToString(), Domain.Constants.IgnoreVersion);
+                new Guid().ToString(), Constants.IgnoreVersion);
 
             return res;
         }

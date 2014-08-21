@@ -2,6 +2,7 @@ using System;
 using Contact.Infrastructure;
 using Contact.ReadStore.Test.SearchStore;
 using Contact.ReadStore.Test.SessionStore;
+using Contact.ReadStore.Test.UserStore;
 
 namespace Contact.ReadStore.Test
 {
@@ -10,8 +11,9 @@ namespace Contact.ReadStore.Test
         readonly ReadModelHandler handlers = new ReadModelHandler();
         public void PrepareHandlers()
         {
-            new EmployeeSearchStore().AddFillAndPrepareHandler(handlers);
-            new CommandStatusStore().AddCommandStatusStoreUpdatedHandler(handlers);
+            new EmployeeSearchStore().PrepareHandler(handlers);
+            new CommandStatusStore().PrepareHandler(handlers);
+            new UserLookupStore().PrepareHandler(handlers);
 
         }
 

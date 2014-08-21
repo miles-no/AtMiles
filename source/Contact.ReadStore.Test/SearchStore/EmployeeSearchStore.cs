@@ -14,7 +14,7 @@ namespace Contact.ReadStore.Test.SearchStore
 {
     public class EmployeeSearchStore
     {
-        public void AddFillAndPrepareHandler(ReadModelHandler handler)
+        public void PrepareHandler(ReadModelHandler handler)
         {
             Mapper.CreateMap<EmployeeCreated, EmployeeSearchModel>()
                 .ForMember(dest => dest.Competency, source => 
