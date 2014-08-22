@@ -14,18 +14,15 @@ namespace Contact.Domain.CommandHandlers
         Handles<OpenOffice>,
         Handles<CloseOffice>,
         Handles<AddEmployee>,
-        Handles<TerminateEmployee>,
-        Handles<ImportDataFromCvPartner>
+        Handles<TerminateEmployee>
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
-        private readonly IImportDataFromCvPartner _cvPartnerImporter;
 
-        public CompanyCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository, IImportDataFromCvPartner cvPartnerImporter)
+        public CompanyCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository)
         {
             _companyRepository = companyRepository;
             _employeeRepository = employeeRepository;
-            _cvPartnerImporter = cvPartnerImporter;
         }
 
         public void Handle(AddCompanyAdmin message)
@@ -71,9 +68,6 @@ namespace Contact.Domain.CommandHandlers
 
             var company = _companyRepository.GetById(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
-
-            //TODO: Check access
-
 
             company.RemoveOfficeAdmin(message.OfficeId, adminToBeRemoved, message.CreatedBy, message.CorrelationId);
 
@@ -186,48 +180,6 @@ namespace Contact.Domain.CommandHandlers
 
             _employeeRepository.Save(employee, Constants.IgnoreVersion);
             _companyRepository.Save(company, message.BasedOnVersion);
-        }
-
-        public void Handle(ImportDataFromCvPartner message)
-        {
-            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
-
-            var company = _companyRepository.GetById(message.CompanyId);
-            if (company == null) throw new UnknownItemException("Unknown ID for company");
-            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
-
-            List<CvPartnerImportData> importData = _cvPartnerImporter.GetImportData().Result;
-
-            if (importData != null)
-            {
-                foreach (var cvPartnerImportData in importData)
-                {
-                    string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
-                    var employee = _employeeRepository.GetById(userId);
-
-                    if (employee == null)
-                    {
-                        employee = new Employee();
-
-                        var office = company.GetOfficeByName(cvPartnerImportData.OfficeName);
-                        if (office == null)
-                        {
-                            company.OpenOffice(cvPartnerImportData.OfficeName, cvPartnerImportData.OfficeName, null, message.CreatedBy, message.CorrelationId);
-                            office = company.GetOffice(cvPartnerImportData.OfficeName);
-                        }
-
-                        employee.CreateNew(company.Id, company.Name,office.Id, office.Name,Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider,cvPartnerImportData.Email,string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,cvPartnerImportData.DateOfBirth,cvPartnerImportData.Title, cvPartnerImportData.Phone,cvPartnerImportData.Email,null, null,message.CreatedBy, message.CorrelationId);
-
-                        company.AddNewEmployeeToOffice(office.Id,employee,message.CreatedBy, message.CorrelationId);
-                        _companyRepository.Save(company, Constants.IgnoreVersion);
-                    }
-
-                    employee.ImportData(cvPartnerImportData, message.CreatedBy, message.CorrelationId);
-
-                    _employeeRepository.Save(employee, Constants.IgnoreVersion);
-                }
-            }
         }
 
         private static void CheckIfHandlingSelf(Employee admin, Employee employee)

@@ -19,12 +19,6 @@ namespace Contact.Domain.Test
         public Exception ExpectedException;
         private Guid _playgroundId = Guid.Empty;
 
-
-        private void SetSelectedPlayground(Guid playgroundId)
-        {
-            _playgroundId = playgroundId;
-        }
-
         public void Setup()
         {
             CaughtException = null;

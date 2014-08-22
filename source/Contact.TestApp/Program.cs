@@ -145,14 +145,13 @@ namespace Contact.TestApp
 
             var companyRepository = new EventStoreRepository<Company>(host, null, eSUsername, eSPassword);
             var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
+            var globalRepository = new EventStoreRepository<Global>(host, null, eSUsername, eSPassword);
             var commandSessionRepository = new EventStoreRepository<CommandSession>(host, null, eSUsername, eSPassword);
 
 
             var importer = new ImportMiles(cvPartnerToken);
 
-            var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, importer);
-
-
+            var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer);
 
             var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
 
@@ -178,14 +177,9 @@ namespace Contact.TestApp
 
             const string companyId = "miles";
             const string companyName = "Miles";
-            const string officeId = "SVG";
+            const string officeId = "Stavanger";
             const string officeName = "Stavanger";
             var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
-
-            const string systemId = Constants.SystemUserId;
-            const string systemLastName = Constants.SystemUserId;
-            var systemDateOfBirth = new DateTime(2014, 1, 1);
-            const string systemJobTitle = Constants.SystemUserId;
 
             var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
             var globalRepository = new EventStoreRepository<Global>(host, null, username, password);
@@ -193,61 +187,50 @@ namespace Contact.TestApp
 
             var importer = new ImportMiles(cvPartnerToken);
 
-            var commandHandler = new CompanyCommandHandler(companyRepository, employeeRepository, importer);
+            var globalCommandHandler = new GlobalCommandHandler(companyRepository, employeeRepository, globalRepository, importer);
 
-            var global = new Global();
 
             const string initCorrelationId = "SYSTEM INIT";
 
-            var system = new Employee();
-            system.CreateNew(companyId, companyName, officeId, officeName, systemId, null, string.Empty, string.Empty, systemLastName, systemDateOfBirth, systemJobTitle, string.Empty, String.Empty, null, null, new Person("SYSTEM", "SYSTEM"), initCorrelationId);
+            var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
 
-            var systemAsPerson = new Person(system.Id, system.Name);
 
-            var company = new Company();
-            company.CreateNewCompany(companyId, companyName, officeId, officeName, officeAddress, system.Id, system.Name, DateTime.UtcNow, systemAsPerson, initCorrelationId);
+            var admins = new List<SimpleUserInfo>();
 
-            global.AddCompany(company, systemAsPerson, initCorrelationId);
+            var admin1 = new SimpleUserInfo(Domain.Services.IdService.CreateNewId(), "Roy", string.Empty, "Veshovda",
+                new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no", string.Empty));
+            admins.Add(admin1);
 
-            try
-            {
-                globalRepository.Save(global, Constants.NewVersion);
-                employeeRepository.Save(system, Constants.NewVersion);
-                companyRepository.Save(company, Constants.NewVersion);
-                Console.WriteLine("Successfully created seed info");
-            }
-            catch (Exception error)
-            {
-                Console.WriteLine("Exception: " + error);
-                return;
-            }
+            var admin2 = new SimpleUserInfo(Domain.Services.IdService.CreateNewId(), "Stian", string.Empty, "Edvardsen",
+                new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
+            admins.Add(admin2);
 
-            Console.WriteLine("Starting to import data from CVpartner");
-
+            var seedCommand = new SeedNewSystemWithCompany(companyId, companyName, officeId, officeName, officeAddress,admins.ToArray(),
+                DateTime.UtcNow, systemAsPerson, initCorrelationId, Constants.IgnoreVersion);
 
             var importCommand = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, systemAsPerson,
                 initCorrelationId, Constants.IgnoreVersion);
 
-            
 
+            globalCommandHandler.Handle(seedCommand);
+            globalCommandHandler.Handle(importCommand);
+
+            
             try
             {
-                commandHandler.Handle(importCommand);
+                //var company2 = companyRepository.GetById(companyId);
 
-                //TODO: Fix so get twice is not needed
-                var company2 = companyRepository.GetById(companyId);
+                //var admin1Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no", string.Empty));
+                //var admin1 = employeeRepository.GetById(admin1Id);
 
-                var admin1Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no", string.Empty));
-                var admin1 = employeeRepository.GetById(admin1Id);
+                //company2.AddCompanyAdmin(admin1, systemAsPerson, initCorrelationId);
 
-                company2.AddCompanyAdmin(admin1, systemAsPerson, initCorrelationId);
+                //var admin2Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
+                //var admin2 = employeeRepository.GetById(admin2Id);
 
-                var admin2Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
-                var admin2 = employeeRepository.GetById(admin2Id);
+                //company2.AddCompanyAdmin(admin2, systemAsPerson, initCorrelationId);
 
-                company2.AddCompanyAdmin(admin2, systemAsPerson, initCorrelationId);
-
-                companyRepository.Save(company2, Constants.IgnoreVersion);
+                //companyRepository.Save(company2, Constants.IgnoreVersion);
 
             }
             catch (Exception error)
