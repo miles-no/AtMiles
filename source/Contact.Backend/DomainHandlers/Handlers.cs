@@ -38,7 +38,7 @@ namespace Contact.Backend.DomainHandlers
 
         private static void RegisterImportFromCvPartner(IMediator mediator, IUnityContainer container)
         {
-            mediator.Subscribe<ImportDataFromCvPartner, Response>((req, user) =>
+            mediator.Subscribe<ImportFromCvPartnerRequest, Response>((req, user) =>
             {
                 string correlationId = Helpers.CreateNewId();
 
