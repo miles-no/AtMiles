@@ -50,15 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InMemoryReadModel\Company.cs" />
-    <Compile Include="InMemoryReadModel\CompanyHandler.cs" />
-    <Compile Include="InMemoryReadModel\Employee.cs" />
-    <Compile Include="InMemoryReadModel\EmployeeHandler.cs" />
-    <Compile Include="InMemoryReadModel\InMemoryRepository.cs" />
-    <Compile Include="InMemoryReadModel\Office.cs" />
-    <Compile Include="InMemoryReadModel\SimpleCompany.cs" />
-    <Compile Include="InMemoryReadModel\SimpleEmployee.cs" />
-    <Compile Include="InMemoryReadModel\SimpleOffice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModelSearchDemo.cs" />
