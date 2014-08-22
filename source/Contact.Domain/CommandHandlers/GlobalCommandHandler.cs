@@ -44,6 +44,8 @@ namespace Contact.Domain.CommandHandlers
             var company = new Company();
             company.CreateNewCompany(message.CompanyId, message.CompanyName, message.FirstOfficeId, message.FirstOfficeName, message.FirstOfficeAddress, system.Id, system.Name, DateTime.UtcNow, systemAsPerson, message.CorrelationId);
 
+            company.OpenOffice(message.FirstOfficeId, message.FirstOfficeName, message.FirstOfficeAddress, message.CreatedBy, message.CorrelationId);
+
             global.AddCompany(company, systemAsPerson, message.CorrelationId);
 
             _globalRepository.Save(global, Constants.NewVersion);
@@ -57,10 +59,16 @@ namespace Contact.Domain.CommandHandlers
                     var adminId = adminInfo.Id;
                     if (string.IsNullOrEmpty(adminId))
                     {
-                        adminId = Domain.Services.IdService.CreateNewId();
+                        adminId = Services.IdService.CreateNewId();
                     }
 
-                    admin.CreateNew(message.CompanyId, message.CompanyName,message.FirstOfficeId, message.FirstOfficeName, adminId, adminInfo.LoginId,adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName,null,string.Empty,string.Empty,string.Empty,null,null,message.CreatedBy, message.CorrelationId);
+                    string email = string.Empty;
+                    if (adminInfo.LoginId != null)
+                    {
+                        email = adminInfo.LoginId.Email;
+                    }
+
+                    admin.CreateNew(message.CompanyId, message.CompanyName,message.FirstOfficeId, message.FirstOfficeName, adminId, adminInfo.LoginId,adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName,null,string.Empty,string.Empty,email,null,null,message.CreatedBy, message.CorrelationId);
                     _employeeRepository.Save(admin, Constants.NewVersion);
                     company.AddNewEmployeeToOffice(message.FirstOfficeId, admin,message.CreatedBy, message.CorrelationId);
                     company.AddCompanyAdmin(admin, message.CreatedBy, message.CorrelationId);

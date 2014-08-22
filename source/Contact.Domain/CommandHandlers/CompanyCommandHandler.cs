@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Contact.Domain.Aggregates;
+﻿using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
