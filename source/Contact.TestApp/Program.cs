@@ -214,32 +214,6 @@ namespace Contact.TestApp
 
             globalCommandHandler.Handle(seedCommand);
             globalCommandHandler.Handle(importCommand);
-
-            
-            try
-            {
-                //var company2 = companyRepository.GetById(companyId);
-
-                //var admin1Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no", string.Empty));
-                //var admin1 = employeeRepository.GetById(admin1Id);
-
-                //company2.AddCompanyAdmin(admin1, systemAsPerson, initCorrelationId);
-
-                //var admin2Id = company2.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
-                //var admin2 = employeeRepository.GetById(admin2Id);
-
-                //company2.AddCompanyAdmin(admin2, systemAsPerson, initCorrelationId);
-
-                //companyRepository.Save(company2, Constants.IgnoreVersion);
-
-            }
-            catch (Exception error)
-            {
-                Console.WriteLine("Exception: " + error);
-                return;
-            }
-
-            //var userEmailsToPromotoToCompanyAdmin = new List<string> {"roy.veshovda@miles.no", "stian.edvardsen@miles.no"};
         }
 
         private static LongRunningProcess ReadModelDemo()
