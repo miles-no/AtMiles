@@ -85,6 +85,8 @@
     <Compile Include="Company\RemoveOfficeAdminTests\RemoveOfficeAdminUnknonwAdmin.cs" />
     <Compile Include="Company\RemoveOfficeAdminTests\RemoveOfficeAdminUnknownFirstAdmin.cs" />
     <Compile Include="Company\RemoveOfficeAdminTests\RemoveOfficeAdminWithoutPermission.cs" />
+    <Compile Include="Company\AddNewCompanyToSystemTests\AddNewCompanyToSystemAlreadyAddedTest.cs" />
+    <Compile Include="Company\AddNewCompanyToSystemTests\AddNewCompanyToSystemEmptySystemTest.cs" />
     <Compile Include="CompareObjects.cs" />
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeAsCompanyAdmin.cs" />
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeAsOfficeAdmin.cs" />
@@ -116,6 +118,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Company\ImportDataFromCvPartnerTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

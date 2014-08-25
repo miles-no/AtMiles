@@ -11,7 +11,7 @@ namespace Contact.Domain.CommandHandlers
             var globalCommandHandler = new GlobalCommandHandler(repositoryCompany, repositoryEmployee, repositoryGlobal, cvPartnerImporter);
 
             cmdHandler.RegisterHandler<Commands.ImportDataFromCvPartner>(globalCommandHandler.Handle);
-            cmdHandler.RegisterHandler<Commands.SeedNewSystemWithCompany>(globalCommandHandler.Handle);
+            cmdHandler.RegisterHandler<Commands.AddNewCompanyToSystem>(globalCommandHandler.Handle);
 
 
             var cmdHandlerCompany = new CompanyCommandHandler(repositoryCompany, repositoryEmployee);

@@ -8,7 +8,7 @@ using Contact.Domain.ValueTypes;
 namespace Contact.Domain.CommandHandlers
 {
     public class GlobalCommandHandler :
-        Handles<SeedNewSystemWithCompany>,
+        Handles<AddNewCompanyToSystem>,
         Handles<ImportDataFromCvPartner>
     {
         private readonly IRepository<Company> _companyRepository;
@@ -24,10 +24,12 @@ namespace Contact.Domain.CommandHandlers
             _cvPartnerImporter = cvPartnerImporter;
         }
 
-        public void Handle(SeedNewSystemWithCompany message)
+        public void Handle(AddNewCompanyToSystem message)
         {
-            var global = new Global();
+            var global = _globalRepository.GetById(Global.GlobalId);
+            if(global == null) global = new Global();
 
+            if(global.HasCompany(message.CompanyId)) throw new AlreadyExistingItemException("CompanyId already in system");
 
             var system = new Employee();
             system.CreateNew(message.CompanyId, message.CompanyName, message.FirstOfficeId, message.FirstOfficeName,

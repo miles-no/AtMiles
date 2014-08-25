@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 namespace Contact.Domain.Test.Company.OpenOfficeTests
 {
+    [TestFixture]
     public class OpenOfficeWithPermisionTest : EventSpecification<OpenOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

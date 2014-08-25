@@ -36,7 +36,7 @@ namespace Contact.Domain.Test
         {
             if (id == string.Empty)
             {
-                throw new UnknownItemException("");
+                return null;
             }
 
             T aggregate = new T();
@@ -45,7 +45,7 @@ namespace Contact.Domain.Test
 
             if (aggregate.Id != id)
             {
-                throw new UnknownItemException(string.Empty);
+                return null;
             }
             return aggregate;
         }

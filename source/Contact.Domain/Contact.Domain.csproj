@@ -62,7 +62,7 @@
     <Compile Include="Commands\OpenOffice.cs" />
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
     <Compile Include="Commands\RemoveOfficeAdmin.cs" />
-    <Compile Include="Commands\SeedNewSystemWithCompany.cs" />
+    <Compile Include="Commands\AddNewCompanyToSystem.cs" />
     <Compile Include="Commands\TerminateEmployee.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DelegateAdjuster.cs" />

@@ -30,9 +30,9 @@ namespace Contact.Domain.Aggregates
         public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
         {
             var ev1 = new CompanyCreated(companyId, companyName, created, createdBy, correlationId);
-            var ev4 = new CompanyAdminAdded(companyId, companyName, adminId, adminName, created, createdBy, correlationId);
+            var ev2 = new CompanyAdminAdded(companyId, companyName, adminId, adminName, created, createdBy, correlationId);
             ApplyChange(ev1);
-            ApplyChange(ev4);
+            ApplyChange(ev2);
         }
 
         public bool IsCompanyAdmin(string identifier)

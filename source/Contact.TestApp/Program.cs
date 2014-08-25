@@ -174,7 +174,7 @@ namespace Contact.TestApp
                 new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
             admins.Add(admin2);
 
-            var seedCommand = new SeedNewSystemWithCompany(companyId, companyName, officeId, officeName, officeAddress,admins.ToArray(),
+            var seedCommand = new AddNewCompanyToSystem(companyId, companyName, officeId, officeName, officeAddress,admins.ToArray(),
                 DateTime.UtcNow, systemAsPerson, initCorrelationId, Constants.IgnoreVersion);
 
             var importCommand = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, systemAsPerson,

@@ -3,7 +3,7 @@ using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Commands
 {
-    public class SeedNewSystemWithCompany : Command
+    public class AddNewCompanyToSystem : Command
     {
         public readonly string CompanyId;
         public readonly string CompanyName;
@@ -13,7 +13,7 @@ namespace Contact.Domain.Commands
         public readonly SimpleUserInfo[] InitialAdmins;
 
 
-        public SeedNewSystemWithCompany(string companyId, string companyName, string firstOfficeId, string firstOfficeName, Address firstOfficeAddress, SimpleUserInfo[] initialAdmins, DateTime created, Person createdBy, string correlationId, int basedOnVersion)
+        public AddNewCompanyToSystem(string companyId, string companyName, string firstOfficeId, string firstOfficeName, Address firstOfficeAddress, SimpleUserInfo[] initialAdmins, DateTime created, Person createdBy, string correlationId, int basedOnVersion)
             : base(created, createdBy, correlationId, basedOnVersion)
         {
             CompanyId = companyId;
