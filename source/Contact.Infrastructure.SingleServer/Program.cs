@@ -4,6 +4,9 @@ using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure.SingleServer.Properties;
+using Contact.ReadStore.Test.SearchStore;
+using Contact.ReadStore.Test.SessionStore;
+using Contact.ReadStore.Test.UserStore;
 using Newtonsoft.Json;
 
 namespace Contact.Infrastructure.SingleServer
@@ -36,10 +39,10 @@ namespace Contact.Infrastructure.SingleServer
 
         private static LongRunningProcess StartCommandHandler(Config config)
         {
-            var companyRepository = new EventStoreRepository<Company>(config.EventServerHost, null, config.EventServerSUsername, config.EventServerSPassword);
-            var employeeRepository = new EventStoreRepository<Employee>(config.EventServerHost, null, config.EventServerSUsername, config.EventServerSPassword);
-            var globalRepository = new EventStoreRepository<Global>(config.EventServerHost, null, config.EventServerSUsername, config.EventServerSPassword);
-            var commandSessionRepository = new EventStoreRepository<CommandSession>(config.EventServerHost, null, config.EventServerSUsername, config.EventServerSPassword);
+            var companyRepository = new EventStoreRepository<Company>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var employeeRepository = new EventStoreRepository<Employee>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var globalRepository = new EventStoreRepository<Global>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var commandSessionRepository = new EventStoreRepository<CommandSession>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
 
             var importer = new ImportMiles(config.CvPartnerToken);
             var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer);
@@ -52,6 +55,19 @@ namespace Contact.Infrastructure.SingleServer
 
             Console.WriteLine("Command-worker Started");
             return worker;
+        }
+
+        private static LongRunningProcess StartReadModelHandler(Config config)
+        {
+            var handlers = new ReadModelHandler();
+            new EmployeeSearchStore().PrepareHandler(handlers);
+            new CommandStatusStore().PrepareHandler(handlers);
+            new UserLookupStore(new UserLookupEngine()).PrepareHandler(handlers);
+
+            var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { });
+            read.Start();
+
+            return null;
         }
     }
 }

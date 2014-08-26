@@ -77,6 +77,10 @@
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
       <Name>Contact.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.Test.csproj">
+      <Project>{dc681094-ce50-4e07-a14e-3cda4554ffb1}</Project>
+      <Name>Contact.ReadStore.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
