@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
