@@ -97,17 +97,16 @@ namespace Contact.Domain.CommandHandlers
                     string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
                     var employee = _employeeRepository.GetById(userId);
 
+                    var office = company.GetOfficeByName(cvPartnerImportData.OfficeName);
+                    if (office == null)
+                    {
+                        company.OpenOffice(cvPartnerImportData.OfficeName, cvPartnerImportData.OfficeName, null, message.CreatedBy, message.CorrelationId);
+                        office = company.GetOffice(cvPartnerImportData.OfficeName);
+                    }
+
                     if (employee == null)
                     {
                         employee = new Employee();
-
-                        var office = company.GetOfficeByName(cvPartnerImportData.OfficeName);
-                        if (office == null)
-                        {
-                            company.OpenOffice(cvPartnerImportData.OfficeName, cvPartnerImportData.OfficeName, null, message.CreatedBy, message.CorrelationId);
-                            office = company.GetOffice(cvPartnerImportData.OfficeName);
-                        }
-
                         employee.CreateNew(company.Id, company.Name, office.Id, office.Name, Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName, cvPartnerImportData.DateOfBirth, cvPartnerImportData.Title, cvPartnerImportData.Phone, cvPartnerImportData.Email, null, null, message.CreatedBy, message.CorrelationId);
 
                         company.AddNewEmployeeToOffice(office.Id, employee, message.CreatedBy, message.CorrelationId);
