@@ -40,7 +40,7 @@ namespace Contact.Domain.Aggregates
         {
             if (import.UpdatedAt > _lastImportUpdateAt)
             {
-                var ev = new ImportedFromCvPartner(import.FirstName, import.MiddleName, import.LastName,
+                var ev = new ImportedFromCvPartner(_id, import.FirstName, import.MiddleName, import.LastName,
                     import.DateOfBirth, import.Email, import.Phone, import.Title, import.UpdatedAt,
                     import.KeyQualifications, import.Technologies, import.Photo, DateTime.UtcNow, createdBy,
                     correlationId);

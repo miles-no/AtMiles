@@ -105,7 +105,7 @@ namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
             _fakeGlobalRepository = new FakeRepository<Aggregates.Global>(GivenGlobal());
-            _fakeImporter = new FakeCvPartnerImporter();
+            _fakeImporter = new FakeCvPartnerImporter(new List<CvPartnerImportData>());
             return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository,_fakeImporter);
         }
 

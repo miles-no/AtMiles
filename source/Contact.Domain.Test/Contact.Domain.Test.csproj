@@ -67,6 +67,11 @@
     <Compile Include="Company\CloseOfficeTests\CloseOfficeWithEmployeesTest.cs" />
     <Compile Include="Company\CloseOfficeTests\CloseOfficeWithoutPermissionTest.cs" />
     <Compile Include="Company\CloseOfficeTests\CloseOfficeWithPermissionTest.cs" />
+    <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerExistingUserFirstImportTest.cs" />
+    <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerExistingUserNoUpdatesTest.cs" />
+    <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerExistingUserWithUpdatesTest.cs" />
+    <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerNewUserAndNewOfficeTest.cs" />
+    <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerNewUserTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeExistingOfficeIdTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeWithoutPermisionTest.cs" />
@@ -119,9 +124,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Company\ImportDataFromCvPartnerTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
