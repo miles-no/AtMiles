@@ -10,5 +10,6 @@
         public string RabbitMqPassword { get; set; }
         public string RabbitMqQueueName { get; set; }
         public string CvPartnerToken { get; set; }
+        public string RavenDbUrl { get; set; }
     }
 }

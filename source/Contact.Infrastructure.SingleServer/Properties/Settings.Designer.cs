@@ -25,7 +25,7 @@ namespace Contact.Infrastructure.SingleServer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\miles\\single_server.config.json")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\miles\\single_server.config")]
         public string ConfigFile {
             get {
                 return ((string)(this["ConfigFile"]));
