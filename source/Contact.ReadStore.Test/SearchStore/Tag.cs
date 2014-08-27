@@ -1,4 +1,4 @@
-namespace Contact.ReadStore.Test.SearchStore
+namespace Contact.ReadStore.SearchStore
 {
     public class Tag
     {

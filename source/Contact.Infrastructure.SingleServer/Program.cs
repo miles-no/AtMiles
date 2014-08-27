@@ -5,9 +5,9 @@ using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure.SingleServer.Properties;
-using Contact.ReadStore.Test.SearchStore;
-using Contact.ReadStore.Test.SessionStore;
-using Contact.ReadStore.Test.UserStore;
+using Contact.ReadStore.SearchStore;
+using Contact.ReadStore.SessionStore;
+using Contact.ReadStore.UserStore;
 using Newtonsoft.Json;
 
 namespace Contact.Infrastructure.SingleServer

@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Backend.Store", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Import.CvPartner", "Contact.Import.CvPartner\Contact.Import.CvPartner.csproj", "{B544EFBD-81E6-44A0-9423-84ABCF1C0B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.ReadStore.Test", "Contact.ReadStore.Test\Contact.ReadStore.Test.csproj", "{DC681094-CE50-4E07-A14E-3CDA4554FFB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.ReadStore", "Contact.ReadStore.Test\Contact.ReadStore.csproj", "{DC681094-CE50-4E07-A14E-3CDA4554FFB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.WebClient", "Contact.WebClient\Contact.WebClient.csproj", "{5FBD68A4-2385-434B-8990-23A468FF5461}"
 EndProject

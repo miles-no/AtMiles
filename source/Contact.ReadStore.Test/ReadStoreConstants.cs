@@ -1,4 +1,4 @@
-﻿namespace Contact.ReadStore.Test
+﻿namespace Contact.ReadStore
 {
     public class ReadStoreConstants
     {

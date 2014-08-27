@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Contact.Backend.MockStore;
 using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
-using Contact.ReadStore.Test.SearchStore;
 using Raven.Abstractions.Data;
-using Raven.Abstractions.Indexing;
 using Raven.Client;
-using Raven.Client.Indexes;
 
-namespace Contact.ReadStore.Test.UserStore
+namespace Contact.ReadStore.UserStore
 {
     public class UserLookupEngine : IResolveUserIdentity
     {

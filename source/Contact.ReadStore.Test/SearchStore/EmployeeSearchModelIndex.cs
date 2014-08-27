@@ -1,9 +1,8 @@
 using System.Linq;
-using Contact.ReadStore.Test.UserStore;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
-namespace Contact.ReadStore.Test.SearchStore
+namespace Contact.ReadStore.SearchStore
 {
     public class EmployeeSearchModelIndex : AbstractMultiMapIndexCreationTask<EmployeeSearchModelIndex.Result>
     {

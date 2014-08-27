@@ -2,7 +2,7 @@ using System.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
-namespace Contact.ReadStore.Test.UserStore
+namespace Contact.ReadStore.UserStore
 {
     
     public class UserLookupIndex : AbstractIndexCreationTask<User>

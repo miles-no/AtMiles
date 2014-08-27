@@ -41,7 +41,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RavenDB.Client.2.5.2910\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RavenDB.Client.2.5.2910\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -75,9 +84,9 @@
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
       <Name>Contact.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.Test.csproj">
+    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.csproj">
       <Project>{DC681094-CE50-4E07-A14E-3CDA4554FFB1}</Project>
-      <Name>Contact.ReadStore.Test</Name>
+      <Name>Contact.ReadStore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

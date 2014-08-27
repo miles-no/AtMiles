@@ -4,7 +4,7 @@ using System.Linq;
 using Raven.Client;
 using Raven.Client.Indexes;
 
-namespace Contact.ReadStore.Test.SearchStore
+namespace Contact.ReadStore.SearchStore
 {
     public class EmployeeSearchEngine
     {

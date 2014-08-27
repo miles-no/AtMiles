@@ -4,8 +4,8 @@ using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Search;
 using Contact.Backend.Models.Api.Status;
-using Contact.ReadStore.Test.SearchStore;
-using Contact.ReadStore.Test.SessionStore;
+using Contact.ReadStore.SearchStore;
+using Contact.ReadStore.SessionStore;
 using Microsoft.Practices.Unity;
 
 namespace Contact.Backend

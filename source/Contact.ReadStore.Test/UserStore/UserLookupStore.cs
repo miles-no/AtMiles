@@ -8,7 +8,7 @@ using Contact.Infrastructure;
 using Raven.Abstractions.Data;
 using Raven.Client;
 
-namespace Contact.ReadStore.Test.UserStore
+namespace Contact.ReadStore.UserStore
 {
     public class UserLookupStore
     {

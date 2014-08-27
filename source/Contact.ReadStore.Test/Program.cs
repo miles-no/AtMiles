@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using Contact.Backend.MockStore;
 
-namespace Contact.ReadStore.Test
+namespace Contact.ReadStore
 {
     class Program
     {

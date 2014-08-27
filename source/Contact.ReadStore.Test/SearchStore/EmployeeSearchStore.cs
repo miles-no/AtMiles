@@ -9,7 +9,7 @@ using Contact.Domain.Events.Employee;
 using Contact.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore.Test.SearchStore
+namespace Contact.ReadStore.SearchStore
 {
     public class EmployeeSearchStore
     {

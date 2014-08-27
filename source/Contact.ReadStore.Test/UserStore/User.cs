@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Contact.ReadStore.Test.UserStore
+namespace Contact.ReadStore.UserStore
 {
     public class User
     {

@@ -1,6 +1,6 @@
 ﻿using Raven.Client;
 
-namespace Contact.ReadStore.Test.SessionStore
+namespace Contact.ReadStore.SessionStore
 {
     public class CommandStatusEngine
     {

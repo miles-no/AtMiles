@@ -1,11 +1,11 @@
 using System;
 using Contact.Infrastructure;
-using Contact.ReadStore.Test.SearchStore;
-using Contact.ReadStore.Test.SessionStore;
-using Contact.ReadStore.Test.UserStore;
+using Contact.ReadStore.SearchStore;
+using Contact.ReadStore.SessionStore;
+using Contact.ReadStore.UserStore;
 using Raven.Client;
 
-namespace Contact.ReadStore.Test
+namespace Contact.ReadStore
 {
     public class ReadStoreAdmin
     {

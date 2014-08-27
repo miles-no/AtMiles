@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Contact.Backend.Models.Api.Search;
-using Contact.ReadStore.Test;
-using Contact.ReadStore.Test.SearchStore;
-using Tag = Contact.ReadStore.Test.SearchStore.Tag;
+using Contact.ReadStore.SearchStore;
+using Tag = Contact.ReadStore.SearchStore.Tag;
 
 namespace Contact.Backend
 {

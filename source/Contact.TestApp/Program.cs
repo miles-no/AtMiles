@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Contact.Backend.MockStore;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
@@ -9,8 +10,8 @@ using Contact.Domain.Commands;
 using Contact.Domain.ValueTypes;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
-using Contact.ReadStore.Test;
-using Contact.ReadStore.Test.SearchStore;
+using Contact.ReadStore;
+using Contact.ReadStore.SearchStore;
 using Company = Contact.Domain.Aggregates.Company;
 using Employee = Contact.Domain.Aggregates.Employee;
 
@@ -60,11 +61,12 @@ namespace Contact.TestApp
                         break;
                     case ConsoleKey.F:
                         var admin = new ReadStoreAdmin();
-                        admin.PrepareHandlers();
+                        
+                        admin.PrepareHandlers(RavenDocumentStore.CreateStore("http://milescontact.cloudapp.net"));
                         admin.StartListening();
                         break;
                     case ConsoleKey.G:
-                        var engine = new EmployeeSearchEngine();
+                        var engine = new EmployeeSearchEngine(RavenDocumentStore.CreateStore("http://milescontact.cloudapp.net"));
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
                         int total;

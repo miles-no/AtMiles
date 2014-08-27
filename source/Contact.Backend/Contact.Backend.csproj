@@ -414,9 +414,9 @@
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
       <Name>Contact.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.Test.csproj">
+    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.csproj">
       <Project>{DC681094-CE50-4E07-A14E-3CDA4554FFB1}</Project>
-      <Name>Contact.ReadStore.Test</Name>
+      <Name>Contact.ReadStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
