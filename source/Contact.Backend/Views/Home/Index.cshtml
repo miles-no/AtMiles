@@ -1,9 +1,7 @@
-﻿@using Microsoft.AspNet.Identity
-@using Microsoft.Owin.Security
-<div class="jumbotron">
+﻿<div class="jumbotron">
     @{
-        // 
-        var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+        // gets all availabel login providers
+        // var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
         <div>
             <p>This is a test page for the @@miles backend. For now this uses OAuth2 as authentication protocol, and Google as provider</p>
         </div>

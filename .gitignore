@@ -158,3 +158,12 @@ source/Contact.Backend/App_Data/aspnet-Contact.Backend-20140806024328_log.ldf
 # Vim
 *.swp
 *.swo
+source/Contact.WebClient/Scripts/lib_5A0CED5DCFAC5CD70C3D6B625EACEF35.js
+source/Contact.WebClient/Scripts/lib_79AC4F85FE2377D749E39A4A23A7A0DA.js
+source/Contact.WebClient/Scripts/lib_9A5A4C0ACBC36B150CE374431A69722D.js
+source/Contact.WebClient/*.dll
+source/Contact.WebClient/*.exe
+source/Contact.WebClient/*.pdb
+source/Contact.WebClient/*.exe.*
+source/Contact.WebClient/Content/styles_*.css
+source/Contact.WebClient/Scripts/home_*.js

@@ -1,0 +1,31 @@
+﻿@using SquishIt.Framework
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    @*Set the viewport width to device width for mobile *@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Insert cool name</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    @Html.Raw(Bundle.Css().RenderNamed("styles"))
+    
+    @RenderSection("head", false)
+    
+</head>
+<body>
+    @RenderBody()
+
+    @Html.Raw(@Bundle.JavaScript().RenderNamed("start_scripts"))
+    @Html.Raw(@Bundle.JavaScript().RenderNamed("foundation"))
+    <script type="text/javascript">
+        $(document).foundation();
+    </script>
+    @*Use the Scripts section to define page specific scripts*@
+    @RenderSection("scripts",false)
+</body>
+</html>

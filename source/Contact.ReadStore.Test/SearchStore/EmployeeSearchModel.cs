@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Contact.ReadStore.Test.SearchStore
 {
     public class EmployeeSearchModel
     {
+        private Tag[] competency =new List<Tag>().ToArray();
         public string Id { get; set; }
         public string CompanyId { get; set; }
         public string OfficeId { get; set; }
@@ -14,7 +16,13 @@ namespace Contact.ReadStore.Test.SearchStore
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Thumb { get; set; }
-        public Tag[] Competency { get; set; }
+
+        public Tag[] Competency
+        {
+            get { return competency; }
+            set { competency = value; }
+        }
+
         public double Score { get; set; }
     }
     
