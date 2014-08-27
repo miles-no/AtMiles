@@ -4,16 +4,22 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using AutoMapper;
-using Contact.Backend.MockStore;
 using Contact.Domain.Events.Employee;
 using Contact.Infrastructure;
+using Raven.Client;
 
 namespace Contact.ReadStore.Test.SearchStore
 {
     public class EmployeeSearchStore
     {
+        private readonly IDocumentStore documentStore;
+
+        public EmployeeSearchStore(IDocumentStore documentStore)
+        {
+            this.documentStore = documentStore;
+        }
+
         public void PrepareHandler(ReadModelHandler handler)
         {
             Mapper.CreateMap<EmployeeCreated, EmployeeSearchModel>()
@@ -78,11 +84,11 @@ namespace Contact.ReadStore.Test.SearchStore
             }
         }
 
-        private static void FillRaven(EmployeeCreated obj)
+        private void FillRaven(EmployeeCreated obj)
         {
 
             var searchModel = Mapper.Map<EmployeeCreated, EmployeeSearchModel>(obj);
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 session.Store(searchModel);
                 session.SaveChanges();

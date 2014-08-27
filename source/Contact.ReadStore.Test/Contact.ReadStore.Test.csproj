@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -84,9 +85,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.MockStore.csproj">
+    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.Store.csproj">
       <Project>{082ee311-417a-4509-a822-45d775919f1e}</Project>
-      <Name>Contact.Backend.MockStore</Name>
+      <Name>Contact.Backend.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</Project>

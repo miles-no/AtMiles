@@ -1,15 +1,20 @@
-﻿using System.Linq;
-using Contact.Backend.MockStore;
-using Raven.Client.Linq;
+﻿using Raven.Client;
 
 namespace Contact.ReadStore.Test.SessionStore
 {
     public class CommandStatusEngine
     {
+        private readonly IDocumentStore documentStore;
+
+        public CommandStatusEngine(IDocumentStore documentStore)
+        {
+            this.documentStore = documentStore;
+        }
+
         public CommandStatus GetStatus(string commandId)
         {
             CommandStatus res;
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 var id = CommandStatusConstants.Prefix + commandId;
                 res = session.Load<CommandStatus>(id);

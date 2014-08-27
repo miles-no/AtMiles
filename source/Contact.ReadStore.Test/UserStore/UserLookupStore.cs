@@ -1,22 +1,24 @@
 using System.Linq;
 using AutoMapper;
-using Contact.Backend.MockStore;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
 using Contact.Domain.Services;
 using Contact.Infrastructure;
 using Raven.Abstractions.Data;
+using Raven.Client;
 
 namespace Contact.ReadStore.Test.UserStore
 {
     public class UserLookupStore
     {
         private readonly UserLookupEngine engine;
+        private readonly IDocumentStore documentStore;
 
-        public UserLookupStore(UserLookupEngine engine)
+        public UserLookupStore(UserLookupEngine engine, IDocumentStore documentStore)
         {
             this.engine = engine;
+            this.documentStore = documentStore;
         }
 
         public void PrepareHandler(ReadModelHandler handler)
@@ -44,7 +46,7 @@ namespace Contact.ReadStore.Test.UserStore
         private void HandleImportCvPartner(ImportedFromCvPartner person)
         {
             var searchModel = Mapper.Map<ImportedFromCvPartner, User>(person);
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 session.Store(searchModel);
                 session.SaveChanges();
@@ -63,7 +65,7 @@ namespace Contact.ReadStore.Test.UserStore
         private void HandleOfficeClosed(OfficeClosed office)
         {
 
-            MockStore.DocumentStore.DatabaseCommands.UpdateByIndex(typeof (UserLookupIndex).Name,
+            documentStore.DatabaseCommands.UpdateByIndex(typeof (UserLookupIndex).Name,
                 new IndexQuery {Query = "CompanyId:" + office.CompanyId},
                 new[]
                 {
@@ -80,7 +82,7 @@ namespace Contact.ReadStore.Test.UserStore
 
         private void HandleOfficeAdminRemoved(OfficeAdminRemoved officeAdmin)
         {
-            MockStore.DocumentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
                  new IndexQuery { Query = "GlobalId:" + officeAdmin.AdminId },
                  new[]
                 {
@@ -95,7 +97,7 @@ namespace Contact.ReadStore.Test.UserStore
 
         private void HandleOfficeAdminAdded(OfficeAdminAdded officeAdmin)
         {
-            MockStore.DocumentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
                  new IndexQuery { Query = "GlobalId:" + officeAdmin.AdminId },
                  new[]
                 {
@@ -110,7 +112,7 @@ namespace Contact.ReadStore.Test.UserStore
 
         private void HandleCompanyAdminRemoved(CompanyAdminRemoved companyAdmin)
         {
-            MockStore.DocumentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
                 new IndexQuery { Query = "GlobalId:" + companyAdmin.AdminId },
                 new[]
                 {
@@ -125,7 +127,7 @@ namespace Contact.ReadStore.Test.UserStore
 
         private void HandleCompanyAdminAdded(CompanyAdminAdded companyAdmin)
         {
-            MockStore.DocumentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
                new IndexQuery { Query = "GlobalId:" + companyAdmin.NewAdminId },
                new[]
                 {
@@ -140,7 +142,7 @@ namespace Contact.ReadStore.Test.UserStore
 
         private void HandleTerminated(EmployeeTerminated employee)
         {
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 var user =
                     session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == employee.Id);
@@ -155,10 +157,10 @@ namespace Contact.ReadStore.Test.UserStore
 
   
       
-        private static void HandleCreated(EmployeeCreated employee)
+        private void HandleCreated(EmployeeCreated employee)
         {
 
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 var existing =
                     session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == employee.GlobalId);

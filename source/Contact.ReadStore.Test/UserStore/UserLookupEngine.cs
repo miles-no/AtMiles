@@ -16,11 +16,11 @@ namespace Contact.ReadStore.Test.UserStore
 {
     public class UserLookupEngine : IResolveUserIdentity
     {
-        private readonly IDocumentStore store = MockStore.DocumentStore;
+        private readonly IDocumentStore store;
 
-        public UserLookupEngine()
+        public UserLookupEngine(IDocumentStore documentStore)
         {
-       
+            store = documentStore;
         }
 
         public string AttachLoginToUser(string companyid, string provider, string providerId, string email, out string message)

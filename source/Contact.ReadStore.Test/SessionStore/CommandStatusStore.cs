@@ -1,13 +1,18 @@
-﻿using Contact.Backend.MockStore;
-using Contact.Domain.Events.CommandSession;
-using Contact.Domain.Events.Employee;
+﻿using Contact.Domain.Events.CommandSession;
 using Contact.Infrastructure;
+using Raven.Client;
 
 namespace Contact.ReadStore.Test.SessionStore
 {
     public class CommandStatusStore
     {
-       
+        private readonly IDocumentStore documentStore;
+
+        public CommandStatusStore(IDocumentStore documentStore)
+        {
+            this.documentStore = documentStore;
+        }
+
         public void PrepareHandler(ReadModelHandler handler)
         {
             handler.RegisterHandler<CommandRequested>(HandleRequested);
@@ -19,7 +24,7 @@ namespace Contact.ReadStore.Test.SessionStore
         {
             var commandSession = new CommandStatus {Id = CommandStatusConstants.Prefix + commandSucceded.CorrelationId, Status = CommandStatusConstants.OkStatus};
             
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 session.Store(commandSession);
                 session.SaveChanges();
@@ -30,7 +35,7 @@ namespace Contact.ReadStore.Test.SessionStore
         {
             var commandSession = new CommandStatus { Id = CommandStatusConstants.Prefix + commandException.CorrelationId, ErrorMessage = commandException.ExceptionMessage, Status = CommandStatusConstants.FailedStatus };
 
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 session.Store(commandSession);
                 session.SaveChanges();
@@ -41,7 +46,7 @@ namespace Contact.ReadStore.Test.SessionStore
         {
             var commandSession = new CommandStatus { Id = CommandStatusConstants.Prefix + commandRequested.CorrelationId, Status = CommandStatusConstants.PendingStatus };
 
-            using (var session = MockStore.DocumentStore.OpenSession())
+            using (var session = documentStore.OpenSession())
             {
                 session.Store(commandSession);
                 session.SaveChanges();

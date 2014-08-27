@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Contact.Backend.MockStore;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
@@ -13,18 +14,22 @@ namespace Contact.Infrastructure.SingleServer
 {
     class Program
     {
+        
+
         static void Main(string[] args)
         {
-            LongRunningProcess commandWorker = null;
+            LongRunningProcess commandWorker;
+            LongRunningProcess readStoreWorker;
 
             var configFilename = Settings.Default.ConfigFile;
             var config = GetConfig(configFilename);
             commandWorker = StartCommandHandler(config);
-
+            readStoreWorker = StartReadModelHandler(config);
             Console.WriteLine("Press enter to finish");
             Console.ReadLine();
-
+            
             commandWorker.Stop();
+            readStoreWorker.Stop();
         }
 
         private static Config GetConfig(string configFilename)
@@ -60,9 +65,10 @@ namespace Contact.Infrastructure.SingleServer
         private static LongRunningProcess StartReadModelHandler(Config config)
         {
             var handlers = new ReadModelHandler();
-            new EmployeeSearchStore().PrepareHandler(handlers);
-            new CommandStatusStore().PrepareHandler(handlers);
-            new UserLookupStore(new UserLookupEngine()).PrepareHandler(handlers);
+            var store = RavenDocumentStore.CreateStore(config.RavenDbUrl);
+            new EmployeeSearchStore(store).PrepareHandler(handlers);
+            new CommandStatusStore(store).PrepareHandler(handlers);
+            new UserLookupStore(new UserLookupEngine(store), store).PrepareHandler(handlers);
 
             var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { });
             read.Start();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Configuration;
 using Contact.Backend.MockStore;
 
 namespace Contact.ReadStore.Test
@@ -9,19 +8,9 @@ namespace Contact.ReadStore.Test
         private static void Main(string[] args)
         {
             var admin = new ReadStoreAdmin();
-            admin.PrepareHandlers();
+            admin.PrepareHandlers(RavenDocumentStore.CreateStore(ConfigurationManager.AppSettings["ravenUrl"]));
             admin.StartListening();
         }
-
-        //TODO
-        public class EventTrackModel
-        {
-            public string Id { get; set; }
-            public string EventType { get; set; }
-            public long? LastVersion { get; set; }
-        }
-
-
        
     }
 }

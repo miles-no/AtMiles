@@ -59,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.MockStore.csproj">
+    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.Store.csproj">
       <Project>{082EE311-417A-4509-A822-45D775919F1E}</Project>
-      <Name>Contact.Backend.MockStore</Name>
+      <Name>Contact.Backend.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>

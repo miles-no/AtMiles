@@ -3,17 +3,18 @@ using Contact.Infrastructure;
 using Contact.ReadStore.Test.SearchStore;
 using Contact.ReadStore.Test.SessionStore;
 using Contact.ReadStore.Test.UserStore;
+using Raven.Client;
 
 namespace Contact.ReadStore.Test
 {
     public class ReadStoreAdmin
     {
         readonly ReadModelHandler handlers = new ReadModelHandler();
-        public void PrepareHandlers()
+        public void PrepareHandlers(IDocumentStore store)
         {
-            new EmployeeSearchStore().PrepareHandler(handlers);
-            new CommandStatusStore().PrepareHandler(handlers);
-            new UserLookupStore(new UserLookupEngine()).PrepareHandler(handlers);
+            new EmployeeSearchStore(store).PrepareHandler(handlers);
+            new CommandStatusStore(store).PrepareHandler(handlers);
+            new UserLookupStore(new UserLookupEngine(store),store).PrepareHandler(handlers);
 
         }
 

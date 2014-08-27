@@ -1,4 +1,6 @@
+using System.Configuration;
 using Contact.Backend.Controllers;
+using Contact.Backend.MockStore;
 using Contact.Backend.Utilities;
 using Contact.Domain;
 using Contact.Infrastructure;
@@ -8,6 +10,7 @@ using Contact.ReadStore.Test.SessionStore;
 using Contact.ReadStore.Test.UserStore;
 using Microsoft.Practices.Unity;
 using System.Web.Http;
+using Raven.Client;
 using Unity.WebApi;
 
 namespace Contact.Backend
@@ -25,14 +28,13 @@ namespace Contact.Backend
             container.RegisterType<TestController>();
             container.RegisterType<HomeController>();
             container.RegisterType<SearchController>();
+            container.RegisterInstance(typeof (IDocumentStore), RavenDocumentStore.CreateStore(ConfigurationManager.AppSettings["ravenUrl"]));
             container.RegisterInstance(MediatorConfig.Create(container));
-            container.RegisterInstance(new EmployeeSearchEngine());
-            container.RegisterInstance(new CommandStatusEngine());
-
+            container.RegisterType<EmployeeSearchEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType(typeof(IResolveUserIdentity), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
             
-            container.RegisterInstance<IResolveUserIdentity>(new UserLookupEngine());
-            
-
             if (Config.UseMockCommandHandler)
             {
                 container.RegisterType<ICommandSender, CommandSenderMock>();

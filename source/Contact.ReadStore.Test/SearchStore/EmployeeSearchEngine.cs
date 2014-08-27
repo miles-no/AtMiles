@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Contact.Backend.MockStore;
 using Raven.Client;
 using Raven.Client.Indexes;
 
@@ -9,14 +8,15 @@ namespace Contact.ReadStore.Test.SearchStore
 {
     public class EmployeeSearchEngine
     {
-        private readonly IDocumentStore store = MockStore.DocumentStore;
+        private readonly IDocumentStore store;
 
-        public EmployeeSearchEngine()
+        public EmployeeSearchEngine(IDocumentStore documentStore)
         {
+            store = documentStore;
             IndexCreation.CreateIndexes(typeof(EmployeeSearchModelIndex).Assembly, store);
         }
 
-
+   
         public List<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {
             searchString = searchString ?? string.Empty;

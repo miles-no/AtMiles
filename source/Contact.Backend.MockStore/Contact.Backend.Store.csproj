@@ -7,8 +7,8 @@
     <ProjectGuid>{082EE311-417A-4509-A822-45D775919F1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.Backend.MockStore</RootNamespace>
-    <AssemblyName>Contact.Backend.MockStore</AssemblyName>
+    <RootNamespace>Contact.Backend.Store</RootNamespace>
+    <AssemblyName>Contact.Backend.Store</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -72,9 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MockStore.cs" />
+    <Compile Include="RavenDocumentStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
