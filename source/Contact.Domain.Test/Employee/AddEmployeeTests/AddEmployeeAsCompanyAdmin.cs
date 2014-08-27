@@ -18,7 +18,6 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private DateTime _timestamp2 = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
-        private FakeCvPartnerImporter _fakeCvPartnerImporter;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
@@ -100,8 +99,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            _fakeCvPartnerImporter = new FakeCvPartnerImporter();
-            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeCvPartnerImporter);
+            return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
         public override IEnumerable<Event> Expect()

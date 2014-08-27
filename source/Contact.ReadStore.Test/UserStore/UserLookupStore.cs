@@ -22,7 +22,7 @@ namespace Contact.ReadStore.Test.UserStore
         public void PrepareHandler(ReadModelHandler handler)
         {
             Mapper.CreateMap<EmployeeCreated, User>()
-                .ForMember(dest => dest.Name, source => source.MapFrom(m => CreateName(m)))
+                .ForMember(dest => dest.Name, source => source.MapFrom(e => NameService.GetName(e.FirstName, e.MiddleName, e.LastName)))
                 .ForMember(dest => dest.LoginId, source => source.MapFrom(s => CreateGlobalId(s)));
 
             //Mapper.CreateMap<ImportedFromCvPartner, User>()
@@ -174,11 +174,5 @@ namespace Contact.ReadStore.Test.UserStore
                 session.SaveChanges();
             }
         }
-
-        private static string CreateName(EmployeeCreated employee)
-        {
-            return employee.FirstName + " " + (string.IsNullOrEmpty(employee.MiddleName) ? string.Empty : (employee.MiddleName + " ")) + employee.LastName;
-        }
-
     }
 }

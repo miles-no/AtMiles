@@ -4,11 +4,17 @@ namespace Contact.Domain.CommandHandlers
 {
     public class MainCommandHandlerFactory
     {
-        public static MainCommandHandler Initialize(IRepository<Company> repositoryCompany, IRepository<Employee> repositoryEmployee, IImportDataFromCvPartner cvPartnerImporter)
+        public static MainCommandHandler Initialize(IRepository<Company> repositoryCompany, IRepository<Employee> repositoryEmployee, IRepository<Global> repositoryGlobal, IImportDataFromCvPartner cvPartnerImporter)
         {
             var cmdHandler = new MainCommandHandler();
 
-            var cmdHandlerCompany = new CompanyCommandHandler(repositoryCompany, repositoryEmployee, cvPartnerImporter);
+            var globalCommandHandler = new GlobalCommandHandler(repositoryCompany, repositoryEmployee, repositoryGlobal, cvPartnerImporter);
+
+            cmdHandler.RegisterHandler<Commands.ImportDataFromCvPartner>(globalCommandHandler.Handle);
+            cmdHandler.RegisterHandler<Commands.AddNewCompanyToSystem>(globalCommandHandler.Handle);
+
+
+            var cmdHandlerCompany = new CompanyCommandHandler(repositoryCompany, repositoryEmployee);
 
             cmdHandler.RegisterHandler<Commands.AddCompanyAdmin>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.AddEmployee>(cmdHandlerCompany.Handle);

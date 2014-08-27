@@ -8,7 +8,7 @@ namespace Contact.Domain.Aggregates
 {
     public class Global : AggregateRoot
     {
-        private const string GlobalId = "GLOBAL";
+        public const string GlobalId = "GLOBAL";
 
         private readonly List<string> _companies;
 
@@ -21,6 +21,11 @@ namespace Contact.Domain.Aggregates
         {
             _id = GlobalId;
             _companies = new List<string>();
+        }
+
+        public bool HasCompany(string companyId)
+        {
+            return _companies.Contains(companyId);
         }
 
         public void AddCompany(Company company, Person createdBy, string correlationId)

@@ -10,15 +10,28 @@
         public static string GetName(string firstName, string middleName, string lastName)
         {
             string name = firstName;
+            if (name == null)
+            {
+                name = string.Empty;
+            }
             
             if (!string.IsNullOrEmpty(middleName))
             {
-                name += " " + middleName;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    name += " ";
+                }
+
+                name += middleName;
             }
 
             if (!string.IsNullOrEmpty(lastName))
             {
-                name += " " + lastName;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    name += " ";
+                }
+                name += lastName;
             }
 
             return name;

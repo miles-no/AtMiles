@@ -1,0 +1,11 @@
+{
+  "EventServerHost": "host",
+  "EventServerSUsername": "un",
+  "EventServerSPassword": "pwd",
+  "RabbitMqHost": "host",
+  "RabbitMqUsername": "un",
+  "RabbitMqPassword": "pw",
+  "RabbitMqQueueName": "Queue",
+  "CvPartnerToken": "12345",
+  "RavenDbUrl": "http://localhost:8080"
+}

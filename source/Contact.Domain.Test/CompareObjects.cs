@@ -339,6 +339,11 @@ namespace Contact.Domain.Test
             {
                 CompareUri(object1, object2, breadCrumb);
             }
+            else if (IsString(t1))
+            {
+                CompareString(object1, object2, breadCrumb);
+            }
+
             else if (IsSimpleType(t1))
             {
                 CompareSimpleType(object1, object2, breadCrumb);
@@ -387,6 +392,14 @@ namespace Contact.Domain.Test
             if (t1.FullName != t2.FullName)
             {
                 Differences.Add(string.Format("object1{0} != object2{0} ({1},{2})", breadCrumb, t1.FullName, t2.FullName));
+            }
+        }
+
+        private void CompareString(object object1, object object2, string breadCrumb)
+        {
+            if ((string) object1 != (string) object2)
+            {
+                Differences.Add(string.Format("object1{0} != object2{0}", breadCrumb));
             }
         }
 
@@ -929,6 +942,11 @@ namespace Contact.Domain.Test
         private bool IsStruct(Type type)
         {
             return type.IsValueType && !IsSimpleType(type);
+        }
+
+        private bool IsString(Type type)
+        {
+            return type == typeof(string);
         }
 
         private bool IsSimpleType(Type type)

@@ -14,7 +14,7 @@ namespace Contact.Infrastructure
         private readonly string _rabbitMqUsername;
         private readonly string _rabbitMqPassword;
         private readonly string _rabbitMqQueueName;
-        private const int RabbitMqRequestedHeartbeat = 30;
+        private const int RabbitMqRequestedHeartbeat = 90;
         private Subscription _brokerSubscription;
         private IConnection _brokerConnection;
         private IModel _brokerChannel;
