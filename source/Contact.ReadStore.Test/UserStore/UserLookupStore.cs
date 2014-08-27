@@ -4,6 +4,7 @@ using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
 using Contact.Domain.Services;
+using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 using Raven.Abstractions.Data;
 using Raven.Client;
@@ -27,9 +28,9 @@ namespace Contact.ReadStore.UserStore
                 .ForMember(dest => dest.Name, source => source.MapFrom(e => NameService.GetName(e.FirstName, e.MiddleName, e.LastName)))
                 .ForMember(dest => dest.LoginId, source => source.MapFrom(s => CreateGlobalId(s)));
 
-            //Mapper.CreateMap<ImportedFromCvPartner, User>()
-            //   .ForMember(dest => dest.Name, source => source.MapFrom(m => CreateName(m)))
-            //   .ForMember(dest => dest.LoginId, source => source.MapFrom(s => CreateGlobalId(s)));
+            Mapper.CreateMap<ImportedFromCvPartner, User>()
+                .ForMember(dest => dest.Name,
+                    source => source.MapFrom(e => NameService.GetName(e.FirstName, e.MiddleName, e.LastName)));
            
             handler.RegisterHandler<EmployeeCreated>(HandleCreated);
             handler.RegisterHandler<EmployeeTerminated>(HandleTerminated);
@@ -38,17 +39,28 @@ namespace Contact.ReadStore.UserStore
             handler.RegisterHandler<OfficeAdminAdded>(HandleOfficeAdminAdded);
             handler.RegisterHandler<OfficeAdminRemoved>(HandleOfficeAdminRemoved);
             handler.RegisterHandler<OfficeClosed>(HandleOfficeClosed);
-            //handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
+            handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
 
            
         }
 
         private void HandleImportCvPartner(ImportedFromCvPartner person)
         {
-            var searchModel = Mapper.Map<ImportedFromCvPartner, User>(person);
             using (var session = documentStore.OpenSession())
             {
-                session.Store(searchModel);
+
+                var existing =
+                   session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == person.EmployeeId);
+                if (existing != null)
+                {
+                    Mapper.Map(person, existing);
+                }
+                else
+                {
+                    existing = Mapper.Map<ImportedFromCvPartner, User>(person);
+                }
+
+                session.Store(existing);
                 session.SaveChanges();
             }
         }
@@ -61,6 +73,8 @@ namespace Contact.ReadStore.UserStore
             }
             return null;
         }
+
+        
 
         private void HandleOfficeClosed(OfficeClosed office)
         {

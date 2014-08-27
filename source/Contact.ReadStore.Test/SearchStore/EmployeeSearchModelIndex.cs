@@ -1,4 +1,5 @@
 using System.Linq;
+using Contact.Domain;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
@@ -15,15 +16,37 @@ namespace Contact.ReadStore.SearchStore
         {
 
             AddMap<EmployeeSearchModel>(personSearchModels =>
-                from person in personSearchModels
+                from person in personSearchModels.Where(w=>w.Id != Constants.SystemUserId)
                 select new
                 {
                     Content = new[] { person.Name, person.Name, person.OfficeId, person.JobTitle, person.Email, 
-                        string.Join(" ", person.Competency.Select(s => s.InternationalCompentency)).Replace("#","sharp"), 
-                        string.Join(" ", person.Competency.Select(s => s.Competency)).Replace("#","sharp") }
+                        string.Join<object>(" ", person.Competency.Select(s => s.InternationalCompentency)).Replace("#","sharp"), 
+                        string.Join<object>(" ", person.Competency.Select(s => s.Competency)).Replace("#","sharp"),
+                        string.Join<object>(" ", person.KeyQualifications)
+                    }
                 });
 
             Index(p => p.Content, FieldIndexing.Analyzed);
+        }
+    }
+
+    public class EmployeeSearchModelLookupIndex : AbstractIndexCreationTask<EmployeeSearchModel>
+    {
+        public EmployeeSearchModelLookupIndex()
+        {
+            Map = u =>
+                from person in u
+                select new
+                {
+                    person.GlobalId,
+                    person.CompanyId,
+                    person.Email,
+                };
+
+            Index(p => p.CompanyId, FieldIndexing.NotAnalyzed);
+            Index(p => p.GlobalId, FieldIndexing.NotAnalyzed);
+            Index(p => p.Email, FieldIndexing.NotAnalyzed);
+    
         }
     }
 

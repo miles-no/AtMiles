@@ -40,7 +40,7 @@ namespace Contact.ReadStore.UserStore
                 user = session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.CompanyId == companyid && w.Email == email);
             }
             
-            if (user != null)
+            if (user != null && user.LoginId != loginId)
             {
                 globalId = user.GlobalId;
                 store.DatabaseCommands.Patch(user.Id, new[]

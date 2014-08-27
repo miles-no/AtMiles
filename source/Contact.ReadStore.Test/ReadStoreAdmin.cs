@@ -4,6 +4,7 @@ using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Contact.ReadStore.UserStore;
 using Raven.Client;
+using Raven.Client.Indexes;
 
 namespace Contact.ReadStore
 {
@@ -12,6 +13,7 @@ namespace Contact.ReadStore
         readonly ReadModelHandler handlers = new ReadModelHandler();
         public void PrepareHandlers(IDocumentStore store)
         {
+            IndexCreation.CreateIndexes(GetType().Assembly, store);
             new EmployeeSearchStore(store).PrepareHandler(handlers);
             new CommandStatusStore(store).PrepareHandler(handlers);
             new UserLookupStore(new UserLookupEngine(store),store).PrepareHandler(handlers);

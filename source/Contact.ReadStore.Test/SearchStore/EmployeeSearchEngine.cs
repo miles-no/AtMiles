@@ -13,7 +13,6 @@ namespace Contact.ReadStore.SearchStore
         public EmployeeSearchEngine(IDocumentStore documentStore)
         {
             store = documentStore;
-            IndexCreation.CreateIndexes(typeof(EmployeeSearchModelIndex).Assembly, store);
         }
 
    
