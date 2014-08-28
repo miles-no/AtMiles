@@ -24,6 +24,10 @@ namespace Contact.Domain.CommandHandlers
             cmdHandler.RegisterHandler<Commands.RemoveCompanyAdmin>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.RemoveOfficeAdmin>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.TerminateEmployee>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.MoveEmployeeToNewOffice>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.AddBusyTime>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.RemoveBusyTime>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.ConfirmBusyTimeEntries>(cmdHandlerCompany.Handle);
 
             return cmdHandler;
         }

@@ -13,7 +13,11 @@ namespace Contact.Domain.CommandHandlers
         Handles<OpenOffice>,
         Handles<CloseOffice>,
         Handles<AddEmployee>,
-        Handles<TerminateEmployee>
+        Handles<TerminateEmployee>,
+        Handles<MoveEmployeeToNewOffice>,
+        Handles<AddBusyTime>,
+        Handles<RemoveBusyTime>,
+        Handles<ConfirmBusyTimeEntries>
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
@@ -184,6 +188,33 @@ namespace Contact.Domain.CommandHandlers
         private static void CheckIfHandlingSelf(Employee admin, Employee employee)
         {
             if (admin.Id == employee.Id) throw new NoAccessException("Cannot perform operation on self");
+        }
+
+        public void Handle(MoveEmployeeToNewOffice message)
+        {
+            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
+
+            var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
+
+            //TODO: Implement
+        }
+
+        public void Handle(AddBusyTime message)
+        {
+            //TODO: Implement
+        }
+
+        public void Handle(RemoveBusyTime message)
+        {
+            //TODO: Implement
+        }
+
+        public void Handle(ConfirmBusyTimeEntries message)
+        {
+            //TODO: Implement
         }
     }
 }

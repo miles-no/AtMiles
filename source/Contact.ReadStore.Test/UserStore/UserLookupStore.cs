@@ -41,6 +41,11 @@ namespace Contact.ReadStore.UserStore
             handler.RegisterHandler<OfficeClosed>(HandleOfficeClosed);
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
 
+            //handler.RegisterHandler<BusyTimeAdded>(Handle???);
+            //handler.RegisterHandler<BusyTimeRemoved>(Handle???);
+            //handler.RegisterHandler<BusyTimeConfirmed>(Handle???);
+            //handler.RegisterHandler<EmployeeMovedToNewOffice>(Handle???);
+
            
         }
 

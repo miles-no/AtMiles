@@ -54,12 +54,16 @@
     <Compile Include="CommandHandlers\GlobalCommandHandler.cs" />
     <Compile Include="CommandHandlers\MainCommandHandler.cs" />
     <Compile Include="CommandHandlers\MainCommandHandlerFactory.cs" />
+    <Compile Include="Commands\AddBusyTime.cs" />
     <Compile Include="Commands\AddCompanyAdmin.cs" />
     <Compile Include="Commands\AddEmployee.cs" />
     <Compile Include="Commands\AddOfficeAdmin.cs" />
     <Compile Include="Commands\CloseOffice.cs" />
+    <Compile Include="Commands\ConfirmBusyTimeEntries.cs" />
     <Compile Include="Commands\ImportDataFromCvPartner.cs" />
+    <Compile Include="Commands\MoveEmployeeToNewOffice.cs" />
     <Compile Include="Commands\OpenOffice.cs" />
+    <Compile Include="Commands\RemoveBusyTime.cs" />
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
     <Compile Include="Commands\RemoveOfficeAdmin.cs" />
     <Compile Include="Commands\AddNewCompanyToSystem.cs" />
@@ -75,6 +79,10 @@
     <Compile Include="Events\Company\CompanyAdminRemoved.cs" />
     <Compile Include="Events\Company\CompanyCreated.cs" />
     <Compile Include="Events\Company\EmployeeAdded.cs" />
+    <Compile Include="Events\Company\EmployeeMovedToNewOffice.cs" />
+    <Compile Include="Events\Employee\BusyTimeAdded.cs" />
+    <Compile Include="Events\Employee\BusyTimeConfirmed.cs" />
+    <Compile Include="Events\Employee\BusyTimeRemoved.cs" />
     <Compile Include="Events\Employee\EmployeeCreated.cs" />
     <Compile Include="Events\Company\EmployeeRemoved.cs" />
     <Compile Include="Events\Employee\EmployeeTerminated.cs" />
