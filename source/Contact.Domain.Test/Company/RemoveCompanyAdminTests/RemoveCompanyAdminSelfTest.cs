@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 {
     [TestFixture]
-    public class RemoveCompanyAdminWithoutPermission : EventSpecification<RemoveCompanyAdmin>
+    public class RemoveCompanyAdminSelfTest : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -35,7 +35,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_without_permission()
+        public void remove_company_admin_self()
         {
             ExpectedException = new NoAccessException(string.Empty);
             Setup();
@@ -62,6 +62,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName), DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName), DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                 };
             return events;
@@ -79,7 +80,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 
         public override RemoveCompanyAdmin When()
         {
-            var cmd = new RemoveCompanyAdmin(CompanyId, NewAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
+            var cmd = new RemoveCompanyAdmin(CompanyId, ExistingAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
             return cmd;
         }
 

@@ -4,7 +4,6 @@
     {
         public readonly string InternationalDescription;
         public readonly string LocalDescription;
-
         public readonly CvPartnerKeyPoint[] Keypoints;
 
         public CvPartnerKeyQualification(string internationalDescription, string localDescription, CvPartnerKeyPoint[] keypoints)

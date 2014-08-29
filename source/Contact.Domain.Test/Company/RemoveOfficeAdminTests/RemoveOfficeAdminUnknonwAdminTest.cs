@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
 {
     [TestFixture]
-    public class RemoveOfficeAdminSelfWithoutBeingCompanyAdmin : EventSpecification<RemoveOfficeAdmin>
+    public class RemoveOfficeAdminUnknonwAdminTest : EventSpecification<RemoveOfficeAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -24,15 +24,17 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
-        private const string Admin1Id = "adm1";
-        private const string Admin1FirstName = "Admin";
-        private const string Admin1LastName = "Adminson";
-        private static readonly DateTime Admin1DateOfBirth = new DateTime(1980, 01, 01);
+        private const string AdminId = "adm1";
+        private const string AdminFirstName = "Admin";
+        private const string AdminLastName = "Adminson";
+        private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
+
+        private const string Admin2Id = "adm2";
 
         [Test]
-        public void remove_office_admin_self_without_being_company_admin()
+        public void remove_office_admin_unknown_admin()
         {
-            ExpectedException = new NoAccessException(string.Empty);
+            ExpectedException = new UnknownItemException(string.Empty);
             Setup();
         }
 
@@ -55,10 +57,10 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName), null, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
-                    new FakeStreamEvent(CompanyId, new OfficeAdminAdded(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, NameService.GetName(Admin1FirstName , Admin1LastName), DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, NameService.GetName(AdminFirstName , AdminLastName), null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName), DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId)),
                 };
             return events;
         }
@@ -67,14 +69,14 @@ namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(Admin1Id, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Admin1Id, null, Admin1FirstName, string.Empty, Admin1LastName, Admin1DateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)), _correlationId)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
                 };
             return events;
         }
 
         public override RemoveOfficeAdmin When()
         {
-            var cmd = new RemoveOfficeAdmin(CompanyId, OfficeId, Admin1Id, DateTime.UtcNow, new Person(Admin1Id, NameService.GetName(Admin1FirstName, Admin1LastName)), _correlationId, 5);
+            var cmd = new RemoveOfficeAdmin(CompanyId, OfficeId, Admin2Id, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 5);
             return cmd;
         }
 

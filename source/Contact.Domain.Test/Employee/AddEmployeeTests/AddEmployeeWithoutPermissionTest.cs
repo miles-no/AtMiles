@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
+using Contact.Domain.Events.Employee;
 using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
@@ -11,7 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Employee.AddEmployeeTests
 {
     [TestFixture]
-    public class AddEmployeeUnknownAdmin : EventSpecification<AddEmployee>
+    public class AddEmployeeWithoutPermissionTest : EventSpecification<AddEmployee>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -28,17 +29,16 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string AdminLastName = "Adminson";
         private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
-        private readonly string employeeGlobalId = new Guid().ToString();
-        private readonly Login employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
-
+        private readonly string _employeeGlobalId = new Guid().ToString();
+        private readonly Login _employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
-        public void add_employee_unknown_admin()
+        public void add_employee_without_permission()
         {
-            ExpectedException = new UnknownItemException(string.Empty);
+            ExpectedException = new NoAccessException(string.Empty);
             Setup();
         }
 
@@ -69,12 +69,16 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         public IEnumerable<FakeStreamEvent> GivenEmployee()
         {
-            yield break;
+            var events = new List<FakeStreamEvent>
+                {
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
+                };
+            return events;
         }
 
         public override AddEmployee When()
         {
-            var cmd = new AddEmployee(CompanyId, OfficeId, employeeGlobalId, employeeLoginId, EmployeeFirstName, EmployeeLastName, EmployeeDateOfBirth, string.Empty, string.Empty, string.Empty, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new AddEmployee(CompanyId, OfficeId, _employeeGlobalId,_employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty, string.Empty, string.Empty, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId,2);
             return cmd;
         }
 

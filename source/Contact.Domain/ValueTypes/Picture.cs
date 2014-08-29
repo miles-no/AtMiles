@@ -2,11 +2,11 @@
 {
     public class Picture
     {
-        public string Title { get; private set; }
-        public string Extension { get; private set; }
-        public byte[] Content { get; private set; }
-        public string ContentType { get; private set; }
-        public byte[] Md5Hash { get; private set; }
+        public readonly string Title;
+        public readonly string Extension;
+        public readonly byte[] Content;
+        public readonly string ContentType;
+        public readonly byte[] Md5Hash;
 
         public Picture(string title, string extension, byte[] content, string contentType, byte[] md5Hash)
         {

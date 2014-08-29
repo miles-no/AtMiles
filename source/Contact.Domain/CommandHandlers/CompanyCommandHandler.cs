@@ -199,22 +199,71 @@ namespace Contact.Domain.CommandHandlers
             if (company == null) throw new UnknownItemException("Unknown ID for company");
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
+            if (!company.IsOffice(message.OldOfficeId)) throw new UnknownItemException("Unknown ID for Office to be moved from");
+
+            if (!company.IsOffice(message.NewOfficeId)) throw new UnknownItemException("Unknown ID for Office to be moved to");
+
             //TODO: Implement
         }
 
         public void Handle(AddBusyTime message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
+
+            var office = company.GetOffice(message.OfficeId);
+
+            if (!office.HasUser(message.EmployeeId)) throw new UnknownItemException("User not in office");
+
+            var employee = _employeeRepository.GetById(message.EmployeeId);
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
+
+            employee.AddBusyTime(company.Id, company.Name, office.Id, office.Name, message.Start, message.End,
+                message.PercentageOccpied, message.Comment, message.CreatedBy, message.CorrelationId);
+
+            _employeeRepository.Save(employee, message.BasedOnVersion);
         }
 
         public void Handle(RemoveBusyTime message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
+
+            var office = company.GetOffice(message.OfficeId);
+
+            if (!office.HasUser(message.EmployeeId)) throw new UnknownItemException("User not in office");
+
+            var employee = _employeeRepository.GetById(message.EmployeeId);
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
+
+            employee.RemoveBusyTime(company.Id, company.Name, office.Id, office.Name, message.BusyTimeId,
+                message.CreatedBy, message.CorrelationId);
+
+            _employeeRepository.Save(employee, message.BasedOnVersion);
         }
 
         public void Handle(ConfirmBusyTimeEntries message)
         {
-            //TODO: Implement
+            var company = _companyRepository.GetById(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+
+            if (!company.IsOffice(message.OfficeId)) throw new UnknownItemException("Unknown ID for Office");
+
+            var office = company.GetOffice(message.OfficeId);
+
+            if (!office.HasUser(message.EmployeeId)) throw new UnknownItemException("User not in office");
+
+            var employee = _employeeRepository.GetById(message.EmployeeId);
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
+
+            employee.ConfirmBusyTimeEntries(company.Id, company.Name, office.Id, office.Name, message.CreatedBy, message.CorrelationId);
+
+            _employeeRepository.Save(employee, message.BasedOnVersion);
+
         }
     }
 }

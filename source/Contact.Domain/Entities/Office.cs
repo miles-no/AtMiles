@@ -56,6 +56,13 @@ namespace Contact.Domain.Entities
             return _employees.Count == 0;
         }
 
+        public bool HasUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return false;
+
+            return _employees.Any(u => u.Id == userId);
+        }
+
         public bool HasUser(Login login)
         {
             if (login == null) return false;

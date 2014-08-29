@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Employee.AddEmployeeTests
 {
     [TestFixture]
-    public class AddEmployeeAsOfficeAdmin : EventSpecification<AddEmployee>
+    public class AddEmployeeAsOfficeAdminTest : EventSpecification<AddEmployee>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private DateTime _timestamp1 = DateTime.MinValue;

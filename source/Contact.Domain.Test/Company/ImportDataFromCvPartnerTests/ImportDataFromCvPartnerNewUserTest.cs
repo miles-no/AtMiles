@@ -36,20 +36,20 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
 
         public string _employeeId = string.Empty;
 
-        private readonly CvPartnerImportData _importData = new CvPartnerImportData
-        {
-            FirstName = "Ole",
-            MiddleName = string.Empty,
-            LastName = "Olsen",
-            DateOfBirth = new DateTime(1990, 1, 1),
-            Email = "ole.olsen@miles.no",
-            Phone = "123456789",
-            Title = "Senior Consultant",
-            UpdatedAt = new DateTime(2014, 6, 6),
-            KeyQualifications = new[] { new CvPartnerKeyQualification("Tester", "Tester", null) },
-            OfficeName = "Stavanger",
-            Technologies = null
-        };
+        private readonly CvPartnerImportData _importData = new CvPartnerImportData(
+            firstName: "Ole",
+            middleName: string.Empty,
+            lastName: "Olsen",
+            dateOfBirth: new DateTime(1990, 1, 1),
+            email: "ole.olsen@miles.no",
+            phone: "123456789",
+            title: "Senior Consultant",
+            officeName: "Stavanger",
+            updatedAt: new DateTime(2014, 6, 6),
+            keyQualifications: new[] { new CvPartnerKeyQualification("Tester", "Tester", null) },
+            technologies: null,
+            photo: null
+        );
 
         [Test]
         public void import_data_from_CvPartner_new_user()

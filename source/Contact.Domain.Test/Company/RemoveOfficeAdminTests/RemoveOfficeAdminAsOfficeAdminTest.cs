@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveOfficeAdminTests
 {
     [TestFixture]
-    public class RemoveOfficeAdminAsOfficeAdmin : EventSpecification<RemoveOfficeAdmin>
+    public class RemoveOfficeAdminAsOfficeAdminTest : EventSpecification<RemoveOfficeAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private DateTime _timestamp = DateTime.MinValue;

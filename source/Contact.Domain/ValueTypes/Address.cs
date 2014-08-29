@@ -2,9 +2,9 @@
 {
     public class Address
     {
-        public string Street { get; private set; }
-        public string PostalCode { get; private set; }
-        public string PostalName { get; private set; }
+        public readonly string Street;
+        public readonly string PostalCode;
+        public readonly string PostalName;
 
         public Address(string street, string postalCode, string postalName)
         {

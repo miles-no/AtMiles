@@ -50,21 +50,20 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
             var technologies = ConvertCvTechnologies(cv.Technologies);
             var keyQualifications = ConvertCvKeyCompetence(cv.KeyQualifications);
-            var res = new CvPartnerImportData
-            {
-                FirstName = givenName,
-                MiddleName = middleName,
-                LastName = familyName,
-                DateOfBirth = bornDate,
-                Email = employee.Email,
-                Phone = cv.Phone,
-                Title = cv.Title,
-                UpdatedAt = cv.UpdatedAt,
-                KeyQualifications = keyQualifications,
-                Technologies = technologies,
-                Photo = employeePhoto,
-                OfficeName = employee.OfficeName
-            };
+            var res = new CvPartnerImportData(
+                firstName: givenName,
+                middleName: middleName,
+                lastName: familyName,
+                dateOfBirth: bornDate,
+                email: employee.Email,
+                phone: cv.Phone,
+                title: cv.Title,
+                officeName: employee.OfficeName,
+                updatedAt: cv.UpdatedAt,
+                keyQualifications: keyQualifications,
+                technologies: technologies,
+                photo: employeePhoto
+            );
             return res;
         }
 

@@ -98,6 +98,7 @@
     <Compile Include="Exceptions\LastItemException.cs" />
     <Compile Include="Exceptions\NoAccessException.cs" />
     <Compile Include="Exceptions\UnknownItemException.cs" />
+    <Compile Include="Exceptions\ValueException.cs" />
     <Compile Include="Handles.cs" />
     <Compile Include="ICommandSender.cs" />
     <Compile Include="IEventPublisher.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Services\IdService.cs" />
     <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
+    <Compile Include="ValueTypes\BusyTimeEntry.cs" />
     <Compile Include="ValueTypes\CvPartnerImportData.cs" />
     <Compile Include="ValueTypes\CvPartnerKeyPoint.cs" />
     <Compile Include="ValueTypes\CvPartnerKeyQualification.cs" />

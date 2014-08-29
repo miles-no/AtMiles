@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 {
     [TestFixture]
-    public class RemoveCompanyAdminUnknown : EventSpecification<RemoveCompanyAdmin>
+    public class RemoveCompanyAdminLastAdminTest : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -26,15 +26,13 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string ExistingAdminLastName = "Admin";
         private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
 
-        private const string NewAdminId = "new1";
-
         private const string OfficeId = "office1";
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_unknown_admin_to_remove()
+        public void remove_company_admin_last_admin()
         {
-            ExpectedException = new UnknownItemException(string.Empty);
+            ExpectedException = new LastItemException(string.Empty);
             Setup();
         }
 
@@ -75,7 +73,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 
         public override RemoveCompanyAdmin When()
         {
-            var cmd = new RemoveCompanyAdmin(CompanyId, NewAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
+            var cmd = new RemoveCompanyAdmin(CompanyId, ExistingAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
             return cmd;
         }
 

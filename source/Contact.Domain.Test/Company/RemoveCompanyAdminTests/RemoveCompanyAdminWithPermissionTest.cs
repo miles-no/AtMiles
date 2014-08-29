@@ -1,10 +1,10 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
-using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
@@ -12,9 +12,10 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 {
     [TestFixture]
-    public class RemoveCompanyAdminLastAdmin : EventSpecification<RemoveCompanyAdmin>
+    public class RemoveCompanyAdminWithPermissionTest : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -26,19 +27,27 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string ExistingAdminLastName = "Admin";
         private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
 
+        private const string NewAdminId = "new1";
+        private const string NewAdminFirstName = "New";
+        private const string NewAdminLastName = "Admin";
+        private static readonly DateTime NewAdminDateOfBirth = new DateTime(1981, 01, 01);
+
         private const string OfficeId = "office1";
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_last_admin()
+        public void remove_company_admin_with_permission()
         {
-            ExpectedException = new LastItemException(string.Empty);
             Setup();
         }
 
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
+            if (events.Count == 1)
+            {
+                _timestamp = events[0].Created;
+            }
             return events;
         }
 
@@ -58,6 +67,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName), DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
+                    new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName), DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                 };
             return events;
         }
@@ -67,13 +77,14 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, ExistingAdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, NewAdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
                 };
             return events;
         }
 
         public override RemoveCompanyAdmin When()
         {
-            var cmd = new RemoveCompanyAdmin(CompanyId, ExistingAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
+            var cmd = new RemoveCompanyAdmin(CompanyId, NewAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
             return cmd;
         }
 
@@ -86,7 +97,11 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 
         public override IEnumerable<Event> Expect()
         {
-            yield break;
+            var events = new List<Event>
+                {
+                    new CompanyAdminRemoved(CompanyId, CompanyName, NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName), _timestamp, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)
+                };
+            return events;
         }
     }
 }

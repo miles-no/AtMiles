@@ -1,21 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Contact.Domain.ValueTypes
 {
     public class CvPartnerImportData
     {
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string Title { get; set; }
-        public string OfficeName { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public CvPartnerKeyQualification[] KeyQualifications { get; set; }
-        public CvPartnerTechnology[] Technologies { get; set; }
-        public Picture Photo { get; set; }
+        public readonly string FirstName;
+        public readonly string MiddleName;
+        public readonly string LastName;
+        public readonly DateTime? DateOfBirth;
+        public readonly string Email;
+        public readonly string Phone;
+        public readonly string Title;
+        public readonly string OfficeName;
+        public readonly DateTime UpdatedAt;
+        public readonly CvPartnerKeyQualification[] KeyQualifications;
+        public readonly CvPartnerTechnology[] Technologies;
+        public readonly Picture Photo;
+
+        public CvPartnerImportData(string firstName, string middleName, string lastName, DateTime? dateOfBirth,
+            string email, string phone, string title, string officeName, DateTime updatedAt,
+            CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo)
+        {
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            Email = email;
+            Phone = phone;
+            Title = title;
+            OfficeName = officeName;
+            UpdatedAt = updatedAt;
+            KeyQualifications = keyQualifications;
+            Technologies = technologies;
+            Photo = photo;
+        }
     }
 }
