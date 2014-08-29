@@ -69,6 +69,14 @@ namespace Contact.Backend.Controllers
             return mediator.Send<AddCompanyAdminRequest, Response>(addCompanyAdminRequest, User.Identity);
         }
 
+        [HttpPost]
+        [Route("api/company/{companyId}/office/{oldofficeId}/employee/{employeeId}/movetooffice/{newOfficeId}")]
+        public Response MoveToNewOffice(string companyId, string oldofficeId, string employeeId, string newOfficeId)
+        {
+            var request = new MoveEmployeeToNewOfficeRequest { CompanyId = companyId, OldOfficeId = oldofficeId, NewOfficeId = newOfficeId, EmployeeId = employeeId};
+            return mediator.Send<MoveEmployeeToNewOfficeRequest, Response>(request, User.Identity);
+        }
+
         /// <summary>
         /// Removes administrative rights for a employee in a company
         /// </summary>

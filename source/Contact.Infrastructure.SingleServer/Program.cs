@@ -27,9 +27,10 @@ namespace Contact.Infrastructure.SingleServer
             readStoreWorker = StartReadModelHandler(config);
             Console.WriteLine("Press enter to finish");
             Console.ReadLine();
-            
+            Console.WriteLine("Stopping.......");
             commandWorker.Stop();
             readStoreWorker.Stop();
+            Console.WriteLine("Stopped");
         }
 
         private static Config GetConfig(string configFilename)
@@ -73,7 +74,7 @@ namespace Contact.Infrastructure.SingleServer
             var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { });
             read.Start();
 
-            return null;
+            return read;
         }
     }
 }

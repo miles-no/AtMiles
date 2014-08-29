@@ -159,6 +159,37 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
+        public void MoveEmployeeToNewOffice(Employee employee, string oldOfficeId, string newOfficeId, Person createdBy, string correlationId)
+        {
+            var oldOffice = GetOffice(oldOfficeId);
+            var newOffice = GetOffice(newOfficeId);
+
+            if(!oldOffice.HasUser(employee.Id)) throw new UnknownItemException("Employee not found in Office to move from.");
+
+            var ev = new EmployeeMovedToNewOffice(_id, Name, oldOffice.Id, oldOffice.Name, newOffice.Id, newOffice.Name,
+                employee.Id, employee.Name, DateTime.UtcNow, createdBy, correlationId);
+            ApplyChange(ev);
+        }
+
+        public string GetUserIdByLoginId(Login login)
+        {
+            foreach (var office in _offices)
+            {
+                if (office.HasUser(login))
+                {
+                    return office.GetUserId(login);
+                }
+            }
+
+            //Not found
+            return string.Empty;
+        }
+
+        public Office GetOfficeByName(string officeName)
+        {
+            return _offices.FirstOrDefault(o => o.Name == officeName);
+        }
+
         [UsedImplicitly] //To keep resharper happy
         private void Apply(CompanyCreated ev)
         {
@@ -230,23 +261,14 @@ namespace Contact.Domain.Aggregates
             office.RemoveEmployee(ev.Id);
         }
 
-        public string GetUserIdByLoginId(Login login)
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(EmployeeMovedToNewOffice ev)
         {
-            foreach (var office in _offices)
-            {
-                if (office.HasUser(login))
-                {
-                    return office.GetUserId(login);
-                }
-            }
-
-            //Not found
-            return string.Empty;
-        }
-
-        public Office GetOfficeByName(string officeName)
-        {
-            return _offices.FirstOrDefault(o => o.Name == officeName);
+            var oldOffice = GetOffice(ev.OldOfficeId);
+            var newOffice = GetOffice(ev.NewOfficeId);
+            var employee = oldOffice.GetEmployee(ev.EmployeeId);
+            oldOffice.RemoveEmployee(ev.EmployeeId);
+            newOffice.AddEmployee(employee);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Contact.Domain.Aggregates;
 using Contact.Domain.ValueTypes;
 
 namespace Contact.Domain.Entities
@@ -90,6 +91,13 @@ namespace Contact.Domain.Entities
                 var employeeLoginInfo = _employees.FirstOrDefault(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
                 return employeeLoginInfo != null ? employeeLoginInfo.Id : string.Empty;
             }
+        }
+
+        public EmployeeLoginInfo GetEmployee(string employeeId)
+        {
+            if (!HasUser(employeeId)) return null;
+            
+            return _employees.First(u => u.Id == employeeId);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Contact.Domain.Aggregates
         private string _lastName;
         private Login _loginId;
         private DateTime _lastImportUpdateAt = DateTime.MinValue;
-        private List<BusyTimeEntry> _busyTimeEntries;
+        private readonly List<BusyTimeEntry> _busyTimeEntries;
 
         public string Name
         {

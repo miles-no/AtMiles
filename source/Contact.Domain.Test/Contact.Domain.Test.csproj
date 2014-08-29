@@ -73,7 +73,7 @@
     <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerNewUserAndNewOfficeTest.cs" />
     <Compile Include="Company\ImportDataFromCvPartnerTests\ImportDataFromCvPartnerNewUserTest.cs" />
     <Compile Include="Company\MoveEmployeeToNewOfficeTests\MoveEmployeeToNewOfficeTest.cs" />
-    <Compile Include="Company\MoveEmployeeToNewOfficeTests\MoveEmployeeToNewOfficeUnknownNewOffice.cs" />
+    <Compile Include="Company\MoveEmployeeToNewOfficeTests\MoveEmployeeToNewOfficeUnknownNewOfficeTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeExistingOfficeIdTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeUnknownAdminTest.cs" />
     <Compile Include="Company\OpenOfficeTests\OpenOfficeWithoutPermisionTest.cs" />

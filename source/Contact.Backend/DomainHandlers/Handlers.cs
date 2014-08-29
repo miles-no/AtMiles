@@ -34,6 +34,91 @@ namespace Contact.Backend.DomainHandlers
 
             RegisterImportFromCvPartner(mediator, container);
 
+            RegisterMoveEmployeeToNewOffice(mediator, container);
+
+            RegisterAddBusyTime(mediator, container);
+            RegisterRemoveBusyTime(mediator, container);
+            RegisterConfirmBusyTimeEntries(mediator, container);
+
+        }
+
+        private static void RegisterMoveEmployeeToNewOffice(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<MoveEmployeeToNewOfficeRequest, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var command = new MoveEmployeeToNewOffice(req.CompanyId, req.OldOfficeId, req.NewOfficeId, req.EmployeeId, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
+        }
+
+        private static void RegisterAddBusyTime(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<AddBusyTimeRequest, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new AddBusyTime(req.CompanyId, req.OfficeId, createdBy.Identifier, req.Start, req.End, req.PercentageOccupied, req.Comment, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
+        }
+
+        private static void RegisterRemoveBusyTime(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<RemoveBusyTimeRequest, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new RemoveBusyTime(req.CompanyId, req.OfficeId, createdBy.Identifier, req.BustTimeEntryId, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
+        }
+
+        private static void RegisterConfirmBusyTimeEntries(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<ConfirmBusyTimeEntriesRequest, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new ConfirmBusyTimeEntries(req.CompanyId, req.OfficeId, createdBy.Identifier, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
         }
 
         private static void RegisterImportFromCvPartner(IMediator mediator, IUnityContainer container)

@@ -4,6 +4,7 @@ using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
+using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
@@ -11,11 +12,9 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.MoveEmployeeToNewOfficeTests
 {
     [TestFixture]
-    public class MoveEmployeeToNewOfficeTest : EventSpecification<MoveEmployeeToNewOffice>
+    public class MoveEmployeeToNewOfficeUnknownNewOfficeTest : EventSpecification<MoveEmployeeToNewOffice>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
-        private DateTime _timestamp = DateTime.MinValue;
-
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -39,18 +38,15 @@ namespace Contact.Domain.Test.Company.MoveEmployeeToNewOfficeTests
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(1980, 01, 01);
 
         [Test]
-        public void move_employee_to_new_office()
+        public void move_employee_to_new_office_unknown_new_office()
         {
+            ExpectedException = new UnknownItemException("Unknown ID for Office to move to.");
             Setup();
         }
 
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
-            if (events.Count == 1)
-            {
-                _timestamp = events[0].Created;
-            }
             return events;
         }
 
@@ -70,7 +66,6 @@ namespace Contact.Domain.Test.Company.MoveEmployeeToNewOfficeTests
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, admin,"INIT")),
                     new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OldOfficeId, OldOfficeName, null, DateTime.UtcNow, admin,"INIT")),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, NewOfficeId, NewOfficeName, null, DateTime.UtcNow, admin,"INIT")),
                     new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName , AdminLastName), DateTime.UtcNow, admin,"INIT")),
                     new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OldOfficeId, OldOfficeName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow, admin, "INIT"))
                     
@@ -102,11 +97,7 @@ namespace Contact.Domain.Test.Company.MoveEmployeeToNewOfficeTests
 
         public override IEnumerable<Event> Expect()
         {
-            var events = new List<Event>
-                {
-                    new EmployeeMovedToNewOffice(CompanyId, CompanyName, OldOfficeId, OldOfficeName, NewOfficeId, NewOfficeName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
-                };
-            return events;
+            yield break;
         }
     }
 }

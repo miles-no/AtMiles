@@ -201,9 +201,15 @@ namespace Contact.Domain.CommandHandlers
 
             if (!company.IsOffice(message.OldOfficeId)) throw new UnknownItemException("Unknown ID for Office to be moved from");
 
-            if (!company.IsOffice(message.NewOfficeId)) throw new UnknownItemException("Unknown ID for Office to be moved to");
+            if (!company.IsOffice(message.NewOfficeId)) throw new UnknownItemException("Unknown ID for Office to move to.");
 
-            //TODO: Implement
+            var employee = _employeeRepository.GetById(message.EmployeeId);
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
+
+            company.MoveEmployeeToNewOffice(employee, message.OldOfficeId, message.NewOfficeId,
+                new Person(admin.Id, admin.Name), message.CorrelationId);
+
+            _companyRepository.Save(company, message.BasedOnVersion);
         }
 
         public void Handle(AddBusyTime message)
