@@ -7,6 +7,7 @@ namespace Contact.ReadStore.SearchStore
     {
         private Tag[] competency =new List<Tag>().ToArray();
         private List<string> keyQualifications = new List<string>();
+        private List<BusyTime> busyTimeEntries = new List<BusyTime>();
         
         public string Id { get; set; }
         public string CompanyId { get; set; }
@@ -25,6 +26,12 @@ namespace Contact.ReadStore.SearchStore
             set { competency = value; }
         }
 
+        public List<BusyTime> BusyTimeEntries
+        {
+            get { return busyTimeEntries; }
+            set { busyTimeEntries = value; }
+        }
+
         public List<string> KeyQualifications
         {
             get { return keyQualifications; }
@@ -32,6 +39,15 @@ namespace Contact.ReadStore.SearchStore
         }
 
         public double Score { get; set; }
+
+        public class BusyTime
+        {
+            public string Id { get; set; }
+            public DateTime Start { get; set; }
+            public DateTime? End { get; set; }
+            public short PercentageOccupied { get; set; }
+            public string Comment { get; set; }
+        }
     }
     
    

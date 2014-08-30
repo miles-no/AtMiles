@@ -45,11 +45,13 @@ namespace Contact.ReadStore.SearchStore
              .ForMember(dest=>dest.Thumb, source => source.MapFrom(s => CreateThumb(s.Photo, 80, 0)))
              .ForMember(dest=>dest.JobTitle, source => source.MapFrom(s => s.Title));
 
-            handler.RegisterHandler<EmployeeCreated>(HandleImportEmployeeCreated); 
+            handler.RegisterHandler<EmployeeCreated>(HandleEmployeeCreated); 
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
            
-            
-           
+            handler.RegisterHandler<BusyTimeAdded>(HandleBusyTimeAdded);
+            handler.RegisterHandler<BusyTimeConfirmed>(HandleBusyTimeConfirmed);
+            handler.RegisterHandler<BusyTimeRemoved>(HandleBusyTimeRemoved);
+            handler.RegisterHandler<Domain.Events.Company.EmployeeMovedToNewOffice>(HandleEmployeeMovedToNewOffice);
         }
 
         private List<string> CreateKeyQalifications(IEnumerable<CvPartnerKeyQualification> keyQualifications)
@@ -120,15 +122,35 @@ namespace Contact.ReadStore.SearchStore
                 session.SaveChanges();
             }
         }
-        private void HandleImportEmployeeCreated(EmployeeCreated obj)
+        private void HandleEmployeeCreated(EmployeeCreated ev)
         {
 
-            var searchModel = Mapper.Map<EmployeeCreated, EmployeeSearchModel>(obj);
+            var searchModel = Mapper.Map<EmployeeCreated, EmployeeSearchModel>(ev);
             using (var session = documentStore.OpenSession())
             {
                 session.Store(searchModel);
                 session.SaveChanges();
             }
+        }
+
+        private void HandleBusyTimeAdded(BusyTimeAdded ev)
+        {
+            //TODO: Implement
+        }
+
+        private void HandleBusyTimeRemoved(BusyTimeRemoved ev)
+        {
+            //TODO: Implement
+        }
+
+        private void HandleBusyTimeConfirmed(BusyTimeConfirmed ev)
+        {
+            //TODO: Implement
+        }
+
+        private void HandleEmployeeMovedToNewOffice(Domain.Events.Company.EmployeeMovedToNewOffice ev)
+        {
+            //TODO: Implement
         }
 
         private static string CreateThumb(Domain.ValueTypes.Picture photo, int width, int height = 0)
