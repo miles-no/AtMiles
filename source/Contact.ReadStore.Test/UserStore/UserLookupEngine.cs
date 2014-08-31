@@ -37,6 +37,7 @@ namespace Contact.ReadStore.UserStore
             string globalId;
             using (var session = store.OpenSession())
             {
+                //TODO: Include search for company here
                 //user = session.Query<UserLookupModel, UserLookupIndex>().FirstOrDefault(w => w.CompanyId == companyid && w.Email == email);
                 user = session.Query<UserLookupModel, UserLookupIndex>().FirstOrDefault(w => w.Email == email);
             }
