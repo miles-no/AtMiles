@@ -9,7 +9,7 @@ namespace Contact.Domain.Events.Employee
         public readonly string CompanyName;
         public readonly string OfficeId;
         public readonly string OfficeName;
-        public readonly string GlobalId;
+        public readonly string EmployeeId;
         public readonly Login LoginId;
         public readonly string FirstName;
         public readonly string MiddleName;
@@ -21,7 +21,7 @@ namespace Contact.Domain.Events.Employee
         public readonly Address HomeAddress;
         public readonly Picture Photo;
 
-        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string globalId,
+        public EmployeeCreated(string companyId, string companyName, string officeId, string officeName, string employeeId,
             Login loginId, string firstName, string middleName, string lastName,
             DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email,
             Address homeAddress, Picture photo, DateTime created, Person createdBy, string correlationId)
@@ -31,7 +31,7 @@ namespace Contact.Domain.Events.Employee
             CompanyName = companyName;
             OfficeId = officeId;
             OfficeName = officeName;
-            GlobalId = globalId;
+            EmployeeId = employeeId;
             LoginId = loginId;
             FirstName = firstName;
             MiddleName = middleName;

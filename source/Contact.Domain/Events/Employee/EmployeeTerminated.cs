@@ -9,18 +9,18 @@ namespace Contact.Domain.Events.Employee
         public readonly string CompanyName;
         public readonly string OfficeId;
         public readonly string OfficeName;
-        public readonly string Id;
-        public readonly string Name;
+        public readonly string EmployeeId;
+        public readonly string EmployeeName;
 
-        public EmployeeTerminated(string companyId, string companyName, string officeId, string officeName, string id, string name, DateTime created, Person createdBy, string correlationId)
+        public EmployeeTerminated(string companyId, string companyName, string officeId, string officeName, string employeeId, string employeeName, DateTime created, Person createdBy, string correlationId)
             : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;
             OfficeId = officeId;
             OfficeName = officeName;
-            Id = id;
-            Name = name;
+            EmployeeId = employeeId;
+            EmployeeName = employeeName;
         }
     }
 }

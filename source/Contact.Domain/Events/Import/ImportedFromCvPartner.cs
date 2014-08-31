@@ -5,6 +5,8 @@ namespace Contact.Domain.Events.Import
 {
     public class ImportedFromCvPartner : Event
     {
+        public readonly string CompanyId;
+        public readonly string CompanyName;
         public readonly string EmployeeId;
         public readonly string FirstName;
         public readonly string MiddleName;
@@ -20,9 +22,12 @@ namespace Contact.Domain.Events.Import
 
 
 
-        public ImportedFromCvPartner(string employeeId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string email, string phone, string title, DateTime updatedAt, CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo, DateTime created, Person createdBy, string correlationId) :
+        public ImportedFromCvPartner(string companyId, string companyName, 
+            string employeeId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string email, string phone, string title, DateTime updatedAt, CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo, DateTime created, Person createdBy, string correlationId) :
             base(created, createdBy, correlationId)
         {
+            CompanyId = companyId;
+            CompanyName = companyName;
             EmployeeId = employeeId;
             FirstName = firstName;
             MiddleName = middleName;

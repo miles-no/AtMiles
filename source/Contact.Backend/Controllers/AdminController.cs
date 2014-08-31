@@ -21,6 +21,7 @@ namespace Contact.Backend.Controllers
         /// Adds an office to a company
         /// </summary>
         /// <param name="companyId"></param>
+        /// <param name="officeId"></param>
         /// <param name="officeName"></param>
         /// <returns></returns>
         [HttpPost]

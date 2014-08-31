@@ -113,7 +113,7 @@ namespace Contact.Domain.CommandHandlers
                         _companyRepository.Save(company, Constants.IgnoreVersion);
                     }
 
-                    employee.ImportData(cvPartnerImportData, message.CreatedBy, message.CorrelationId);
+                    employee.ImportData(company.Id, company.Name, cvPartnerImportData, message.CreatedBy, message.CorrelationId);
 
                     _employeeRepository.Save(employee, Constants.IgnoreVersion);
                 }

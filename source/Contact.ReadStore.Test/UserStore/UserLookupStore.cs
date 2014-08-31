@@ -4,7 +4,6 @@ using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
 using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 using Raven.Abstractions.Data;
 using Raven.Client;
@@ -14,12 +13,12 @@ namespace Contact.ReadStore.UserStore
     public class UserLookupStore
     {
         private readonly UserLookupEngine engine;
-        private readonly IDocumentStore documentStore;
+        private readonly IDocumentStore _documentStore;
 
         public UserLookupStore(UserLookupEngine engine, IDocumentStore documentStore)
         {
             this.engine = engine;
-            this.documentStore = documentStore;
+            this._documentStore = documentStore;
         }
 
         public void PrepareHandler(ReadModelHandler handler)
@@ -40,29 +39,22 @@ namespace Contact.ReadStore.UserStore
             handler.RegisterHandler<OfficeAdminRemoved>(HandleOfficeAdminRemoved);
             handler.RegisterHandler<OfficeClosed>(HandleOfficeClosed);
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
-
-            //handler.RegisterHandler<BusyTimeAdded>(Handle???);
-            //handler.RegisterHandler<BusyTimeRemoved>(Handle???);
-            //handler.RegisterHandler<BusyTimeConfirmed>(Handle???);
-            //handler.RegisterHandler<EmployeeMovedToNewOffice>(Handle???);
-
-           
         }
-
-        private void HandleImportCvPartner(ImportedFromCvPartner person)
+        
+        private void HandleImportCvPartner(ImportedFromCvPartner ev)
         {
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
 
                 var existing =
-                   session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == person.EmployeeId);
+                   session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == ev.EmployeeId);
                 if (existing != null)
                 {
-                    Mapper.Map(person, existing);
+                    Mapper.Map(ev, existing);
                 }
                 else
                 {
-                    existing = Mapper.Map<ImportedFromCvPartner, User>(person);
+                    existing = Mapper.Map<ImportedFromCvPartner, User>(ev);
                 }
 
                 session.Store(existing);
@@ -70,69 +62,65 @@ namespace Contact.ReadStore.UserStore
             }
         }
 
-        private static string CreateGlobalId(EmployeeCreated employee)
+        private static string CreateGlobalId(EmployeeCreated ev)
         {
-            if (employee.LoginId != null)
-            {
-                return IdService.IdsToSingleLoginId(employee.CompanyId, employee.LoginId.Provider, employee.LoginId.Id);
-            }
-            return null;
+            if (ev.LoginId == null) return null;
+            
+            return IdService.IdsToSingleLoginId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Id);
         }
 
-        
-
-        private void HandleOfficeClosed(OfficeClosed office)
+        private void HandleOfficeClosed(OfficeClosed ev)
         {
 
-            documentStore.DatabaseCommands.UpdateByIndex(typeof (UserLookupIndex).Name,
-                new IndexQuery {Query = "CompanyId:" + office.CompanyId},
+            _documentStore.DatabaseCommands.UpdateByIndex(typeof (UserLookupIndex).Name,
+                new IndexQuery {Query = "CompanyId:" + ev.CompanyId},
                 new[]
                 {
                     new PatchRequest
                     {
                         Type = PatchCommandType.Remove,
                         Name = "AdminForOffices",
-                        Value = office.OfficeId
+                        Value = ev.OfficeId
                     }
                 }, false);
 
 
         }
 
-        private void HandleOfficeAdminRemoved(OfficeAdminRemoved officeAdmin)
+        private void HandleOfficeAdminRemoved(OfficeAdminRemoved ev)
         {
-            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-                 new IndexQuery { Query = "GlobalId:" + officeAdmin.AdminId },
+            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+                 new IndexQuery { Query = "GlobalId:" + ev.AdminId },
                  new[]
                 {
                     new PatchRequest
                     {
                         Type = PatchCommandType.Remove,
                         Name = "AdminForOffices",
-                        Value = officeAdmin.OfficeId
+                        Value = ev.OfficeId
                     }
                 }, false);
         }
 
-        private void HandleOfficeAdminAdded(OfficeAdminAdded officeAdmin)
+        private void HandleOfficeAdminAdded(OfficeAdminAdded ev)
         {
-            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-                 new IndexQuery { Query = "GlobalId:" + officeAdmin.AdminId },
+            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+                 new IndexQuery { Query = "GlobalId:" + ev.AdminId },
                  new[]
                 {
                     new PatchRequest
                     {
                         Type = PatchCommandType.Add,
                         Name = "AdminForOffices",
-                        Value = officeAdmin.OfficeId
+                        Value = ev.OfficeId
                     }
                 }, false);
         }
 
-        private void HandleCompanyAdminRemoved(CompanyAdminRemoved companyAdmin)
+        private void HandleCompanyAdminRemoved(CompanyAdminRemoved ev)
         {
-            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-                new IndexQuery { Query = "GlobalId:" + companyAdmin.AdminId },
+            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+                new IndexQuery { Query = "GlobalId:" + ev.AdminId },
                 new[]
                 {
                     new PatchRequest
@@ -144,10 +132,10 @@ namespace Contact.ReadStore.UserStore
                 }, false);
         }
 
-        private void HandleCompanyAdminAdded(CompanyAdminAdded companyAdmin)
+        private void HandleCompanyAdminAdded(CompanyAdminAdded ev)
         {
-            documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-               new IndexQuery { Query = "GlobalId:" + companyAdmin.NewAdminId },
+            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
+               new IndexQuery { Query = "GlobalId:" + ev.NewAdminId },
                new[]
                 {
                     new PatchRequest
@@ -159,12 +147,12 @@ namespace Contact.ReadStore.UserStore
                 }, false);
         }
 
-        private void HandleTerminated(EmployeeTerminated employee)
+        private void HandleTerminated(EmployeeTerminated ev)
         {
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
                 var user =
-                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == employee.Id);
+                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == ev.EmployeeId);
                 if (user != null)
                 {
                     session.Delete(user);
@@ -173,23 +161,21 @@ namespace Contact.ReadStore.UserStore
                 session.SaveChanges();
             }
         }
-
-  
       
-        private void HandleCreated(EmployeeCreated employee)
+        private void HandleCreated(EmployeeCreated ev)
         {
 
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
                 var existing =
-                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == employee.GlobalId);
+                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == ev.EmployeeId);
                 if (existing != null)
                 {
-                    Mapper.Map(employee, existing);
+                    Mapper.Map(ev, existing);
                 }
                 else
                 {
-                    existing = Mapper.Map<EmployeeCreated, User>(employee);
+                    existing = Mapper.Map<EmployeeCreated, User>(ev);
                 }
                 session.Store(existing);
                 session.SaveChanges();

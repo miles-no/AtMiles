@@ -33,26 +33,65 @@ namespace Contact.Domain.Aggregates
 
         public void CreateNew(string companyId, string companyName, string officeId, string officeName, string globalId, Login loginId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, Person createdBy, string correlationId)
         {
-            var ev = new EmployeeCreated(companyId, companyName, officeId, officeName, globalId, loginId, firstName, middleName,
-                lastName, dateOfBirth, jobTitle, phoneNumber, email, homeAddress, photo, DateTime.UtcNow, createdBy, correlationId);
+            var ev = new EmployeeCreated(
+                companyId: companyId,
+                companyName: companyName,
+                officeId: officeId,
+                officeName: officeName,
+                employeeId: globalId,
+                loginId: loginId,
+                firstName: firstName,
+                middleName: middleName,
+                lastName: lastName,
+                dateOfBirth: dateOfBirth,
+                jobTitle: jobTitle,
+                phoneNumber: phoneNumber,
+                email: email,
+                homeAddress: homeAddress,
+                photo: photo,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
             ApplyChange(ev);
         }
 
         public void Terminate(string companyId, string companyName, string officeId, string officeName, Person createdBy, string correlationId)
         {
-            var ev = new EmployeeTerminated(companyId, companyName, officeId, officeName, _id,
-                NameService.GetName(_firstName, _middleName, _lastName),DateTime.UtcNow, createdBy, correlationId);
+            var ev = new EmployeeTerminated(
+                companyId: companyId,
+                companyName: companyName,
+                officeId: officeId,
+                officeName: officeName,
+                employeeId: _id,
+                employeeName: NameService.GetName(_firstName, _middleName, _lastName),
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
             ApplyChange(ev);
         }
 
-        public void ImportData(CvPartnerImportData import, Person createdBy, string correlationId)
+        public void ImportData(string companyId, string companyName, CvPartnerImportData import, Person createdBy, string correlationId)
         {
             if (import.UpdatedAt > _lastImportUpdateAt)
             {
-                var ev = new ImportedFromCvPartner(_id, import.FirstName, import.MiddleName, import.LastName,
-                    import.DateOfBirth, import.Email, import.Phone, import.Title, import.UpdatedAt,
-                    import.KeyQualifications, import.Technologies, import.Photo, DateTime.UtcNow, createdBy,
-                    correlationId);
+                var ev = new ImportedFromCvPartner(
+                    companyId: companyId,
+                    companyName: companyName,
+                    employeeId: _id,
+                    firstName: import.FirstName,
+                    middleName: import.MiddleName,
+                    lastName: import.LastName,
+                    dateOfBirth: import.DateOfBirth,
+                    email: import.Email,
+                    phone: import.Phone,
+                    title: import.Title,
+                    updatedAt: import.UpdatedAt,
+                    keyQualifications: import.KeyQualifications,
+                    technologies: import.Technologies,
+                    photo: import.Photo,
+                    created: DateTime.UtcNow,
+                    createdBy: createdBy,
+                    correlationId: correlationId);
                 ApplyChange(ev);
             }
         }
@@ -61,7 +100,16 @@ namespace Contact.Domain.Aggregates
         {
             if (createdBy.Identifier != _id) throw new NoAccessException("Can only confirm busy-time entries on self");
 
-            var ev = new BusyTimeConfirmed(companyId, companyName, officeId, officeName, _id, Name, DateTime.UtcNow, createdBy, correlationId);
+            var ev = new BusyTimeConfirmed(
+                companyId: companyId,
+                companyName: companyName,
+                officeId: officeId,
+                officeName: officeName,
+                employeeId: _id,
+                employeeName: Name,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
             ApplyChange(ev);
         }
 
@@ -77,8 +125,21 @@ namespace Contact.Domain.Aggregates
             if (AnyConflictWithExistingBusyTimeEntries(start, end)) throw new AlreadyExistingItemException("Existing busy time items already defined in this range.");
 
             var busyTimeId = Services.IdService.CreateNewId();
-            var ev = new BusyTimeAdded(companyId, companyName, officeId, officeName, _id, Name, busyTimeId, start, end,
-                percentageOccpied, comment, DateTime.UtcNow, createdBy, correlationId);
+            var ev = new BusyTimeAdded(
+                companyId: companyId,
+                companyName: companyName,
+                officeId: officeId,
+                officeName: officeName,
+                employeeId: _id,
+                employeeName: Name,
+                busyTimeId: busyTimeId,
+                start: start,
+                end: end,
+                percentageOccpied: percentageOccpied,
+                comment: comment,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
 
             ApplyChange(ev);
         }
@@ -91,8 +152,21 @@ namespace Contact.Domain.Aggregates
 
             if (busyTime == null) throw new UnknownItemException("Unknown ID for Busy time entry");
 
-            var ev = new BusyTimeRemoved(companyId, companyName, officeId, officeName, _id, Name, busyTime.Id,
-                busyTime.Start, busyTime.End, busyTime.PercentageOccpied, busyTime.Comment, DateTime.UtcNow, createdBy, correlationId);
+            var ev = new BusyTimeRemoved(
+                companyId: companyId,
+                companyName: companyName,
+                officeId: officeId,
+                officeName: officeName,
+                employeeId: _id,
+                employeeName: Name,
+                busyTimeId: busyTime.Id,
+                start: busyTime.Start,
+                end: busyTime.End,
+                percentageOccpied: busyTime.PercentageOccpied,
+                comment: busyTime.Comment,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
 
             ApplyChange(ev);
         }
@@ -148,7 +222,7 @@ namespace Contact.Domain.Aggregates
         [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeCreated ev)
         {
-            _id = ev.GlobalId;
+            _id = ev.EmployeeId;
             _firstName = ev.FirstName;
             _middleName = ev.MiddleName;
             _lastName = ev.LastName;

@@ -127,7 +127,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<Event>
                 {
-                    new Events.Import.ImportedFromCvPartner(EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp, new Person(AdminId, Domain.Services.NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp, new Person(AdminId, Domain.Services.NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }
