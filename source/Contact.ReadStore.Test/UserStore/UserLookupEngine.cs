@@ -33,16 +33,17 @@ namespace Contact.ReadStore.UserStore
 
             
 
-            User user;
+            UserLookupModel user;
             string globalId;
             using (var session = store.OpenSession())
             {
-                user = session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.CompanyId == companyid && w.Email == email);
+                //user = session.Query<UserLookupModel, UserLookupIndex>().FirstOrDefault(w => w.CompanyId == companyid && w.Email == email);
+                user = session.Query<UserLookupModel, UserLookupIndex>().FirstOrDefault(w => w.Email == email);
             }
             
             if (user != null && user.LoginId != loginId)
             {
-                globalId = user.GlobalId;
+                globalId = user.GlobalProviderId;
                 store.DatabaseCommands.Patch(user.Id, new[]
                 {
                     new PatchRequest
@@ -58,10 +59,10 @@ namespace Contact.ReadStore.UserStore
             }
 
             //TODO: This isnt working. And it should lead to a sign out
-            List<User> administrators;
+            List<UserLookupModel> administrators;
             using (var session = store.OpenSession())
             {
-                administrators = session.Query<User, UserLookupIndex>().Where(w => w.CompanyId == companyid && w.AdminForOffices != null && w.AdminForOffices.Any()).ToList();
+                administrators = session.Query<UserLookupModel, UserLookupIndex>().Where(w => w.CompanyId == companyid && w.AdminForOffices != null && w.AdminForOffices.Any()).ToList();
             }
 
             message = "You are not registered. Please ask an administrator to add you.";
@@ -84,21 +85,31 @@ namespace Contact.ReadStore.UserStore
         public string ResolveUserIdentityByProviderId(string companyId, string provider, string providerId)
         {
             var loginId = IdService.IdsToSingleLoginId(companyId, provider, providerId);
-            User res;
+            UserLookupModel res;
             using (var session = store.OpenSession())
             {
-               res = session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.LoginId == loginId);
+               res = session.Query<UserLookupModel, UserLookupIndex>().FirstOrDefault(w => w.LoginId == loginId);
             }
             if (res != null)
             {
-                return res.GlobalId;
+                return res.GlobalProviderId;
             }
             return null;
         }
 
         public string ResolveUserIdentityByEmail(string companyId, string provider, string email)
         {
-            throw new NotImplementedException();
+            var loginId = IdService.IdsToSingleEmailId(companyId, provider, email);
+            UserLookupModel res;
+            using (var session = store.OpenSession())
+            {
+                res = session.Query<UserLookupModel, UserLookupIndex>().FirstOrDefault(w => w.LoginId == loginId);
+            }
+            if (res != null)
+            {
+                return res.GlobalProviderEmail;
+            }
+            return null;
         }
     }
 

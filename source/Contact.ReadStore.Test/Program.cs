@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using Contact.Backend.MockStore;
 
 namespace Contact.ReadStore
 {

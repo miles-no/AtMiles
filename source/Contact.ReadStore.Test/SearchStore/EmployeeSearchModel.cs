@@ -10,6 +10,7 @@ namespace Contact.ReadStore.SearchStore
         private List<BusyTime> busyTimeEntries = new List<BusyTime>();
         
         public string Id { get; set; }
+        public string GlobalId { get; set; }
         public string CompanyId { get; set; }
         public string OfficeId { get; set; }
         public string OfficeName { get; set; }

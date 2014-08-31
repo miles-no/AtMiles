@@ -21,5 +21,10 @@ namespace Contact.Domain.Services
         {
             return companyId + "/" + providerId + "/" + id;
         }
+
+        public static string IdsToSingleEmailId(string companyId, string providerId, string email)
+        {
+            return companyId + "/" + providerId + "/" + email;
+        }
     }
 }

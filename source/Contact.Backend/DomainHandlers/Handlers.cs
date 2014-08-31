@@ -7,7 +7,6 @@ using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
 using Contact.Domain;
 using Contact.Domain.Commands;
-using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 using Microsoft.AspNet.Identity;
@@ -22,7 +21,7 @@ namespace Contact.Backend.DomainHandlers
             // Add employee
             RegisterAddEmployee(mediator, container);
             RegisterTerminateEmployee(mediator, container);
-            
+
             RegisterAddCompanyAdmin(mediator, container);
             RegisterRemoveCompanyAdmin(mediator, container);
 
@@ -143,7 +142,6 @@ namespace Contact.Backend.DomainHandlers
             });
         }
 
-
         private static void RegisterAddEmployee(IMediator mediator, IUnityContainer container)
         {
             mediator.Subscribe<AddEmployeeRequest, Response>((req, user) =>
@@ -176,12 +174,12 @@ namespace Contact.Backend.DomainHandlers
                     //RV: 19.08.2014:
                     //TODO: Fix login here.
                     //new Login is not the same as the user requesting the command
-                    
+
                     var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, Helpers.GetIdFromIdentity(user, identityResolver)), req.FirstName, req.LastName,
                         req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -199,7 +197,7 @@ namespace Contact.Backend.DomainHandlers
                 try
                 {
                     //TODO: Get version from readmodel
-                    var command = new TerminateEmployee(req.CompanyId, req.OfficeId, req.EmployeeId,DateTime.UtcNow,GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()),correlationId,Domain.Constants.IgnoreVersion);
+                    var command = new TerminateEmployee(req.CompanyId, req.OfficeId, req.EmployeeId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                 }
@@ -220,7 +218,7 @@ namespace Contact.Backend.DomainHandlers
                 {
                     //TODO: Get version from readmodel
                     var command = new AddCompanyAdmin(req.CompanyId, req.NewAdminId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
-                    
+
                     return Send(container, command);
                 }
                 catch (Exception ex)
@@ -269,7 +267,6 @@ namespace Contact.Backend.DomainHandlers
                 }
             });
         }
-
 
         private static void RegisterRemoveOfficeAdmin(IMediator mediator, IUnityContainer container)
         {
@@ -352,12 +349,10 @@ namespace Contact.Backend.DomainHandlers
             return Helpers.CreateResponse(command.CorrelationId);
         }
 
-    
         private static string CreateNewGlobalId()
         {
             return new Guid().ToString();
         }
-
 
         private static string GetProviderFromIdentity(IIdentity user)
         {
@@ -368,10 +363,8 @@ namespace Contact.Backend.DomainHandlers
                 var id = claims.FindFirst(ClaimTypes.NameIdentifier);
                 return id.Issuer;
             }
-            
+
             return null;
         }
-
     }
 }
-

@@ -407,10 +407,6 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.Store.csproj">
-      <Project>{082EE311-417A-4509-A822-45D775919F1E}</Project>
-      <Name>Contact.Backend.Store</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</Project>
       <Name>Contact.Domain</Name>

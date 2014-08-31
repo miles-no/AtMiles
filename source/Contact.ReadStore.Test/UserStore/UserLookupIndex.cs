@@ -5,7 +5,7 @@ using Raven.Client.Indexes;
 namespace Contact.ReadStore.UserStore
 {
     
-    public class UserLookupIndex : AbstractIndexCreationTask<User>
+    public class UserLookupIndex : AbstractIndexCreationTask<UserLookupModel>
     {
         public UserLookupIndex()
         {
@@ -14,7 +14,8 @@ namespace Contact.ReadStore.UserStore
                 from person in u
                 select new
                 {
-                    person.GlobalId,
+                    person.GlobalProviderId,
+                    person.GlobalProviderEmail,
                     person.LoginId,
                     person.CompanyId,
                     person.Email,
@@ -23,7 +24,8 @@ namespace Contact.ReadStore.UserStore
                 };
 
             Index(p => p.CompanyId, FieldIndexing.NotAnalyzed);
-            Index(p => p.GlobalId, FieldIndexing.NotAnalyzed);
+            Index(p => p.GlobalProviderId, FieldIndexing.NotAnalyzed);
+            Index(p => p.GlobalProviderEmail, FieldIndexing.NotAnalyzed);
             Index(p => p.Email, FieldIndexing.NotAnalyzed);
             Index(p => p.AdminForOffices, FieldIndexing.NotAnalyzed);
             Index(p => p.CompanyAdmin, FieldIndexing.NotAnalyzed);

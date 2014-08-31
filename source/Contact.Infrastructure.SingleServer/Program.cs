@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using Contact.Backend.MockStore;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure.SingleServer.Properties;
+using Contact.ReadStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Contact.ReadStore.UserStore;

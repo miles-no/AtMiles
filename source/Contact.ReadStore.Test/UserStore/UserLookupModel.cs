@@ -2,12 +2,13 @@
 
 namespace Contact.ReadStore.UserStore
 {
-    public class User
+    public class UserLookupModel
     {
         private List<string> adminForOffices;
         public string Id { get; set; }
         public string Email { get; set; }
-        public string GlobalId { get; set; }
+        public string GlobalProviderId { get; set; }
+        public string GlobalProviderEmail { get; set; }
         public string LoginId { get; set; }
         public string Name { get; set; }
 
@@ -26,6 +27,14 @@ namespace Contact.ReadStore.UserStore
 
         public bool CompanyAdmin { get; set; }
         public string CompanyId { get; set; }
-        public bool ValidUser { get { return string.IsNullOrEmpty(GlobalId) == false; } }
+
+        public bool ValidUser
+        {
+            get
+            {
+                //TODO: ImproveGlobalProviderEmail
+                return string.IsNullOrEmpty(GlobalProviderId) == false;
+            }
+        }
     }
 }

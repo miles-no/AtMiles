@@ -1,5 +1,3 @@
-using System.Linq;
-using AutoMapper;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
@@ -21,16 +19,13 @@ namespace Contact.ReadStore.UserStore
             this._documentStore = documentStore;
         }
 
+        private static string GetRavenId(string id)
+        {
+            return "users/" + id;
+        }
+
         public void PrepareHandler(ReadModelHandler handler)
         {
-            Mapper.CreateMap<EmployeeCreated, User>()
-                .ForMember(dest => dest.Name, source => source.MapFrom(e => NameService.GetName(e.FirstName, e.MiddleName, e.LastName)))
-                .ForMember(dest => dest.LoginId, source => source.MapFrom(s => CreateGlobalId(s)));
-
-            Mapper.CreateMap<ImportedFromCvPartner, User>()
-                .ForMember(dest => dest.Name,
-                    source => source.MapFrom(e => NameService.GetName(e.FirstName, e.MiddleName, e.LastName)));
-           
             handler.RegisterHandler<EmployeeCreated>(HandleCreated);
             handler.RegisterHandler<EmployeeTerminated>(HandleTerminated);
             handler.RegisterHandler<CompanyAdminAdded>(HandleCompanyAdminAdded);
@@ -45,16 +40,14 @@ namespace Contact.ReadStore.UserStore
         {
             using (var session = _documentStore.OpenSession())
             {
-
-                var existing =
-                   session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == ev.EmployeeId);
+                var existing = session.Load<UserLookupModel>(GetRavenId(ev.EmployeeId));
                 if (existing != null)
                 {
-                    Mapper.Map(ev, existing);
+                    existing = Patch(existing, ev);
                 }
                 else
                 {
-                    existing = Mapper.Map<ImportedFromCvPartner, User>(ev);
+                    existing = Convert(ev);
                 }
 
                 session.Store(existing);
@@ -69,9 +62,15 @@ namespace Contact.ReadStore.UserStore
             return IdService.IdsToSingleLoginId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Id);
         }
 
+        private static string CreateGlobalEmailId(EmployeeCreated ev)
+        {
+            if (ev.LoginId == null) return null;
+
+            return IdService.IdsToSingleEmailId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Email);
+        }
+
         private void HandleOfficeClosed(OfficeClosed ev)
         {
-
             _documentStore.DatabaseCommands.UpdateByIndex(typeof (UserLookupIndex).Name,
                 new IndexQuery {Query = "CompanyId:" + ev.CompanyId},
                 new[]
@@ -89,97 +88,145 @@ namespace Contact.ReadStore.UserStore
 
         private void HandleOfficeAdminRemoved(OfficeAdminRemoved ev)
         {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-                 new IndexQuery { Query = "GlobalId:" + ev.AdminId },
-                 new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Remove,
-                        Name = "AdminForOffices",
-                        Value = ev.OfficeId
-                    }
-                }, false);
+            using (var session = _documentStore.OpenSession())
+            {
+                var user = session.Load<UserLookupModel>(GetRavenId(ev.AdminId));
+                user = Patch(user, ev);
+                session.Store(user);
+                session.SaveChanges();
+            }
         }
 
         private void HandleOfficeAdminAdded(OfficeAdminAdded ev)
         {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-                 new IndexQuery { Query = "GlobalId:" + ev.AdminId },
-                 new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Add,
-                        Name = "AdminForOffices",
-                        Value = ev.OfficeId
-                    }
-                }, false);
+            using (var session = _documentStore.OpenSession())
+            {
+                var user = session.Load<UserLookupModel>(GetRavenId(ev.AdminId));
+                user = Patch(user, ev);
+                session.Store(user);
+                session.SaveChanges();
+            }
         }
 
         private void HandleCompanyAdminRemoved(CompanyAdminRemoved ev)
         {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-                new IndexQuery { Query = "GlobalId:" + ev.AdminId },
-                new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Set,
-                        Name = "CompanyAdmin",
-                        Value = false
-                    }
-                }, false);
+            using (var session = _documentStore.OpenSession())
+            {
+                var user = session.Load<UserLookupModel>(GetRavenId(ev.AdminId));
+
+                user = Patch(user, ev);
+                session.Store(user);
+                session.SaveChanges();
+            }
         }
 
         private void HandleCompanyAdminAdded(CompanyAdminAdded ev)
         {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof(UserLookupIndex).Name,
-               new IndexQuery { Query = "GlobalId:" + ev.NewAdminId },
-               new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Set,
-                        Name = "CompanyAdmin",
-                        Value = true
-                    }
-                }, false);
+            using (var session = _documentStore.OpenSession())
+            {
+                var user = session.Load<UserLookupModel>(GetRavenId(ev.NewAdminId));
+
+                user = Patch(user, ev);
+                session.Store(user);
+                session.SaveChanges();
+            }
         }
 
         private void HandleTerminated(EmployeeTerminated ev)
         {
             using (var session = _documentStore.OpenSession())
             {
-                var user =
-                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == ev.EmployeeId);
+                var user = session.Load<UserLookupModel>(GetRavenId(ev.EmployeeId));
                 if (user != null)
                 {
                     session.Delete(user);
+                    session.SaveChanges();
                 }
-                
-                session.SaveChanges();
             }
         }
       
         private void HandleCreated(EmployeeCreated ev)
         {
-
             using (var session = _documentStore.OpenSession())
             {
-                var existing =
-                    session.Query<User, UserLookupIndex>().FirstOrDefault(w => w.GlobalId == ev.EmployeeId);
+                var existing = session.Load<UserLookupModel>(GetRavenId(ev.EmployeeId));
                 if (existing != null)
                 {
-                    Mapper.Map(ev, existing);
+                    existing = Patch(existing, ev);
                 }
                 else
                 {
-                    existing = Mapper.Map<EmployeeCreated, User>(ev);
+                    existing = Convert(ev);
                 }
                 session.Store(existing);
                 session.SaveChanges();
             }
         }
+
+        private static UserLookupModel Convert(EmployeeCreated ev)
+        {
+            return new UserLookupModel
+            {
+                Id = GetRavenId(ev.EmployeeId),
+                GlobalProviderId = CreateGlobalId(ev),
+                GlobalProviderEmail = CreateGlobalEmailId(ev),
+                Email = ev.Email,
+                Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
+                CompanyAdmin = false,
+                CompanyId = ev.CompanyId,
+                LoginId = CreateGlobalId(ev)
+            };
+        }
+
+        private static UserLookupModel Convert(ImportedFromCvPartner ev)
+        {
+            return new UserLookupModel
+            {
+                Id = GetRavenId(ev.EmployeeId),
+                //GlobalProviderId = CreateGlobalId(ev),
+                //GlobalProviderEmail = CreateGlobalEmailId(ev),
+                Email = ev.Email,
+                Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
+                CompanyAdmin = false,
+                CompanyId = ev.CompanyId,
+            };
+        }
+
+        private static UserLookupModel Patch(UserLookupModel model, ImportedFromCvPartner ev)
+        {
+            return model;
+        }
+
+        private static UserLookupModel Patch(UserLookupModel model, EmployeeCreated ev)
+        {
+            model.Email = ev.Email;
+            model.Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName);
+            return model;
+        }
+
+        private static UserLookupModel Patch(UserLookupModel model, CompanyAdminAdded ev)
+        {
+            model.CompanyAdmin = true;
+            return model;
+        }
+
+        private static UserLookupModel Patch(UserLookupModel model, CompanyAdminRemoved ev)
+        {
+            model.CompanyAdmin = true;
+            return model;
+        }
+
+        private static UserLookupModel Patch(UserLookupModel model, OfficeAdminAdded ev)
+        {
+            model.AdminForOffices.Add(ev.OfficeId);
+            return model;
+        }
+
+        private static UserLookupModel Patch(UserLookupModel model, OfficeAdminRemoved ev)
+        {
+            model.AdminForOffices.RemoveAll(o => o == ev.OfficeId);
+            return model;
+        }
+        
     }
 }

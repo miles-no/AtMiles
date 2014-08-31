@@ -25,6 +25,11 @@ namespace Contact.ReadStore.SearchStore
             _documentStore = documentStore;
         }
 
+        private static string GetRavenId(string id)
+        {
+            return "employees/" + id;
+        }
+
         public void PrepareHandler(ReadModelHandler handler)
         {
             handler.RegisterHandler<EmployeeCreated>(HandleEmployeeCreated); 
@@ -87,7 +92,7 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var existing = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                var existing = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 if (existing != null)
                 {
                     existing = Patch(existing, ev);
@@ -118,7 +123,7 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
                 session.Store(employee);
                 session.SaveChanges();
@@ -129,7 +134,7 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
                 session.Store(employee);
                 session.SaveChanges();
@@ -140,7 +145,7 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
                 session.Store(employee);
                 session.SaveChanges();
@@ -151,7 +156,7 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
                 session.Store(employee);
                 session.SaveChanges();
@@ -162,7 +167,8 @@ namespace Contact.ReadStore.SearchStore
         {
             var model = new EmployeeSearchModel
             {
-                Id = ev.EmployeeId,
+                Id = GetRavenId(ev.EmployeeId),
+                GlobalId = ev.EmployeeId,
                 CompanyId = ev.CompanyId,
                 OfficeId = ev.OfficeId,
                 OfficeName = ev.OfficeName,
@@ -185,7 +191,8 @@ namespace Contact.ReadStore.SearchStore
         {
             var model = new EmployeeSearchModel
             {
-                Id = ev.EmployeeId,
+                Id = GetRavenId(ev.EmployeeId),
+                GlobalId = ev.EmployeeId,
                 CompanyId = ev.CompanyId,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue,

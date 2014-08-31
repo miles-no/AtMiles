@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RavenDocumentStore.cs" />
     <Compile Include="ReadStoreConstants.cs" />
     <Compile Include="SearchStore\EmployeeSearchStore.cs" />
     <Compile Include="SearchStore\EmployeeSearchModel.cs" />
@@ -76,7 +77,7 @@
     <Compile Include="SessionStore\CommandStatusStore.cs" />
     <Compile Include="SearchStore\Tag.cs" />
     <Compile Include="UserStore\UserLookupIndex.cs" />
-    <Compile Include="UserStore\User.cs" />
+    <Compile Include="UserStore\UserLookupModel.cs" />
     <Compile Include="UserStore\UserLookupEngine.cs" />
     <Compile Include="UserStore\UserLookupStore.cs" />
   </ItemGroup>
@@ -85,10 +86,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contact.Backend.MockStore\Contact.Backend.Store.csproj">
-      <Project>{082ee311-417a-4509-a822-45d775919f1e}</Project>
-      <Name>Contact.Backend.Store</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</Project>
       <Name>Contact.Domain</Name>
