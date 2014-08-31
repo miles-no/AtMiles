@@ -6,13 +6,12 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using AutoMapper;
+using Contact.Domain;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
-using Raven.Abstractions.Data;
 using Raven.Client;
 
 namespace Contact.ReadStore.SearchStore
@@ -28,23 +27,6 @@ namespace Contact.ReadStore.SearchStore
 
         public void PrepareHandler(ReadModelHandler handler)
         {
-            Mapper.CreateMap<EmployeeCreated, EmployeeSearchModel>()
-                //.ForMember(dest => dest.Competency, source => 
-                //    source.MapFrom(s => s.Competence != null ? s.Competence.Select(competenceTag=>new Tag{Category = competenceTag.LocalCategory, Competency = competenceTag.LocalSubject, InternationalCategory = competenceTag.InternationalCategory, InternationalCompentency = competenceTag.InternationalSubject}) : null))
-                .ForMember(dest => dest.Id, source => source.MapFrom(s=>s.EmployeeId))
-                .ForMember(dest => dest.Name, source => source.MapFrom(
-                    m => m.FirstName + " " +
-                         (string.IsNullOrEmpty(m.MiddleName) ? string.Empty : (m.MiddleName + " ")) + m.LastName))
-                .ForMember(dest=>dest.Thumb, source => source.MapFrom(s => CreateThumb(s.Photo, 80, 0)));
-
-            Mapper.CreateMap<ImportedFromCvPartner, EmployeeSearchModel>()
-             .ForMember(dest => dest.Name, source => source.MapFrom(e => NameService.GetName(e.FirstName, e.MiddleName, e.LastName)))
-             .ForMember(dest => dest.Id, source => source.MapFrom(s => s.EmployeeId))
-             .ForMember(dest => dest.Competency, source => source.MapFrom(s => CreateCompetency(s.Technologies)))
-             .ForMember(dest => dest.KeyQualifications, source => source.MapFrom(s => CreateKeyQalifications(s.KeyQualifications)))
-             .ForMember(dest=>dest.Thumb, source => source.MapFrom(s => CreateThumb(s.Photo, 80, 0)))
-             .ForMember(dest=>dest.JobTitle, source => source.MapFrom(s => s.Title));
-
             handler.RegisterHandler<EmployeeCreated>(HandleEmployeeCreated); 
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
            
@@ -105,14 +87,14 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var existing = session.Query<EmployeeSearchModel, EmployeeSearchModelLookupIndex>().FirstOrDefault(w => w.CompanyId == ev.CompanyId && w.Email == ev.Email);
+                var existing = session.Load<EmployeeSearchModel>(ev.EmployeeId);
                 if (existing != null)
                 {
-                    Mapper.Map(ev, existing);
+                    existing = Patch(existing, ev);
                 }
                 else
                 {
-                    existing = Mapper.Map<ImportedFromCvPartner, EmployeeSearchModel>(ev);
+                    existing = ConvertTo(ev);
                 }
 
                 session.Store(existing);
@@ -122,8 +104,9 @@ namespace Contact.ReadStore.SearchStore
         
         private void HandleEmployeeCreated(EmployeeCreated ev)
         {
+            if (ev.EmployeeId == Constants.SystemUserId) return; //Do not show SYSTEM user in search
 
-            var searchModel = Mapper.Map<EmployeeCreated, EmployeeSearchModel>(ev);
+            var searchModel = ConvertTo(ev);
             using (var session = _documentStore.OpenSession())
             {
                 session.Store(searchModel);
@@ -133,48 +116,130 @@ namespace Contact.ReadStore.SearchStore
 
         private void HandleBusyTimeAdded(BusyTimeAdded ev)
         {
-            //TODO: Implement
+            using (var session = _documentStore.OpenSession())
+            {
+                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                employee = Patch(employee, ev);
+                session.Store(employee);
+                session.SaveChanges();
+            }
         }
 
         private void HandleBusyTimeRemoved(BusyTimeRemoved ev)
         {
-            //TODO: Implement
+            using (var session = _documentStore.OpenSession())
+            {
+                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                employee = Patch(employee, ev);
+                session.Store(employee);
+                session.SaveChanges();
+            }
         }
 
         private void HandleBusyTimeConfirmed(BusyTimeConfirmed ev)
         {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof(EmployeeSearchModelIndex).Name,
-                new IndexQuery { Query = "GlobalId:" + ev.EmployeeId },
-                new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Set,
-                        Name = "BusyTimeEntriesConfirmed",
-                        Value = ev.Created
-                    }
-                }, false);
+            using (var session = _documentStore.OpenSession())
+            {
+                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                employee = Patch(employee, ev);
+                session.Store(employee);
+                session.SaveChanges();
+            }
         }
 
         private void HandleEmployeeMovedToNewOffice(Domain.Events.Company.EmployeeMovedToNewOffice ev)
         {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof(EmployeeSearchModelIndex).Name,
-                new IndexQuery { Query = "GlobalId:" + ev.EmployeeId },
-                new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Set,
-                        Name = "Officeid",
-                        Value = ev.NewOfficeId
-                    },
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Set,
-                        Name = "OfficeName",
-                        Value = ev.NewOfficeName
-                    }
-                }, false);
+            using (var session = _documentStore.OpenSession())
+            {
+                var employee = session.Load<EmployeeSearchModel>(ev.EmployeeId);
+                employee = Patch(employee, ev);
+                session.Store(employee);
+                session.SaveChanges();
+            }
+        }
+
+        private static EmployeeSearchModel ConvertTo(EmployeeCreated ev)
+        {
+            var model = new EmployeeSearchModel
+            {
+                Id = ev.EmployeeId,
+                CompanyId = ev.CompanyId,
+                OfficeId = ev.OfficeId,
+                OfficeName = ev.OfficeName,
+                Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
+                DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue,
+                JobTitle = ev.JobTitle,
+                PhoneNumber = ev.PhoneNumber,
+                Email = ev.Email,
+                Thumb = CreateThumb(ev.Photo, 80, 0),
+                BusyTimeEntriesConfirmed = DateTime.MinValue,
+                Competency = null,
+                KeyQualifications = new List<string>(),
+                BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>()
+            };
+
+            return model;
+        }
+
+        private static EmployeeSearchModel ConvertTo(ImportedFromCvPartner ev)
+        {
+            var model = new EmployeeSearchModel
+            {
+                Id = ev.EmployeeId,
+                CompanyId = ev.CompanyId,
+                Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
+                DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue,
+                JobTitle = ev.Title,
+                PhoneNumber = ev.Phone,
+                Email = ev.Email,
+                Thumb = CreateThumb(ev.Photo, 80, 0),
+                BusyTimeEntriesConfirmed = DateTime.MinValue,
+                Competency = CreateCompetency(ev.Technologies),
+                KeyQualifications = CreateKeyQalifications(ev.KeyQualifications),
+                BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>()
+            };
+            return model;
+        }
+
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, ImportedFromCvPartner ev)
+        {
+            model.Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName);
+            model.DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue;
+            model.JobTitle = ev.Title;
+            model.PhoneNumber = ev.Phone;
+            model.Email = ev.Email;
+            model.Thumb = CreateThumb(ev.Photo, 80, 0);
+            model.Competency = CreateCompetency(ev.Technologies);
+            model.KeyQualifications = CreateKeyQalifications(ev.KeyQualifications);
+            return model;
+        }
+
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, BusyTimeConfirmed ev)
+        {
+            model.BusyTimeEntriesConfirmed = ev.Created;
+            return model;
+        }
+
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, BusyTimeAdded ev)
+        {
+            if(model.BusyTimeEntries == null) model.BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>();
+            model.BusyTimeEntries.Add(new EmployeeSearchModel.BusyTime{Id = ev.BusyTimeId, Start = ev.Start, End = ev.End, PercentageOccupied = ev.PercentageOccpied, Comment = ev.Comment});
+            return model;
+        }
+
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, BusyTimeRemoved ev)
+        {
+            if (model.BusyTimeEntries != null)
+            {
+                model.BusyTimeEntries.RemoveAll(b => b.Id == ev.BusyTimeId);
+            }
+            return model;
+        }
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, Domain.Events.Company.EmployeeMovedToNewOffice ev)
+        {
+            model.OfficeId = ev.NewOfficeId;
+            model.OfficeName = ev.NewOfficeName;
+            return model;
         }
 
         private static string CreateThumb(Picture photo, int width, int height = 0)

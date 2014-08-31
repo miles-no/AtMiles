@@ -38,13 +38,13 @@ namespace Contact.ReadStore.SearchStore
                 from person in u
                 select new
                 {
-                    person.GlobalId,
+                    person.Id,
                     person.CompanyId,
                     person.Email,
                 };
 
             Index(p => p.CompanyId, FieldIndexing.NotAnalyzed);
-            Index(p => p.GlobalId, FieldIndexing.NotAnalyzed);
+            Index(p => p.Id, FieldIndexing.NotAnalyzed);
             Index(p => p.Email, FieldIndexing.NotAnalyzed);
     
         }
