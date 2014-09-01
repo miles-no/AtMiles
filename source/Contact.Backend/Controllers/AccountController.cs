@@ -84,7 +84,7 @@ namespace Contact.Backend.Controllers
 
             try
             {
-                Helpers.GetIdFromIdentity(User.Identity, resolveUserIdentity);
+                Helpers.CheckIdentity(User.Identity, resolveUserIdentity);
             }
             catch (UnknownUserException ex)
             {

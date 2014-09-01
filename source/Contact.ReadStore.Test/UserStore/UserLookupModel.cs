@@ -9,7 +9,6 @@ namespace Contact.ReadStore.UserStore
         public string Email { get; set; }
         public string GlobalProviderId { get; set; }
         public string GlobalProviderEmail { get; set; }
-        public string LoginId { get; set; }
         public string Name { get; set; }
 
         public List<string> AdminForOffices

@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="CommandSenderMock.cs" />
     <Compile Include="ConsoleLogger.cs" />
-    <Compile Include="DummyAndHardCodedIdentityReseolver.cs" />
     <Compile Include="EventStoreDispatcher.cs" />
     <Compile Include="EventStoreRepository.cs" />
     <Compile Include="ILog.cs" />

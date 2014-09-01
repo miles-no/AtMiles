@@ -175,7 +175,7 @@ namespace Contact.Backend.DomainHandlers
                     //TODO: Fix login here.
                     //new Login is not the same as the user requesting the command
 
-                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, Helpers.GetIdFromIdentity(user, identityResolver)), req.FirstName, req.LastName,
+                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, Helpers.GetUserIdentity(user, identityResolver)), req.FirstName, req.LastName,
                         req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
@@ -337,7 +337,7 @@ namespace Contact.Backend.DomainHandlers
 
         private static Person GetCreatedBy(IIdentity user, IResolveUserIdentity identityResolver)
         {
-            return new Person(Helpers.GetIdFromIdentity(user, identityResolver), user.GetUserName());
+            return new Person(Helpers.GetUserIdentity(user, identityResolver), user.GetUserName());
         }
 
         private static Response Send(IUnityContainer container, Command command)

@@ -12,6 +12,7 @@ namespace Contact.Backend.Utilities
 {
     public class Helpers
     {
+        private static string companyId = "miles";
         public static Response CreateResponse(string id = null, string message = null)
         {
             if (string.IsNullOrEmpty(id))
@@ -36,42 +37,53 @@ namespace Contact.Backend.Utilities
         }
 
         
-        private static ConcurrentDictionary<Tuple<string,string,string>,string> cache = new ConcurrentDictionary<Tuple<string, string, string>, string>(); 
-        
-        public static string GetIdFromIdentity(IIdentity user, IResolveUserIdentity identityResolver)
+        private static readonly ConcurrentDictionary<Tuple<string,string,string>,string> Cache = new ConcurrentDictionary<Tuple<string, string, string>, string>();
+
+        public static string GetUserIdentity(IIdentity user, IResolveUserIdentity identityResolver)
         {
             var identity = user as ClaimsIdentity;
-            if (identity != null)
+            if (identity == null) return string.Empty;
+
+            var claims = identity;
+            var id = claims.FindFirst(ClaimTypes.NameIdentifier);
+
+            string userId;
+            if (Cache.TryGetValue(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), out userId))
             {
-                var claims = identity;
-                var id = claims.FindFirst(ClaimTypes.NameIdentifier);
-                string globalIdentity;
-                
-                if (cache.TryGetValue(new Tuple<string, string, string>("miles", id.Issuer, id.Value), out globalIdentity))
-                {
-                    return globalIdentity;
-                }
-
-                globalIdentity = identityResolver.ResolveUserIdentityByProviderId("miles", id.Issuer, id.Value);
-
-                if (!string.IsNullOrEmpty(globalIdentity)) return globalIdentity;
-
-                var email = claims.FindFirst(ClaimTypes.Email);
-
-                string message;
-                globalIdentity = identityResolver.AttachLoginToUser("miles", id.Issuer, id.Value, email.Value,
-                    out message);
-                if (string.IsNullOrEmpty(globalIdentity))
-                {
-                    throw new UnknownUserException(message);
-                }
-                //Add to cache
-                cache.AddOrUpdate(new Tuple<string, string, string>("miles", id.Issuer, id.Value), globalIdentity, (key, oldvalue)=>globalIdentity);
-                return globalIdentity;
+                return userId;
             }
-            //return user.GetUserId();
-            return string.Empty;
+
+            userId = identityResolver.ResolveUserIdentityByProviderId(companyId, id.Issuer, id.Value);
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                Cache.AddOrUpdate(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
+                return userId;
+            }
+
+            //Resolve by Email
+            var email = claims.FindFirst(ClaimTypes.Email);
+
+            userId = identityResolver.ResolveUserIdentityByEmail(companyId, id.Issuer, email.Value);
+
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                identityResolver.AttachLoginToUser(companyId, userId, id.Issuer, id.Value);
+                Cache.AddOrUpdate(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
+            }
+
+            return userId;
         }
 
+        public static void CheckIdentity(IIdentity user, IResolveUserIdentity identityResolver)
+        {
+            var userId = GetUserIdentity(user, identityResolver);
+            
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnknownUserException("Unknown user");
+            }
+        }
     }
 }

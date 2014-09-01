@@ -57,14 +57,16 @@ namespace Contact.ReadStore.UserStore
 
         private static string CreateGlobalId(EmployeeCreated ev)
         {
-            if (ev.LoginId == null) return null;
-            
+            if (ev.LoginId == null) return string.Empty;
+            if (string.IsNullOrEmpty(ev.LoginId.Id)) return string.Empty;
+
             return IdService.IdsToSingleLoginId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Id);
         }
 
         private static string CreateGlobalEmailId(EmployeeCreated ev)
         {
             if (ev.LoginId == null) return null;
+            if (string.IsNullOrEmpty(ev.LoginId.Email)) return string.Empty;
 
             return IdService.IdsToSingleEmailId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Email);
         }
@@ -174,7 +176,6 @@ namespace Contact.ReadStore.UserStore
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 CompanyAdmin = false,
                 CompanyId = ev.CompanyId,
-                LoginId = CreateGlobalId(ev)
             };
         }
 
@@ -183,7 +184,6 @@ namespace Contact.ReadStore.UserStore
             return new UserLookupModel
             {
                 Id = GetRavenId(ev.EmployeeId),
-                //GlobalProviderId = CreateGlobalId(ev),
                 //GlobalProviderEmail = CreateGlobalEmailId(ev),
                 Email = ev.Email,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
