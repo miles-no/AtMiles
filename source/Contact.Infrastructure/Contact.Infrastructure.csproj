@@ -53,7 +53,9 @@
     <Compile Include="CommandSenderMock.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="EventStoreDispatcher.cs" />
+    <Compile Include="EventStoreGlobalPosition.cs" />
     <Compile Include="EventStoreRepository.cs" />
+    <Compile Include="IHandlePosition.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPersistGetEventStorePosition.cs" />
     <Compile Include="IResolveUserIdentity.cs" />

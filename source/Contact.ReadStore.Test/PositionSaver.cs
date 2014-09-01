@@ -1,8 +1,9 @@
-﻿using Raven.Client;
+﻿using Contact.Infrastructure;
+using Raven.Client;
 
 namespace Contact.ReadStore
 {
-    public class PositionSaver
+    public class PositionSaver : IHandlePosition
     {
         private const string PositionId = "global/POSITION";
         private readonly IDocumentStore _documentStore;
@@ -16,17 +17,27 @@ namespace Contact.ReadStore
         {
             using (var session = _documentStore.OpenSession())
             {
-                var position = session.Load<EventStoreGlobalPosition>(PositionId);
-                return position;
+                var position = session.Load<EventStoreGlobalPositionUsedInRavenDb>(PositionId);
+                if (position == null) return null;
+                return new EventStoreGlobalPosition
+                {
+                    PreparePosition = position.PreparePosition,
+                    CommitPosition = position.CommitPosition
+                };
             }
         }
 
         public void SaveLatestPosition(EventStoreGlobalPosition position)
         {
-            position.Id = PositionId;
+            var toSave = new EventStoreGlobalPositionUsedInRavenDb
+            {
+                Id = PositionId,
+                PreparePosition = position.PreparePosition,
+                CommitPosition = position.CommitPosition
+            };
             using (var session = _documentStore.OpenSession())
             {
-                session.Store(position);
+                session.Store(toSave);
                 session.SaveChanges();
             }
         }

@@ -19,8 +19,9 @@ namespace Contact.Infrastructure
         private readonly string _eventStorePassword;
         private readonly IEventPublisher _publisher;
         private readonly Action _liveProcessing;
+        private readonly IHandlePosition _positionHandler;
 
-        public EventStoreDispatcher(string eventStoreServer, string eventStoreUsername, string eventStorePassword, IEventPublisher publisher, ILog log, Action liveProcessing)
+        public EventStoreDispatcher(string eventStoreServer, string eventStoreUsername, string eventStorePassword, IEventPublisher publisher, ILog log, Action liveProcessing, IHandlePosition positionHandler)
             : base(log)
         {
             _eventStoreServer = eventStoreServer;
@@ -28,6 +29,7 @@ namespace Contact.Infrastructure
             _eventStorePassword = eventStorePassword;
             _publisher = publisher;
             _liveProcessing = liveProcessing;
+            _positionHandler = positionHandler;
         }
 
         protected override void Initialize()
@@ -89,11 +91,24 @@ namespace Contact.Infrastructure
                 try
                 {
                     _publisher.Publish(domainEvent);
+                    SavePosition(resolvedEvent.OriginalPosition);
                 }
                 catch (Exception error)
                 {
                     Log.Warn("Not able to publish event", error);
                 }
+            }
+        }
+
+        private void SavePosition(Position? originalPosition)
+        {
+            if (_positionHandler != null && originalPosition.HasValue)
+            {
+                _positionHandler.SaveLatestPosition(new EventStoreGlobalPosition
+                {
+                    PreparePosition = originalPosition.Value.PreparePosition,
+                    CommitPosition = originalPosition.Value.CommitPosition
+                });
             }
         }
 
@@ -116,7 +131,12 @@ namespace Contact.Infrastructure
 
         private Position? GetLatestPosition()
         {
-            return null;
+            if (_positionHandler == null) return null;
+
+            var position = _positionHandler.GetLatestSavedPosition();
+            if (position == null) return null;
+
+            return new Position(position.CommitPosition, position.PreparePosition);
         }
 
         private void LiveProcessingStarted(EventStoreCatchUpSubscription arg1)

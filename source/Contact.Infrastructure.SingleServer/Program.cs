@@ -70,8 +70,8 @@ namespace Contact.Infrastructure.SingleServer
             new EmployeeSearchStore(store).PrepareHandler(handlers);
             new CommandStatusStore(store).PrepareHandler(handlers);
             new UserLookupStore(new UserLookupEngine(store), store).PrepareHandler(handlers);
-
-            var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { });
+            var positionSaver = new PositionSaver(store);
+            var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { }, positionSaver);
             read.Start();
 
             return read;

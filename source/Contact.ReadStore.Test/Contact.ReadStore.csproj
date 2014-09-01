@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventStoreGlobalPosition.cs" />
+    <Compile Include="EventStoreGlobalPositionUsedInRavenDb.cs" />
     <Compile Include="PositionSaver.cs" />
     <Compile Include="RavenDocumentStore.cs" />
     <Compile Include="ReadStoreConstants.cs" />
