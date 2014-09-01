@@ -85,13 +85,18 @@ namespace Contact.Infrastructure
 
         private void EventHandle(EventStoreCatchUpSubscription arg1, ResolvedEvent resolvedEvent)
         {
+            PublishEvent(resolvedEvent);
+            SavePosition(resolvedEvent.OriginalPosition);
+        }
+
+        private void PublishEvent(ResolvedEvent resolvedEvent)
+        {
             Event domainEvent;
             if (TryDeserializeAggregateEvent(resolvedEvent, out domainEvent))
             {
                 try
                 {
                     _publisher.Publish(domainEvent);
-                    SavePosition(resolvedEvent.OriginalPosition);
                 }
                 catch (Exception error)
                 {
@@ -102,13 +107,20 @@ namespace Contact.Infrastructure
 
         private void SavePosition(Position? originalPosition)
         {
-            if (_positionHandler != null && originalPosition.HasValue)
+            try
             {
-                _positionHandler.SaveLatestPosition(new EventStoreGlobalPosition
+                if (_positionHandler != null && originalPosition.HasValue)
                 {
-                    PreparePosition = originalPosition.Value.PreparePosition,
-                    CommitPosition = originalPosition.Value.CommitPosition
-                });
+                    _positionHandler.SaveLatestPosition(new EventStoreGlobalPosition
+                    {
+                        PreparePosition = originalPosition.Value.PreparePosition,
+                        CommitPosition = originalPosition.Value.CommitPosition
+                    });
+                }
+            }
+            catch (Exception error)
+            {
+                Log.Warn("Not able to save lastest position", error);
             }
         }
 
