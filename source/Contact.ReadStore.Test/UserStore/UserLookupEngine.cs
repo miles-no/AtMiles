@@ -74,7 +74,7 @@ namespace Contact.ReadStore.UserStore
             }
             if (res != null)
             {
-                return res.Id;
+                return res.GlobalId;
             }
             return null;
         }
@@ -89,7 +89,7 @@ namespace Contact.ReadStore.UserStore
             }
             if (res != null)
             {
-                return res.Id;
+                return res.GlobalId;
             }
             return null;
         }

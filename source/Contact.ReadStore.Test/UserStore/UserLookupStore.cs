@@ -19,7 +19,7 @@ namespace Contact.ReadStore.UserStore
             this._documentStore = documentStore;
         }
 
-        private static string GetRavenId(string id)
+        public static string GetRavenId(string id)
         {
             return "users/" + id;
         }
@@ -172,6 +172,7 @@ namespace Contact.ReadStore.UserStore
                 Id = GetRavenId(ev.EmployeeId),
                 GlobalProviderId = CreateGlobalId(ev),
                 GlobalProviderEmail = CreateGlobalEmailId(ev),
+                GlobalId = ev.EmployeeId,
                 Email = ev.Email,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 CompanyAdmin = false,

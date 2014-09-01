@@ -7,6 +7,7 @@ using Contact.Backend.Models.Api.Status;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Domain.Exceptions;
 using Contact.Infrastructure;
+using Contact.ReadStore.UserStore;
 
 namespace Contact.Backend.Utilities
 {
@@ -69,7 +70,7 @@ namespace Contact.Backend.Utilities
 
             if (!string.IsNullOrEmpty(userId))
             {
-                identityResolver.AttachLoginToUser(companyId, userId, id.Issuer, id.Value);
+                identityResolver.AttachLoginToUser(companyId, UserLookupStore.GetRavenId(userId), id.Issuer, id.Value);
                 Cache.AddOrUpdate(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
             }
 

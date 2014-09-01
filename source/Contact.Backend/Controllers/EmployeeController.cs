@@ -24,7 +24,7 @@ namespace Contact.Backend.Controllers
         }
 
         [HttpDelete]
-        [Route("api/company/{companyId}/office({officeId}/employee/busytime/{busyTimeId}")]
+        [Route("api/company/{companyId}/office/{officeId}/employee/busytime/{busyTimeId}")]
         public Response RemoveBusyTime(string companyId, string officeId, string busyTimeId)
         {
             var request = new RemoveBusyTimeRequest { CompanyId = companyId, OfficeId = officeId, BustTimeEntryId = busyTimeId };
@@ -32,7 +32,7 @@ namespace Contact.Backend.Controllers
         }
 
         [HttpPost]
-        [Route("api/company/{companyId}/office({officeId}/employee/busytime/confirm")]
+        [Route("api/company/{companyId}/office/{officeId}/employee/busytime/confirm")]
         public Response ConfirmBusyTimeEntries(string companyId, string officeId)
         {
             var request = new ConfirmBusyTimeEntriesRequest { CompanyId = companyId, OfficeId = officeId };
