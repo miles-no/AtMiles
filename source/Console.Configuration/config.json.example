@@ -5,7 +5,8 @@
   "RabbitMqHost": "host",
   "RabbitMqUsername": "un",
   "RabbitMqPassword": "pw",
-  "RabbitMqQueueName": "Queue",
+  "RabbitMqCommandQueueName" : "Commands",
+  "RabbitMqCommandExchangeName" : "Commands_X",
   "CvPartnerToken": "12345",
   "RavenDbUrl": "http://localhost:8080"
 }

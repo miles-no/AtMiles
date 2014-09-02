@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using Contact.Configuration;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
@@ -8,7 +7,7 @@ using Contact.ReadStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Contact.ReadStore.UserStore;
-using Newtonsoft.Json;
+
 
 namespace Contact.Infrastructure.SingleServer
 {
@@ -16,31 +15,18 @@ namespace Contact.Infrastructure.SingleServer
     {
         
 
-        static void Main(string[] args)
+        static void Main()
         {
-            LongRunningProcess commandWorker;
-            LongRunningProcess readStoreWorker;
-
             var configFilename = Settings.Default.ConfigFile;
-            var config = GetConfig(configFilename);
-            commandWorker = StartCommandHandler(config);
-            readStoreWorker = StartReadModelHandler(config);
-            Console.WriteLine("Press enter to finish");
-            Console.ReadLine();
-            Console.WriteLine("Stopping.......");
+            var config = ConfigManager.GetConfig(configFilename);
+            var commandWorker = StartCommandHandler(config);
+            var readStoreWorker = StartReadModelHandler(config);
+            System.Console.WriteLine("Press enter to finish");
+            System.Console.ReadLine();
+            System.Console.WriteLine("Stopping.......");
             commandWorker.Stop();
             readStoreWorker.Stop();
-            Console.WriteLine("Stopped");
-        }
-
-        private static Config GetConfig(string configFilename)
-        {
-            if (!File.Exists(configFilename)) throw new FileNotFoundException();
-
-            var raw = File.ReadAllText(configFilename);
-            var config = JsonConvert.DeserializeObject<Config>(raw);
-
-            return config;
+            System.Console.WriteLine("Stopped");
         }
 
         private static LongRunningProcess StartCommandHandler(Config config)
@@ -55,11 +41,11 @@ namespace Contact.Infrastructure.SingleServer
             var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
 
             var logger = new ConsoleLogger();
-            var worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqQueueName, logger, cmdReceiver.MessageHandler);
+            var worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandQueueName, logger, cmdReceiver.MessageHandler);
 
             worker.Start();
 
-            Console.WriteLine("Command-worker Started");
+            System.Console.WriteLine("Command-worker Started");
             return worker;
         }
 

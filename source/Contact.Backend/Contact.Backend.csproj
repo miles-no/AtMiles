@@ -407,6 +407,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Console.Configuration\Contact.Configuration.csproj">
+      <Project>{7e312251-4a54-4176-99bd-6265c4647111}</Project>
+      <Name>Contact.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</Project>
       <Name>Contact.Domain</Name>

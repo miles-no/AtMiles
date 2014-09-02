@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
+using Contact.Configuration;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
@@ -11,6 +11,7 @@ using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure;
 using Contact.ReadStore;
 using Contact.ReadStore.SearchStore;
+using Contact.TestApp.Properties;
 using Company = Contact.Domain.Aggregates.Company;
 using Employee = Contact.Domain.Aggregates.Employee;
 
@@ -22,6 +23,7 @@ namespace Contact.TestApp
         {
             LongRunningProcess cmdWorker = null;
             bool quit = false;
+            var config = ConfigManager.GetConfig(Settings.Default.ConfigFile);
 
             while (!quit)
             {
@@ -50,10 +52,10 @@ namespace Contact.TestApp
                         quit = true;
                         break;
                     case ConsoleKey.I:
-                        SeedEmptyEventStore().Wait();
+                        SeedEmptyEventStore(config).Wait();
                         break;
                     case ConsoleKey.C:
-                        cmdWorker = StartCommandHandler();
+                        cmdWorker = StartCommandHandler(config);
                         break;
                     case ConsoleKey.S:
                         StopCommandHandler(cmdWorker);
@@ -61,11 +63,11 @@ namespace Contact.TestApp
                     case ConsoleKey.F:
                         var admin = new ReadStoreAdmin();
                         
-                        admin.PrepareHandlers(RavenDocumentStore.CreateStore("http://milescontact.cloudapp.net"));
+                        admin.PrepareHandlers(RavenDocumentStore.CreateStore(config.RavenDbUrl));
                         admin.StartListening();
                         break;
                     case ConsoleKey.G:
-                        var engine = new EmployeeSearchEngine(RavenDocumentStore.CreateStore("http://milescontact.cloudapp.net"));
+                        var engine = new EmployeeSearchEngine(RavenDocumentStore.CreateStore(config.RavenDbUrl));
                         Console.WriteLine("Write query:");
                         var query = Console.ReadLine();
                         int total;
@@ -99,28 +101,20 @@ namespace Contact.TestApp
             }
         }
 
-        private static LongRunningProcess StartCommandHandler()
+        private static LongRunningProcess StartCommandHandler(Config config)
         {
-            const string host = "milescontact.cloudapp.net";
-            const string eSUsername = "admin";
-            const string eSPassword = "changeit";
+            var companyRepository = new EventStoreRepository<Company>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var employeeRepository = new EventStoreRepository<Employee>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var globalRepository = new EventStoreRepository<Global>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var commandSessionRepository = new EventStoreRepository<CommandSession>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
 
-            const string rMqUsername = "miles";
-            const string rMqPassword = "GoGoMilesContact";
-
-            var companyRepository = new EventStoreRepository<Company>(host, null, eSUsername, eSPassword);
-            var employeeRepository = new EventStoreRepository<Employee>(host, null, eSUsername, eSPassword);
-            var globalRepository = new EventStoreRepository<Global>(host, null, eSUsername, eSPassword);
-            var commandSessionRepository = new EventStoreRepository<CommandSession>(host, null, eSUsername, eSPassword);
-
-
-            var importer = new ImportMiles(GetCvPartnerToken());
+            var importer = new ImportMiles(config.CvPartnerToken);
 
             var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer);
 
             var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
 
-            var worker = new QueueWorker(host, rMqUsername, rMqPassword, "Commands", null, cmdReceiver.MessageHandler);
+            var worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandQueueName, null, cmdReceiver.MessageHandler);
 
             worker.Start();
 
@@ -128,34 +122,19 @@ namespace Contact.TestApp
             return worker;
         }
 
-        private static string GetCvPartnerToken()
+        private static async Task SeedEmptyEventStore(Config config)
         {
-            string cvPartnerToken;
-    #if testing
-            cvPartnerToken = File.ReadAllText("D:\\miles\\key.txt");
-    #endif
-            return cvPartnerToken;
-        }
-
-        private static async Task SeedEmptyEventStore()
-        {
-            const string host = "milescontact.cloudapp.net";
-            const string username = "admin";
-            //const string password = "GoGoMilesContact";
-            const string password = "changeit";
-
-
             const string companyId = "miles";
             const string companyName = "Miles";
             const string officeId = "Stavanger";
             const string officeName = "Stavanger";
             var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
 
-            var companyRepository = new EventStoreRepository<Company>(host, null, username, password);
-            var globalRepository = new EventStoreRepository<Global>(host, null, username, password);
-            var employeeRepository = new EventStoreRepository<Employee>(host, null, username, password);
+            var companyRepository = new EventStoreRepository<Company>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var globalRepository = new EventStoreRepository<Global>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
+            var employeeRepository = new EventStoreRepository<Employee>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
 
-            var importer = new ImportMiles(GetCvPartnerToken());
+            var importer = new ImportMiles(config.CvPartnerToken);
 
             var globalCommandHandler = new GlobalCommandHandler(companyRepository, employeeRepository, globalRepository, importer);
 
