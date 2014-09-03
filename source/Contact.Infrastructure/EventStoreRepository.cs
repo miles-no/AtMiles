@@ -1,4 +1,6 @@
-﻿using Contact.Domain;
+﻿using System.Linq;
+using System.Net.Sockets;
+using Contact.Domain;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using System;
@@ -152,7 +154,9 @@ namespace Contact.Infrastructure
         {
             var addresses = System.Net.Dns.GetHostAddresses(serverName);
             if (addresses.Length == 0) throw new Exception(serverName);
-            return new System.Net.IPEndPoint(addresses[0], portNumber);
+            var adr = addresses.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+            if (adr == null) throw new Exception(serverName);
+            return new System.Net.IPEndPoint(adr, portNumber);
         }
 
         private void PublishEvent(Event @event)

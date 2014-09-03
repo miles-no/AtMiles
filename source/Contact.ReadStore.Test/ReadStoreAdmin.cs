@@ -22,7 +22,7 @@ namespace Contact.ReadStore
 
         public void StartListening()
         {
-            var demo = new EventStoreDispatcher(ReadStoreConstants.Host, ReadStoreConstants.Username, ReadStoreConstants.Password, handlers, new ConsoleLogger(), () => { });
+            var demo = new EventStoreDispatcher(ReadStoreConstants.Host, ReadStoreConstants.Username, ReadStoreConstants.Password, handlers, new ConsoleLogger(), () => { }, null);
             demo.Start();
             Console.WriteLine("Listening...");
             

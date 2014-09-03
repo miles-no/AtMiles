@@ -1,7 +1,6 @@
-﻿using Contact.ReadStore.SearchStore;
-using Contact.ReadStore.UserStore;
-using Raven.Client;
+﻿using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 
 namespace Contact.ReadStore
 {
@@ -13,18 +12,11 @@ namespace Contact.ReadStore
              documentStore.Initialize();
             //documentStore.Conventions.RegisterIdConvention<UserLookupModel>((dbname, commands, user) => "users_lookup/" + user.Id);
             //documentStore.Conventions.RegisterIdConvention<EmployeeSearchModel>((dbname, commands, user) => "employee_search/" + user.Id);
-
-            using (var session = documentStore.OpenSession())
-            {
-                Raven.Client.Indexes.IndexCreation.CreateIndexes(
-                    typeof(UserLookupIndex).Assembly, documentStore);
-                Raven.Client.Indexes.IndexCreation.CreateIndexes(
-                    typeof(EmployeeSearchModelIndex).Assembly, documentStore);
-                Raven.Client.Indexes.IndexCreation.CreateIndexes(
-                    typeof(EmployeeSearchModelLookupIndex).Assembly, documentStore);
-            }
+            
+            //Create all indexes in assembly
+            IndexCreation.CreateIndexes(typeof(RavenDocumentStore).Assembly, documentStore);
+            
             return documentStore;
         }
-
     }
 }

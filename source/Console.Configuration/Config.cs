@@ -1,4 +1,4 @@
-﻿namespace Contact.Infrastructure.SingleServer
+﻿namespace Contact.Configuration
 {
     public class Config
     {
@@ -8,7 +8,8 @@
         public string RabbitMqHost { get; set; }
         public string RabbitMqUsername { get; set; }
         public string RabbitMqPassword { get; set; }
-        public string RabbitMqQueueName { get; set; }
+        public string RabbitMqCommandQueueName { get; set; }
+        public string RabbitMqCommandExchangeName { get; set; }
         public string CvPartnerToken { get; set; }
         public string RavenDbUrl { get; set; }
     }
