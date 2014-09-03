@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Owin.Hosting;
 using Nancy;
-using Nancy.Owin;
 using Owin;
 
-namespace JustForFun2
+namespace Contact.WebClient
 {
     class Program
     {
@@ -38,8 +33,6 @@ namespace JustForFun2
             
             app.UseStaticFiles("/scripts/foundation");
             app.UseStaticFiles("/scripts/app");
-
-            //app.UseStaticFiles("/images");
 
             app.UseNancy(); 
         }

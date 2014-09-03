@@ -1,10 +1,8 @@
-
-
 using SquishIt.Framework;
 using SquishIt.Framework.Minifiers.JavaScript;
 using YuiMinifier = SquishIt.Framework.Minifiers.CSS.YuiMinifier;
 
-namespace JustForFun2
+namespace Contact.WebClient
 {
     public class BundleConfig
     {

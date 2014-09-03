@@ -1,6 +1,6 @@
 ﻿using Nancy;
 
-namespace JustForFun2.Modules
+namespace Contact.WebClient.Modules
 {
     public class HomeModule : NancyModule
     {
