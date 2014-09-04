@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandSenderMock.cs" />
+    <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\ConfigManager.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="EventStoreDispatcher.cs" />
     <Compile Include="EventStoreGlobalPosition.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="ReadModelHandler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="config.json.example" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

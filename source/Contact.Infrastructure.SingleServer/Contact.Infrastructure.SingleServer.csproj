@@ -71,10 +71,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Console.Configuration\Contact.Configuration.csproj">
-      <Project>{7e312251-4a54-4176-99bd-6265c4647111}</Project>
-      <Name>Contact.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Contact.Domain</Name>

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Contact.Configuration
+namespace Contact.Infrastructure.Configuration
 {
     public class ConfigManager
     {

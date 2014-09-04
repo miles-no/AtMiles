@@ -66,13 +66,6 @@ namespace Contact.Backend
             //    clientId: "",
             //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(
-            //    consumerKey: "",
-            //    consumerSecret: "");
-
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
             var options = new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "387201482859-4091mlp9nvru7lfhd6mr546hku4gue2q.apps.googleusercontent.com",
@@ -85,8 +78,6 @@ namespace Contact.Backend
             var config = GlobalConfiguration.Configuration;
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(DefaultAuthenticationTypes.ExternalCookie));
-
-          
         }
     }
 }

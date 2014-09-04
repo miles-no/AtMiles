@@ -1,7 +1,7 @@
-﻿using Contact.Configuration;
-using Contact.Domain.Aggregates;
+﻿using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
+using Contact.Infrastructure.Configuration;
 using Contact.Infrastructure.SingleServer.Properties;
 using Contact.ReadStore;
 using Contact.ReadStore.SearchStore;
