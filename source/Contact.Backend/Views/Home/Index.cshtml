@@ -7,7 +7,7 @@
         </div>
         <div id="login" >
             <span>Log in with </span>
-            <a href="api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A56548%2F">Google</a>
+            <a href="api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=@string.Format("{0}://{1}{2}", HttpContext.Current.Request.Url.Scheme, HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port == 80 ? string.Empty : ":" + HttpContext.Current.Request.Url.Port) ">Google</a>
 
             @*  If more providers are added, we can loop through these like this:
                 <p>
