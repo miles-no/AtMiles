@@ -167,3 +167,6 @@ source/Contact.WebClient/*.pdb
 source/Contact.WebClient/*.exe.*
 source/Contact.WebClient/Content/styles_*.css
 source/Contact.WebClient/Scripts/home_*.js
+source/Contact.Web/*.dat
+source/Contact.Web/.sass-cache
+source/Contact.Web/node_modules
