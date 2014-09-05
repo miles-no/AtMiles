@@ -41,6 +41,30 @@
       <IncludedFiles>
       </IncludedFiles>
     </Compile>
+    <Compile Include="public\javascripts\angular.js" />
+    <Compile Include="public\javascripts\angular.min.js" />
+    <Compile Include="public\javascripts\foundation\fastclick.js" />
+    <Compile Include="public\javascripts\foundation\foundation.abide.js" />
+    <Compile Include="public\javascripts\foundation\foundation.accordion.js" />
+    <Compile Include="public\javascripts\foundation\foundation.alert.js" />
+    <Compile Include="public\javascripts\foundation\foundation.clearing.js" />
+    <Compile Include="public\javascripts\foundation\foundation.dropdown.js" />
+    <Compile Include="public\javascripts\foundation\foundation.equalizer.js" />
+    <Compile Include="public\javascripts\foundation\foundation.interchange.js" />
+    <Compile Include="public\javascripts\foundation\foundation.joyride.js" />
+    <Compile Include="public\javascripts\foundation\foundation.js" />
+    <Compile Include="public\javascripts\foundation\foundation.magellan.js" />
+    <Compile Include="public\javascripts\foundation\foundation.offcanvas.js" />
+    <Compile Include="public\javascripts\foundation\foundation.orbit.js" />
+    <Compile Include="public\javascripts\foundation\foundation.reveal.js" />
+    <Compile Include="public\javascripts\foundation\foundation.slider.js" />
+    <Compile Include="public\javascripts\foundation\foundation.tab.js" />
+    <Compile Include="public\javascripts\foundation\foundation.tooltip.js" />
+    <Compile Include="public\javascripts\foundation\foundation.topbar.js" />
+    <Compile Include="public\javascripts\foundation\jquery.cookie.js" />
+    <Compile Include="public\javascripts\jquery-2.1.1.intellisense.js" />
+    <Compile Include="public\javascripts\jquery-2.1.1.js" />
+    <Compile Include="public\javascripts\modernizr-2.8.3.js" />
     <Compile Include="routes\index.js">
       <Compile>True</Compile>
       <Minify>False</Minify>
@@ -553,6 +577,7 @@
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
+    <Folder Include="public\javascripts\foundation\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="public\stylesheets\sass\" />
     <Folder Include="public\stylesheets\sass\foundation\" />
