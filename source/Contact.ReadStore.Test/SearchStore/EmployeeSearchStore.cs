@@ -64,6 +64,24 @@ namespace Contact.ReadStore.SearchStore
             return res.Where(w => string.IsNullOrEmpty(w) == false).Distinct().ToList();
         }
 
+        private static List<EmployeeSearchModel.Description> CreateDescritpions(IEnumerable<CvPartnerKeyQualification> keyQualifications)
+        {
+            var res = new List<EmployeeSearchModel.Description>();
+            if (keyQualifications != null)
+            {
+                foreach (var cvPartnerKeyQualification in keyQualifications)
+                {
+                    var desc = new EmployeeSearchModel.Description
+                    {
+                        InternationalDescription = cvPartnerKeyQualification.InternationalDescription,
+                        LocalDescription = cvPartnerKeyQualification.LocalDescription
+                    };
+                    res.Add(desc);
+                }
+            }
+            return res;
+        }
+
         private static Tag[] CreateCompetency(IEnumerable<CvPartnerTechnology> technologies)
         {
             var res = new List<Tag>();
@@ -203,6 +221,7 @@ namespace Contact.ReadStore.SearchStore
                 BusyTimeEntriesConfirmed = DateTime.MinValue,
                 Competency = CreateCompetency(ev.Technologies),
                 KeyQualifications = CreateKeyQalifications(ev.KeyQualifications),
+                Descriptions = CreateDescritpions(ev.KeyQualifications),
                 BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>()
             };
             return model;
@@ -218,6 +237,7 @@ namespace Contact.ReadStore.SearchStore
             model.Thumb = CreateThumb(ev.Photo, 80, 0);
             model.Competency = CreateCompetency(ev.Technologies);
             model.KeyQualifications = CreateKeyQalifications(ev.KeyQualifications);
+            model.Descriptions = CreateDescritpions(ev.KeyQualifications);
             return model;
         }
 
