@@ -124,7 +124,7 @@ namespace Contact.Domain.Aggregates
 
             if (AnyConflictWithExistingBusyTimeEntries(start, end)) throw new AlreadyExistingItemException("Existing busy time items already defined in this range.");
 
-            var busyTimeId = Services.IdService.CreateNewId();
+            var busyTimeId = IdService.CreateNewId();
             var ev = new BusyTimeAdded(
                 companyId: companyId,
                 companyName: companyName,
@@ -188,7 +188,7 @@ namespace Contact.Domain.Aggregates
             return false;
         }
 
-        public bool TimePeriodOverlap(DateTime BS, DateTime BE, DateTime TS, DateTime TE)
+        public bool TimePeriodOverlap(DateTime bs, DateTime be, DateTime ts, DateTime te)
         {
             return (
                 // 1. Case:
@@ -197,7 +197,7 @@ namespace Contact.Domain.Aggregates
                 //    BS------BE 
                 //
                 // TS is after BS but before BE
-                (TS >= BS && TS < BE)
+                (ts >= bs && ts < be)
                 || // or
 
                 // 2. Case
@@ -206,7 +206,7 @@ namespace Contact.Domain.Aggregates
                 //        BS---------BE
                 //
                 // TE is before BE but after BS
-                (TE <= BE && TE > BS)
+                (te <= be && te > bs)
                 || // or
 
                 // 3. Case
@@ -215,7 +215,7 @@ namespace Contact.Domain.Aggregates
                 //     BS----BE
                 //
                 // TS is before BS and TE is after BE
-                (TS <= BS && TE >= BE)
+                (ts <= bs && te >= be)
             );
         }
 
