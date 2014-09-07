@@ -49,6 +49,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet">
+      <HintPath>..\packages\YamlDotNet.3.3.0\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandSenderMock.cs" />
@@ -71,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json.example" />
+    <None Include="config_example.yaml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

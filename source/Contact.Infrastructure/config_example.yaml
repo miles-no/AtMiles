@@ -1,0 +1,16 @@
+# Every setting in this file is only for example. You need to provide your own settings here
+# More info at these urls:
+# http://en.wikipedia.org/wiki/YAML
+# http://www.yaml.org/
+
+CompanyId: miles
+EventServerHost: localhost
+EventServerUsername: admin
+EventServerPassword: changeit
+RabbitMqHost: localhost
+RabbitMqUsername: guest
+RabbitMqPassword: guest
+RabbitMqCommandQueueName: Commands
+RabbitMqCommandExchangeName: Commands_X
+RavenDbUrl: http://localhost:8080
+CvPartnerToken: 123

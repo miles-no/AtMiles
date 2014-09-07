@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Newtonsoft.Json;
+using YamlDotNet.Serialization;
 
 namespace Contact.Infrastructure.Configuration
 {
@@ -7,11 +7,12 @@ namespace Contact.Infrastructure.Configuration
     {
         public static Config GetConfig(string configFilename)
         {
-            if (!File.Exists(configFilename)) throw new FileNotFoundException();
-
-            var raw = File.ReadAllText(configFilename);
-            var config = JsonConvert.DeserializeObject<Config>(raw);
-
+            Config config = null;
+            using (var reader = File.OpenText(configFilename))
+            {
+                var deserializer = new Deserializer();
+                config = deserializer.Deserialize<Config>(reader);
+            }
             return config;
         }
     }
