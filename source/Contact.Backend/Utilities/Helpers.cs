@@ -13,7 +13,9 @@ namespace Contact.Backend.Utilities
 {
     public class Helpers
     {
+        // If this system should support more then one company, we have to shift this around a bit
         private static string _companyId;
+        
         private static string _statusEndpointUrl;
 
         public static void Initialize(string companyId, string statusEndpointUrl)
@@ -93,6 +95,12 @@ namespace Contact.Backend.Utilities
             {
                 throw new UnknownUserException("Unknown user");
             }
+        }
+
+        public static bool UserHasAccessToCompany(IIdentity user, string companyId, IResolveUserIdentity identityResolver)
+        {
+            // This doesnt really make sense before we have more than one company
+            return companyId == _companyId;
         }
     }
 }

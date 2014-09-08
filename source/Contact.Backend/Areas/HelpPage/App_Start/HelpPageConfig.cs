@@ -15,6 +15,7 @@ using System.Web.Http;
 #if Handle_PageResultOfT
 using System.Web.Http.OData;
 #endif
+using Contact.Backend.Models.Api.Employee;
 
 namespace Contact.Backend.Areas.HelpPage
 {
@@ -73,7 +74,7 @@ namespace Contact.Backend.Areas.HelpPage
 
             //// Uncomment the following to correct the sample request when the action expects an HttpRequestMessage with ObjectContent<string>.
             //// The sample will be generated as if the controller named "Values" and action named "Get" were having string as the body parameter.
-            //config.SetActualRequestType(typeof(string), "Values", "Get");
+            config.SetActualRequestType(typeof(EmployeeDetailsResponse), "Employee", "GetEmployeeDetails");
 
             //// Uncomment the following to correct the sample response when the action returns an HttpResponseMessage with ObjectContent<string>.
             //// The sample will be generated as if the controller named "Values" and action named "Post" were returning a string.

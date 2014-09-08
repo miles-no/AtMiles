@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Web.Http;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.DataHandler;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
@@ -50,7 +53,15 @@ namespace Contact.Backend
                 AllowInsecureHttp = true
             };
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions());
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                CookieName = "atMiles",
+                CookiePath = FormsAuthentication.FormsCookiePath,
+                CookieSecure = CookieSecureOption.SameAsRequest,
+                AuthenticationMode = AuthenticationMode.Active,
+                ExpireTimeSpan = new TimeSpan(8,0,0),
+                SlidingExpiration = true,
+            });
 
             app.UseOAuthBearerTokens(OAuthOptions);
           

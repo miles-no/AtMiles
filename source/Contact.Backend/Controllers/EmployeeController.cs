@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Tasks;
+using Contact.Backend.Utilities;
+using Contact.Infrastructure;
 
 namespace Contact.Backend.Controllers
 {
@@ -9,11 +14,29 @@ namespace Contact.Backend.Controllers
     public class EmployeeController : ApiController
     {
         private readonly IMediator mediator;
+        private readonly IResolveUserIdentity identityResolver;
 
-        public EmployeeController(IMediator mediator)
+        public EmployeeController(IMediator mediator, IResolveUserIdentity identityResolver)
         {
             this.mediator = mediator;
+            this.identityResolver = identityResolver;
         }
+
+        [HttpGet]
+        [Route("api/company/{companyId}/employee/{employeeId}")]
+        public HttpResponseMessage GetEmployeeDetails(string employeeId)
+        {
+            var res =
+                mediator.Send<EmployeeDetailsRequest, EmployeeDetailsResponse>(
+                    new EmployeeDetailsRequest {EmployeeId = employeeId}, User.Identity);
+            if (Helpers.UserHasAccessToCompany(User.Identity, res.CompanyId, identityResolver) == false)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
+                    "User does not have permission to view this employe");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+        
 
         [HttpPost]
         [Route("api/company/{companyId}/office({officeId}/employee/busytime")]

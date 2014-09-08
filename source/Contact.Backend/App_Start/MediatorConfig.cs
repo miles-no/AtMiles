@@ -2,6 +2,7 @@
 using AutoMapper;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Search;
 using Contact.Backend.Models.Api.Status;
 using Contact.ReadStore.SearchStore;
@@ -43,6 +44,13 @@ namespace Contact.Backend
                     ErrorMessage = res.ErrorMessage,
                     Url = sr.SenderUrl
                 };
+            });
+
+            mediator.Subscribe<EmployeeDetailsRequest, EmployeeDetailsResponse>((request, user) =>
+            {
+                var engine = container.Resolve<EmployeeSearchEngine>();
+                var employee = engine.GetEmployeeSearchModel(request.EmployeeId);
+                return Mapper.Map<EmployeeSearchModel, EmployeeDetailsResponse>(employee);
             });
 
             return mediator;

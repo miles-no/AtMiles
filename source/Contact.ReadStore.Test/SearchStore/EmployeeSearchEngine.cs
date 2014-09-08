@@ -14,6 +14,14 @@ namespace Contact.ReadStore.SearchStore
             store = documentStore;
         }
 
+        public EmployeeSearchModel GetEmployeeSearchModel(string employeeId)
+        {
+            using (var session = store.OpenSession())
+            {
+                return session.Load<EmployeeSearchModel>("employees/" + employeeId);
+            }
+        }
+
    
         public List<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {

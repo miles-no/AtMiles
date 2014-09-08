@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Search;
 using Contact.ReadStore.SearchStore;
 using Tag = Contact.ReadStore.SearchStore.Tag;
@@ -21,7 +22,10 @@ namespace Contact.Backend
     {
         protected override void Configure()
         {
-            Mapper.CreateMap<EmployeeSearchModel, Result>(); 
+            Mapper.CreateMap<EmployeeSearchModel, Result>();
+            Mapper.CreateMap<EmployeeSearchModel, EmployeeDetailsResponse>();
+            Mapper.CreateMap<EmployeeSearchModel.BusyTime, EmployeeDetailsResponse.BusyTime>();
+            Mapper.CreateMap<EmployeeSearchModel.Description, EmployeeDetailsResponse.Description>(); 
             Mapper.CreateMap<Tag, Models.Api.Search.Tag>();
         }
     }

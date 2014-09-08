@@ -19,7 +19,6 @@ namespace Contact.Backend.Models.Api.Search
 
     public class Result
     {
-        public string Id { get; set; }
         public string CompanyId { get; set; }
         public string OfficeId { get; set; }
         public string GlobalId { get; set; }
