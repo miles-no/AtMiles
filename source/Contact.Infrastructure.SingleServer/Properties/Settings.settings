@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ConfigFile" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">D:\miles\single_server.config</Value>
+      <Value Profile="(Default)">D:\miles\single_server.yaml</Value>
     </Setting>
   </Settings>
 </SettingsFile>

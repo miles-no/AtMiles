@@ -1,0 +1,15 @@
+{
+    "CompanyId" :  "miles",
+    "StatusEndpointUrl": "http://localhost:56548",
+    "EventServerHost": "host",
+    "EventServerSUsername": "un",
+    "EventServerSPassword": "pwd",
+    "RabbitMqHost": "host",
+    "RabbitMqUsername": "un",
+    "RabbitMqPassword": "pw",
+    "RabbitMqUseSsl": "false",
+    "RabbitMqCommandQueueName": "Commands",
+    "RabbitMqCommandExchangeName": "Commands_X",
+    "CvPartnerToken": "12345",
+    "RavenDbUrl": "http://localhost:8080"
+}

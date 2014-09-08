@@ -13,14 +13,22 @@ namespace Contact.Backend.Utilities
 {
     public class Helpers
     {
-        private static string companyId = "miles";
+        private static string _companyId;
+        private static string _statusEndpointUrl;
+
+        public static void Initialize(string companyId, string statusEndpointUrl)
+        {
+            _companyId = companyId;
+            _statusEndpointUrl = statusEndpointUrl;
+        }
+
         public static Response CreateResponse(string id = null, string message = null)
         {
             if (string.IsNullOrEmpty(id))
             {
                 id = Domain.Services.IdService.CreateNewId();
             }
-            return new Response { RequestId = id, Status = new StatusResponse { Url = Config.StatusEndpoint + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
+            return new Response { RequestId = id, Status = new StatusResponse { Url = _statusEndpointUrl + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
         }
 
         public static Response CreateErrorResponse(string id, string errorMessage)
@@ -49,29 +57,29 @@ namespace Contact.Backend.Utilities
             var id = claims.FindFirst(ClaimTypes.NameIdentifier);
 
             string userId;
-            if (Cache.TryGetValue(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), out userId))
+            if (Cache.TryGetValue(new Tuple<string, string, string>(_companyId, id.Issuer, id.Value), out userId))
             {
                 return userId;
             }
 
-            userId = identityResolver.ResolveUserIdentityByProviderId(companyId, id.Issuer, id.Value);
+            userId = identityResolver.ResolveUserIdentityByProviderId(_companyId, id.Issuer, id.Value);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                Cache.AddOrUpdate(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
+                Cache.AddOrUpdate(new Tuple<string, string, string>(_companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
                 return userId;
             }
 
             //Resolve by Email
             var email = claims.FindFirst(ClaimTypes.Email);
 
-            userId = identityResolver.ResolveUserIdentityByEmail(companyId, id.Issuer, email.Value);
+            userId = identityResolver.ResolveUserIdentityByEmail(_companyId, id.Issuer, email.Value);
 
 
             if (!string.IsNullOrEmpty(userId))
             {
-                identityResolver.AttachLoginToUser(companyId, UserLookupStore.GetRavenId(userId), id.Issuer, id.Value);
-                Cache.AddOrUpdate(new Tuple<string, string, string>(companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
+                identityResolver.AttachLoginToUser(_companyId, UserLookupStore.GetRavenId(userId), id.Issuer, id.Value);
+                Cache.AddOrUpdate(new Tuple<string, string, string>(_companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
             }
 
             return userId;

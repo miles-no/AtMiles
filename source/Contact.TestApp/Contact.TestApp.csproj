@@ -33,22 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EventStore.ClientAPI, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EventStore.Client.3.0.0-rc2\lib\net40\EventStore.ClientAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.5.2910\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.5.2910\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -69,32 +53,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Console.Configuration\Contact.Configuration.csproj">
-      <Project>{7e312251-4a54-4176-99bd-6265c4647111}</Project>
-      <Name>Contact.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Contact.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contact.Import.CvPartner\Contact.Import.CvPartner.csproj">
-      <Project>{b544efbd-81e6-44a0-9423-84abcf1c0b46}</Project>
-      <Name>Contact.Import.CvPartner</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contact.Infrastructure\Contact.Infrastructure.csproj">
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
       <Name>Contact.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Contact.ReadStore.Test\Contact.ReadStore.csproj">
-      <Project>{DC681094-CE50-4E07-A14E-3CDA4554FFB1}</Project>
-      <Name>Contact.ReadStore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

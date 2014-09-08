@@ -28,7 +28,7 @@
                 </div>
                 <div class="hidden" ng-switch-when="false">
                     <span>Log in with </span>
-                    <a href="http://localhost:56548/api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost">Google</a>
+                    <a href="http://localhost:56548/api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=@string.Format("{0}://{1}{2}", HttpContext.Current.Request.Url.Scheme, HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Url.Port == 80 ? string.Empty : ":" + HttpContext.Current.Request.Url.Port) ">Google</a>
                 </div>
                 <div class="hidden" ng-switch-default><p>Something bad happened</p></div>
             </div>
