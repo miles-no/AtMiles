@@ -8489,3 +8489,16 @@ th.hide-for-touch {
     display: table-cell !important;
   }
 }
+/* line 6, sass/Site.scss */
+.img-panel {
+  position: relative;
+  padding-left: 6rem;
+  margin-bottom: 2rem;
+}
+/* line 11, sass/Site.scss */
+.img-panel img {
+  position: absolute;
+  top: 1.7rem;
+  left: -1.875rem;
+  max-width: 6rem;
+}

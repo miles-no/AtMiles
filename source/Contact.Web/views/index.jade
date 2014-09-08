@@ -1,5 +1,28 @@
 ﻿extends layout
 
+
+block scripts
+    script(src='/javascripts/homepageController.js')
+
 block content
-  h1= title
-  p Welcome to #{title}
+    
+    h1 @Miles
+
+    .large-12.columns(ng-app ng-controller="homepageController")
+        div(ng-switch="isAuthenticated.good")
+            .container.hidden(ng-switch-when="false")
+                span Log in with
+                a.button(href="http://milescontact.cloudapp.net/api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost") Google
+        .row.hidden
+            .large-12.columns
+                input.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                .large-4.columns
+                    table.table.table-striped
+                        tr(ng-repeat="item in searchResult.Results" ng-click="showDetails(item)")
+                            td
+                                img(src="{{item.Thumb}}")
+                                {{item.OfficeId}} - {{item.JobTitle}}
+                div.large-8.columns.panel(ng-show="selectedEmployee")
+                    h3(ng-bind="selectedEmployee.Name")
+
+        
