@@ -15,5 +15,36 @@
     max-width: 6rem;
   }
 }
+.my-repeat-animation.ng-enter, 
+.my-repeat-animation.ng-leave, 
+.my-repeat-animation.ng-move {
+  -webkit-transition: 0.5s ease-in all;
+  transition: 0.5s ease-in all;
+  position: relative;
+  display: block;
+}
 
+.my-repeat-animation.ng-enter {
+  left:-20px;
+  opacity:0;
+}
+.my-repeat-animation.ng-enter.ng-enter-active {
+  left:0;
+  opacity:1;
+}
 
+.my-repeat-animation.ng-leave {
+  left:0;
+  opacity:1;
+}
+.my-repeat-animation.ng-leave.ng-leave-active {
+  left:-20px;
+  opacity:0;
+}
+
+.my-repeat-animation.ng-move {
+  opacity:0.5;
+}
+.my-repeat-animation.ng-move.ng-move-active {
+  opacity:1;
+}

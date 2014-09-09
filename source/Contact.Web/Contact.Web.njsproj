@@ -41,6 +41,7 @@
       <IncludedFiles>
       </IncludedFiles>
     </Compile>
+    <Compile Include="public\javascripts\angular-animate.js" />
     <Compile Include="public\javascripts\angular.js" />
     <Compile Include="public\javascripts\angular.min.js" />
     <Compile Include="public\javascripts\foundation\fastclick.js" />

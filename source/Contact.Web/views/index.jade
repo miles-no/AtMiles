@@ -8,30 +8,30 @@ block content
     .row
         h1 @Miles
     .row
-        .large-12.columns(ng-app ng-controller="homepageController")
+        .large-12.small-12.columns(ng-app="AtMiles" ng-controller="homepageController")
             div(ng-switch="isAuthenticated.good")
                 .panel.container.hidden(ng-switch-when="false")
                     span Log in with&nbsp;
                     a.button.small.radius(href="http://milescontact.cloudapp.net/api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost") Google
              #mainContent.row.hidden
-                .large-12.columns
+                .large-12.small-12.columns
                     
-                    input.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
-                    .large-4.columns
+                    input.large-4.columns.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                    .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
                         table.table.table-striped
-                            tr(ng-repeat="item in searchResult.Results" ng-click="showDetails(item)")
+                            tr.my-repeat-animation(ng-repeat="item in searchResult.Results" ng-click="showDetails(item)")
                                 td
                                     img(src="{{item.Thumb}}")
                                 td
                                     <b>{{item.Name}}</b>
                                     | {{item.OfficeId}} - {{item.JobTitle}}
                                     
-                    .large-8.columns.panel(ng-show="selectedEmployee")
+                    .large-8.small-12.columns.panel(ng-show="selectedEmployee")
                         h3(ng-bind="selectedEmployee.name")
                         p(ng-bind="selectedEmployee.local.description")
                         ul.inline-list
                             li(ng-repeat="comp in selectedEmployee.local.competencygroups")
-                                span.label {{comp.key}}
+                                span.label.round.success {{comp.key}}
                         
 
         

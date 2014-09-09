@@ -8502,3 +8502,47 @@ th.hide-for-touch {
   left: -1.875rem;
   max-width: 6rem;
 }
+
+/* line 20, sass/Site.scss */
+.my-repeat-animation.ng-enter,
+.my-repeat-animation.ng-leave,
+.my-repeat-animation.ng-move {
+  -webkit-transition: 0.5s ease-in all;
+  transition: 0.5s ease-in all;
+  position: relative;
+  display: block;
+}
+
+/* line 27, sass/Site.scss */
+.my-repeat-animation.ng-enter {
+  left: -20px;
+  opacity: 0;
+}
+
+/* line 31, sass/Site.scss */
+.my-repeat-animation.ng-enter.ng-enter-active {
+  left: 0;
+  opacity: 1;
+}
+
+/* line 36, sass/Site.scss */
+.my-repeat-animation.ng-leave {
+  left: 0;
+  opacity: 1;
+}
+
+/* line 40, sass/Site.scss */
+.my-repeat-animation.ng-leave.ng-leave-active {
+  left: -20px;
+  opacity: 0;
+}
+
+/* line 45, sass/Site.scss */
+.my-repeat-animation.ng-move {
+  opacity: 0.5;
+}
+
+/* line 48, sass/Site.scss */
+.my-repeat-animation.ng-move.ng-move-active {
+  opacity: 1;
+}
