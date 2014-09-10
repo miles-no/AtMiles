@@ -21,6 +21,7 @@
         var tmpTerm = $scope.queryTerm;
 
         if (!tmpTerm || tmpTerm == '') {
+            $scope.selectedEmployee = null;
             while ($scope.searchResult.Results.length > 0) {
                 skip = 0;
                 $scope.searchResult.Results.pop();
@@ -47,6 +48,7 @@
                                 while ($scope.searchResult.Results.length > 0) {
                                     $scope.searchResult.Results.pop();
                                 }
+                                $scope.selectedEmployee = null;
                             }
 
                             for (var i = 0; i < data.Results.length; i++) {
@@ -61,6 +63,9 @@
                                 $scope.moreSearchResults = false;
                             }
                             lastQueryTerm = tmpTerm;
+                            if ($scope.searchResult.Results.length == 1) {
+                                $scope.showDetails($scope.searchResult.Results[0]);
+                            }
                         }
                     }
                 });
