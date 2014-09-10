@@ -4,48 +4,62 @@
 
     $scope.queryTerm = "";
     var lastQueryTerm = null;
+    var maxSearchResults = 9;
+
+    var skip = 0;
+    var take = maxSearchResults;
 
     $scope.selectedEmployee = null;
 
+    $scope.moreSearchResults = false;
     $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
 
-    $scope.search = function () {
-        if ($scope.queryTerm == lastQueryTerm) {
+    $scope.search = function (add) {
+        if ($scope.queryTerm == lastQueryTerm && (!skip || skip == 0)) {
             return;
         }
         var tmpTerm = $scope.queryTerm;
 
         if (!tmpTerm || tmpTerm == '') {
             while ($scope.searchResult.Results.length > 0) {
+                skip = 0;
                 $scope.searchResult.Results.pop();
             }
            
             return;
+        }
+        if (tmpTerm != lastQueryTerm) {
+            skip = 0;
         }
 
         $timeout(function () {
             if (tmpTerm == $scope.queryTerm) {
                 var res = $http({
                     method: 'GET',
-                    url: $scope.apiRoot + "/api/Search?query=" + encodeURIComponent(tmpTerm),
+                    url: $scope.apiRoot + "/api/Search?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(tmpTerm),
                     withCredentials: true
                 });
 
                 res.success(function (data) {
                     if (tmpTerm == $scope.queryTerm) {
                         if (data != null) {
-                            //$scope.searchResult.Total = data.Total;
-                            //$scope.searchResult.Skipped = data.Skipped;
-
-                            while ($scope.searchResult.Results.length > 0) {
-                                $scope.searchResult.Results.pop();
+                            if (!add) {
+                                while ($scope.searchResult.Results.length > 0) {
+                                    $scope.searchResult.Results.pop();
+                                }
                             }
-                            
 
                             for (var i = 0; i < data.Results.length; i++) {
                                 $scope.searchResult.Results.push(data.Results[i]);
                             }
 
+                            if (data.Total > $scope.searchResult.Results.length) {
+                                skip = skip + take;
+                                $scope.moreSearchResults = data.Total - skip;
+                            } else {
+                                skip = 0;
+                                $scope.moreSearchResults = false;
+                            }
                             lastQueryTerm = tmpTerm;
                         }
                     }
@@ -88,9 +102,11 @@
                 name: data.Name,
                 title: data.JobTitle,
                 phoneNumber: data.PhoneNumber,
+                address : data.Address,
                 email: data.Email,
                 english: getEnglishDetails(data),
                 local: getLocalDetails(data),
+                canEdit: true//data.CanEdit
             };
         });
     }
@@ -107,6 +123,13 @@
                 });
             });
 
+        for (var i = 0; i < groups.length; i++) {
+            groups[i].competencies = cleanArray(groups[i].competencies);
+            if (groups[i].competencies.length == 0) {
+                groups.splice(i, 1);
+                i = i - 1;
+            }
+        }
         var description = details.Descriptions;
         if (description.length > 0) {
             description = description[0].InternationalDescription;
@@ -130,6 +153,14 @@
                 });
             });
 
+        for (var i = 0; i < groups.length; i++) {
+            groups[i].competencies = cleanArray(groups[i].competencies);
+            if (groups[i].competencies.length == 0) {
+                groups.splice(i, 1);
+                i = i - 1;
+            }
+        }
+
         var description = details.Descriptions;
         if (description.length > 0) {
             description = description[0].LocalDescription;
@@ -146,7 +177,10 @@
         array.forEach(function (o) {
             var group = JSON.stringify(f(o));
             groups[group] = groups[group] || [];
-            groups[group].push(o);
+            if (o) {
+                groups[group].push(o);
+            }
+
             if (!groups[group].key) {
                 groups[group].key = group;
             }
@@ -156,11 +190,21 @@
         });
     }
 
+    function cleanArray(actual){
+        var newArray = new Array();
+        for(var i = 0; i<actual.length; i++){
+            if (actual[i]){
+                newArray.push(actual[i]);
+            }
+        }
+        return newArray;
+    }
 
     angular.element(document).ready(function () {
         $scope.checkAuthenticated();
     });
 
+   
 }
 
 var atMiles = angular.module('AtMiles', ['ngAnimate']);

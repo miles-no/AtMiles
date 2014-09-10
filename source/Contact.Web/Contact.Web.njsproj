@@ -44,6 +44,7 @@
     <Compile Include="public\javascripts\angular-animate.js" />
     <Compile Include="public\javascripts\angular.js" />
     <Compile Include="public\javascripts\angular.min.js" />
+    <Compile Include="public\javascripts\effects\logo.js" />
     <Compile Include="public\javascripts\foundation\fastclick.js" />
     <Compile Include="public\javascripts\foundation\foundation.abide.js" />
     <Compile Include="public\javascripts\foundation\foundation.accordion.js" />
@@ -580,6 +581,7 @@
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\javascripts\foundation\" />
+    <Folder Include="public\javascripts\effects\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="public\stylesheets\sass\" />
     <Folder Include="public\stylesheets\sass\foundation\" />

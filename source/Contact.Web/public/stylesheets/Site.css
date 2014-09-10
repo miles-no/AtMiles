@@ -498,7 +498,7 @@ body {
 
 /* line 378, sass/foundation/components/_global.scss */
 body {
-  background: white;
+  background: #bfb9ad;
   color: #222222;
   padding: 0;
   margin: 0;
@@ -2110,8 +2110,8 @@ select {
   padding: 0.875rem 1.5rem 0.875rem 0.875rem;
   font-size: 0.8125rem;
   transition: opacity 300ms ease-out;
-  background-color: #008cba;
-  border-color: #0078a0;
+  background-color: #f04924;
+  border-color: #de350f;
   color: white;
 }
 /* line 113, sass/foundation/components/_alert-boxes.scss */
@@ -2723,7 +2723,7 @@ select {
   font-size: 0.6875rem;
   line-height: 0.6875rem;
   text-transform: uppercase;
-  color: #008cba;
+  color: #f04924;
 }
 /* line 68, sass/foundation/components/_breadcrumbs.scss */
 .breadcrumbs > *:hover a, .breadcrumbs > *:focus a {
@@ -2731,7 +2731,7 @@ select {
 }
 /* line 70, sass/foundation/components/_breadcrumbs.scss */
 .breadcrumbs > * a {
-  color: #008cba;
+  color: #f04924;
 }
 /* line 75, sass/foundation/components/_breadcrumbs.scss */
 .breadcrumbs > *.current {
@@ -2796,14 +2796,14 @@ button, .button {
   padding-bottom: 1.0625rem;
   padding-left: 2rem;
   font-size: 1rem;
-  background-color: #008cba;
-  border-color: #007095;
+  background-color: #f04924;
+  border-color: #cf310e;
   color: white;
   transition: background-color 300ms ease-out;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button:hover, button:focus, .button:hover, .button:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 button:hover, button:focus, .button:hover, .button:focus {
@@ -2812,12 +2812,12 @@ button:hover, button:focus, .button:hover, .button:focus {
 /* line 197, sass/foundation/components/_buttons.scss */
 button.secondary, .button.secondary {
   background-color: #e7e7e7;
-  border-color: #007095;
+  border-color: #cf310e;
   color: #333333;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.secondary:hover, button.secondary:focus, .button.secondary:hover, .button.secondary:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 144, sass/foundation/components/_buttons.scss */
 button.secondary:hover, button.secondary:focus, .button.secondary:hover, .button.secondary:focus {
@@ -2826,12 +2826,12 @@ button.secondary:hover, button.secondary:focus, .button.secondary:hover, .button
 /* line 198, sass/foundation/components/_buttons.scss */
 button.success, .button.success {
   background-color: #43ac6a;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.success:hover, button.success:focus, .button.success:hover, .button.success:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 button.success:hover, button.success:focus, .button.success:hover, .button.success:focus {
@@ -2840,12 +2840,12 @@ button.success:hover, button.success:focus, .button.success:hover, .button.succe
 /* line 199, sass/foundation/components/_buttons.scss */
 button.alert, .button.alert {
   background-color: #f04124;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.alert:hover, button.alert:focus, .button.alert:hover, .button.alert:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 button.alert:hover, button.alert:focus, .button.alert:hover, .button.alert:focus {
@@ -2901,8 +2901,8 @@ button.round, .button.round {
 }
 /* line 212, sass/foundation/components/_buttons.scss */
 button.disabled, button[disabled], .button.disabled, .button[disabled] {
-  background-color: #008cba;
-  border-color: #007095;
+  background-color: #f04924;
+  border-color: #cf310e;
   color: white;
   cursor: default;
   opacity: 0.7;
@@ -2910,7 +2910,7 @@ button.disabled, button[disabled], .button.disabled, .button[disabled] {
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus {
@@ -2918,12 +2918,12 @@ button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[dis
 }
 /* line 159, sass/foundation/components/_buttons.scss */
 button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus {
-  background-color: #008cba;
+  background-color: #f04924;
 }
 /* line 213, sass/foundation/components/_buttons.scss */
 button.disabled.secondary, button[disabled].secondary, .button.disabled.secondary, .button[disabled].secondary {
   background-color: #e7e7e7;
-  border-color: #007095;
+  border-color: #cf310e;
   color: #333333;
   cursor: default;
   opacity: 0.7;
@@ -2931,7 +2931,7 @@ button.disabled.secondary, button[disabled].secondary, .button.disabled.secondar
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.disabled.secondary:hover, button.disabled.secondary:focus, button[disabled].secondary:hover, button[disabled].secondary:focus, .button.disabled.secondary:hover, .button.disabled.secondary:focus, .button[disabled].secondary:hover, .button[disabled].secondary:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 144, sass/foundation/components/_buttons.scss */
 button.disabled.secondary:hover, button.disabled.secondary:focus, button[disabled].secondary:hover, button[disabled].secondary:focus, .button.disabled.secondary:hover, .button.disabled.secondary:focus, .button[disabled].secondary:hover, .button[disabled].secondary:focus {
@@ -2944,7 +2944,7 @@ button.disabled.secondary:hover, button.disabled.secondary:focus, button[disable
 /* line 214, sass/foundation/components/_buttons.scss */
 button.disabled.success, button[disabled].success, .button.disabled.success, .button[disabled].success {
   background-color: #43ac6a;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
   cursor: default;
   opacity: 0.7;
@@ -2952,7 +2952,7 @@ button.disabled.success, button[disabled].success, .button.disabled.success, .bu
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.disabled.success:hover, button.disabled.success:focus, button[disabled].success:hover, button[disabled].success:focus, .button.disabled.success:hover, .button.disabled.success:focus, .button[disabled].success:hover, .button[disabled].success:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 button.disabled.success:hover, button.disabled.success:focus, button[disabled].success:hover, button[disabled].success:focus, .button.disabled.success:hover, .button.disabled.success:focus, .button[disabled].success:hover, .button[disabled].success:focus {
@@ -2965,7 +2965,7 @@ button.disabled.success:hover, button.disabled.success:focus, button[disabled].s
 /* line 215, sass/foundation/components/_buttons.scss */
 button.disabled.alert, button[disabled].alert, .button.disabled.alert, .button[disabled].alert {
   background-color: #f04124;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
   cursor: default;
   opacity: 0.7;
@@ -2973,7 +2973,7 @@ button.disabled.alert, button[disabled].alert, .button.disabled.alert, .button[d
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 button.disabled.alert:hover, button.disabled.alert:focus, button[disabled].alert:hover, button[disabled].alert:focus, .button.disabled.alert:hover, .button.disabled.alert:focus, .button[disabled].alert:hover, .button[disabled].alert:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 button.disabled.alert:hover, button.disabled.alert:focus, button[disabled].alert:hover, button[disabled].alert:focus, .button.disabled.alert:hover, .button.disabled.alert:focus, .button[disabled].alert:hover, .button[disabled].alert:focus {
@@ -4375,7 +4375,7 @@ div.icon-bar > * img {
 }
 /* line 155, sass/foundation/components/_icon-bar.scss */
 div.icon-bar > *:hover {
-  background: #008cba;
+  background: #f04924;
 }
 /* line 157, sass/foundation/components/_icon-bar.scss */
 div.icon-bar > * label {
@@ -4676,7 +4676,7 @@ kbd {
   margin-bottom: inherit;
   padding: 0.25rem 0.5rem 0.375rem;
   font-size: 0.6875rem;
-  background-color: #008cba;
+  background-color: #f04924;
   color: white;
 }
 /* line 96, sass/foundation/components/_labels.scss */
@@ -5115,14 +5115,14 @@ ul.pagination li.unavailable:hover a, ul.pagination li.unavailable a:focus {
 }
 /* line 64, sass/foundation/components/_pagination.scss */
 ul.pagination li.current a {
-  background: #008cba;
+  background: #f04924;
   color: white;
   font-weight: bold;
   cursor: default;
 }
 /* line 71, sass/foundation/components/_pagination.scss */
 ul.pagination li.current a:hover, ul.pagination li.current a:focus {
-  background: #008cba;
+  background: #f04924;
 }
 /* line 124, sass/foundation/components/_pagination.scss */
 ul.pagination li {
@@ -5176,10 +5176,10 @@ ul.pagination li {
 .panel.callout {
   border-style: solid;
   border-width: 1px;
-  border-color: #b6edff;
+  border-color: #fbcabf;
   margin-bottom: 1.25rem;
   padding: 1.25rem;
-  background: #ecfaff;
+  background: #fef4f2;
 }
 /* line 52, sass/foundation/components/_panels.scss */
 .panel.callout > :first-child {
@@ -5204,7 +5204,7 @@ ul.pagination li {
 }
 /* line 81, sass/foundation/components/_panels.scss */
 .panel.callout a:not(.button) {
-  color: #008cba;
+  color: #f04924;
 }
 /* line 86, sass/foundation/components/_panels.scss */
 .panel.radius {
@@ -5282,7 +5282,7 @@ ul.pagination li {
 }
 /* line 61, sass/foundation/components/_progress-bars.scss */
 .progress .meter {
-  background: #008cba;
+  background: #f04924;
   height: 100%;
   display: block;
 }
@@ -5367,12 +5367,12 @@ ul.pagination li {
 }
 /* line 141, sass/foundation/components/_range-slider.scss */
 .range-slider.radius .range-slider-handle {
-  background: #008cba;
+  background: #f04924;
   border-radius: 3px;
 }
 /* line 110, sass/foundation/components/_range-slider.scss */
 .range-slider.radius .range-slider-handle:hover {
-  background: #007ba4;
+  background: #e33610;
 }
 /* line 143, sass/foundation/components/_range-slider.scss */
 .range-slider.round {
@@ -5381,12 +5381,12 @@ ul.pagination li {
 }
 /* line 145, sass/foundation/components/_range-slider.scss */
 .range-slider.round .range-slider-handle {
-  background: #008cba;
+  background: #f04924;
   border-radius: 1000px;
 }
 /* line 110, sass/foundation/components/_range-slider.scss */
 .range-slider.round .range-slider-handle:hover {
-  background: #007ba4;
+  background: #e33610;
 }
 /* line 147, sass/foundation/components/_range-slider.scss */
 .range-slider.disabled, .range-slider[disabled] {
@@ -5396,13 +5396,13 @@ ul.pagination li {
 }
 /* line 149, sass/foundation/components/_range-slider.scss */
 .range-slider.disabled .range-slider-handle, .range-slider[disabled] .range-slider-handle {
-  background: #008cba;
+  background: #f04924;
   cursor: default;
   opacity: 0.7;
 }
 /* line 110, sass/foundation/components/_range-slider.scss */
 .range-slider.disabled .range-slider-handle:hover, .range-slider[disabled] .range-slider-handle:hover {
-  background: #007ba4;
+  background: #e33610;
 }
 
 /* line 152, sass/foundation/components/_range-slider.scss */
@@ -5423,11 +5423,11 @@ ul.pagination li {
   height: 1.375rem;
   border: 1px solid none;
   cursor: pointer;
-  background: #008cba;
+  background: #f04924;
 }
 /* line 110, sass/foundation/components/_range-slider.scss */
 .range-slider-handle:hover {
-  background: #007ba4;
+  background: #e33610;
 }
 
 /* line 162, sass/foundation/components/_reveal.scss */
@@ -5607,18 +5607,18 @@ dialog[open] {
 /* line 74, sass/foundation/components/_side-nav.scss */
 .side-nav li a:not(.button) {
   display: block;
-  color: #008cba;
+  color: #f04924;
   margin: 0;
   padding: 0.4375rem 0.875rem;
 }
 /* line 80, sass/foundation/components/_side-nav.scss */
 .side-nav li a:not(.button):hover, .side-nav li a:not(.button):focus {
   background: rgba(0, 0, 0, 0.025);
-  color: #1cc7ff;
+  color: #f58066;
 }
 /* line 86, sass/foundation/components/_side-nav.scss */
 .side-nav li.active > a:first-child:not(.button) {
-  color: #1cc7ff;
+  color: #f58066;
   font-weight: normal;
   font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
@@ -5632,7 +5632,7 @@ dialog[open] {
 }
 /* line 100, sass/foundation/components/_side-nav.scss */
 .side-nav li.heading {
-  color: #008cba;
+  color: #f04924;
   font-size: 0.875rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -5813,7 +5813,7 @@ dialog[open] {
 .sub-nav li.active a {
   border-radius: 3px;
   font-weight: normal;
-  background: #008cba;
+  background: #f04924;
   padding: 0.1875rem 1rem;
   cursor: default;
   color: white;
@@ -5822,7 +5822,7 @@ dialog[open] {
 .sub-nav dt.active a:hover,
 .sub-nav dd.active a:hover,
 .sub-nav li.active a:hover {
-  background: #0078a0;
+  background: #de350f;
 }
 
 /* line 49, sass/foundation/components/_switches.scss */
@@ -5863,7 +5863,7 @@ div.switch label:after {
 }
 /* line 87, sass/foundation/components/_switches.scss */
 div.switch input:checked + label {
-  background: #008cba;
+  background: #f04924;
 }
 /* line 91, sass/foundation/components/_switches.scss */
 div.switch input:checked + label:after {
@@ -5894,7 +5894,7 @@ div.switch label:after {
 }
 /* line 140, sass/foundation/components/_switches.scss */
 div.switch input:checked + label {
-  background: #008cba;
+  background: #f04924;
 }
 /* line 103, sass/foundation/components/_switches.scss */
 div.switch.large label {
@@ -6277,13 +6277,13 @@ td {
 /* Default Link Styles */
 /* line 212, sass/foundation/components/_type.scss */
 a {
-  color: #008cba;
+  color: #f04924;
   text-decoration: none;
   line-height: inherit;
 }
 /* line 218, sass/foundation/components/_type.scss */
 a:hover, a:focus {
-  color: #0078a0;
+  color: #de350f;
 }
 /* line 225, sass/foundation/components/_type.scss */
 a img {
@@ -6838,7 +6838,7 @@ blockquote p {
 }
 /* line 51, sass/foundation/components/_thumbs.scss */
 .th:hover, .th:focus {
-  box-shadow: 0 0 6px 1px rgba(0, 140, 186, 0.5);
+  box-shadow: 0 0 6px 1px rgba(240, 73, 36, 0.5);
 }
 /* line 65, sass/foundation/components/_thumbs.scss */
 .th.radius {
@@ -6855,8 +6855,8 @@ blockquote p {
 }
 /* line 45, sass/foundation/components/_tooltips.scss */
 .has-tip:hover, .has-tip:focus {
-  border-bottom: dotted 1px #003f54;
-  color: #008cba;
+  border-bottom: dotted 1px #741c08;
+  color: #f04924;
 }
 /* line 51, sass/foundation/components/_tooltips.scss */
 .has-tip.tip-left, .has-tip.tip-right {
@@ -6908,8 +6908,8 @@ blockquote p {
 }
 /* line 94, sass/foundation/components/_tooltips.scss */
 .tooltip.opened {
-  color: #008cba !important;
-  border-bottom: dotted 1px #003f54 !important;
+  color: #f04924 !important;
+  border-bottom: dotted 1px #741c08 !important;
 }
 
 /* line 100, sass/foundation/components/_tooltips.scss */
@@ -7169,13 +7169,13 @@ meta.foundation-mq-topbar {
   font-size: 0.8125rem;
   padding-right: 15px;
   padding-left: 15px;
-  background-color: #008cba;
-  border-color: #007095;
+  background-color: #f04924;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button:hover, .top-bar-section ul li > a.button:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button:hover, .top-bar-section ul li > a.button:focus {
@@ -7184,12 +7184,12 @@ meta.foundation-mq-topbar {
 /* line 318, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li > a.button.secondary {
   background-color: #e7e7e7;
-  border-color: #007095;
+  border-color: #cf310e;
   color: #333333;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button.secondary:hover, .top-bar-section ul li > a.button.secondary:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 144, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button.secondary:hover, .top-bar-section ul li > a.button.secondary:focus {
@@ -7198,12 +7198,12 @@ meta.foundation-mq-topbar {
 /* line 319, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li > a.button.success {
   background-color: #43ac6a;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button.success:hover, .top-bar-section ul li > a.button.success:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button.success:hover, .top-bar-section ul li > a.button.success:focus {
@@ -7212,12 +7212,12 @@ meta.foundation-mq-topbar {
 /* line 320, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li > a.button.alert {
   background-color: #f04124;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button.alert:hover, .top-bar-section ul li > a.button.alert:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > a.button.alert:hover, .top-bar-section ul li > a.button.alert:focus {
@@ -7228,13 +7228,13 @@ meta.foundation-mq-topbar {
   font-size: 0.8125rem;
   padding-right: 15px;
   padding-left: 15px;
-  background-color: #008cba;
-  border-color: #007095;
+  background-color: #f04924;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button:hover, .top-bar-section ul li > button:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button:hover, .top-bar-section ul li > button:focus {
@@ -7243,12 +7243,12 @@ meta.foundation-mq-topbar {
 /* line 329, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li > button.secondary {
   background-color: #e7e7e7;
-  border-color: #007095;
+  border-color: #cf310e;
   color: #333333;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button.secondary:hover, .top-bar-section ul li > button.secondary:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 144, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button.secondary:hover, .top-bar-section ul li > button.secondary:focus {
@@ -7257,12 +7257,12 @@ meta.foundation-mq-topbar {
 /* line 330, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li > button.success {
   background-color: #43ac6a;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button.success:hover, .top-bar-section ul li > button.success:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button.success:hover, .top-bar-section ul li > button.success:focus {
@@ -7271,12 +7271,12 @@ meta.foundation-mq-topbar {
 /* line 331, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li > button.alert {
   background-color: #f04124;
-  border-color: #007095;
+  border-color: #cf310e;
   color: white;
 }
 /* line 138, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button.alert:hover, .top-bar-section ul li > button.alert:focus {
-  background-color: #007095;
+  background-color: #cf310e;
 }
 /* line 149, sass/foundation/components/_buttons.scss */
 .top-bar-section ul li > button.alert:hover, .top-bar-section ul li > button.alert:focus {
@@ -7290,12 +7290,12 @@ meta.foundation-mq-topbar {
 }
 /* line 345, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li.active > a {
-  background: #008cba;
+  background: #f04924;
   color: white;
 }
 /* line 348, sass/foundation/components/_top-bar.scss */
 .top-bar-section ul li.active > a:hover {
-  background: #0078a0;
+  background: #de350f;
   color: white;
 }
 /* line 356, sass/foundation/components/_top-bar.scss */
@@ -7490,11 +7490,11 @@ meta.foundation-mq-topbar {
     padding: 0 15px;
     line-height: 45px;
     color: white;
-    background: #008cba;
+    background: #f04924;
   }
   /* line 507, sass/foundation/components/_top-bar.scss */
   .top-bar-section li.active:not(.has-form) a:not(.button):hover {
-    background: #0078a0;
+    background: #de350f;
   }
   /* line 516, sass/foundation/components/_top-bar.scss */
   .top-bar-section .has-dropdown > a {
@@ -7622,7 +7622,7 @@ meta.foundation-mq-topbar {
   }
   /* line 643, sass/foundation/components/_top-bar.scss */
   .no-js .top-bar-section ul li:active > a {
-    background: #008cba;
+    background: #f04924;
     color: white;
   }
   /* line 651, sass/foundation/components/_top-bar.scss */
@@ -8489,60 +8489,16 @@ th.hide-for-touch {
     display: table-cell !important;
   }
 }
-/* line 6, sass/Site.scss */
+/* line 7, sass/Site.scss */
 .img-panel {
   position: relative;
   padding-left: 6rem;
   margin-bottom: 2rem;
 }
-/* line 11, sass/Site.scss */
+/* line 12, sass/Site.scss */
 .img-panel img {
   position: absolute;
   top: 1.7rem;
   left: -1.875rem;
   max-width: 6rem;
-}
-
-/* line 20, sass/Site.scss */
-.my-repeat-animation.ng-enter,
-.my-repeat-animation.ng-leave,
-.my-repeat-animation.ng-move {
-  -webkit-transition: 0.5s ease-in all;
-  transition: 0.5s ease-in all;
-  position: relative;
-  display: block;
-}
-
-/* line 27, sass/Site.scss */
-.my-repeat-animation.ng-enter {
-  left: -20px;
-  opacity: 0;
-}
-
-/* line 31, sass/Site.scss */
-.my-repeat-animation.ng-enter.ng-enter-active {
-  left: 0;
-  opacity: 1;
-}
-
-/* line 36, sass/Site.scss */
-.my-repeat-animation.ng-leave {
-  left: 0;
-  opacity: 1;
-}
-
-/* line 40, sass/Site.scss */
-.my-repeat-animation.ng-leave.ng-leave-active {
-  left: -20px;
-  opacity: 0;
-}
-
-/* line 45, sass/Site.scss */
-.my-repeat-animation.ng-move {
-  opacity: 0.5;
-}
-
-/* line 48, sass/Site.scss */
-.my-repeat-animation.ng-move.ng-move-active {
-  opacity: 1;
 }

@@ -1,5 +1,7 @@
 ﻿extends layout
 
+block css
+    link(rel='stylesheet', href="//cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js")
 
 block scripts
     script(src='/javascripts/homepageController.js')
@@ -14,24 +16,66 @@ block content
                     span Log in with&nbsp;
                     a.button.small.radius(href="http://milescontact.cloudapp.net/api/Account/ExternalLogin?provider=Google&client_id=self&response_type=token&redirect_uri=http%3A%2F%2Flocalhost") Google
              #mainContent.row.hidden
-                .large-12.small-12.columns
+                 .large-12.columns  
+                    .row
+                        .small-12.large-4.columns
+                            input.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
                     
-                    input.large-4.columns.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
-                    .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
-                        table.table.table-striped
-                            tr.my-repeat-animation(ng-repeat="item in searchResult.Results" ng-click="showDetails(item)")
-                                td
-                                    img(src="{{item.Thumb}}")
-                                td
-                                    <b>{{item.Name}}</b>
-                                    | {{item.OfficeId}} - {{item.JobTitle}}
+                    .row
+                        .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
+                            table.table.table-striped
+                                tr(ng-repeat="item in searchResult.Results" ng-click="showDetails(item); $event.preventDefault();")
+                                    td
+                                        img(src="{{item.Thumb}}")
+                                    td
+                                        <b>{{item.Name}}</b>
+                                        | {{item.OfficeId}} - {{item.JobTitle}}
+                                tr(ng-show="moreSearchResults")
+                                   td
+                                   td
+                                        a.center(href="#" ng-click="search('true'); $event.preventDefault();") {{moreSearchResults}} More...
                                     
-                    .large-8.small-12.columns.panel(ng-show="selectedEmployee")
-                        h3(ng-bind="selectedEmployee.name")
-                        p(ng-bind="selectedEmployee.local.description")
-                        ul.inline-list
-                            li(ng-repeat="comp in selectedEmployee.local.competencygroups")
-                                span.label.round.success {{comp.key}}
+                        .large-8.small-12.columns.panel(ng-show="selectedEmployee")
+                            h3(ng-bind="selectedEmployee.name")
+                            .row
+                                div.large-12.columns(ng-hide="editContactInformationEnabled")
+                                    table.large-6.columns.table
+                                        tr
+                                            td Email
+                                            td {{selectedEmployee.email}}
+                                        tr
+                                            td Phone
+                                            td {{selectedEmployee.phoneNumber}}
+                                        tr
+                                            td Address
+                                            td {{selectedEmployee.address}}
+                                    a.large-2.columns.button.tiny.radius.left(href="#" ng-click="editContactInformationEnabled=!editContactInformationEnabled; $event.preventDefault();") Edit
+                                div.large-12.columns(ng-show="editContactInformationEnabled" )
+                                    table.large-6.columns.table
+                                        tr
+                                            td Email
+                                            td
+                                                input.input-lg(ng-model="selectedEmployee.email")
+                                        tr
+                                            td Phone
+                                            td
+                                                input.input-lg(ng-model="selectedEmployee.phoneNumber")
+                                        tr
+                                            td Address
+                                            td
+                                                input.input-lg(ng-model="selectedEmployee.address")
+                                    a.large-2.columns.button.tiny.radius.left(href="#" ng-click="editContactInformationEnabled=!editContactInformationEnabled; $event.preventDefault();") Done
+
+
+                                p.large-12.columns(ng-bind="selectedEmployee.local.description")
+                                .large-12.columns(ng-repeat="g in selectedEmployee.local.competencygroups")
+                                    div
+                                        hr
+                                        b {{g.key}}
+                                        br
+                                        
+                                    .left
+                                        .label.round(ng-repeat="comp in g.competencies") {{comp}}&nbsp;
                         
 
         
