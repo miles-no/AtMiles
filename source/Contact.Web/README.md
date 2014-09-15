@@ -1,5 +1,8 @@
 ﻿# Contact.Web
-Probably requires NodeJs tools for Visual Studio:
+Install node.js
+http://nodejs.org/
+
+Requires tools for Visual Studio:
 http://nodejstools.codeplex.com/
 
 Uses Foundation and sass. Read instruction here for more details
