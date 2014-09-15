@@ -15,7 +15,7 @@
     $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
 
     $scope.search = function (add) {
-        if ($scope.queryTerm == lastQueryTerm && (!skip || skip == 0)) {
+        if ($scope.queryTerm == lastQueryTerm && !add) {
             return;
         }
         var tmpTerm = $scope.queryTerm;
@@ -29,7 +29,7 @@
            
             return;
         }
-        if (tmpTerm != lastQueryTerm) {
+        if (!add) {
             skip = 0;
         }
 
@@ -56,7 +56,7 @@
                             }
 
                             if (data.Total > $scope.searchResult.Results.length) {
-                                skip = skip + take;
+                                skip = data.Skipped + data.Results.length;
                                 $scope.moreSearchResults = data.Total - skip;
                             } else {
                                 skip = 0;
