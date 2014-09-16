@@ -19,7 +19,6 @@ namespace Contact.Backend
             var container = new UnityContainer();
 
             container.RegisterType<AdminController>();
-            container.RegisterType<OfficeAdminController>();
             container.RegisterType<StatusController>();
             container.RegisterType<AccountController>();
             container.RegisterType<TestController>();

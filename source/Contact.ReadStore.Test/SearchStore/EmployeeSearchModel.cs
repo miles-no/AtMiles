@@ -13,7 +13,6 @@ namespace Contact.ReadStore.SearchStore
         public string Id { get; set; }
         public string GlobalId { get; set; }
         public string CompanyId { get; set; }
-        public string OfficeId { get; set; }
         public string OfficeName { get; set; }
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }

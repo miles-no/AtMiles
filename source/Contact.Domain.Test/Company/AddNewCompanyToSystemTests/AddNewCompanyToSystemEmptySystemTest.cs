@@ -24,16 +24,12 @@ namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
         private DateTime _timestamp32 = DateTime.MinValue;
         private DateTime _timestamp33 = DateTime.MinValue;
         private DateTime _timestamp34 = DateTime.MinValue;
-        private DateTime _timestamp35 = DateTime.MinValue;
 
         private DateTime _systemDateOfBirth = DateTime.MinValue;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-
-        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
-
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -65,13 +61,12 @@ namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
             }
 
             var events3 = _fakeCompanyRepository.GetThenEvents();
-            if (events3.Count == 5)
+            if (events3.Count == 4)
             {
                 _timestamp31 = events3[0].Created;
                 _timestamp32 = events3[1].Created;
                 _timestamp33 = events3[2].Created;
                 _timestamp34 = events3[3].Created;
-                _timestamp35 = events3[4].Created;
             }
 
             events1.AddRange(events2);
@@ -97,7 +92,7 @@ namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
                 new SimpleUserInfo(AdminId, AdminFirstName, string.Empty, AdminLastName,
                     new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty))
             };
-            return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeId, OfficeName,null,admins.ToArray(),DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
+            return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeName, admins.ToArray(),DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
         }
 
         public override Handles<AddNewCompanyToSystem> OnHandler()
@@ -131,15 +126,14 @@ namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
                 {
                     new Events.Global.CompanyCreated(CompanyId, CompanyName,_timestamp11, systemAsPerson, _correlationId),
 
-                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, Constants.SystemUserId, null, string.Empty, string.Empty,
-                        Constants.SystemUserId, _systemDateOfBirth, string.Empty, string.Empty, string.Empty, null, null, _timestamp21, systemAsPerson, _correlationId),
-                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), AdminFirstName, string.Empty,
-                        AdminLastName, null, string.Empty, string.Empty, AdminEmail, null, null, _timestamp22, systemAsPerson, _correlationId),
+                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, null, string.Empty, string.Empty,
+                        Constants.SystemUserId, _systemDateOfBirth, string.Empty, OfficeName, string.Empty, string.Empty, null, null, _timestamp21, systemAsPerson, _correlationId),
+                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), AdminFirstName, string.Empty,
+                        AdminLastName, null, string.Empty, OfficeName, string.Empty, AdminEmail, null, null, _timestamp22, systemAsPerson, _correlationId),
                     new Events.Company.CompanyCreated(CompanyId, CompanyName, _timestamp31, systemAsPerson, _correlationId),
                     new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, Constants.SystemUserId, NameService.GetName(string.Empty, Constants.SystemUserId), _timestamp32, systemAsPerson, _correlationId),
-                    new Events.Company.OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, _timestamp33, systemAsPerson, _correlationId),
-                    new Events.Company.EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), _timestamp34, systemAsPerson, _correlationId),
-                    new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), _timestamp35, systemAsPerson, _correlationId)
+                    new Events.Company.EmployeeAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), _timestamp33, systemAsPerson, _correlationId),
+                    new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), _timestamp34, systemAsPerson, _correlationId)
                 };
             return events;
         }

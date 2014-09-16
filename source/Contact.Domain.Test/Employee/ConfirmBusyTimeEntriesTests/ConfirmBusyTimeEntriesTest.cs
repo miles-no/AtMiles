@@ -20,8 +20,6 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-
-        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
         private const string EmployeeId = "id1";
@@ -61,8 +59,7 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, system, "INIT")),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, system, "INIT")),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT"))
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT"))
                 };
             return events;
         }
@@ -71,14 +68,14 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
+                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
                 };
             return events;
         }
 
         public override ConfirmBusyTimeEntries When()
         {
-            return new ConfirmBusyTimeEntries(CompanyId, OfficeId, EmployeeId, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
+            return new ConfirmBusyTimeEntries(CompanyId, EmployeeId, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
         public override Handles<ConfirmBusyTimeEntries> OnHandler()
@@ -92,7 +89,7 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
         {
             var events = new List<Event>
                 {
-                    new BusyTimeConfirmed(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),_correlationId)
+                    new BusyTimeConfirmed(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),_correlationId)
                 };
             return events;
         }

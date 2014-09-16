@@ -57,9 +57,7 @@ namespace Contact.TestApp
         {
             string companyId = config.CompanyId;
             const string companyName = "Miles";
-            const string officeId = "Stavanger";
             const string officeName = "Stavanger";
-            var officeAddress = new Address("Øvre Holmegate 1, 3. etasje", "4006", "Stavanger");
 
             const string initCorrelationId = "SYSTEM INIT";
             var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
@@ -74,7 +72,7 @@ namespace Contact.TestApp
                 new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
             admins.Add(admin2);
 
-            var seedCommand = new AddNewCompanyToSystem(companyId, companyName, officeId, officeName, officeAddress, admins.ToArray(),
+            var seedCommand = new AddNewCompanyToSystem(companyId, companyName, officeName, admins.ToArray(),
                 DateTime.UtcNow, systemAsPerson, initCorrelationId, Constants.IgnoreVersion);
 
             var importCommand = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, systemAsPerson,

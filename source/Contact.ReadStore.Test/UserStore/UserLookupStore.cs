@@ -30,9 +30,6 @@ namespace Contact.ReadStore.UserStore
             handler.RegisterHandler<EmployeeTerminated>(HandleTerminated);
             handler.RegisterHandler<CompanyAdminAdded>(HandleCompanyAdminAdded);
             handler.RegisterHandler<CompanyAdminRemoved>(HandleCompanyAdminRemoved);
-            handler.RegisterHandler<OfficeAdminAdded>(HandleOfficeAdminAdded);
-            handler.RegisterHandler<OfficeAdminRemoved>(HandleOfficeAdminRemoved);
-            handler.RegisterHandler<OfficeClosed>(HandleOfficeClosed);
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
         }
         
@@ -69,45 +66,6 @@ namespace Contact.ReadStore.UserStore
             if (string.IsNullOrEmpty(ev.LoginId.Email)) return string.Empty;
 
             return IdService.IdsToSingleEmailId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Email);
-        }
-
-        private void HandleOfficeClosed(OfficeClosed ev)
-        {
-            _documentStore.DatabaseCommands.UpdateByIndex(typeof (UserLookupIndex).Name,
-                new IndexQuery {Query = "CompanyId:" + ev.CompanyId},
-                new[]
-                {
-                    new PatchRequest
-                    {
-                        Type = PatchCommandType.Remove,
-                        Name = "AdminForOffices",
-                        Value = ev.OfficeId
-                    }
-                }, false);
-
-
-        }
-
-        private void HandleOfficeAdminRemoved(OfficeAdminRemoved ev)
-        {
-            using (var session = _documentStore.OpenSession())
-            {
-                var user = session.Load<UserLookupModel>(GetRavenId(ev.AdminId));
-                user = Patch(user, ev);
-                session.Store(user);
-                session.SaveChanges();
-            }
-        }
-
-        private void HandleOfficeAdminAdded(OfficeAdminAdded ev)
-        {
-            using (var session = _documentStore.OpenSession())
-            {
-                var user = session.Load<UserLookupModel>(GetRavenId(ev.AdminId));
-                user = Patch(user, ev);
-                session.Store(user);
-                session.SaveChanges();
-            }
         }
 
         private void HandleCompanyAdminRemoved(CompanyAdminRemoved ev)
@@ -216,18 +174,5 @@ namespace Contact.ReadStore.UserStore
             model.CompanyAdmin = true;
             return model;
         }
-
-        private static UserLookupModel Patch(UserLookupModel model, OfficeAdminAdded ev)
-        {
-            model.AdminForOffices.Add(ev.OfficeId);
-            return model;
-        }
-
-        private static UserLookupModel Patch(UserLookupModel model, OfficeAdminRemoved ev)
-        {
-            model.AdminForOffices.RemoveAll(o => o == ev.OfficeId);
-            return model;
-        }
-        
     }
 }

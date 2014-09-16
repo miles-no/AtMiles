@@ -20,8 +20,6 @@ namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-
-        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
         private const string EmployeeId = "id1";
@@ -31,8 +29,6 @@ namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
 
         private static readonly DateTime Start1 = new DateTime(2014, 01, 01);
         private static readonly DateTime End1 = new DateTime(2015, 01, 01);
-        private const short Percentage1 = 100;
-        private const string Comment1 = "Client A";
         private const string BusyTimeId1 = "BT01";
 
         [Test]
@@ -64,8 +60,7 @@ namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, system, "INIT")),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, system, "INIT")),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT"))
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT"))
                 };
             return events;
         }
@@ -74,14 +69,14 @@ namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
+                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
                 };
             return events;
         }
 
         public override RemoveBusyTime When()
         {
-            return new RemoveBusyTime(CompanyId, OfficeId, EmployeeId, BusyTimeId1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
+            return new RemoveBusyTime(CompanyId, EmployeeId, BusyTimeId1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
         public override Handles<RemoveBusyTime> OnHandler()

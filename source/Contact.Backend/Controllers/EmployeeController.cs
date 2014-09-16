@@ -39,26 +39,26 @@ namespace Contact.Backend.Controllers
         
 
         [HttpPost]
-        [Route("api/company/{companyId}/office({officeId}/employee/busytime")]
-        public Response AddBusyTime(string companyId, string officeId, DateTime start, DateTime? end, short percentageOccupied, string comment)
+        [Route("api/company/{companyId}/employee/busytime")]
+        public Response AddBusyTime(string companyId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
-            var request = new AddBusyTimeRequest { CompanyId = companyId, OfficeId = officeId, Start = start, End = end, PercentageOccupied = percentageOccupied, Comment = comment};
+            var request = new AddBusyTimeRequest { CompanyId = companyId, Start = start, End = end, PercentageOccupied = percentageOccupied, Comment = comment};
             return mediator.Send<AddBusyTimeRequest, Response>(request, User.Identity);
         }
 
         [HttpDelete]
-        [Route("api/company/{companyId}/office/{officeId}/employee/busytime/{busyTimeId}")]
-        public Response RemoveBusyTime(string companyId, string officeId, string busyTimeId)
+        [Route("api/company/{companyId}/employee/busytime/{busyTimeId}")]
+        public Response RemoveBusyTime(string companyId, string busyTimeId)
         {
-            var request = new RemoveBusyTimeRequest { CompanyId = companyId, OfficeId = officeId, BustTimeEntryId = busyTimeId };
+            var request = new RemoveBusyTimeRequest { CompanyId = companyId, BustTimeEntryId = busyTimeId };
             return mediator.Send<RemoveBusyTimeRequest, Response>(request, User.Identity);
         }
 
         [HttpPost]
-        [Route("api/company/{companyId}/office/{officeId}/employee/busytime/confirm")]
-        public Response ConfirmBusyTimeEntries(string companyId, string officeId)
+        [Route("api/company/{companyId}/employee/busytime/confirm")]
+        public Response ConfirmBusyTimeEntries(string companyId)
         {
-            var request = new ConfirmBusyTimeEntriesRequest { CompanyId = companyId, OfficeId = officeId };
+            var request = new ConfirmBusyTimeEntriesRequest { CompanyId = companyId };
             return mediator.Send<ConfirmBusyTimeEntriesRequest, Response>(request, User.Identity);
         }
 

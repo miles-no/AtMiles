@@ -32,9 +32,9 @@ namespace Contact.Domain.CommandHandlers
             if(global.HasCompany(message.CompanyId)) throw new AlreadyExistingItemException("CompanyId already in system");
 
             var system = new Employee();
-            system.CreateNew(message.CompanyId, message.CompanyName, message.FirstOfficeId, message.FirstOfficeName,
+            system.CreateNew(message.CompanyId, message.CompanyName,
                 Constants.SystemUserId, null, string.Empty, string.Empty, Constants.SystemUserId, DateTime.UtcNow,
-                string.Empty, string.Empty, string.Empty, null, null,
+                string.Empty, message.FirstOfficeName, string.Empty, string.Empty, null, null,
                 new Person(Constants.SystemUserId, Constants.SystemUserId), message.CorrelationId);
 
 
@@ -44,9 +44,7 @@ namespace Contact.Domain.CommandHandlers
             var systemAsPerson = new Person(system.Id, system.Name);
 
             var company = new Company();
-            company.CreateNewCompany(message.CompanyId, message.CompanyName, message.FirstOfficeId, message.FirstOfficeName, message.FirstOfficeAddress, system.Id, system.Name, DateTime.UtcNow, systemAsPerson, message.CorrelationId);
-
-            company.OpenOffice(message.FirstOfficeId, message.FirstOfficeName, message.FirstOfficeAddress, message.CreatedBy, message.CorrelationId);
+            company.CreateNewCompany(message.CompanyId, message.CompanyName, system.Id, system.Name, DateTime.UtcNow, systemAsPerson, message.CorrelationId);
 
             global.AddCompany(company, systemAsPerson, message.CorrelationId);
 
@@ -70,9 +68,9 @@ namespace Contact.Domain.CommandHandlers
                         email = adminInfo.LoginId.Email;
                     }
 
-                    admin.CreateNew(message.CompanyId, message.CompanyName,message.FirstOfficeId, message.FirstOfficeName, adminId, adminInfo.LoginId,adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName,null,string.Empty,string.Empty,email,null,null,message.CreatedBy, message.CorrelationId);
+                    admin.CreateNew(message.CompanyId, message.CompanyName, adminId, adminInfo.LoginId, adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName, null, string.Empty, message.FirstOfficeName, string.Empty, email, null, null, message.CreatedBy, message.CorrelationId);
                     _employeeRepository.Save(admin, Constants.NewVersion);
-                    company.AddNewEmployeeToOffice(message.FirstOfficeId, admin,message.CreatedBy, message.CorrelationId);
+                    company.AddNewEmployeeToCompany(admin,message.CreatedBy, message.CorrelationId);
                     company.AddCompanyAdmin(admin, message.CreatedBy, message.CorrelationId);
                 }
             }
@@ -97,19 +95,12 @@ namespace Contact.Domain.CommandHandlers
                     string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
                     var employee = _employeeRepository.GetById(userId);
 
-                    var office = company.GetOfficeByName(cvPartnerImportData.OfficeName);
-                    if (office == null)
-                    {
-                        company.OpenOffice(cvPartnerImportData.OfficeName, cvPartnerImportData.OfficeName, null, message.CreatedBy, message.CorrelationId);
-                        office = company.GetOffice(cvPartnerImportData.OfficeName);
-                    }
-
                     if (employee == null)
                     {
                         employee = new Employee();
-                        employee.CreateNew(company.Id, company.Name, office.Id, office.Name, Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName, cvPartnerImportData.DateOfBirth, cvPartnerImportData.Title, cvPartnerImportData.Phone, cvPartnerImportData.Email, null, null, message.CreatedBy, message.CorrelationId);
+                        employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName, cvPartnerImportData.DateOfBirth, cvPartnerImportData.Title, cvPartnerImportData.OfficeName, cvPartnerImportData.Phone, cvPartnerImportData.Email, null, null, message.CreatedBy, message.CorrelationId);
 
-                        company.AddNewEmployeeToOffice(office.Id, employee, message.CreatedBy, message.CorrelationId);
+                        company.AddNewEmployeeToCompany(employee, message.CreatedBy, message.CorrelationId);
                         _companyRepository.Save(company, Constants.IgnoreVersion);
                     }
 

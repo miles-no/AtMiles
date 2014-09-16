@@ -19,7 +19,7 @@ namespace Contact.ReadStore.SearchStore
                 from person in personSearchModels.Where(w=>w.Id != Constants.SystemUserId)
                 select new
                 {
-                    Content = new[] { person.Name, person.Name, person.OfficeId, person.JobTitle, person.Email, 
+                    Content = new[] { person.Name, person.Name, person.OfficeName, person.JobTitle, person.Email, 
                         string.Join<object>(" ", person.Competency.Select(s => s.InternationalCompentency)).Replace("#","sharp"), 
                         string.Join<object>(" ", person.Competency.Select(s => s.Competency)).Replace("#","sharp"),
                         string.Join<object>(" ", person.KeyQualifications)

@@ -244,7 +244,6 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
-    <Compile Include="Controllers\OfficeAdminController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -260,15 +259,10 @@
     <Compile Include="Models\Api\Tasks\AddBusyTimeRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddCompanyAdminRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddEmployeeRequest.cs" />
-    <Compile Include="Models\Api\Tasks\AddOfficeAdminRequest.cs" />
-    <Compile Include="Models\Api\Tasks\CloseOfficeRequest.cs" />
     <Compile Include="Models\Api\Tasks\ConfirmBusyTimeEntriesRequest.cs" />
     <Compile Include="Models\Api\Tasks\ImportFromCvPartnerRequest.cs" />
-    <Compile Include="Models\Api\Tasks\MoveEmployeeToNewOfficeRequest.cs" />
-    <Compile Include="Models\Api\Tasks\OpenOfficeRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveBusyTimeRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveCompanyAdminRequest.cs" />
-    <Compile Include="Models\Api\Tasks\RemoveOfficeAdminRequest.cs" />
     <Compile Include="Models\Api\Tasks\TerminateEmployeeRequest.cs" />
     <Compile Include="Models\ExternalLoginViewModel.cs" />
     <Compile Include="Models\Api\Status\StatusResponse.cs" />

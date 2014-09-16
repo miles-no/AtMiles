@@ -30,7 +30,6 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string NewAdminLastName = "Admin";
         private static readonly DateTime NewAdminDateOfBirth = new DateTime(1981, 01, 01);
 
-        private const string OfficeId = "office1";
         private const string OfficeName = "Stavanger";
 
         [Test]
@@ -60,7 +59,6 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                     new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName), DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)),_correlationId)),
                 };
             return events;
@@ -70,7 +68,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, NewAdminDateOfBirth, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, NewAdminDateOfBirth, string.Empty, OfficeName ,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
                 };
             return events;
         }
