@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Security;
 using Microsoft.AspNet.Identity;
@@ -7,6 +8,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataHandler;
 using Microsoft.Owin.Security.Google;
+using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 
@@ -26,6 +28,7 @@ namespace Contact.Backend
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"), 
+                RefreshTokenProvider = new ApplicationRefreshTokenProvider(),
        
                 //TODO: Add additional validation if necessary
                 Provider = new OAuthAuthorizationServerProvider
@@ -49,7 +52,7 @@ namespace Contact.Backend
                 },
              
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(8),
                 AllowInsecureHttp = true
             };
 
@@ -89,6 +92,36 @@ namespace Contact.Backend
             var config = GlobalConfiguration.Configuration;
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(DefaultAuthenticationTypes.ExternalCookie));
+        }
+    }
+
+    public class ApplicationRefreshTokenProvider : IAuthenticationTokenProvider
+    {
+        const int Expire = 60 * 60;
+          
+        public void Create(AuthenticationTokenCreateContext context)
+        {
+            context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddSeconds(Expire));
+            context.SetToken(context.SerializeTicket());
+        }
+
+        public Task CreateAsync(AuthenticationTokenCreateContext context)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddSeconds(Expire));
+                context.SetToken(context.SerializeTicket());
+            });
+        }
+
+        public void Receive(AuthenticationTokenReceiveContext context)
+        {
+            context.DeserializeTicket(context.Token);
+        }
+
+        public Task ReceiveAsync(AuthenticationTokenReceiveContext context)
+        {
+            return Task.Factory.StartNew(() => context.DeserializeTicket(context.Token));
         }
     }
 }
