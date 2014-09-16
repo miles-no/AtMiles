@@ -10,50 +10,19 @@ namespace Contact.Backend.Controllers
     [Authorize]
     public class AdminController : ApiController
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public AdminController(IMediator mediator)
         {
-            this.mediator = mediator;
+            this._mediator = mediator;
         }
-
-        /// <summary>
-        /// Adds an office to a company
-        /// </summary>
-        /// <param name="companyId"></param>
-        /// <param name="officeId"></param>
-        /// <param name="officeName"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("api/company/{companyId}/office")]
-        public Response OpenOffice(string companyId, string officeId, string officeName)
-        {
-            var openOfficeRequest = new OpenOfficeRequest {CompanyId = companyId, OfficeIdName = officeId, OfficeName = officeName};
-            return mediator.Send<OpenOfficeRequest, Response>(openOfficeRequest, User.Identity);
-        }
-
 
         [HttpPost]
         [Route("api/company/{companyId}/importCvPartner")]
         public Response ImportFromCvPartner(string companyId)
         {
             var importRequest = new ImportFromCvPartnerRequest { CompanyId = companyId };
-            return mediator.Send<ImportFromCvPartnerRequest, Response>(importRequest, User.Identity);
-        }
-
-
-        /// <summary>
-        /// Closes an office in a company
-        /// </summary>
-        /// <param name="companyId"></param>
-        /// <param name="officeId"></param>
-        /// <returns></returns>
-        [HttpDelete]
-        [Route("api/company/{companyId}/office/{officeId}")]
-        public Response CloseOffice(string companyId, string officeId)
-        {
-            var closeOfficeRequest = new CloseOfficeRequest { CompanyId = companyId, OfficeId = officeId};
-            return mediator.Send<CloseOfficeRequest, Response>(closeOfficeRequest, User.Identity);
+            return _mediator.Send<ImportFromCvPartnerRequest, Response>(importRequest, User.Identity);
         }
 
         /// <summary>
@@ -67,15 +36,7 @@ namespace Contact.Backend.Controllers
         public Response AddAdmin(string companyId, string employeeId)
         {
             var addCompanyAdminRequest = new AddCompanyAdminRequest {CompanyId = companyId, NewAdminId = employeeId};
-            return mediator.Send<AddCompanyAdminRequest, Response>(addCompanyAdminRequest, User.Identity);
-        }
-
-        [HttpPost]
-        [Route("api/company/{companyId}/office/{oldofficeId}/employee/{employeeId}/movetooffice/{newOfficeId}")]
-        public Response MoveToNewOffice(string companyId, string oldofficeId, string employeeId, string newOfficeId)
-        {
-            var request = new MoveEmployeeToNewOfficeRequest { CompanyId = companyId, OldOfficeId = oldofficeId, NewOfficeId = newOfficeId, EmployeeId = employeeId};
-            return mediator.Send<MoveEmployeeToNewOfficeRequest, Response>(request, User.Identity);
+            return _mediator.Send<AddCompanyAdminRequest, Response>(addCompanyAdminRequest, User.Identity);
         }
 
         /// <summary>
@@ -89,10 +50,40 @@ namespace Contact.Backend.Controllers
         public Response RemoveAdmin(string companyId, string adminId)
         {
             var removeCompanyAdminRequest = new RemoveCompanyAdminRequest { CompanyId = companyId, AdminId = adminId };
-            return mediator.Send<RemoveCompanyAdminRequest, Response>(removeCompanyAdminRequest, User.Identity);
+            return _mediator.Send<RemoveCompanyAdminRequest, Response>(removeCompanyAdminRequest, User.Identity);
         
         }
-        
+
+        /// <summary>
+        /// Creates an employee within a company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/company/{companyId}/employee")]
+        public Response CreateEmployee(string companyId, AddEmployeeRequest request)
+        {
+            request.CompanyId = companyId;
+            return _mediator.Send<AddEmployeeRequest, Response>(request, User.Identity);
+        }
+
+
+        /// <summary>
+        /// Terminate an employee
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="officeId"></param>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("api/company/{companyId}/office/{officeId}/employee/{employeeId}")]
+        public Response TerminateEmployee(string companyId, string officeId, string employeeId)
+        {
+            var terminateEmployeeRequest = new TerminateEmployeeRequest { CompanyId = companyId, EmployeeId = employeeId };
+            return _mediator.Send<TerminateEmployeeRequest, Response>(terminateEmployeeRequest, User.Identity);
+
+        }
    
     }
 }

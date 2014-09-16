@@ -151,11 +151,22 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
             var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
 
             var res = new AddEmployee(company,
-                employee.OfficeName,
-                id, new Login(Constants.GoogleIdProvider, employee.Email, null), givenName, middleName, familyName,
-                bornDate,
-                cv.Title, cv.Phone, employee.Email, null, employeePhoto, DateTime.UtcNow, createdBy,
-                new Guid().ToString(), Constants.IgnoreVersion);
+                id,
+                new Login(Constants.GoogleIdProvider, employee.Email, null),
+                givenName,
+                middleName,
+                familyName,
+                dateOfBirth: bornDate,
+                jobTitle: cv.Title,
+                officeName: employee.OfficeName,
+                phoneNumber: cv.Phone,
+                email: employee.Email,
+                homeAddress: null,
+                photo: employeePhoto,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: new Guid().ToString(), 
+                basedOnVersion: Constants.IgnoreVersion);
 
             return res;
         }
@@ -171,11 +182,6 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
         {
             var client = new WebClient();
             return client.DownloadData(url);
-        }
-
-        public OpenOffice ToOpenOffice(string officeName)
-        {
-            return new OpenOffice(company, officeName, officeName, null, DateTime.UtcNow, createdBy, Guid.NewGuid().ToString(), Domain.Constants.IgnoreVersion);
         }
     }
 

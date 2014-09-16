@@ -15,6 +15,7 @@ namespace Contact.Domain.Events.Import
         public readonly string Email;
         public readonly string Phone;
         public readonly string Title;
+        public readonly string OfficeName;
         public readonly DateTime UpdatedAt;
         public readonly CvPartnerKeyQualification[] KeyQualifications;
         public readonly CvPartnerTechnology[] Technologies;
@@ -22,8 +23,8 @@ namespace Contact.Domain.Events.Import
 
 
 
-        public ImportedFromCvPartner(string companyId, string companyName, 
-            string employeeId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string email, string phone, string title, DateTime updatedAt, CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo, DateTime created, Person createdBy, string correlationId) :
+        public ImportedFromCvPartner(string companyId, string companyName,
+            string employeeId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string email, string phone, string title, string officeName, DateTime updatedAt, CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo, DateTime created, Person createdBy, string correlationId) :
             base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
@@ -36,6 +37,7 @@ namespace Contact.Domain.Events.Import
             Email = email;
             Phone = phone;
             Title = title;
+            OfficeName = officeName;
             UpdatedAt = updatedAt;
             KeyQualifications = keyQualifications;
             Technologies = technologies;

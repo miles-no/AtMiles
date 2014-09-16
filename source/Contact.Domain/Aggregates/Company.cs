@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Contact.Domain.Annotations;
-using Contact.Domain.Entities;
 using System.Linq;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Exceptions;
@@ -12,7 +11,7 @@ namespace Contact.Domain.Aggregates
     public class Company : AggregateRoot
     {
         private readonly List<string> _companyAdmins;
-        private readonly List<Office> _offices;
+        private readonly List<EmployeeLoginInfo> _employees;
         private string _name;
 
         public string Name
@@ -24,7 +23,7 @@ namespace Contact.Domain.Aggregates
         {
             _name = string.Empty;
             _companyAdmins = new List<string>();
-            _offices = new List<Office>();
+            _employees = new List<EmployeeLoginInfo>();
         }
 
         public bool IsCompanyAdmin(string identifier)
@@ -32,50 +31,54 @@ namespace Contact.Domain.Aggregates
             return _companyAdmins.Contains(identifier);
         }
 
-        public bool IsOfficeAdmin(string identifier, string officeId)
+        public bool HasUser(string userId)
         {
-            if (!IsOffice(officeId)) return false;
-            var office = GetOffice(officeId);
-            return office.IsAdmin(identifier);
+            if (string.IsNullOrEmpty(userId)) return false;
+
+            return _employees.Any(u => u.Id == userId);
         }
 
-        public Office GetOffice(string officeId)
+        public bool HasUser(Login login)
         {
-            return _offices.First(item => item.Id == officeId);
+            if (login == null) return false;
+
+            if (!string.IsNullOrEmpty(login.Id))
+            {
+                return _employees.Any(u => u.LoginId.Provider == login.Provider && u.LoginId.Id == login.Id);
+            }
+            else
+            {
+                return _employees.Any(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
+            }
         }
 
-        public bool IsOffice(string officeId)
+        public string GetUserId(Login login)
         {
-            return _offices.Any(item => item.Id == officeId);
-        }
-
-        public bool HasOfficeAdminAccess(string employeeId, string officeId)
-        {
-            if (!IsOffice(officeId)) return false;
-
-            return IsCompanyAdmin(employeeId) || IsOfficeAdmin(employeeId, officeId);
+            if (login == null) return string.Empty;
+            if (!string.IsNullOrEmpty(login.Id))
+            {
+                var employeeLoginInfo = _employees.FirstOrDefault(u => u.LoginId.Provider == login.Provider && u.LoginId.Id == login.Id);
+                return employeeLoginInfo != null ? employeeLoginInfo.Id : string.Empty;
+            }
+            else
+            {
+                var employeeLoginInfo = _employees.FirstOrDefault(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
+                return employeeLoginInfo != null ? employeeLoginInfo.Id : string.Empty;
+            }
         }
 
         public string GetUserIdByLoginId(Login login)
         {
-            foreach (var office in _offices)
+            if (HasUser(login))
             {
-                if (office.HasUser(login))
-                {
-                    return office.GetUserId(login);
-                }
+                return GetUserId(login);
             }
 
             //Not found
             return string.Empty;
         }
 
-        public Office GetOfficeByName(string officeName)
-        {
-            return _offices.FirstOrDefault(o => o.Name == officeName);
-        }
-
-        public void CreateNewCompany(string companyId, string companyName, string officeId, string officeName, Address officeAddress, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
+        public void CreateNewCompany(string companyId, string companyName, string adminId, string adminName, DateTime created, Person createdBy, string correlationId)
         {
             var ev1 = new CompanyCreated(
                 companyId: companyId,
@@ -99,7 +102,7 @@ namespace Contact.Domain.Aggregates
 
         public void AddCompanyAdmin(Employee employeeToBeAdmin, Person createdBy, string correlationId)
         {
-            if(IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException("Already company admin");
+            if (IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException("Already company admin");
 
             var ev = new CompanyAdminAdded(
                 companyId: _id,
@@ -114,7 +117,7 @@ namespace Contact.Domain.Aggregates
 
         public void RemoveCompanyAdmin(Employee employeeToBeRemoved, Person createdBy, string correlationId)
         {
-            if(OnlyOneCompanyAdminLeft()) throw new LastItemException("Cannot remove last admin");
+            if (OnlyOneCompanyAdminLeft()) throw new LastItemException("Cannot remove last admin");
             if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException("Cannot remove self");
 
             var ev = new CompanyAdminRemoved(
@@ -127,94 +130,13 @@ namespace Contact.Domain.Aggregates
                 correlationId: correlationId);
             ApplyChange(ev);
         }
+        
 
-        public void OpenOffice(string officeId, string officeName, Address address, Person createdBy, string correlationId)
+        public void AddNewEmployeeToCompany(Employee employee, Person createdBy, string correlationId)
         {
-            var ev = new OfficeOpened(
-                companyId: _id,
-                companyName: _name,
-                officeId: officeId,
-                officeName: officeName,
-                address: address,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void CloseOffice(string officeId, Person createdBy, string correlationId)
-        {
-            if (OnlyOneOfficeLeft()) throw new LastItemException("Cannot close last office");
-
-            var office = GetOffice(officeId);
-
-            if(!office.IsEmptyForEmployees()) throw new ExistingChildItemsException("Cannot close non-empty office");
-
-            var ev = new OfficeClosed(
-                companyId: _id,
-                companyName: _name,
-                officeId: office.Id,
-                officeName: office.Name,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void AddOfficeAdmin(string officeId, Employee newAdmin, Person createdBy, string correlationId)
-        {
-            if(!IsOffice(officeId)) throw new UnknownItemException("Unknown ID for Office");
-            
-            var office = GetOffice(officeId);
-
-            if (!HasOfficeAdminAccess(createdBy.Identifier, office.Id)) throw new NoAccessException("No access to complete this operation");
-
-            if(office.IsAdmin(newAdmin.Id)) throw new AlreadyExistingItemException("Already admin in this office");
-
-            var ev = new OfficeAdminAdded(
-                companyId: _id,
-                companyName: _name,
-                officeId: office.Id,
-                officeName: office.Name,
-                adminId: newAdmin.Id,
-                adminName: newAdmin.Name,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void RemoveOfficeAdmin(string officeId, Employee adminToBeRemoved, Person createdBy, string correlationId)
-        {
-            if (!IsOffice(officeId)) throw new UnknownItemException("Unknown ID for Office");
-
-            var office = GetOffice(officeId);
-
-            if (!HasOfficeAdminAccess(createdBy.Identifier, office.Id)) throw new NoAccessException("No access to complete this operation");
-            
-            CheckIfTryingToDisconnectSelf(adminToBeRemoved, createdBy);
-
-            var ev = new OfficeAdminRemoved(
-                companyId: _id,
-                companyName: _name,
-                officeId: office.Id,
-                officeName: office.Name,
-                adminId: adminToBeRemoved.Id,
-                adminName: adminToBeRemoved.Name,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void AddNewEmployeeToOffice(string officeId, Employee employee, Person createdBy, string correlationId)
-        {
-            var office = GetOffice(officeId);
             var ev = new EmployeeAdded(
                 companyId: _id,
                 companyName: _name,
-                officeId: office.Id,
-                officeName: office.Name,
                 globalId: employee.Id,
                 name: employee.Name,
                 login: employee.LoginId,
@@ -224,38 +146,13 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        public void RemoveEmployee(string officeId, Employee employee, Person createdBy, string correlationId)
+        public void RemoveEmployee(Employee employee, Person createdBy, string correlationId)
         {
-            var office = GetOffice(officeId);
             var ev = new EmployeeRemoved(
                 companyId: _id,
                 companyName: _name,
-                officeId: office.Id,
-                officeName: office.Name,
                 id: employee.Id,
                 name: employee.Name,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void MoveEmployeeToNewOffice(Employee employee, string oldOfficeId, string newOfficeId, Person createdBy, string correlationId)
-        {
-            var oldOffice = GetOffice(oldOfficeId);
-            var newOffice = GetOffice(newOfficeId);
-
-            if(!oldOffice.HasUser(employee.Id)) throw new UnknownItemException("Employee not found in Office to move from.");
-
-            var ev = new EmployeeMovedToNewOffice(
-                companyId: _id,
-                companyName: Name,
-                oldOfficeId: oldOffice.Id,
-                oldOfficeName: oldOffice.Name,
-                newOfficeId: newOffice.Id,
-                newOfficeName: newOffice.Name,
-                employeeId: employee.Id,
-                employeeName: employee.Name,
                 created: DateTime.UtcNow,
                 createdBy: createdBy,
                 correlationId: correlationId);
@@ -267,17 +164,25 @@ namespace Contact.Domain.Aggregates
             return _companyAdmins.Count == 1;
         }
 
+        public void AddEmployee(EmployeeLoginInfo employeeInfo)
+        {
+            if (_employees.All(e => e.Id != employeeInfo.Id))
+            {
+                _employees.Add(employeeInfo);
+            }
+        }
+
+        public void RemoveEmployee(string employeeId)
+        {
+            _employees.RemoveAll(item => item.Id == employeeId);
+        }
+
         private void CheckIfTryingToDisconnectSelf(Employee adminToBeRemoved, Person createdBy)
         {
             if (adminToBeRemoved.Id == createdBy.Identifier)
             {
                 if (!IsCompanyAdmin(adminToBeRemoved.Id)) throw new NoAccessException("Cannot remove self");
             }
-        }
-
-        private bool OnlyOneOfficeLeft()
-        {
-            return _offices.Count == 1;
         }
 
         [UsedImplicitly] //To keep resharper happy
@@ -302,63 +207,15 @@ namespace Contact.Domain.Aggregates
         }
 
         [UsedImplicitly] //To keep resharper happy
-        private void Apply(OfficeOpened ev)
-        {
-            if (IsOffice(ev.OfficeId)) return;
-
-            var office = new Office(ev.OfficeId, ev.OfficeName);
-            _offices.Add(office);
-        }
-
-        [UsedImplicitly] //To keep resharper happy
-        private void Apply(OfficeClosed ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-
-            _offices.RemoveAll(item => item.Id == ev.OfficeId);
-        }
-
-        [UsedImplicitly] //To keep resharper happy
-        private void Apply(OfficeAdminAdded ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-
-            var office = GetOffice(ev.OfficeId);
-            office.AddAdmin(ev.AdminId);
-        }
-
-        [UsedImplicitly] //To keep resharper happy
-        private void Apply(OfficeAdminRemoved ev)
-        {
-            if (!IsOffice(ev.OfficeId)) return;
-            var office = GetOffice(ev.OfficeId);
-            office.RemoveAdmin(ev.AdminId);
-        }
-
-        [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeAdded ev)
         {
-            if (!IsOffice(ev.OfficeId)) return;
-            var office = GetOffice(ev.OfficeId);
-            office.AddEmployee(new EmployeeLoginInfo(ev.GlobalId, ev.Login));
+            AddEmployee(new EmployeeLoginInfo(ev.GlobalId, ev.Login));
         }
 
         [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeRemoved ev)
         {
-            if (!IsOffice(ev.OfficeId)) return;
-            var office = GetOffice(ev.OfficeId);
-            office.RemoveEmployee(ev.Id);
-        }
-
-        [UsedImplicitly] //To keep resharper happy
-        private void Apply(EmployeeMovedToNewOffice ev)
-        {
-            var oldOffice = GetOffice(ev.OldOfficeId);
-            var newOffice = GetOffice(ev.NewOfficeId);
-            var employee = oldOffice.GetEmployee(ev.EmployeeId);
-            oldOffice.RemoveEmployee(ev.EmployeeId);
-            newOffice.AddEmployee(employee);
+            RemoveEmployee(ev.Id);
         }
     }
 }

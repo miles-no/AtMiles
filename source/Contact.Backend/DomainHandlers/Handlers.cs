@@ -25,39 +25,12 @@ namespace Contact.Backend.DomainHandlers
             RegisterAddCompanyAdmin(mediator, container);
             RegisterRemoveCompanyAdmin(mediator, container);
 
-            RegisterAddOfficeAdmin(mediator, container);
-            RegisterRemoveOfficeAdmin(mediator, container);
-
-            RegisterOpenOffice(mediator, container);
-            RegisterCloseOffice(mediator, container);
-
             RegisterImportFromCvPartner(mediator, container);
-
-            RegisterMoveEmployeeToNewOffice(mediator, container);
 
             RegisterAddBusyTime(mediator, container);
             RegisterRemoveBusyTime(mediator, container);
             RegisterConfirmBusyTimeEntries(mediator, container);
 
-        }
-
-        private static void RegisterMoveEmployeeToNewOffice(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<MoveEmployeeToNewOfficeRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var command = new MoveEmployeeToNewOffice(req.CompanyId, req.OldOfficeId, req.NewOfficeId, req.EmployeeId, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
-                    return Send(container, command);
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
         }
 
         private static void RegisterAddBusyTime(IMediator mediator, IUnityContainer container)
@@ -70,7 +43,7 @@ namespace Contact.Backend.DomainHandlers
                 {
                     var identityResolver = container.Resolve<IResolveUserIdentity>();
                     var createdBy = GetCreatedBy(user, identityResolver);
-                    var command = new AddBusyTime(req.CompanyId, req.OfficeId, createdBy.Identifier, req.Start, req.End, req.PercentageOccupied, req.Comment, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new AddBusyTime(req.CompanyId, createdBy.Identifier, req.Start, req.End, req.PercentageOccupied, req.Comment, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(container, command);
                 }
                 catch (Exception ex)
@@ -90,7 +63,7 @@ namespace Contact.Backend.DomainHandlers
                 {
                     var identityResolver = container.Resolve<IResolveUserIdentity>();
                     var createdBy = GetCreatedBy(user, identityResolver);
-                    var command = new RemoveBusyTime(req.CompanyId, req.OfficeId, createdBy.Identifier, req.BustTimeEntryId, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new RemoveBusyTime(req.CompanyId, createdBy.Identifier, req.BustTimeEntryId, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(container, command);
                 }
                 catch (Exception ex)
@@ -110,7 +83,7 @@ namespace Contact.Backend.DomainHandlers
                 {
                     var identityResolver = container.Resolve<IResolveUserIdentity>();
                     var createdBy = GetCreatedBy(user, identityResolver);
-                    var command = new ConfirmBusyTimeEntries(req.CompanyId, req.OfficeId, createdBy.Identifier, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new ConfirmBusyTimeEntries(req.CompanyId, createdBy.Identifier, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(container, command);
                 }
                 catch (Exception ex)
@@ -175,8 +148,8 @@ namespace Contact.Backend.DomainHandlers
                     //TODO: Fix login here.
                     //new Login is not the same as the user requesting the command
 
-                    var command = new AddEmployee(req.CompanyId, req.OfficeId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, Helpers.GetUserIdentity(user, identityResolver)), req.FirstName, req.LastName,
-                        req.DateOfBirth, req.JobTitle, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new AddEmployee(req.CompanyId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, Helpers.GetUserIdentity(user, identityResolver)), req.FirstName, req.LastName,
+                        req.DateOfBirth, req.JobTitle, req.OfficeName, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
 
@@ -197,7 +170,7 @@ namespace Contact.Backend.DomainHandlers
                 try
                 {
                     //TODO: Get version from readmodel
-                    var command = new TerminateEmployee(req.CompanyId, req.OfficeId, req.EmployeeId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new TerminateEmployee(req.CompanyId, req.EmployeeId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                 }
@@ -238,93 +211,6 @@ namespace Contact.Backend.DomainHandlers
                 {
                     //TODO: Get version from readmodel
                     var command = new RemoveCompanyAdmin(req.CompanyId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
-
-                    return Send(container, command);
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
-        }
-
-        private static void RegisterAddOfficeAdmin(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<AddOfficeAdminRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    //TODO: Get version from readmodel
-                    var command = new AddOfficeAdmin(req.CompanyId, req.OfficeId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
-
-                    return Send(container, command);
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
-        }
-
-        private static void RegisterRemoveOfficeAdmin(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<RemoveOfficeAdminRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    //TODO: Get version from readmodel
-                    var command = new RemoveOfficeAdmin(req.CompanyId, req.OfficeId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
-
-                    return Send(container, command);
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
-        }
-
-        private static void RegisterOpenOffice(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<OpenOfficeRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    //TODO: Include Address in request
-                    Domain.ValueTypes.Address address = null;
-                    //if (req.Address != null)
-                    //{
-                    //    Address = new Domain.ValueTypes.Address(req.Address.Street,
-                    //        req.Address.PostalCode, req.Address.PostalName);
-                    //}
-                    //TODO: Get version from readmodel
-                    var command = new OpenOffice(req.CompanyId, req.OfficeName, req.OfficeName, address, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
-
-                    return Send(container, command);
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
-        }
-
-        private static void RegisterCloseOffice(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<CloseOfficeRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    //TODO: Get version from readmodel
-                    var command = new CloseOffice(req.CompanyId, req.OfficeId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(container, command);
                 }

@@ -38,7 +38,6 @@ namespace Contact.ReadStore.SearchStore
             handler.RegisterHandler<BusyTimeAdded>(HandleBusyTimeAdded);
             handler.RegisterHandler<BusyTimeConfirmed>(HandleBusyTimeConfirmed);
             handler.RegisterHandler<BusyTimeRemoved>(HandleBusyTimeRemoved);
-            handler.RegisterHandler<Domain.Events.Company.EmployeeMovedToNewOffice>(HandleEmployeeMovedToNewOffice);
         }
 
         private static List<string> CreateKeyQalifications(IEnumerable<CvPartnerKeyQualification> keyQualifications)
@@ -170,17 +169,6 @@ namespace Contact.ReadStore.SearchStore
             }
         }
 
-        private void HandleEmployeeMovedToNewOffice(Domain.Events.Company.EmployeeMovedToNewOffice ev)
-        {
-            using (var session = _documentStore.OpenSession())
-            {
-                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
-                employee = Patch(employee, ev);
-                session.Store(employee);
-                session.SaveChanges();
-            }
-        }
-
         private static EmployeeSearchModel ConvertTo(EmployeeCreated ev)
         {
             var model = new EmployeeSearchModel
@@ -188,7 +176,6 @@ namespace Contact.ReadStore.SearchStore
                 Id = GetRavenId(ev.EmployeeId),
                 GlobalId = ev.EmployeeId,
                 CompanyId = ev.CompanyId,
-                OfficeId = ev.OfficeId,
                 OfficeName = ev.OfficeName,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue,
@@ -260,12 +247,6 @@ namespace Contact.ReadStore.SearchStore
             {
                 model.BusyTimeEntries.RemoveAll(b => b.Id == ev.BusyTimeId);
             }
-            return model;
-        }
-        private static EmployeeSearchModel Patch(EmployeeSearchModel model, Domain.Events.Company.EmployeeMovedToNewOffice ev)
-        {
-            model.OfficeId = ev.NewOfficeId;
-            model.OfficeName = ev.NewOfficeName;
             return model;
         }
 

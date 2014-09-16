@@ -24,7 +24,6 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
 
-        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
@@ -94,7 +93,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, null, string.Empty,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName,   AdminId, null, AdminFirstName, string.Empty, AdminLastName, null, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId)),
                 };
             return events;
         }
@@ -104,7 +103,6 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),"INIT")),
-                    new FakeStreamEvent(CompanyId, new OfficeOpened(CompanyId, CompanyName, OfficeId, OfficeName, null, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),_correlationId)),
                     new FakeStreamEvent(CompanyId, new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),_correlationId)),
                 };
             return events;
@@ -128,8 +126,8 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<Event>
                 {
-                    new EmployeeCreated(CompanyId, CompanyName, OfficeId, OfficeName, _employeeId, new Login(Constants.GoogleIdProvider,_importData.Email, string.Empty), _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth, _importData.Title,_importData.Phone,_importData.Email, null, null,_timestamp1,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
-                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, _employeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp2, new Person(AdminId, Domain.Services.NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new EmployeeCreated(CompanyId, CompanyName, _employeeId, new Login(Constants.GoogleIdProvider,_importData.Email, string.Empty), _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth, _importData.Title, _importData.OfficeName, _importData.Phone,_importData.Email, null, null,_timestamp1,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
+                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, _employeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp2, new Person(AdminId, Domain.Services.NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

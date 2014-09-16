@@ -7,19 +7,15 @@ namespace Contact.Domain.Events.Company
     {
         public readonly string CompanyId;
         public readonly string CompanyName;
-        public readonly string OfficeId;
-        public readonly string OfficeName;
         public readonly string GlobalId;
         public readonly string Name;
         public readonly Login Login;
 
-        public EmployeeAdded(string companyId, string companyName, string officeId, string officeName, string globalId, string name, Login login, DateTime created, Person createdBy, string correlationId)
+        public EmployeeAdded(string companyId, string companyName, string globalId, string name, Login login, DateTime created, Person createdBy, string correlationId)
             : base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
             CompanyName = companyName;
-            OfficeId = officeId;
-            OfficeName = officeName;
             GlobalId = globalId;
             Name = name;
             Login = login;

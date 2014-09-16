@@ -80,7 +80,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
                 new SimpleUserInfo(AdminId, AdminFirstName, string.Empty, AdminLastName,
                     new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty))
             };
-            return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeId, OfficeName, null, admins.ToArray(), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
+            return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeName, admins.ToArray(), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
         }
 
         public override Handles<AddNewCompanyToSystem> OnHandler()

@@ -31,13 +31,11 @@ namespace Contact.Domain.Aggregates
             _busyTimeEntries = new List<BusyTimeEntry>();
         }
 
-        public void CreateNew(string companyId, string companyName, string officeId, string officeName, string globalId, Login loginId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string jobTitle, string phoneNumber, string email, Address homeAddress, Picture photo, Person createdBy, string correlationId)
+        public void CreateNew(string companyId, string companyName, string globalId, Login loginId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string jobTitle, string officeName, string phoneNumber, string email, Address homeAddress, Picture photo, Person createdBy, string correlationId)
         {
             var ev = new EmployeeCreated(
                 companyId: companyId,
                 companyName: companyName,
-                officeId: officeId,
-                officeName: officeName,
                 employeeId: globalId,
                 loginId: loginId,
                 firstName: firstName,
@@ -45,6 +43,7 @@ namespace Contact.Domain.Aggregates
                 lastName: lastName,
                 dateOfBirth: dateOfBirth,
                 jobTitle: jobTitle,
+                officeName: officeName,
                 phoneNumber: phoneNumber,
                 email: email,
                 homeAddress: homeAddress,
@@ -55,13 +54,11 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        public void Terminate(string companyId, string companyName, string officeId, string officeName, Person createdBy, string correlationId)
+        public void Terminate(string companyId, string companyName, Person createdBy, string correlationId)
         {
             var ev = new EmployeeTerminated(
                 companyId: companyId,
                 companyName: companyName,
-                officeId: officeId,
-                officeName: officeName,
                 employeeId: _id,
                 employeeName: NameService.GetName(_firstName, _middleName, _lastName),
                 created: DateTime.UtcNow,
@@ -85,6 +82,7 @@ namespace Contact.Domain.Aggregates
                     email: import.Email,
                     phone: import.Phone,
                     title: import.Title,
+                    officeName: import.OfficeName,
                     updatedAt: import.UpdatedAt,
                     keyQualifications: import.KeyQualifications,
                     technologies: import.Technologies,
@@ -96,15 +94,13 @@ namespace Contact.Domain.Aggregates
             }
         }
 
-        public void ConfirmBusyTimeEntries(string companyId, string companyName, string officeId, string officeName, Person createdBy, string correlationId)
+        public void ConfirmBusyTimeEntries(string companyId, string companyName, Person createdBy, string correlationId)
         {
             if (createdBy.Identifier != _id) throw new NoAccessException("Can only confirm busy-time entries on self");
 
             var ev = new BusyTimeConfirmed(
                 companyId: companyId,
                 companyName: companyName,
-                officeId: officeId,
-                officeName: officeName,
                 employeeId: _id,
                 employeeName: Name,
                 created: DateTime.UtcNow,
@@ -113,7 +109,7 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        public void AddBusyTime(string companyId, string companyName, string officeId, string officeName, DateTime start, DateTime? end, short percentageOccpied, string comment, Person createdBy, string correlationId)
+        public void AddBusyTime(string companyId, string companyName, DateTime start, DateTime? end, short percentageOccpied, string comment, Person createdBy, string correlationId)
         {
             if (createdBy.Identifier != _id) throw new NoAccessException("Can only add busy-time to self");
 
@@ -128,8 +124,6 @@ namespace Contact.Domain.Aggregates
             var ev = new BusyTimeAdded(
                 companyId: companyId,
                 companyName: companyName,
-                officeId: officeId,
-                officeName: officeName,
                 employeeId: _id,
                 employeeName: Name,
                 busyTimeId: busyTimeId,
@@ -144,7 +138,7 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        public void RemoveBusyTime(string companyId, string companyName, string officeId, string officeName, string busyTimeId, Person createdBy, string correlationId)
+        public void RemoveBusyTime(string companyId, string companyName, string busyTimeId, Person createdBy, string correlationId)
         {
             if (createdBy.Identifier != _id) throw new NoAccessException("Can only add busy-time to self");
 
@@ -155,8 +149,6 @@ namespace Contact.Domain.Aggregates
             var ev = new BusyTimeRemoved(
                 companyId: companyId,
                 companyName: companyName,
-                officeId: officeId,
-                officeName: officeName,
                 employeeId: _id,
                 employeeName: Name,
                 busyTimeId: busyTime.Id,
