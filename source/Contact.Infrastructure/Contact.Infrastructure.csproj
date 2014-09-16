@@ -73,7 +73,6 @@
     <Compile Include="ReadModelHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.json.example" />
     <None Include="config_example.yaml" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -3,11 +3,13 @@
 # http://en.wikipedia.org/wiki/YAML
 # http://www.yaml.org/
 
+StatusEndpointUrl: http://localhost:56548
 CompanyId: miles
 EventServerHost: localhost
 EventServerUsername: admin
 EventServerPassword: changeit
 RabbitMqHost: localhost
+RabbitMqUseSsl: false
 RabbitMqUsername: guest
 RabbitMqPassword: guest
 RabbitMqCommandQueueName: Commands

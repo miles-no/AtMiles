@@ -44,7 +44,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public object TagLine { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
     }
 
     public class KeyPoint
@@ -66,7 +66,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public string LocalDescription { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
     }
 
     public class Language
@@ -106,7 +106,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public bool Starred { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
     }
 
     public class Role
@@ -146,7 +146,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public bool Starred { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
     }
 
     public class ProjectExperience
@@ -314,7 +314,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public Tags Tags { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
     }
 
     public class Technology
@@ -363,7 +363,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public bool Uncategorized { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
     }
 
     public class Thumb
@@ -528,7 +528,7 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int? Version { get; set; }
 
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
