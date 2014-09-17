@@ -13,7 +13,7 @@ namespace Contact.Domain.Test
         }
         public async Task<List<CvPartnerImportData>> GetImportData()
         {
-            return _importData;
+            return await Task.Run(() => _importData);
         }
     }
 }
