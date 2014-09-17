@@ -14,7 +14,6 @@ namespace Contact.TestApp
     {
         static void Main()
         {
-            LongRunningProcess cmdWorker = null;
             bool quit = false;
             var config = ConfigManager.GetConfig(Settings.Default.ConfigFile);
 
@@ -59,7 +58,8 @@ namespace Contact.TestApp
             const string companyName = "Miles";
             const string officeName = "Stavanger";
 
-            const string initCorrelationId = "SYSTEM INIT";
+            const string initCorrelationId1 = "SYSTEM INIT 1";
+            const string initCorrelationId2 = "SYSTEM INIT 2";
             var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
 
             var admins = new List<SimpleUserInfo>();
@@ -73,20 +73,17 @@ namespace Contact.TestApp
             admins.Add(admin2);
 
             var seedCommand = new AddNewCompanyToSystem(companyId, companyName, officeName, admins.ToArray(),
-                DateTime.UtcNow, systemAsPerson, initCorrelationId, Constants.IgnoreVersion);
+                DateTime.UtcNow, systemAsPerson, initCorrelationId1, Constants.IgnoreVersion);
 
             var importCommand = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, systemAsPerson,
-                initCorrelationId, Constants.IgnoreVersion);
-
-            //TODO: Rewrite to use RabbitMQ and/or webApi to seed.
-            //Maybe RabbitMQ to send seedCommand, since we do not wish to expose this command.
-            //And then WebAPI to issue Import-command
+                initCorrelationId2, Constants.IgnoreVersion);
 
             var sender = new RabbitMqCommandSender(config.RabbitMqHost, config.RabbitMqUsername,
                 config.RabbitMqPassword, config.RabbitMqCommandExchangeName, config.RabbitMqUseSsl);
-            
-            sender.Send(seedCommand);
-            sender.Send(importCommand);
+            await Task.Run(() => sender.Send(seedCommand));
+            await Task.Run(() => sender.Send(importCommand));
+
+            //TODO: wait for results to come back
         }
     }
 }
