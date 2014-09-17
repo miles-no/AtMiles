@@ -19,14 +19,14 @@ namespace Contact.Domain.Test
         public Exception ExpectedException;
         private Guid _playgroundId = Guid.Empty;
 
-        public void Setup()
+        public async void Setup()
         {
             CaughtException = null;
             var handler = OnHandler();
 
             try
             {
-                handler.Handle(When());
+                await handler.Handle(When());
                 var produced = Produced().ToList();
                 var expected = Expect().ToList();
                 if (expected.Count > 0 || produced.Count > 0)

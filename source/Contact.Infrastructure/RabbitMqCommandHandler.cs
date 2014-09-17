@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Contact.Domain;
 using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
@@ -19,7 +20,7 @@ namespace Contact.Infrastructure
         }
 
 
-        public void MessageHandler(string routingKey, byte[] messageBody, string messageType,
+        public async Task MessageHandler(string routingKey, byte[] messageBody, string messageType,
             IDictionary<string, object> headers)
         {
             if (messageType == null) throw new Exception("Type not set for event");
@@ -33,20 +34,24 @@ namespace Contact.Infrastructure
                 if (command != null)
                 {
                     var session = new CommandSession();
+                    DomainBaseException capturedException = null;
                     try
                     {
                         session.AddRequestCommand(command);
-                        _handler.HandleCommand(command, t);
+                        await _handler.HandleCommand(command, t);
                         session.MarkCommandAsSuccess(command.CreatedBy, command.CorrelationId);
                     }
                     catch (DomainBaseException domainException)
                     {
-                        session.AddException(domainException, command.CreatedBy, command.CorrelationId);
+                        capturedException = domainException;
                     }
-                    finally
+
+                    if (capturedException != null)
                     {
-                        _commandSessionRepository.Save(session, Constants.IgnoreVersion);
+                        session.AddException(capturedException, command.CreatedBy, command.CorrelationId);
                     }
+
+                    await _commandSessionRepository.SaveAsync(session, Constants.IgnoreVersion);
                 }
             }
         }

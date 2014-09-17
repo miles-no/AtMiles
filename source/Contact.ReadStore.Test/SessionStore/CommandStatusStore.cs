@@ -1,4 +1,5 @@
-﻿using Contact.Domain.Events.CommandSession;
+﻿using System.Threading.Tasks;
+using Contact.Domain.Events.CommandSession;
 using Contact.Infrastructure;
 using Raven.Client;
 
@@ -6,11 +7,11 @@ namespace Contact.ReadStore.SessionStore
 {
     public class CommandStatusStore
     {
-        private readonly IDocumentStore documentStore;
+        private readonly IDocumentStore _documentStore;
 
         public CommandStatusStore(IDocumentStore documentStore)
         {
-            this.documentStore = documentStore;
+            this._documentStore = documentStore;
         }
 
         public void PrepareHandler(ReadModelHandler handler)
@@ -20,36 +21,36 @@ namespace Contact.ReadStore.SessionStore
             handler.RegisterHandler<CommandSucceded>(HandleSuccess);
         }
 
-        private void HandleSuccess(CommandSucceded commandSucceded)
+        private async Task HandleSuccess(CommandSucceded commandSucceded)
         {
             var commandSession = new CommandStatus {Id = CommandStatusConstants.Prefix + commandSucceded.CorrelationId, Status = CommandStatusConstants.OkStatus};
             
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                session.Store(commandSession);
-                session.SaveChanges();
+                await session.StoreAsync(commandSession);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleException(CommandException commandException)
+        private async Task HandleException(CommandException commandException)
         {
             var commandSession = new CommandStatus { Id = CommandStatusConstants.Prefix + commandException.CorrelationId, ErrorMessage = commandException.ExceptionMessage, Status = CommandStatusConstants.FailedStatus };
 
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                session.Store(commandSession);
-                session.SaveChanges();
+                await session.StoreAsync(commandSession);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleRequested(CommandRequested commandRequested)
+        private async Task HandleRequested(CommandRequested commandRequested)
         {
             var commandSession = new CommandStatus { Id = CommandStatusConstants.Prefix + commandRequested.CorrelationId, Status = CommandStatusConstants.PendingStatus };
 
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                session.Store(commandSession);
-                session.SaveChanges();
+                await session.StoreAsync(commandSession);
+                await session.SaveChangesAsync();
             }
         }
     }

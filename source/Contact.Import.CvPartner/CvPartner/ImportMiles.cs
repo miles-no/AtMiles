@@ -38,6 +38,9 @@ namespace Contact.Import.CvPartner.CvPartner
             var employees = JsonConvert.DeserializeObject<List<Employee>>(employeesRaw);
             Log("Done - " + employees.Count + " users");
             
+
+            //TODO: Make this parallell using async
+
             foreach (var employee in employees)
             {
                 var cv = await DownloadCv(employee, client);

@@ -1,7 +1,9 @@
-﻿namespace Contact.Domain
+﻿using System.Threading.Tasks;
+
+namespace Contact.Domain
 {
     public interface Handles<T> where T : Message
     {
-        void Handle(T message);
+        Task Handle(T message);
     }
 }

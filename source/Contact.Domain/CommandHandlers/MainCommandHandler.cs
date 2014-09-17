@@ -1,38 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Contact.Domain.CommandHandlers
 {
     public class MainCommandHandler
     {
-        private readonly Dictionary<Type, List<Action<Message>>> _routes = new Dictionary<Type, List<Action<Message>>>();
+        private readonly Dictionary<Type, List<Func<Message, Task>>> _routes = new Dictionary<Type, List<Func<Message, Task>>>();
 
-        internal void RegisterHandler<T>(Action<T> handler) where T : Message
+        internal void RegisterHandler<T>(Func<T,Task> handler) where T : Message
         {
-            List<Action<Message>> handlers;
+            List<Func<Message, Task>> handlers;
             if (!_routes.TryGetValue(typeof(T), out handlers))
             {
-                handlers = new List<Action<Message>>();
+                handlers = new List<Func<Message, Task>>();
                 _routes.Add(typeof(T), handlers);
             }
             handlers.Add(DelegateAdjuster.CastArgument<Message, T>(x => handler(x)));
         }
 
-        public void HandleCommand(Command cmd, Type type)
+        public async Task HandleCommand(Command cmd, Type type)
         {
-            Handle(cmd, type);
+            await Handle(cmd, type);
         }
 
-        private void Handle<T>(T command, Type originalType) where T : Command
+        private async Task Handle<T>(T command, Type originalType) where T : Command
         {
-            List<Action<Message>> handlers;
+            List<Func<Message, Task>> handlers;
             if (_routes.TryGetValue(originalType, out handlers))
             {
                 if (handlers.Count != 1)
                 {
                     throw new InvalidOperationException("cannot send to more than one handler");
                 }
-                handlers[0](command);
+                await handlers[0](command);
             }
             else
             {

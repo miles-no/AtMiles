@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.MessagePatterns;
@@ -18,11 +19,11 @@ namespace Contact.Infrastructure
         private Subscription _brokerSubscription;
         private IConnection _brokerConnection;
         private IModel _brokerChannel;
-        private readonly Action<string, byte[], string, IDictionary<string, object>> _messageHandler;
+        private readonly Func<string, byte[], string, IDictionary<string, object>, Task> _messageHandler;
         private const string MessageTypeDefinition = "clrtype";
         private ConnectionFactory _factory;
 
-        public QueueWorker(string rabbitMqHostname, string rabbitMqUsername, string rabbitMqPassword, string rabbitMqQueueName, ILog log, Action<string, byte[], string, IDictionary<string, object>> messageHandler)
+        public QueueWorker(string rabbitMqHostname, string rabbitMqUsername, string rabbitMqPassword, string rabbitMqQueueName, ILog log, Func<string, byte[], string, IDictionary<string, object>, Task> messageHandler)
             : base(log)
         {
             _rabbitMqHostname = rabbitMqHostname;

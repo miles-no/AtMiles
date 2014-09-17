@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Contact.Domain;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
@@ -50,7 +51,7 @@ namespace Contact.Infrastructure
             _publisher = publisher;
         }
 
-        public void Save(T aggregate, int expectedVersion)
+        public async Task SaveAsync(T aggregate, int expectedVersion)
         {
             var events = aggregate.GetUncommittedChanges();
             var streamName = _aggregateIdToStreamName(typeof(T), aggregate.Id);
@@ -73,7 +74,7 @@ namespace Contact.Infrastructure
                     var data = Encoding.UTF8.GetBytes(stringVersion);
                     var esEv = new EventData(eventId, eventType, true, data, metadata);
 
-                    connection.AppendToStream(streamName, expectedVersion, new[] { esEv }, _credentials);
+                    await connection.AppendToStreamAsync(streamName, expectedVersion, new[] { esEv }, _credentials);
 
                     expectedVersion = ChangeExpectedVersion(expectedVersion);
                     PublishEvent(@event);

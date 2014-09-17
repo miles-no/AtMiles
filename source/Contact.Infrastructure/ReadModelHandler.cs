@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Contact.Domain;
 
 namespace Contact.Infrastructure
 {
     public class ReadModelHandler : IEventPublisher
     {
-        private readonly Dictionary<Type, List<Action<Message>>> _routes = new Dictionary<Type, List<Action<Message>>>();
+        private readonly Dictionary<Type, List<Func<Message, Task>>> _routes = new Dictionary<Type, List<Func<Message, Task>>>();
 
-        public void RegisterHandler<T>(Action<T> handler) where T : Message
+        public void RegisterHandler<T>(Func<T, Task> handler) where T : Message
         {
-            List<Action<Message>> handlers;
+            List<Func<Message, Task>> handlers;
             if (!_routes.TryGetValue(typeof(T), out handlers))
             {
-                handlers = new List<Action<Message>>();
+                handlers = new List<Func<Message, Task>>();
                 _routes.Add(typeof(T), handlers);
             }
             handlers.Add(DelegateAdjuster.CastArgument<Message, T>(x => handler(x)));
@@ -21,7 +22,7 @@ namespace Contact.Infrastructure
 
         public void Publish<T>(T @event) where T : Event
         {
-            List<Action<Message>> handlers;
+            List<Func<Message, Task>> handlers;
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach (var handler in handlers)
             {

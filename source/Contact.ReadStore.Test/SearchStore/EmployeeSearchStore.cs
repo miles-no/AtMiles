@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Contact.Domain;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
@@ -105,11 +106,11 @@ namespace Contact.ReadStore.SearchStore
         }
 
 
-        private void HandleImportCvPartner(ImportedFromCvPartner ev)
+        private async Task HandleImportCvPartner(ImportedFromCvPartner ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var existing = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                var existing = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 if (existing != null)
                 {
                     existing = Patch(existing, ev);
@@ -119,53 +120,53 @@ namespace Contact.ReadStore.SearchStore
                     existing = ConvertTo(ev);
                 }
 
-                session.Store(existing);
-                session.SaveChanges();
+                await session.StoreAsync(existing);
+                await session.SaveChangesAsync();
             }
         }
-        
-        private void HandleEmployeeCreated(EmployeeCreated ev)
+
+        private async Task HandleEmployeeCreated(EmployeeCreated ev)
         {
             if (ev.EmployeeId == Constants.SystemUserId) return; //Do not show SYSTEM user in search
 
             var searchModel = ConvertTo(ev);
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                session.Store(searchModel);
-                session.SaveChanges();
+                await session.StoreAsync(searchModel);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleBusyTimeAdded(BusyTimeAdded ev)
+        private async Task HandleBusyTimeAdded(BusyTimeAdded ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                var employee = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
-                session.Store(employee);
-                session.SaveChanges();
+                await session.StoreAsync(employee);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleBusyTimeRemoved(BusyTimeRemoved ev)
+        private async Task HandleBusyTimeRemoved(BusyTimeRemoved ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                var employee = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
-                session.Store(employee);
-                session.SaveChanges();
+                await session.StoreAsync(employee);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleBusyTimeConfirmed(BusyTimeConfirmed ev)
+        private async Task HandleBusyTimeConfirmed(BusyTimeConfirmed ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var employee = session.Load<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                var employee = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
                 employee = Patch(employee, ev);
-                session.Store(employee);
-                session.SaveChanges();
+                await session.StoreAsync(employee);
+                await session.SaveChangesAsync();
             }
         }
 

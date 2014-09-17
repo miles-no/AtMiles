@@ -1,4 +1,5 @@
-﻿using Contact.Domain.Aggregates;
+﻿using System.Threading.Tasks;
+using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
 using Contact.Domain.Exceptions;
 using Contact.Domain.ValueTypes;
@@ -23,7 +24,7 @@ namespace Contact.Domain.CommandHandlers
             _employeeRepository = employeeRepository;
         }
 
-        public void Handle(AddCompanyAdmin message)
+        public async Task Handle(AddCompanyAdmin message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
@@ -37,10 +38,10 @@ namespace Contact.Domain.CommandHandlers
 
 
             company.AddCompanyAdmin(employeeToBeAdmin, message.CreatedBy, message.CorrelationId);
-            _companyRepository.Save(company, message.BasedOnVersion);
+            await _companyRepository.SaveAsync(company, message.BasedOnVersion);
         }
 
-        public void Handle(RemoveCompanyAdmin message)
+        public async Task Handle(RemoveCompanyAdmin message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
@@ -53,11 +54,11 @@ namespace Contact.Domain.CommandHandlers
             if (employeeToBeRemoved == null) throw new UnknownItemException("Unknown ID for admin to be removed");
 
             company.RemoveCompanyAdmin(employeeToBeRemoved, message.CreatedBy, message.CorrelationId);
-            _companyRepository.Save(company, message.BasedOnVersion);
+            await _companyRepository.SaveAsync(company, message.BasedOnVersion);
         }
 
 
-        public void Handle(AddEmployee message)
+        public async Task Handle(AddEmployee message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
@@ -83,11 +84,11 @@ namespace Contact.Domain.CommandHandlers
 
             company.AddNewEmployeeToCompany(newEmployee, new Person(admin.Id, admin.Name), message.CorrelationId);
 
-            _employeeRepository.Save(newEmployee, Constants.NewVersion);
-            _companyRepository.Save(company, message.BasedOnVersion);
+            await _employeeRepository.SaveAsync(newEmployee, Constants.NewVersion);
+            await _companyRepository.SaveAsync(company, message.BasedOnVersion);
         }
 
-        public void Handle(TerminateEmployee message)
+        public async Task Handle(TerminateEmployee message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
@@ -105,8 +106,8 @@ namespace Contact.Domain.CommandHandlers
             company.RemoveEmployee(employee, new Person(admin.Id, admin.Name), message.CorrelationId);
             employee.Terminate(company.Id, company.Name, new Person(admin.Id, admin.Name), message.CorrelationId);
 
-            _employeeRepository.Save(employee, Constants.IgnoreVersion);
-            _companyRepository.Save(company, message.BasedOnVersion);
+            await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
+            await _companyRepository.SaveAsync(company, message.BasedOnVersion);
         }
 
         private static void CheckIfHandlingSelf(Employee admin, Employee employee)
@@ -114,7 +115,7 @@ namespace Contact.Domain.CommandHandlers
             if (admin.Id == employee.Id) throw new NoAccessException("Cannot perform operation on self");
         }
 
-        public void Handle(AddBusyTime message)
+        public async Task Handle(AddBusyTime message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
@@ -129,10 +130,10 @@ namespace Contact.Domain.CommandHandlers
             employee.AddBusyTime(company.Id, company.Name, message.Start, message.End,
                 message.PercentageOccpied, message.Comment, message.CreatedBy, message.CorrelationId);
 
-            _employeeRepository.Save(employee, message.BasedOnVersion);
+            await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
         }
 
-        public void Handle(RemoveBusyTime message)
+        public async Task Handle(RemoveBusyTime message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
@@ -145,10 +146,10 @@ namespace Contact.Domain.CommandHandlers
             employee.RemoveBusyTime(company.Id, company.Name, message.BusyTimeId,
                 message.CreatedBy, message.CorrelationId);
 
-            _employeeRepository.Save(employee, message.BasedOnVersion);
+            await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
         }
 
-        public void Handle(ConfirmBusyTimeEntries message)
+        public async Task Handle(ConfirmBusyTimeEntries message)
         {
             var company = _companyRepository.GetById(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
@@ -160,8 +161,7 @@ namespace Contact.Domain.CommandHandlers
 
             employee.ConfirmBusyTimeEntries(company.Id, company.Name, message.CreatedBy, message.CorrelationId);
 
-            _employeeRepository.Save(employee, message.BasedOnVersion);
-
+            await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
         }
     }
 }

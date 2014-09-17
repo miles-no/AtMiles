@@ -1,9 +1,9 @@
+using System.Threading.Tasks;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
 using Contact.Domain.Services;
 using Contact.Infrastructure;
-using Raven.Abstractions.Data;
 using Raven.Client;
 
 namespace Contact.ReadStore.UserStore
@@ -32,12 +32,12 @@ namespace Contact.ReadStore.UserStore
             handler.RegisterHandler<CompanyAdminRemoved>(HandleCompanyAdminRemoved);
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
         }
-        
-        private void HandleImportCvPartner(ImportedFromCvPartner ev)
+
+        private async Task HandleImportCvPartner(ImportedFromCvPartner ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var existing = session.Load<UserLookupModel>(GetRavenId(ev.EmployeeId));
+                var existing = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.EmployeeId));
                 if (existing != null)
                 {
                     existing = Patch(existing, ev);
@@ -47,8 +47,8 @@ namespace Contact.ReadStore.UserStore
                     existing = Convert(ev);
                 }
 
-                session.Store(existing);
-                session.SaveChanges();
+                await session.StoreAsync(existing);
+                await session.SaveChangesAsync();
             }
         }
 
@@ -68,48 +68,48 @@ namespace Contact.ReadStore.UserStore
             return IdService.IdsToSingleEmailId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Email);
         }
 
-        private void HandleCompanyAdminRemoved(CompanyAdminRemoved ev)
+        private async Task HandleCompanyAdminRemoved(CompanyAdminRemoved ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var user = session.Load<UserLookupModel>(GetRavenId(ev.AdminId));
+                var user = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.AdminId));
 
                 user = Patch(user, ev);
-                session.Store(user);
-                session.SaveChanges();
+                await session.StoreAsync(user);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleCompanyAdminAdded(CompanyAdminAdded ev)
+        private async Task HandleCompanyAdminAdded(CompanyAdminAdded ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var user = session.Load<UserLookupModel>(GetRavenId(ev.NewAdminId));
+                var user = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.NewAdminId));
 
                 user = Patch(user, ev);
-                session.Store(user);
-                session.SaveChanges();
+                await session.StoreAsync(user);
+                await session.SaveChangesAsync();
             }
         }
 
-        private void HandleTerminated(EmployeeTerminated ev)
+        private async Task HandleTerminated(EmployeeTerminated ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var user = session.Load<UserLookupModel>(GetRavenId(ev.EmployeeId));
+                var user = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.EmployeeId));
                 if (user != null)
                 {
                     session.Delete(user);
-                    session.SaveChanges();
+                    await session.SaveChangesAsync();
                 }
             }
         }
-      
-        private void HandleCreated(EmployeeCreated ev)
+
+        private async Task HandleCreated(EmployeeCreated ev)
         {
-            using (var session = _documentStore.OpenSession())
+            using (var session = _documentStore.OpenAsyncSession())
             {
-                var existing = session.Load<UserLookupModel>(GetRavenId(ev.EmployeeId));
+                var existing = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.EmployeeId));
                 if (existing != null)
                 {
                     existing = Patch(existing, ev);
@@ -118,8 +118,8 @@ namespace Contact.ReadStore.UserStore
                 {
                     existing = Convert(ev);
                 }
-                session.Store(existing);
-                session.SaveChanges();
+                await session.StoreAsync(existing);
+                await session.SaveChangesAsync();
             }
         }
 

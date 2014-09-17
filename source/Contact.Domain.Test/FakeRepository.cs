@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Contact.Domain.Exceptions;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Contact.Domain.Test
 {
@@ -20,11 +19,15 @@ namespace Contact.Domain.Test
             return ThenEvents;
         }
 
-        public void Save(T aggregate, int expectedVersion)
+
+        public async Task SaveAsync(T aggregate, int expectedVersion)
         {
-            var eventsToSave = aggregate.GetUncommittedChanges();
-            ThenEvents.AddRange(eventsToSave);
-            aggregate.MarkChangesAsCommitted();
+            await Task.Run(() =>
+            {
+                var eventsToSave = aggregate.GetUncommittedChanges();
+                ThenEvents.AddRange(eventsToSave);
+                aggregate.MarkChangesAsCommitted();
+            });
         }
 
         public T GetById(string id)

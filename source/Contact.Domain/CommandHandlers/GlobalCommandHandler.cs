@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Contact.Domain.Aggregates;
 using Contact.Domain.Commands;
 using Contact.Domain.Exceptions;
@@ -24,7 +25,7 @@ namespace Contact.Domain.CommandHandlers
             _cvPartnerImporter = cvPartnerImporter;
         }
 
-        public void Handle(AddNewCompanyToSystem message)
+        public async Task Handle(AddNewCompanyToSystem message)
         {
             var global = _globalRepository.GetById(Global.GlobalId);
             if(global == null) global = new Global();
@@ -38,7 +39,7 @@ namespace Contact.Domain.CommandHandlers
                 new Person(Constants.SystemUserId, Constants.SystemUserId), message.CorrelationId);
 
 
-            _employeeRepository.Save(system, Constants.NewVersion);
+            await _employeeRepository.SaveAsync(system, Constants.NewVersion);
 
 
             var systemAsPerson = new Person(system.Id, system.Name);
@@ -48,8 +49,8 @@ namespace Contact.Domain.CommandHandlers
 
             global.AddCompany(company, systemAsPerson, message.CorrelationId);
 
-            _globalRepository.Save(global, Constants.NewVersion);
-            _companyRepository.Save(company, Constants.NewVersion);
+            await _globalRepository.SaveAsync(global, Constants.NewVersion);
+            await _companyRepository.SaveAsync(company, Constants.NewVersion);
 
             if (message.InitialAdmins != null)
             {
@@ -69,15 +70,15 @@ namespace Contact.Domain.CommandHandlers
                     }
 
                     admin.CreateNew(message.CompanyId, message.CompanyName, adminId, adminInfo.LoginId, adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName, null, string.Empty, message.FirstOfficeName, string.Empty, email, null, null, message.CreatedBy, message.CorrelationId);
-                    _employeeRepository.Save(admin, Constants.NewVersion);
+                    await _employeeRepository.SaveAsync(admin, Constants.NewVersion);
                     company.AddNewEmployeeToCompany(admin,message.CreatedBy, message.CorrelationId);
                     company.AddCompanyAdmin(admin, message.CreatedBy, message.CorrelationId);
                 }
             }
-            _companyRepository.Save(company, Constants.IgnoreVersion);
+            await _companyRepository.SaveAsync(company, Constants.IgnoreVersion);
         }
 
-        public void Handle(ImportDataFromCvPartner message)
+        public async Task Handle(ImportDataFromCvPartner message)
         {
             var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
@@ -86,7 +87,7 @@ namespace Contact.Domain.CommandHandlers
             if (company == null) throw new UnknownItemException("Unknown ID for company");
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
-            List<CvPartnerImportData> importData = _cvPartnerImporter.GetImportData().Result;
+            List<CvPartnerImportData> importData = await _cvPartnerImporter.GetImportData();
 
             if (importData != null)
             {
@@ -101,12 +102,12 @@ namespace Contact.Domain.CommandHandlers
                         employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName, cvPartnerImportData.DateOfBirth, cvPartnerImportData.Title, cvPartnerImportData.OfficeName, cvPartnerImportData.Phone, cvPartnerImportData.Email, null, null, message.CreatedBy, message.CorrelationId);
 
                         company.AddNewEmployeeToCompany(employee, message.CreatedBy, message.CorrelationId);
-                        _companyRepository.Save(company, Constants.IgnoreVersion);
+                        await _companyRepository.SaveAsync(company, Constants.IgnoreVersion);
                     }
 
                     employee.ImportData(company.Id, company.Name, cvPartnerImportData, message.CreatedBy, message.CorrelationId);
 
-                    _employeeRepository.Save(employee, Constants.IgnoreVersion);
+                    await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
                 }
             }
         }
