@@ -80,9 +80,11 @@ namespace Contact.TestApp
 
             var sender = new RabbitMqCommandSender(config.RabbitMqHost, config.RabbitMqUsername,
                 config.RabbitMqPassword, config.RabbitMqCommandExchangeName, config.RabbitMqUseSsl);
-            await Task.Run(() => sender.Send(seedCommand));
-            await Task.Run(() => sender.Send(importCommand));
-
+            await Task.Run(() =>
+            {
+                sender.Send(seedCommand);
+                sender.Send(importCommand);
+            });
             //TODO: wait for results to come back
         }
     }
