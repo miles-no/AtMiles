@@ -1,8 +1,16 @@
-﻿var homepageController = function ($scope, $http, $timeout) {
+﻿var homepageController = function ($scope, $http, $timeout, $location) {
 
-    $scope.apiRoot = "http://milescontact.cloudapp.net";
+    //$scope.apiRoot = "http://milescontact.cloudapp.net";
+    $scope.apiRoot = "/";
 
     $scope.queryTerm = "";
+
+    $scope.errors = [];
+    
+    var getCompany = function () {
+        var p = $location.path().split("/");
+        return p[1] || "Unknown";  
+    }
     var lastQueryTerm = null;
     var maxSearchResults = 9;
 
@@ -37,13 +45,17 @@
             if (tmpTerm == $scope.queryTerm) {
                 var res = $http({
                     method: 'GET',
-                    url: $scope.apiRoot + "/api/Search?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(tmpTerm),
+                    url: $scope.apiRoot + getCompany() +"/api/Search/fulltext?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(tmpTerm),
                     withCredentials: true
                 });
 
                 res.success(function (data) {
+                    if (data.Error) {
+                        $scope.errors.push(data.Error);
+                        return;
+                    }
                     if (tmpTerm == $scope.queryTerm) {
-                        if (data != null) {
+                        if (data) {
                             if (!add) {
                                 while ($scope.searchResult.Results.length > 0) {
                                     $scope.searchResult.Results.pop();
@@ -57,7 +69,7 @@
 
                             if (data.Total > $scope.searchResult.Results.length) {
                                 skip = data.Skipped + data.Results.length;
-                                $scope.moreSearchResults = data.Total - skip;
+                                $scope.moreSearchResults = data.TotalResults - skip;
                             } else {
                                 skip = 0;
                                 $scope.moreSearchResults = false;
@@ -73,32 +85,12 @@
         }, 250);
     };
 
-    $scope.checkAuthenticated = function () {
-        var res = $http({
-            method: 'GET',
-            url: $scope.apiRoot + "/api/test",
-            withCredentials: true
-        });
-        res.success(function (data) {
-
-            $scope.isAuthenticated = { good: true, name: data.replace(/"/g, "") };
-            $('#mainContent').show();
-        });
-        res.error(function (errorData, status) {
-            if (status == 401) {
-                $scope.isAuthenticated = { good: false, name: "unknown" };
-                $('#mainContent').hide();
-            } else {
-                alert(errorData.data);
-            }
-        }
-        );
-    }
+  
     $scope.showDetails = function (item) {
 
         var res = $http({
             method: 'GET',
-            url: $scope.apiRoot + "/api/company/miles/employee/" + item.GlobalId,
+            url: $scope.apiRoot + getCompany() +"/api/employee/" + item.GlobalId,
             withCredentials: true
         });
         res.success(function (data) {
@@ -206,11 +198,16 @@
     }
 
     angular.element(document).ready(function () {
-        $scope.checkAuthenticated();
+       
     });
 
    
 }
 
 var atMiles = angular.module('AtMiles', ['ngAnimate']);
-atMiles.controller('homepageController', ['$scope', '$http', '$timeout', homepageController]);
+atMiles.config([
+    '$locationProvider', function ($locationProvider) {
+    $locationProvider.html5Mode(true);
+}
+]);
+atMiles.controller('homepageController', ['$scope', '$http', '$timeout','$location', homepageController]);
