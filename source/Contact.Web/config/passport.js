@@ -15,7 +15,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 // load the auth variables
 var configAuth = require('./auth');
 
-module.exports = function (passport) {
+module.exports = function (app, passport) {
     
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
@@ -45,19 +45,19 @@ module.exports = function (passport) {
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
         callbackURL     : configAuth.googleAuth.callbackURL,
+        passReqToCallback: true
     },
-    function (token, refreshToken, profile, done) {
-
-        var company = 'miles';
+    function (req, token, refreshToken, profile, done) {
+        var company = req.session.company;
         var provider = 'Google';
-        var id = profile.id;
+        
+        var email = profile.emails[0].value;
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function () {
-            var path = '/databases/Contact/indexes/UserLookupIndex?&query=GlobalProviderId%3A' + company + '%2F' + provider + '%2F' + id + '&pageSize=1';
-            console.log(path); 
+            var path = '/databases/Contact/indexes/UserLookupIndex?&query=GlobalProviderEmail%3A' + company + '%2F' + provider + '%2F' + email + '&pageSize=1';
             http.get({
-                host: 'milescontact.cloudapp.net',
+                host: app.rootHost,
                 port: 8080,
                 path: path
             }, function (resp) {

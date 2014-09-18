@@ -5,7 +5,8 @@
 
 var express = require('express');
 //var routes = require('./routes/routes.js');
-var user = require('./routes/user');
+
+
 var http = require('http');
 var path = require('path');
 
@@ -19,6 +20,7 @@ var session = require('express-session');
 
 var app = express();
 
+app.rootHost = 'milescontact.cloudapp.net';
 // all environments
 app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +37,7 @@ app.use(cookieParser()); // read cookies (needed for auth)
 sessionStore = new express.session.MemoryStore;
 app.use(express.session({ secret: 'humptydumptysatatmiles', store: sessionStore })); // session secret
 
-require('./config/passport')(passport);
+require('./config/passport')(app, passport);
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -49,6 +51,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(app.router);
 // routes ======================================================================
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./routes/api.js')(app, passport);
 
 
 

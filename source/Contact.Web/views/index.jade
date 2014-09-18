@@ -11,6 +11,8 @@ block content
         h1 @#{company}
     .row
         .large-12.small-12.columns(ng-app="AtMiles" ng-controller="homepageController")
+             div(ng-repeat="error in errors")
+                p {{error}}   
              if notAuthenticated
                 div
                     .panel.container

@@ -10,6 +10,7 @@ namespace Contact.ReadStore.SearchStore
         public class Result
         {
             public object Content { get; set; }
+            public string Company { get; set; }
         }
 
         public EmployeeSearchModelIndex()
@@ -19,6 +20,7 @@ namespace Contact.ReadStore.SearchStore
                 from person in personSearchModels.Where(w=>w.Id != Constants.SystemUserId)
                 select new
                 {
+                    Company = person.CompanyId,
                     Content = new[] { person.Name, person.Name, person.OfficeName, person.JobTitle, person.Email, 
                         string.Join<object>(" ", person.Competency.Select(s => s.InternationalCompentency)).Replace("#","sharp"), 
                         string.Join<object>(" ", person.Competency.Select(s => s.Competency)).Replace("#","sharp"),
@@ -27,6 +29,7 @@ namespace Contact.ReadStore.SearchStore
                 });
 
             Index(p => p.Content, FieldIndexing.Analyzed);
+            Index(p => p.Company, FieldIndexing.NotAnalyzed);
         }
     }
 

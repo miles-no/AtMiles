@@ -70,17 +70,8 @@
     <Compile Include="public\javascripts\jquery-2.1.1.intellisense.js" />
     <Compile Include="public\javascripts\jquery-2.1.1.js" />
     <Compile Include="public\javascripts\modernizr-2.8.3.js" />
+    <Compile Include="routes\api.js" />
     <Compile Include="routes\routes.js">
-      <Compile>True</Compile>
-      <Minify>False</Minify>
-      <OutputFolder>
-      </OutputFolder>
-      <IgnoreWarnings>True</IgnoreWarnings>
-      <IgnoreErrors>True</IgnoreErrors>
-      <IncludedFiles>
-      </IncludedFiles>
-    </Compile>
-    <Compile Include="routes\user.js">
       <Compile>True</Compile>
       <Minify>False</Minify>
       <OutputFolder>
@@ -580,6 +571,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="config\" />
+    <Folder Include="api\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
