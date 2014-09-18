@@ -14,7 +14,7 @@ module.exports = function (app, passport) {
             res.json({ Error: 'Yo you do not have access to this company' });
             return;
         }
-
+        var resultData = [];
         var path = '/databases/Contact/indexes/EmployeeSearchModelIndex?'+ encodeURIComponent('query= Content:({0}*) AND Company:{1}&pageSize={2}&start={3}'.format(query, company, take, skip));
         console.log(path);
         var options = {
@@ -24,14 +24,17 @@ module.exports = function (app, passport) {
         }
          http.get(options, function (resp) {
             resp.on('data', function (chunk) {
-                console.log('result from search' + chunk);
-                var response = JSON.parse(chunk);
-                res.json(response);
+                resultData.push(chunk);
+              
             });
         }).on("error", function (e) {
             console.log(e);
-            res.json({ Results: [], TotalResults :0 });
+            res.json({Error: e, Results: [], TotalResults :0 });
 
+        }).on('end', function () {
+            
+            var response = JSON.parse(resultData.join(''));
+            res.json(response);
         });
     });
 
@@ -40,7 +43,7 @@ module.exports = function (app, passport) {
         
         var company = req.params.company;
         var employeeId = req.params.employeeId;
-        
+        var resultData = [];
         if (req.session.company != company) {
             res.json({ Error: 'Yo you do not have access to this company.' });
             return;
@@ -56,13 +59,17 @@ module.exports = function (app, passport) {
         http.get(options, function (resp) {
             resp.on('data', function (chunk) {
                 console.log('result from search' + chunk);
-                var response = JSON.parse(chunk);
-                res.json(response);
+                resultData.push(chunk);
+              
             });
         }).on("error", function (e) {
             console.log(e);
-            res.json({ Results: [], TotalResults : 0 });
+            res.json({ Error: e });
 
+        }).on('end', function () {
+            
+            var response = JSON.parse(resultData.join(''));
+            res.json(response);
         });
     });
      
