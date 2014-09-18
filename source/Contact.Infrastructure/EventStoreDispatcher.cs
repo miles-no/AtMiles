@@ -47,7 +47,6 @@ namespace Contact.Infrastructure
             while (IsRunning)
             {
                 Thread.Sleep(5000);
-
             }
             StopSubscription();
         }
@@ -58,6 +57,7 @@ namespace Contact.Infrastructure
             {
                 try
                 {
+
                     var credentials = new UserCredentials(_eventStoreUsername, _eventStorePassword);
                     var currentPosition = GetLatestPosition();
                     _subscription = _eventStoreConnection.SubscribeToAllFrom(currentPosition, false, EventHandle,
@@ -127,7 +127,6 @@ namespace Contact.Infrastructure
 
         private void DroppedHandle(EventStoreCatchUpSubscription arg1, SubscriptionDropReason dropReason, Exception exception)
         {
-            
             if (dropReason == SubscriptionDropReason.UserInitiated) return;
 
             if (exception != null)

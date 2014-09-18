@@ -6,7 +6,7 @@ namespace Contact.Domain
 {
     public class DelegateAdjuster
     {
-        public static Func<TBaseT, Task> CastArgument<TBaseT, TDerivedT>(Expression<Action<TDerivedT>> source) where TDerivedT : TBaseT
+        public static Func<TBaseT, Task> CastArgument<TBaseT, TDerivedT>(Expression<Func<TDerivedT, Task>> source) where TDerivedT : TBaseT
         {
             if (typeof(TDerivedT) == typeof(TBaseT))
             {
