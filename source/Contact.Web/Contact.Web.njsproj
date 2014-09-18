@@ -41,6 +41,8 @@
       <IncludedFiles>
       </IncludedFiles>
     </Compile>
+    <Compile Include="config\auth.js" />
+    <Compile Include="config\passport.js" />
     <Compile Include="public\javascripts\angular-animate.js" />
     <Compile Include="public\javascripts\angular.js" />
     <Compile Include="public\javascripts\angular.min.js" />
@@ -68,7 +70,7 @@
     <Compile Include="public\javascripts\jquery-2.1.1.intellisense.js" />
     <Compile Include="public\javascripts\jquery-2.1.1.js" />
     <Compile Include="public\javascripts\modernizr-2.8.3.js" />
-    <Compile Include="routes\index.js">
+    <Compile Include="routes\routes.js">
       <Compile>True</Compile>
       <Minify>False</Minify>
       <OutputFolder>
@@ -577,6 +579,7 @@
     <Content Include="views\layout.jade" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
