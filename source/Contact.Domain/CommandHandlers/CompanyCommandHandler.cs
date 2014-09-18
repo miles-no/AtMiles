@@ -26,14 +26,14 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(AddCompanyAdmin message)
         {
-            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
-            var employeeToBeAdmin = _employeeRepository.GetById(message.NewAdminId);
+            var employeeToBeAdmin = await _employeeRepository.GetByIdAsync(message.NewAdminId);
             if (employeeToBeAdmin == null) throw new UnknownItemException("Unknown ID for employee to be admin");
 
 
@@ -43,14 +43,14 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(RemoveCompanyAdmin message)
         {
-            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
-            var employeeToBeRemoved = _employeeRepository.GetById(message.AdminId);
+            var employeeToBeRemoved = await _employeeRepository.GetByIdAsync(message.AdminId);
             if (employeeToBeRemoved == null) throw new UnknownItemException("Unknown ID for admin to be removed");
 
             company.RemoveCompanyAdmin(employeeToBeRemoved, message.CreatedBy, message.CorrelationId);
@@ -60,16 +60,16 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(AddEmployee message)
         {
-            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
 
             Employee existingUser = null;
             try
             {
-                existingUser = _employeeRepository.GetById(message.GlobalId);
+                existingUser = await _employeeRepository.GetByIdAsync(message.GlobalId);
             }
             catch (UnknownItemException) { }
 
@@ -90,13 +90,13 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(TerminateEmployee message)
         {
-            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
 
-            var employee = _employeeRepository.GetById(message.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(message.EmployeeId);
             if (employee == null) throw new UnknownItemException("Unknown ID for employee");
 
             CheckIfHandlingSelf(admin, employee);
@@ -117,14 +117,14 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(AddBusyTime message)
         {
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
 
 
 
             if (!company.HasUser(message.EmployeeId)) throw new UnknownItemException("User not in office");
 
-            var employee = _employeeRepository.GetById(message.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(message.EmployeeId);
             if (employee == null) throw new UnknownItemException("Unknown ID for employee");
 
             employee.AddBusyTime(company.Id, company.Name, message.Start, message.End,
@@ -135,12 +135,12 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(RemoveBusyTime message)
         {
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
 
             if (!company.HasUser(message.EmployeeId)) throw new UnknownItemException("User not in office");
 
-            var employee = _employeeRepository.GetById(message.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(message.EmployeeId);
             if (employee == null) throw new UnknownItemException("Unknown ID for employee");
 
             employee.RemoveBusyTime(company.Id, company.Name, message.BusyTimeId,
@@ -151,12 +151,12 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(ConfirmBusyTimeEntries message)
         {
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
 
             if (!company.HasUser(message.EmployeeId)) throw new UnknownItemException("User not in office");
 
-            var employee = _employeeRepository.GetById(message.EmployeeId);
+            var employee = await _employeeRepository.GetByIdAsync(message.EmployeeId);
             if (employee == null) throw new UnknownItemException("Unknown ID for employee");
 
             employee.ConfirmBusyTimeEntries(company.Id, company.Name, message.CreatedBy, message.CorrelationId);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Contact.Domain;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
@@ -32,12 +33,12 @@ namespace Contact.Infrastructure
             _positionHandler = positionHandler;
         }
 
-        protected override void Initialize()
+        protected override async Task Initialize()
         {
             var settings = ConnectionSettings.Create();
             var endPoint = GetIpEndPoint(_eventStoreServer);
             _eventStoreConnection = EventStoreConnection.Create(settings, endPoint);
-            _eventStoreConnection.Connect();
+            await _eventStoreConnection.ConnectAsync();
         }
 
         protected override void Run()

@@ -63,7 +63,7 @@ namespace Contact.Infrastructure
 
             using (var connection = EventStoreConnection.Create(_connectionSettings, _endPoint))
             {
-                connection.Connect();
+                await connection.ConnectAsync();
                 foreach (var @event in events)
                 {
                     var stringVersion = JsonConvert.SerializeObject(@event);
@@ -99,12 +99,12 @@ namespace Contact.Infrastructure
             return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data), Type.GetType((string)eventClrTypeName));
         }
 
-        public T GetById(string id)
+        public async Task<T> GetByIdAsync(string id)
         {
-            return GetById(id, false);
+            return await GetByIdAsync(id, false);
         }
 
-        public T GetById(string id, bool keepHistory)
+        public async Task<T> GetByIdAsync(string id, bool keepHistory)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -117,11 +117,11 @@ namespace Contact.Infrastructure
 
             using (var connection = EventStoreConnection.Create(_connectionSettings, _endPoint))
             {
-                connection.Connect();
+                await connection.ConnectAsync();
                 StreamEventsSlice evStream;
                 try
                 {
-                    evStream = connection.ReadStreamEventsForward(streamName, startPosition, batchSize, false, _credentials);
+                    evStream = await connection.ReadStreamEventsForwardAsync(streamName, startPosition, batchSize, false, _credentials);
                 }
                 catch (Exception)
                 {
@@ -141,7 +141,7 @@ namespace Contact.Infrastructure
                     }
                     obj.LoadsFromHistory(events, keepHistory);
                     startPosition += batchSize;
-                    evStream = connection.ReadStreamEventsForward(streamName, startPosition, batchSize, false, _credentials);
+                    evStream = await connection.ReadStreamEventsForwardAsync(streamName, startPosition, batchSize, false, _credentials);
                 }
             }
             if (obj.Id != id)

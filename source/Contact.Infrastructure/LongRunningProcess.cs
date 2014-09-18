@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Contact.Infrastructure
 {
@@ -16,7 +17,7 @@ namespace Contact.Infrastructure
             _isInitialized = false;
         }
 
-        protected abstract void Initialize();
+        protected abstract Task Initialize();
         protected abstract void Run();
 
         public void Start()

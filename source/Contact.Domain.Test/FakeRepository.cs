@@ -30,27 +30,30 @@ namespace Contact.Domain.Test
             });
         }
 
-        public T GetById(string id)
+        public async Task<T> GetByIdAsync(string id)
         {
-            return GetById(id, false);
+            return await GetByIdAsync(id, false);
         }
 
-        public T GetById(string id, bool keepHistory)
+        public async Task<T> GetByIdAsync(string id, bool keepHistory)
         {
-            if (id == string.Empty)
+            return await Task.Run(() =>
             {
-                return null;
-            }
+                if (id == string.Empty)
+                {
+                    return null;
+                }
 
-            T aggregate = new T();
+                T aggregate = new T();
 
-            aggregate.LoadsFromHistory(GetEventsById(id),keepHistory);
+                aggregate.LoadsFromHistory(GetEventsById(id), keepHistory);
 
-            if (aggregate.Id != id)
-            {
-                return null;
-            }
-            return aggregate;
+                if (aggregate.Id != id)
+                {
+                    return null;
+                }
+                return aggregate;
+            });
         }
 
         private List<Event> GetEventsById(string id)

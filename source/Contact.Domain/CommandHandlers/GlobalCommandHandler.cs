@@ -27,7 +27,7 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(AddNewCompanyToSystem message)
         {
-            var global = _globalRepository.GetById(Global.GlobalId);
+            var global = await _globalRepository.GetByIdAsync(Global.GlobalId);
             if(global == null) global = new Global();
 
             if(global.HasCompany(message.CompanyId)) throw new AlreadyExistingItemException("CompanyId already in system");
@@ -80,10 +80,10 @@ namespace Contact.Domain.CommandHandlers
 
         public async Task Handle(ImportDataFromCvPartner message)
         {
-            var admin = _employeeRepository.GetById(message.CreatedBy.Identifier);
+            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
             if (admin == null) throw new UnknownItemException("Unknown ID for admin");
 
-            var company = _companyRepository.GetById(message.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
             if (company == null) throw new UnknownItemException("Unknown ID for company");
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
@@ -94,7 +94,7 @@ namespace Contact.Domain.CommandHandlers
                 foreach (var cvPartnerImportData in importData)
                 {
                     string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
-                    var employee = _employeeRepository.GetById(userId);
+                    var employee = await _employeeRepository.GetByIdAsync(userId);
 
                     if (employee == null)
                     {

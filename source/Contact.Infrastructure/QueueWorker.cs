@@ -33,15 +33,18 @@ namespace Contact.Infrastructure
             _messageHandler = messageHandler;
         }
 
-        protected override void Initialize()
+        protected override async Task Initialize()
         {
-            _factory = new ConnectionFactory
+            await Task.Run(() =>
             {
-                HostName = _rabbitMqHostname,
-                UserName = _rabbitMqUsername,
-                Password = _rabbitMqPassword,
-                RequestedHeartbeat = RabbitMqRequestedHeartbeat
-            };
+                _factory = new ConnectionFactory
+                {
+                    HostName = _rabbitMqHostname,
+                    UserName = _rabbitMqUsername,
+                    Password = _rabbitMqPassword,
+                    RequestedHeartbeat = RabbitMqRequestedHeartbeat
+                };
+            });
         }
 
         protected override void Run()
