@@ -20,7 +20,7 @@ namespace Contact.Backend.Models.Api.Search
     public class Result
     {
         public string CompanyId { get; set; }
-        public string OfficeId { get; set; }
+        public string OfficeName { get; set; }
         public string GlobalId { get; set; }
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
