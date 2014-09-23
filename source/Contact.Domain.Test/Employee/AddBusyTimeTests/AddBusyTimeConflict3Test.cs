@@ -39,10 +39,10 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         private const string Comment2 = "Client B";
 
         [Test]
-        public void add_busy_time_conflict_3()
+        public async void add_busy_time_conflict_3()
         {
             ExpectedException = new AlreadyExistingItemException("Existing busy time items already defined in this range.");
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

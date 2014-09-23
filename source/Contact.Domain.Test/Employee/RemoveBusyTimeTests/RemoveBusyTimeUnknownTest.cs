@@ -32,10 +32,10 @@ namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
         private const string BusyTimeId1 = "BT01";
 
         [Test]
-        public void remove_busy_time_unknown()
+        public async void remove_busy_time_unknown()
         {
             ExpectedException = new UnknownItemException("Unknown ID for Busy time entry");
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

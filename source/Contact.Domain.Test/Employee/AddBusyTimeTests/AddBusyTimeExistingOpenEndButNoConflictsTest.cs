@@ -41,9 +41,9 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         private string _busyTimeId2 = string.Empty;
 
         [Test]
-        public void add_busy_time_existing_open_end_but_no_conflicts()
+        public async void add_busy_time_existing_open_end_but_no_conflicts()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

@@ -33,10 +33,10 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
-        public void terminate_employee_unknown_employee()
+        public async void terminate_employee_unknown_employee()
         {
             ExpectedException = new UnknownItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

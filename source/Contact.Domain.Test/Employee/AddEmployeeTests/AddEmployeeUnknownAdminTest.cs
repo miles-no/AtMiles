@@ -34,10 +34,10 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
-        public void add_employee_unknown_admin()
+        public async void add_employee_unknown_admin()
         {
             ExpectedException = new UnknownItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

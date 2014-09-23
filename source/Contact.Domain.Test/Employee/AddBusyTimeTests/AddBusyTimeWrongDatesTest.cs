@@ -34,10 +34,10 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         private const string Comment1 = "Client A";
 
         [Test]
-        public void add_busy_time_wrong_dates()
+        public async void add_busy_time_wrong_dates()
         {
             ExpectedException = new ValueException("Start date must be before end date.");
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

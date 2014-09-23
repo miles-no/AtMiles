@@ -34,9 +34,9 @@ namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
         private const string BusyTimeId1 = "BT01";
 
         [Test]
-        public void remove_busy_time()
+        public async void remove_busy_time()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

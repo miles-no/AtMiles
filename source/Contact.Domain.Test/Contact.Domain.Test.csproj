@@ -91,6 +91,10 @@
     <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeUnknownAdminTest.cs" />
     <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeUnknownEmployeeTest.cs" />
     <Compile Include="Employee\TerminateEmployeeTests\TerminateEmployeeWithoutPermissionTest.cs" />
+    <Compile Include="Employee\UpdateBusyTimeChangePercentageTests\UpdateBusyTimeChangePercentageTest.cs" />
+    <Compile Include="Employee\UpdateBusyTimeChangePercentageTests\UpdateBusyTimeChangePercentageUnknownTest.cs" />
+    <Compile Include="Employee\UpdateBusyTimeSetFinishDateTests\UpdateBusyTimeSetFinishDateTest.cs" />
+    <Compile Include="Employee\UpdateBusyTimeSetFinishDateTests\UpdateBusyTimeSetFinishDateUnknownTest.cs" />
     <Compile Include="EventSpecification.cs" />
     <Compile Include="FakeCvPartnerImporter.cs" />
     <Compile Include="FakeRepository.cs" />

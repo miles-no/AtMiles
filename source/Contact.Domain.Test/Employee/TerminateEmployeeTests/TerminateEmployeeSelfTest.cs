@@ -28,10 +28,10 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
         private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
         [Test]
-        public void terminate_employee_self()
+        public async void terminate_employee_self()
         {
             ExpectedException = new NoAccessException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

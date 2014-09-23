@@ -36,9 +36,9 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         private string _busyTimeId = string.Empty;
 
         [Test]
-        public void add_busy_time()
+        public async void add_busy_time()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

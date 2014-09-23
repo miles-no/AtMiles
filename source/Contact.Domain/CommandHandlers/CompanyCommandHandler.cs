@@ -13,7 +13,9 @@ namespace Contact.Domain.CommandHandlers
         Handles<TerminateEmployee>,
         Handles<AddBusyTime>,
         Handles<RemoveBusyTime>,
-        Handles<ConfirmBusyTimeEntries>
+        Handles<ConfirmBusyTimeEntries>,
+        Handles<UpdateBusyTimeSetEndDate>,
+        Handles<UpdateBusyTimeChangePercentage>
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
@@ -160,6 +162,32 @@ namespace Contact.Domain.CommandHandlers
             if (employee == null) throw new UnknownItemException("Unknown ID for employee");
 
             employee.ConfirmBusyTimeEntries(company.Id, company.Name, message.CreatedBy, message.CorrelationId);
+
+            await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
+        }
+
+        public async Task Handle(UpdateBusyTimeSetEndDate message)
+        {
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+
+            var employee = await _employeeRepository.GetByIdAsync(message.EmployeeId);
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
+
+            employee.SetBusyTimeEnd(company.Id, company.Name, message.BusyTimeId, message.NewEnd, message.CreatedBy, message.CorrelationId);
+
+            await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
+        }
+
+        public async Task Handle(UpdateBusyTimeChangePercentage message)
+        {
+            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+
+            var employee = await _employeeRepository.GetByIdAsync(message.EmployeeId);
+            if (employee == null) throw new UnknownItemException("Unknown ID for employee");
+
+            employee.SetPercentageOccupied(company.Id, company.Name, message.BusyTimeId, message.NewpercentageOccpied, message.CreatedBy, message.CorrelationId);
 
             await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
         }

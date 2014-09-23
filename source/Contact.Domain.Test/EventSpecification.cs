@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -19,7 +20,7 @@ namespace Contact.Domain.Test
         public Exception ExpectedException;
         private Guid _playgroundId = Guid.Empty;
 
-        public async void Setup()
+        public async Task Setup()
         {
             CaughtException = null;
             var handler = OnHandler();

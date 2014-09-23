@@ -63,6 +63,8 @@
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
     <Compile Include="Commands\AddNewCompanyToSystem.cs" />
     <Compile Include="Commands\TerminateEmployee.cs" />
+    <Compile Include="Commands\UpdateBusyTimeChangePercentage.cs" />
+    <Compile Include="Commands\UpdateBusyTimeSetEndDate.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DelegateAdjuster.cs" />
     <Compile Include="Event.cs" />
@@ -76,6 +78,8 @@
     <Compile Include="Events\Employee\BusyTimeAdded.cs" />
     <Compile Include="Events\Employee\BusyTimeConfirmed.cs" />
     <Compile Include="Events\Employee\BusyTimeRemoved.cs" />
+    <Compile Include="Events\Employee\BusyTimeUpdatedNewEndDate.cs" />
+    <Compile Include="Events\Employee\BusyTimeUpdatedNewPercentage.cs" />
     <Compile Include="Events\Employee\EmployeeCreated.cs" />
     <Compile Include="Events\Company\EmployeeRemoved.cs" />
     <Compile Include="Events\Employee\EmployeeTerminated.cs" />

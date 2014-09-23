@@ -34,10 +34,10 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
-        public void add_employee_existing_global_id()
+        public async void add_employee_existing_global_id()
         {
             ExpectedException = new AlreadyExistingItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

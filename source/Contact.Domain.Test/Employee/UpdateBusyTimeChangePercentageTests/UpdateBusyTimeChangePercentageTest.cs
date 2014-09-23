@@ -8,10 +8,10 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
+namespace Contact.Domain.Test.Employee.UpdateBusyTimeChangePercentageTests
 {
     [TestFixture]
-    public class ConfirmBusyTimeEntriesTest : EventSpecification<ConfirmBusyTimeEntries>
+    public class UpdateBusyTimeChangePercentageTest : EventSpecification<UpdateBusyTimeChangePercentage>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private DateTime _timestamp = DateTime.MinValue;
@@ -27,8 +27,15 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
         private const string EmployeeLastName = "Jensen";
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(1980, 01, 01);
 
+        private static readonly DateTime Start1 = new DateTime(2014, 01, 01);
+        private static readonly DateTime End1 = new DateTime(2015, 01, 01);
+        private const short Percentage1 = 100;
+        private const short Percentage2 = 60;
+        private const string Comment1 = "Client A";
+        private const string BusyTimeId1 = "BT01";
+
         [Test]
-        public async void confirm_busy_time_entries()
+        public async void update_busy_time_change_percentage()
         {
             await Setup();
         }
@@ -68,17 +75,18 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
+                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT")),
+                    new FakeStreamEvent(EmployeeId, new BusyTimeAdded(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), BusyTimeId1, Start1, End1, Percentage1, Comment1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),"FIRST"))
                 };
             return events;
         }
 
-        public override ConfirmBusyTimeEntries When()
+        public override UpdateBusyTimeChangePercentage When()
         {
-            return new ConfirmBusyTimeEntries(CompanyId, EmployeeId, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
+            return new UpdateBusyTimeChangePercentage(CompanyId, EmployeeId, BusyTimeId1, Percentage2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<ConfirmBusyTimeEntries> OnHandler()
+        public override Handles<UpdateBusyTimeChangePercentage> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
@@ -89,7 +97,7 @@ namespace Contact.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
         {
             var events = new List<Event>
                 {
-                    new BusyTimeConfirmed(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _timestamp, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),_correlationId)
+                    new BusyTimeUpdatedNewPercentage(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), BusyTimeId1, Percentage2, _timestamp, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),_correlationId)
                 };
             return events;
         }

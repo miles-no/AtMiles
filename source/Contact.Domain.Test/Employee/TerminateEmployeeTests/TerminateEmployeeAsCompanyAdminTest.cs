@@ -34,9 +34,9 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
         private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
-        public void terminate_employee_as_company_admin()
+        public async void terminate_employee_as_company_admin()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()
