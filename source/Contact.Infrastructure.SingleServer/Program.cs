@@ -1,4 +1,5 @@
-﻿using Contact.Domain.Aggregates;
+﻿using System.Threading.Tasks;
+using Contact.Domain.Aggregates;
 using Contact.Domain.CommandHandlers;
 using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure.Configuration;
@@ -19,8 +20,12 @@ namespace Contact.Infrastructure.SingleServer
         {
             var configFilename = Settings.Default.ConfigFile;
             var config = ConfigManager.GetConfig(configFilename);
-            var commandWorker = StartCommandHandler(config);
-            var readStoreWorker = StartReadModelHandler(config);
+            var t1 = StartCommandHandler(config);
+            var t2 = StartReadModelHandler(config);
+            t1.Wait();
+            t2.Wait();
+            var commandWorker = t1.Result;
+            var readStoreWorker = t2.Result;
             System.Console.WriteLine("Press enter to finish");
             System.Console.ReadLine();
             System.Console.WriteLine("Stopping.......");
@@ -29,7 +34,7 @@ namespace Contact.Infrastructure.SingleServer
             System.Console.WriteLine("Stopped");
         }
 
-        private static LongRunningProcess StartCommandHandler(Config config)
+        private async static Task<LongRunningProcess> StartCommandHandler(Config config)
         {
             var companyRepository = new EventStoreRepository<Company>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
             var employeeRepository = new EventStoreRepository<Employee>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
@@ -43,13 +48,13 @@ namespace Contact.Infrastructure.SingleServer
             var logger = new ConsoleLogger();
             var worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandQueueName, logger, cmdReceiver.MessageHandler);
 
-            worker.Start();
+            await worker.Start();
 
             System.Console.WriteLine("Command-worker Started");
             return worker;
         }
 
-        private static LongRunningProcess StartReadModelHandler(Config config)
+        private async static Task<LongRunningProcess> StartReadModelHandler(Config config)
         {
             var handlers = new ReadModelHandler();
             var store = RavenDocumentStore.CreateStore(config.RavenDbUrl);
@@ -58,7 +63,7 @@ namespace Contact.Infrastructure.SingleServer
             new UserLookupStore(new UserLookupEngine(store), store).PrepareHandler(handlers);
             var positionSaver = new PositionSaver(store);
             var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { }, positionSaver);
-            read.Start();
+            await read.Start();
 
             return read;
         }

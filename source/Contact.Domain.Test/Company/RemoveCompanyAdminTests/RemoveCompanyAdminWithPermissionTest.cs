@@ -36,9 +36,9 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_with_permission()
+        public async void remove_company_admin_with_permission()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

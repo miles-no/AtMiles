@@ -48,9 +48,9 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         );
 
         [Test]
-        public void import_data_from_CvPartner_existing_user_no_updates()
+        public async void import_data_from_CvPartner_existing_user_no_updates()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

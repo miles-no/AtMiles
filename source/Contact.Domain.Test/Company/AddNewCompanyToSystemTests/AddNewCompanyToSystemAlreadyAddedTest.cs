@@ -22,9 +22,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
 
-        private const string OfficeId = "SVG";
         private const string OfficeName = "Stavanger";
-
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -32,10 +30,10 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
         private const string AdminEmail = "admin@miles.no";
 
         [Test]
-        public void add_new_company_to_system_already_added()
+        public async void add_new_company_to_system_already_added()
         {
             ExpectedException = new AlreadyExistingItemException("CompanyId already in system");
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

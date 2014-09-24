@@ -31,10 +31,10 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_unknown_admin_to_remove()
+        public async void remove_company_admin_unknown_admin_to_remove()
         {
             ExpectedException = new UnknownItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

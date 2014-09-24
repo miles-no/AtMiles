@@ -50,9 +50,9 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         private DateTime _timestamp = DateTime.MinValue;
 
         [Test]
-        public void import_data_from_CvPartner_existing_user_first_import()
+        public async void import_data_from_CvPartner_existing_user_first_import()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

@@ -33,10 +33,10 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 
 
         [Test]
-        public void add_company_admin_unknown_first_admin()
+        public async void add_company_admin_unknown_first_admin()
         {
             ExpectedException = new UnknownItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

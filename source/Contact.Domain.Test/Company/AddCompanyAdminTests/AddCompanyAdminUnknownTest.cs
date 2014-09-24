@@ -31,10 +31,10 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 
 
         [Test]
-        public void add_company_admin_unknown_employee()
+        public async void add_company_admin_unknown_employee()
         {
             ExpectedException = new UnknownItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

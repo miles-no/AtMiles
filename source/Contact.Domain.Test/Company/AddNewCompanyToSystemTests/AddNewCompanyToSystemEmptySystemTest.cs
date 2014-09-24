@@ -6,7 +6,7 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
+namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
 {
     [TestFixture]
     public class AddNewCompanyToSystemEmptySystemTest : EventSpecification<AddNewCompanyToSystem>
@@ -37,9 +37,9 @@ namespace Contact.Domain.Test.Company.SeedNewSystemWithCompanyTests
         private const string AdminEmail = "admin@miles.no";
 
         [Test]
-        public void add_new_company_to_system_empty_system()
+        public async void add_new_company_to_system_empty_system()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

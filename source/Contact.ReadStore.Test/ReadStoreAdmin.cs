@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Contact.Infrastructure;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
@@ -20,10 +21,10 @@ namespace Contact.ReadStore
 
         }
 
-        public void StartListening()
+        public async Task StartListening()
         {
             var demo = new EventStoreDispatcher(ReadStoreConstants.Host, ReadStoreConstants.Username, ReadStoreConstants.Password, handlers, new ConsoleLogger(), () => { }, null);
-            demo.Start();
+            await demo.Start();
             Console.WriteLine("Listening...");
             
         }

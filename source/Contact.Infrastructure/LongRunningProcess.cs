@@ -20,13 +20,13 @@ namespace Contact.Infrastructure
         protected abstract Task Initialize();
         protected abstract void Run();
 
-        public void Start()
+        public async Task Start()
         {
             if (!_isInitialized)
             {
                 try
                 {
-                    Initialize();
+                    await Initialize();
                     _isInitialized = true;
                 }
                 catch (Exception ex)

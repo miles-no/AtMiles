@@ -35,10 +35,10 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 
 
         [Test]
-        public void add_company_admin_already_existing()
+        public async void add_company_admin_already_existing()
         {
             ExpectedException = new AlreadyExistingItemException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

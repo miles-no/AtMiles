@@ -36,9 +36,9 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 
 
         [Test]
-        public void add_company_admin_with_permission()
+        public async void add_company_admin_with_permission()
         {
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

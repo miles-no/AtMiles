@@ -35,10 +35,10 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 
 
         [Test]
-        public void add_company_admin_without_permission()
+        public async void add_company_admin_without_permission()
         {
             ExpectedException = new NoAccessException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()

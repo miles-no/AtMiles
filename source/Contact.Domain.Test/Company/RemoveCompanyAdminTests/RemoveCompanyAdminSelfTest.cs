@@ -35,10 +35,10 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string OfficeName = "Stavanger";
 
         [Test]
-        public void remove_company_admin_self()
+        public async void remove_company_admin_self()
         {
             ExpectedException = new NoAccessException(string.Empty);
-            Setup();
+            await Setup();
         }
 
         public override IEnumerable<Event> Produced()
