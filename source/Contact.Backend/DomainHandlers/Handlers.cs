@@ -31,6 +31,49 @@ namespace Contact.Backend.DomainHandlers
             RegisterRemoveBusyTime(mediator, container);
             RegisterConfirmBusyTimeEntries(mediator, container);
 
+            RegisterUpdateBusyTimeSetEnd(mediator, container);
+            RegisterUpdateBusyTimeChangePercentage(mediator, container);
+
+        }
+
+        private static void RegisterUpdateBusyTimeChangePercentage(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<UpdateBusyTimeChangePercentageRequest, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new UpdateBusyTimeChangePercentage(req.CompanyId, createdBy.Identifier, req.BustTimeEntryId, req.NewPercentageOccupied, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
+        }
+
+        private static void RegisterUpdateBusyTimeSetEnd(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<UpdateBusyTimeSetEndRequest, Response>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new UpdateBusyTimeSetEndDate(req.CompanyId, createdBy.Identifier, req.BustTimeEntryId, req.NewEnd, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
+                }
+            });
         }
 
         private static void RegisterAddBusyTime(IMediator mediator, IUnityContainer container)

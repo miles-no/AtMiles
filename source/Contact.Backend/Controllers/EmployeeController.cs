@@ -6,6 +6,7 @@ using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
+using Contact.Domain.Commands;
 using Contact.Infrastructure;
 
 namespace Contact.Backend.Controllers
@@ -52,6 +53,22 @@ namespace Contact.Backend.Controllers
         {
             var request = new RemoveBusyTimeRequest { CompanyId = companyId, BustTimeEntryId = busyTimeId };
             return mediator.Send<RemoveBusyTimeRequest, Response>(request, User.Identity);
+        }
+
+        [HttpPost]
+        [Route("api/company/{companyId}/employee/busytime/{busyTimeId}/newend")]
+        public Response UpdateBusyTimeNewEnd(string companyId, string busyTimeId, DateTime? newend)
+        {
+            var request = new UpdateBusyTimeSetEndRequest { CompanyId = companyId, BustTimeEntryId = busyTimeId, NewEnd = newend};
+            return mediator.Send<UpdateBusyTimeSetEndRequest, Response>(request, User.Identity);
+        }
+
+        [HttpPost]
+        [Route("api/company/{companyId}/employee/busytime/{busyTimeId}/newpercentage")]
+        public Response UpdateBusyTimeChangePercentage(string companyId, string busyTimeId, short newpercentageOccupied)
+        {
+            var request = new UpdateBusyTimeChangePercentageRequest { CompanyId = companyId, BustTimeEntryId = busyTimeId, NewPercentageOccupied = newpercentageOccupied};
+            return mediator.Send<UpdateBusyTimeChangePercentageRequest, Response>(request, User.Identity);
         }
 
         [HttpPost]
