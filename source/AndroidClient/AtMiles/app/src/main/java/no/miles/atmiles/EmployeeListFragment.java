@@ -8,7 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-import no.miles.atmiles.dummy.DummyContent;
+import no.miles.atmiles.employee.EmployeeDummyContent;
+import no.miles.atmiles.employee.EmployeeItem;
 
 /**
  * A list fragment representing a list of Employees. This fragment
@@ -72,11 +73,11 @@ public class EmployeeListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        setListAdapter(new ArrayAdapter<EmployeeItem>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+                EmployeeDummyContent.ITEMS));
     }
 
     @Override
@@ -116,7 +117,7 @@ public class EmployeeListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(EmployeeDummyContent.ITEMS.get(position).id);
     }
 
     @Override
