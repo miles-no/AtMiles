@@ -9,4 +9,6 @@
     <string name="action_menu_exit">Exit</string>
     <string name="title_activity_favorites">Favorites</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_login">Login</string>
+    <string name="menu_item_login">Login</string>
 </resources>

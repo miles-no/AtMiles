@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_menu_login"
+        android:title="@string/menu_item_login"/>
     <item android:id="@+id/action_menu_favorites"
         android:title="@string/menu_item_favorites"/>
     <item android:id="@+id/action_menu_profile"

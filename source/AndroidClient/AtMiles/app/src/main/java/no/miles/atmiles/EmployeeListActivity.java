@@ -94,6 +94,9 @@ public class EmployeeListActivity extends Activity
         int id = item.getItemId();
 
         switch(id){
+            case R.id.action_menu_login:
+                startActivity(new Intent(this, LoginActivity.class));
+                break;
             case R.id.action_menu_favorites:
                 startActivity(new Intent(this, FavoritesActivity.class));
                 break;
