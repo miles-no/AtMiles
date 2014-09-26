@@ -54,7 +54,7 @@ public class EmployeeDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.employee_detail)).setText(mItem.content);
+            ((TextView) rootView.findViewById(R.id.employee_detail)).setText(mItem.id + " " + mItem.content);
         }
 
         return rootView;
