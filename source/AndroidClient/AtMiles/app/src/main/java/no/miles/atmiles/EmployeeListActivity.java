@@ -3,8 +3,9 @@ package no.miles.atmiles;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-
-
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 
 /**
@@ -54,6 +55,12 @@ public class EmployeeListActivity extends Activity
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
     /**
      * Callback method from {@link EmployeeListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
@@ -79,5 +86,26 @@ public class EmployeeListActivity extends Activity
             detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean handled = true;
+        int id = item.getItemId();
+
+        switch(id){
+            case R.id.action_menu_favorites:
+                startActivity(new Intent(this, FavoritesActivity.class));
+                break;
+            case R.id.action_menu_profile:
+                startActivity(new Intent(this, ProfileActivity.class));
+                break;
+            case R.id.action_menu_exit:
+                finish();
+                break;
+            default:
+                handled = super.onOptionsItemSelected(item);
+        }
+        return handled;
     }
 }

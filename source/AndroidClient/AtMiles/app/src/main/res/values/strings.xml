@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AtMiles</string>
+    <string name="app_name">\@miles</string>
     <string name="title_employee_detail">Employee Detail</string>
-
+    <string name="menu_item_home">\@miles home</string>
+    <string name="menu_item_favorites">Favorites</string>
+    <string name="menu_item_profile">Edit profile</string>
+    <string name="action_menu_exit">Exit</string>
+    <string name="title_activity_favorites">Favorites</string>
+    <string name="title_activity_profile">Profile</string>
 </resources>

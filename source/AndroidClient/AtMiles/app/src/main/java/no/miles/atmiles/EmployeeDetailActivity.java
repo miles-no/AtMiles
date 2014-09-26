@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 /**
@@ -50,18 +52,32 @@ public class EmployeeDetailActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.employee, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean handled = true;
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, EmployeeListActivity.class));
-            return true;
+
+        switch(id){
+            case android.R.id.home:
+                navigateUpTo(new Intent(this, EmployeeListActivity.class));
+                break;
+            case R.id.action_menu_home:
+                navigateUpTo(new Intent(this, EmployeeListActivity.class));
+                break;
+            case R.id.action_menu_favorites:
+                startActivity(new Intent(this, FavoritesActivity.class));
+                break;
+            case R.id.action_menu_profile:
+                startActivity(new Intent(this, ProfileActivity.class));
+                break;
+            default:
+                handled = super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return handled;
     }
 }
