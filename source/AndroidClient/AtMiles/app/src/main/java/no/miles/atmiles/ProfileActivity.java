@@ -14,6 +14,9 @@ public class ProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // Show the Up button in the action bar.
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -30,7 +33,7 @@ public class ProfileActivity extends Activity {
         int id = item.getItemId();
 
         switch(id){
-            case R.id.action_menu_home:
+            case android.R.id.home:
                 navigateUpTo(new Intent(this, EmployeeListActivity.class));
                 break;
             case R.id.action_menu_favorites:
