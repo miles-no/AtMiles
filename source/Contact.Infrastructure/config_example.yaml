@@ -16,3 +16,6 @@ RabbitMqCommandQueueName: Commands
 RabbitMqCommandExchangeName: Commands_X
 RavenDbUrl: http://localhost:8080
 CvPartnerToken: 123
+Auth0Issuer: https://atmiles.auth0.com/
+Auth0Audience: ???
+Auth0Secret: ???

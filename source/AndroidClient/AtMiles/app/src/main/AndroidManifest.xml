@@ -36,10 +36,7 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+        <activity android:name="no.miles.atmiles.AuthenticationActivity" />
     </application>
 
 </manifest>

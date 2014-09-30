@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Security;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
-using Microsoft.Owin.Security.Infrastructure;
+using Contact.Infrastructure.Configuration;
+using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json.Linq;
 using Owin;
+using Microsoft.Owin.Security.Jwt;
+using System.Web.Http;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+using Microsoft.Owin.Security;
 
 namespace Contact.Backend
 {
@@ -19,108 +20,63 @@ namespace Contact.Backend
 
         public static string PublicClientId { get; private set; }
 
-        // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
-        public void ConfigureAuth(IAppBuilder app)
+        public void ConfigureAuth(IAppBuilder app, Config settings)
         {
-            PublicClientId = "self";
-    
-            OAuthOptions = new OAuthAuthorizationServerOptions
-            {
-                TokenEndpointPath = new PathString("/Token"), 
-                RefreshTokenProvider = new ApplicationRefreshTokenProvider(),
-       
-                //TODO: Add additional validation if necessary
-                Provider = new OAuthAuthorizationServerProvider
+            var issuer = settings.Auth0Issuer;
+            var audience = settings.Auth0Audience;
+            var secret = TextEncodings.Base64Url.Decode(settings.Auth0Secret);
+
+            string token = string.Empty;
+
+            // Api controllers with an [Authorize] attribute will be validated with JWT
+            app.UseJwtBearerAuthentication(
+                new JwtBearerAuthenticationOptions
                 {
-                     OnValidateClientRedirectUri = async (context) =>
-                     {
-                         context.Validated(context.RedirectUri);
-                     },
-                     OnValidateClientAuthentication = async (context) =>
-                     {
-                         context.Validated(context.ClientId);
-                     },
-                     OnGrantResourceOwnerCredentials = async (context) =>
-                     {
-                         context.Validated(context.Ticket);
-                     },
-                     OnGrantClientCredentials = async (context) =>
-                     {
-                         context.Validated(context.Ticket);
-                     }
-                },
-             
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(8),
-                AllowInsecureHttp = true
-            };
+                    AuthenticationMode = AuthenticationMode.Active,
+                    AllowedAudiences = new[] { audience },
+                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
+                    {
+                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
+                    },
+                    Provider = new OAuthBearerAuthenticationProvider
+                    {
+                        OnRequestToken = context =>
+                        {
+                            token = context.Token;
+                            return Task.FromResult<object>(null);
+                        },
+                        OnValidateIdentity = context =>
+                        {
+                            if (!string.IsNullOrEmpty(token))
+                            {
+                                var notPadded = token.Split('.')[1];
+                                var claimsPart = Convert.FromBase64String(
+                                    notPadded.PadRight(notPadded.Length + (4 - notPadded.Length % 4) % 4, '='));
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                CookieName = "atMiles",
-                CookiePath = FormsAuthentication.FormsCookiePath,
-                CookieSecure = CookieSecureOption.SameAsRequest,
-                AuthenticationMode = AuthenticationMode.Active,
-                ExpireTimeSpan = new TimeSpan(8,0,0),
-                SlidingExpiration = true,
-            });
+                                var obj = JObject.Parse(Encoding.UTF8.GetString(claimsPart, 0, claimsPart.Length));
 
-            app.UseOAuthBearerTokens(OAuthOptions);
-          
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+                                // simple, not handling specific types, arrays, etc.
+                                foreach (var prop in obj.Properties().AsJEnumerable())
+                                {
+                                    if (!context.Ticket.Identity.HasClaim(prop.Name, prop.Value.Value<string>()))
+                                    {
+                                        context.Ticket.Identity.AddClaim(new Claim(prop.Name, prop.Value.Value<string>()));
+                                    }
+                                }
 
-            // Configure the application for OAuth based flow
-            
+                                //TODO: Lookup and add userId here. If not existing: Add new user
+                            }
+                            return Task.FromResult<object>(null);
+                        }
+                    }
+                });
 
-            // Enable the application to use bearer tokens to authenticate users
-        
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
-
-            var options = new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = "387201482859-4091mlp9nvru7lfhd6mr546hku4gue2q.apps.googleusercontent.com",
-                ClientSecret = "pvJiPJkQTOI6LurhaWPRfyvt",
-            };
-
-            app.UseGoogleAuthentication(options);
+            app.UseCors(CorsOptions.AllowAll);
 
             // Only use external cookie for authentication
             var config = GlobalConfiguration.Configuration;
             config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(DefaultAuthenticationTypes.ExternalCookie));
-        }
-    }
-
-    public class ApplicationRefreshTokenProvider : IAuthenticationTokenProvider
-    {
-        const int Expire = 60 * 60;
-          
-        public void Create(AuthenticationTokenCreateContext context)
-        {
-            context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddSeconds(Expire));
-            context.SetToken(context.SerializeTicket());
-        }
-
-        public Task CreateAsync(AuthenticationTokenCreateContext context)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddSeconds(Expire));
-                context.SetToken(context.SerializeTicket());
-            });
-        }
-
-        public void Receive(AuthenticationTokenReceiveContext context)
-        {
-            context.DeserializeTicket(context.Token);
-        }
-
-        public Task ReceiveAsync(AuthenticationTokenReceiveContext context)
-        {
-            return Task.Factory.StartNew(() => context.DeserializeTicket(context.Token));
+            //config.Filters.Add(new HostAuthenticationFilter(DefaultAuthenticationTypes.ExternalCookie));
         }
     }
 }

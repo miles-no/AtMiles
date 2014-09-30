@@ -15,5 +15,8 @@
         public string RabbitMqCommandExchangeName { get; set; }
         public string CvPartnerToken { get; set; }
         public string RavenDbUrl { get; set; }
+        public string Auth0Issuer { get; set; }
+        public string Auth0Audience { get; set; }
+        public string Auth0Secret { get; set; }
     }
 }

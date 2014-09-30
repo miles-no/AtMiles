@@ -26,7 +26,7 @@ namespace Contact.Backend
             Helpers.Initialize(config.CompanyId, config.StatusEndpointUrl);
             UnityConfig.RegisterComponents(config);
             MapperConfig.Configure();
-            ConfigureAuth(app);
+            ConfigureAuth(app, config);
         }
     }
 }
