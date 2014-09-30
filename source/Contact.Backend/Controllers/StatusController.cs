@@ -1,8 +1,6 @@
 ﻿using System.Web.Http;
 using Contact.Backend.Infrastructure;
-using Contact.Backend.Models.Api;
 using Contact.Backend.Models.Api.Status;
-using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Controllers
 {

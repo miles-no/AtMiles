@@ -1,16 +1,15 @@
 package no.miles.atmiles;
 
 
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+import no.miles.atmiles.employee.Constants;
 
 public class AuthenticationActivity
         extends Activity {
@@ -41,6 +48,7 @@ public class AuthenticationActivity
     private WebView webView;
     private ProgressDialog progressDialog;
     private String callback;
+
 
     private class AuthenticationWebViewClient
             extends WebViewClient {
@@ -68,14 +76,32 @@ public class AuthenticationActivity
 
                     String jwt = tokens[1];
                     String access_token = tokens[0];
-
                     Intent data = new Intent();
 
-                    AuthenticationActivityResult result = new AuthenticationActivityResult();
-                    result.accessToken = access_token.split("=")[1];
-                    result.JsonWebToken = jwt.split("=")[1];
+                    String webToken = jwt.split("=")[1];
+                    String[] pieces = webToken.split("\\.");
+                    String claims = base64decode(pieces[1]);
+                    JSONObject jObject  = null;
+                    String exp = "";
+                    try {
+                        jObject = new JSONObject(claims);
+                        exp = jObject.getString("exp");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                    data.putExtra(AUTHENTICATION_RESULT, result);
+                    long expire = Long.parseLong(exp);
+                    SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_NAME,0);
+                    SharedPreferences.Editor editor = settings.edit();
+
+                    editor.putString(Constants.SETTINGS_ACCESS_TOKEN, access_token.split("=")[1]);
+                    editor.putString(Constants.SETTINGS_JSON_WEB_TOKEN, webToken);
+                    editor.putLong(Constants.SETTINGS_JSON_WEB_TOKEN_EXPIRE, expire);
+
+
+                    //TODO: Parse and save exp here (expiration dateTime)
+
+                    editor.commit();
 
                     AuthenticationActivity.this.setResult(RESULT_OK, data);
                 }
@@ -103,6 +129,17 @@ public class AuthenticationActivity
             progressDialog.dismiss();
             webView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private String base64decode(String base64) {
+        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+        String text = null;
+        try {
+            text = new String(data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return text;
     }
 
     private class AuthenticationWebChromeClient

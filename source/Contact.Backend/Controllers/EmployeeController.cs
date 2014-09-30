@@ -6,7 +6,6 @@ using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
-using Contact.Domain.Commands;
 using Contact.Infrastructure;
 
 namespace Contact.Backend.Controllers

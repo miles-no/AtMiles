@@ -49,6 +49,8 @@ public class EmployeeDetailActivity extends Activity {
                     .add(R.id.employee_detail_container, fragment)
                     .commit();
         }
+
+        new AuthenticationHelper().checkLogin(this);
     }
 
     @Override
@@ -76,5 +78,20 @@ public class EmployeeDetailActivity extends Activity {
                 handled = super.onOptionsItemSelected(item);
         }
         return handled;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent authActivityResult) {
+        super.onActivityResult(requestCode, resultCode, authActivityResult);
+
+        switch(requestCode)
+        {
+            case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
+                if(resultCode!=RESULT_OK)
+                {
+                    finish();
+                }
+                break;
+        }
     }
 }

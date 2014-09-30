@@ -17,6 +17,8 @@ public class ProfileActivity extends Activity {
 
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        new AuthenticationHelper().checkLogin(this);
     }
 
 
@@ -43,5 +45,20 @@ public class ProfileActivity extends Activity {
                 handled = super.onOptionsItemSelected(item);
         }
         return handled;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent authActivityResult) {
+        super.onActivityResult(requestCode, resultCode, authActivityResult);
+
+        switch(requestCode)
+        {
+            case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
+                if(resultCode!=RESULT_OK)
+                {
+                    finish();
+                }
+                break;
+        }
     }
 }

@@ -2,10 +2,13 @@ package no.miles.atmiles;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import no.miles.atmiles.employee.Constants;
 
 
 public class FavoritesActivity extends Activity {
@@ -17,6 +20,8 @@ public class FavoritesActivity extends Activity {
 
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        new AuthenticationHelper().checkLogin(this);
     }
 
 
@@ -43,5 +48,20 @@ public class FavoritesActivity extends Activity {
                 handled = super.onOptionsItemSelected(item);
         }
         return handled;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent authActivityResult) {
+        super.onActivityResult(requestCode, resultCode, authActivityResult);
+
+        switch(requestCode)
+        {
+            case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
+                if(resultCode!=RESULT_OK)
+                {
+                    finish();
+                }
+                break;
+        }
     }
 }

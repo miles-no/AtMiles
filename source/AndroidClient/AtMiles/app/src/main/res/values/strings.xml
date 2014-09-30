@@ -6,9 +6,8 @@
     <string name="menu_item_home">\@miles home</string>
     <string name="menu_item_favorites">Favorites</string>
     <string name="menu_item_profile">Edit profile</string>
-    <string name="action_menu_exit">Exit</string>
+    <string name="action_menu_exit">Close</string>
     <string name="title_activity_favorites">Favorites</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_login">Login</string>
     <string name="menu_item_login">Login</string>
 </resources>
