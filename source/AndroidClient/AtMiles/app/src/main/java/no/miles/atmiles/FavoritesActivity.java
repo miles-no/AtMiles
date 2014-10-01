@@ -66,6 +66,7 @@ public class FavoritesActivity extends Activity {
             case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
                 if(resultCode!=RESULT_OK)
                 {
+                    Toast.makeText(this, "Not able to sign in", Toast.LENGTH_LONG).show();
                     finish();
                 }
                 break;

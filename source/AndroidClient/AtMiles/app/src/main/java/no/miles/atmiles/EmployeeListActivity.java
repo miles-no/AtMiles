@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ import org.json.JSONObject;
  * to listen for item selections.
  */
 public class EmployeeListActivity extends Activity
-        implements EmployeeListFragment.Callbacks {
+        implements EmployeeListFragment.Callbacks, OnSearchStringChangeListener {
 
 
     /**
@@ -61,7 +62,6 @@ public class EmployeeListActivity extends Activity
         if(savedInstanceState != null) {
             restoreState(savedInstanceState);
         }
-
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
@@ -137,7 +137,7 @@ public class EmployeeListActivity extends Activity
             case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
                 if(resultCode!=RESULT_OK)
                 {
-                    //TODO: Logout
+                    Toast.makeText(this, "Not able to sign in", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 break;
@@ -151,6 +151,12 @@ public class EmployeeListActivity extends Activity
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        //ODO: Restore state
+        //TODO: Restore state
+    }
+
+    @Override
+    public void OnSearchStringChanged(String searchString) {
+        Toast.makeText(this, searchString, Toast.LENGTH_SHORT).show();
+        //TODO: Start async method
     }
 }
