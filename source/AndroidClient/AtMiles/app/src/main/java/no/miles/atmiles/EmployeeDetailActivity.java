@@ -50,6 +50,14 @@ public class EmployeeDetailActivity extends Activity {
                     .commit();
         }
 
+        if(savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         new AuthenticationHelper().checkLogin(this);
     }
 
@@ -93,5 +101,15 @@ public class EmployeeDetailActivity extends Activity {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //TODO: Save state to Bundle
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        //ODO: Restore state
     }
 }

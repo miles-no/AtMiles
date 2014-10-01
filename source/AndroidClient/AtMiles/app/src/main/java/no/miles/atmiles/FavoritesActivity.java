@@ -21,9 +21,16 @@ public class FavoritesActivity extends Activity {
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        new AuthenticationHelper().checkLogin(this);
+        if(savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new AuthenticationHelper().checkLogin(this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,5 +70,15 @@ public class FavoritesActivity extends Activity {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //TODO: Save state to Bundle
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        //ODO: Restore state
     }
 }

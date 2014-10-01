@@ -58,12 +58,20 @@ public class EmployeeListActivity extends Activity
                     .setActivateOnItemClick(true);
         }
 
-        //Clean to debug
-        //new AuthenticationHelper().cleanLoginData(this);
+        if(savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
 
-        new AuthenticationHelper().checkLogin(this);
 
         // TODO: If exposing deep links into your app, handle intents here.
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Clean to debug
+        //new AuthenticationHelper().cleanLoginData(this);
+        new AuthenticationHelper().checkLogin(this);
     }
 
     @Override
@@ -134,5 +142,15 @@ public class EmployeeListActivity extends Activity
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //TODO: Save state to Bundle
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        //ODO: Restore state
     }
 }

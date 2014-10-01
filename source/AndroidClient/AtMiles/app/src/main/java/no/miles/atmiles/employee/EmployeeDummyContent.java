@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by royveshovda on 26/09/14.
- */
 public class EmployeeDummyContent {
 
     public static List<EmployeeItem> ITEMS = new ArrayList<EmployeeItem>();
@@ -19,9 +16,10 @@ public class EmployeeDummyContent {
 
     static {
         // Add 3 sample items.
-        addItem(new EmployeeItem("1", "Item 1"));
-        addItem(new EmployeeItem("2", "Item 2"));
-        addItem(new EmployeeItem("3", "Item 3"));
+        addItem(new EmployeeItem("1", "Ole Olsen"));
+        addItem(new EmployeeItem("2", "Jens Jensen"));
+        addItem(new EmployeeItem("3", "Per Persen"));
+        addItem(new EmployeeItem("4", "Lars Larsen"));
     }
 
     private static void addItem(EmployeeItem item) {
