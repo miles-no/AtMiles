@@ -12,9 +12,6 @@ public class AuthenticationHelper {
     //static final String Connection = "";
 
     public void checkLogin(Activity activity) {
-
-
-
         SharedPreferences settings = activity.getSharedPreferences(Constants.SETTINGS_NAME, 0);
         boolean shouldDoLogin = false;
 
@@ -46,23 +43,17 @@ public class AuthenticationHelper {
     }
 
     public String getJsonWebToken(Activity activity) {
+        checkLogin(activity);
         SharedPreferences settings = activity.getSharedPreferences(Constants.SETTINGS_NAME,0);
-        if(!settings.contains(Constants.SETTINGS_JSON_WEB_TOKEN))
-        {
-            sendToLogin(activity);
-            return "";
-        }
-        else{
-            return settings.getString(Constants.SETTINGS_JSON_WEB_TOKEN, "");
-        }
+        return settings.getString(Constants.SETTINGS_JSON_WEB_TOKEN, "");
     }
 
     private void sendToLogin(Activity activity) {
-        Intent authActivity = new Intent(activity,
+        Intent authActivityIntent = new Intent(activity,
                 no.miles.atmiles.AuthenticationActivity.class);
         AuthenticationActivitySetup setup;
         setup = new AuthenticationActivitySetup(Tenant, ClientID, Callback);
-        authActivity.putExtra(AuthenticationActivity.AUTHENTICATION_SETUP, setup);
-        activity.startActivity(authActivity);
+        authActivityIntent.putExtra(AuthenticationActivity.AUTHENTICATION_SETUP, setup);
+        activity.startActivityForResult(authActivityIntent, AuthenticationActivity.AUTH_REQUEST_COMPLETE);
     }
 }

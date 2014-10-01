@@ -70,40 +70,36 @@ public class AuthenticationActivity
                     AuthenticationActivity.this.setResult(ACCESS_DENIED);
                 else
                 {
-                    //Quick and dirty parsing
-                    String[] r = url.split("#");
-                    String[] tokens = r[1].split("&");
-
-                    String jwt = tokens[1];
-                    String access_token = tokens[0];
-                    Intent data = new Intent();
-
-                    String webToken = jwt.split("=")[1];
-                    String[] pieces = webToken.split("\\.");
-                    String claims = base64decode(pieces[1]);
-                    JSONObject jObject  = null;
-                    String exp = "";
                     try {
-                        jObject = new JSONObject(claims);
-                        exp = jObject.getString("exp");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        //Quick and dirty parsing
+                        String[] r = url.split("#");
+                        String[] tokens = r[1].split("&");
+
+                        String jwt = tokens[1];
+                        String access_token = tokens[0];
+
+                        String webToken = jwt.split("=")[1];
+                        String[] pieces = webToken.split("\\.");
+                        String claims = base64decode(pieces[1]);
+                        JSONObject jObject = new JSONObject(claims);
+                        String exp = jObject.getString("exp");
+
+                        long expire = Long.parseLong(exp);
+                        SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_NAME, 0);
+                        SharedPreferences.Editor editor = settings.edit();
+
+                        editor.putString(Constants.SETTINGS_ACCESS_TOKEN, access_token.split("=")[1]);
+                        editor.putString(Constants.SETTINGS_JSON_WEB_TOKEN, webToken);
+                        editor.putLong(Constants.SETTINGS_JSON_WEB_TOKEN_EXPIRE, expire);
+
+                        editor.commit();
+
+                        AuthenticationActivity.this.setResult(RESULT_OK);
+                    } catch(Exception err)
+                    {
+                        //TODO: Log error
+                        AuthenticationActivity.this.setResult(RESULT_CANCELED);
                     }
-
-                    long expire = Long.parseLong(exp);
-                    SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_NAME,0);
-                    SharedPreferences.Editor editor = settings.edit();
-
-                    editor.putString(Constants.SETTINGS_ACCESS_TOKEN, access_token.split("=")[1]);
-                    editor.putString(Constants.SETTINGS_JSON_WEB_TOKEN, webToken);
-                    editor.putLong(Constants.SETTINGS_JSON_WEB_TOKEN_EXPIRE, expire);
-
-
-                    //TODO: Parse and save exp here (expiration dateTime)
-
-                    editor.commit();
-
-                    AuthenticationActivity.this.setResult(RESULT_OK, data);
                 }
                 AuthenticationActivity.this.finish();
                 return true;
