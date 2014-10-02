@@ -20,12 +20,10 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-        private const string OfficeName = "Stavanger";
 
         private const string EmployeeId = "id1";
         private const string EmployeeFirstName = "Ole";
         private const string EmployeeLastName = "Jensen";
-        private static readonly DateTime EmployeeDateOfBirth = new DateTime(1980, 01, 01);
 
         private static readonly DateTime Start1 = new DateTime(2014, 09, 22);
         private static readonly DateTime End1 = new DateTime(2013, 11, 30);
@@ -71,7 +69,7 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
+                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT"))
                 };
             return events;
         }

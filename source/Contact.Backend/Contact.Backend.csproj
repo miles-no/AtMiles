@@ -272,12 +272,10 @@
     <Compile Include="Models\Api\Status\StatusRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddBusyTimeRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddCompanyAdminRequest.cs" />
-    <Compile Include="Models\Api\Tasks\AddEmployeeRequest.cs" />
     <Compile Include="Models\Api\Tasks\ConfirmBusyTimeEntriesRequest.cs" />
     <Compile Include="Models\Api\Tasks\ImportFromCvPartnerRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveBusyTimeRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveCompanyAdminRequest.cs" />
-    <Compile Include="Models\Api\Tasks\TerminateEmployeeRequest.cs" />
     <Compile Include="Models\Api\Tasks\UpdateBusyTimeChangePercentageRequest.cs" />
     <Compile Include="Models\Api\Tasks\UpdateBusyTimeSetEndRequest.cs" />
     <Compile Include="Models\ExternalLoginViewModel.cs" />

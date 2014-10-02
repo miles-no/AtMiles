@@ -20,17 +20,14 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-        private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
-        private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
         private const string EmployeeGlobalId = "google:mail@miles.no";
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";
-        private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
         public async void terminate_employee_unknown_admin()
@@ -70,7 +67,7 @@ namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(EmployeeGlobalId, new EmployeeCreated(CompanyId, CompanyName, EmployeeGlobalId, null, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(EmployeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId)),
+                    new FakeStreamEvent(EmployeeGlobalId, new EmployeeCreated(CompanyId, CompanyName, EmployeeGlobalId, null, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow, new Person(EmployeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId)),
                 };
             return events;
         }

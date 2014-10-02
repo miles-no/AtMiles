@@ -24,15 +24,10 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string ExistingAdminId = "old1";
         private const string ExistingAdminFirstName = "Existing";
         private const string ExistingAdminLastName = "Admin";
-        private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
 
         private const string NewAdminId = "new1";
         private const string NewAdminFirstName = "New";
         private const string NewAdminLastName = "Admin";
-        private static readonly DateTime NewAdminDateOfBirth = new DateTime(1981, 01, 01);
-
-        private const string OfficeId = "office1";
-        private const string OfficeName = "Stavanger";
 
         [Test]
         public async void remove_company_admin_without_permission()
@@ -70,8 +65,8 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, ExistingAdminDateOfBirth, string.Empty, OfficeName,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
-                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, NewAdminDateOfBirth, string.Empty, OfficeName,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(NewAdminId, new EmployeeCreated(CompanyId, CompanyName, NewAdminId, null, NewAdminFirstName, string.Empty, NewAdminLastName, DateTime.UtcNow, new Person(NewAdminId, NameService.GetName(NewAdminFirstName, NewAdminLastName)), _correlationId)),
                 };
             return events;
         }

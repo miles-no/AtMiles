@@ -131,7 +131,6 @@ namespace Contact.ReadStore.UserStore
                 GlobalProviderId = CreateGlobalId(ev),
                 GlobalProviderEmail = CreateGlobalEmailId(ev),
                 GlobalId = ev.EmployeeId,
-                Email = ev.Email,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 CompanyAdmin = false,
                 CompanyId = ev.CompanyId,
@@ -158,7 +157,7 @@ namespace Contact.ReadStore.UserStore
 
         private static UserLookupModel Patch(UserLookupModel model, EmployeeCreated ev)
         {
-            model.Email = ev.Email;
+            model.Email = ev.LoginId.Email;
             model.Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName);
             return model;
         }

@@ -66,7 +66,7 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, ExistingAdminDateOfBirth, string.Empty, OfficeName,string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
+                    new FakeStreamEvent(ExistingAdminId, new EmployeeCreated(CompanyId, CompanyName, ExistingAdminId, null, ExistingAdminFirstName, string.Empty, ExistingAdminLastName, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId)),
                 };
             return events;
         }

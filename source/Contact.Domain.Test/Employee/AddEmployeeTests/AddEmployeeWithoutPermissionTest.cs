@@ -25,7 +25,6 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
-        private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
         private readonly string _employeeGlobalId = new Guid().ToString();
         private readonly Login _employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
@@ -68,7 +67,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
                 };
             return events;
         }

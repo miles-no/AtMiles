@@ -18,13 +18,11 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
 
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
-        private FakeRepository<Aggregates.Global> _fakeGlobalRepository;
+        private FakeRepository<Global> _fakeGlobalRepository;
         private FakeCvPartnerImporter _fakeImporter;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-
-        private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -89,8 +87,8 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, null, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId)),
-                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, new Login(Constants.GoogleIdProvider,_importData.Email, string.Empty), _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth, string.Empty, _importData.OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId)),
+                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, new Login(Constants.GoogleIdProvider,_importData.Email, string.Empty), _importData.FirstName, _importData.MiddleName, _importData.LastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
                 };
             return events;
         }
@@ -116,7 +114,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            _fakeGlobalRepository = new FakeRepository<Aggregates.Global>(GivenGlobal());
+            _fakeGlobalRepository = new FakeRepository<Global>(GivenGlobal());
             _fakeImporter = new FakeCvPartnerImporter(new List<CvPartnerImportData>(new[] { _importData }));
             return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository, _fakeImporter);
         }
@@ -125,7 +123,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<Event>
                 {
-                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp, new Person(AdminId, Domain.Services.NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

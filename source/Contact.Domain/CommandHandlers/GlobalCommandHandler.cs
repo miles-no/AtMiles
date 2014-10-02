@@ -34,10 +34,8 @@ namespace Contact.Domain.CommandHandlers
 
             var system = new Employee();
             system.CreateNew(message.CompanyId, message.CompanyName,
-                Constants.SystemUserId, null, string.Empty, string.Empty, Constants.SystemUserId, DateTime.UtcNow,
-                string.Empty, message.FirstOfficeName, string.Empty, string.Empty, null, null,
+                Constants.SystemUserId, null, string.Empty, string.Empty, Constants.SystemUserId,
                 new Person(Constants.SystemUserId, Constants.SystemUserId), message.CorrelationId);
-
 
             await _employeeRepository.SaveAsync(system, Constants.NewVersion);
 
@@ -69,7 +67,7 @@ namespace Contact.Domain.CommandHandlers
                         email = adminInfo.LoginId.Email;
                     }
 
-                    admin.CreateNew(message.CompanyId, message.CompanyName, adminId, adminInfo.LoginId, adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName, null, string.Empty, message.FirstOfficeName, string.Empty, email, null, null, message.CreatedBy, message.CorrelationId);
+                    admin.CreateNew(message.CompanyId, message.CompanyName, adminId, adminInfo.LoginId, adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName, message.CreatedBy, message.CorrelationId);
                     await _employeeRepository.SaveAsync(admin, Constants.NewVersion);
                     company.AddNewEmployeeToCompany(admin,message.CreatedBy, message.CorrelationId);
                     company.AddCompanyAdmin(admin, message.CreatedBy, message.CorrelationId);
@@ -91,6 +89,7 @@ namespace Contact.Domain.CommandHandlers
 
             if (importData != null)
             {
+                //TODO: Remove users not in CV-Partner anymore
                 foreach (var cvPartnerImportData in importData)
                 {
                     string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
@@ -99,7 +98,10 @@ namespace Contact.Domain.CommandHandlers
                     if (employee == null)
                     {
                         employee = new Employee();
-                        employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(), new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty), cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName, cvPartnerImportData.DateOfBirth, cvPartnerImportData.Title, cvPartnerImportData.OfficeName, cvPartnerImportData.Phone, cvPartnerImportData.Email, null, null, message.CreatedBy, message.CorrelationId);
+                        employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(),
+                            new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty),
+                            cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,
+                            message.CreatedBy, message.CorrelationId);
 
                         company.AddNewEmployeeToCompany(employee, message.CreatedBy, message.CorrelationId);
                         await _companyRepository.SaveAsync(company, Constants.IgnoreVersion);

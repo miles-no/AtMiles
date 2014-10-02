@@ -31,7 +31,7 @@ namespace Contact.Domain.Aggregates
             _busyTimeEntries = new List<BusyTimeEntry>();
         }
 
-        public void CreateNew(string companyId, string companyName, string globalId, Login loginId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string jobTitle, string officeName, string phoneNumber, string email, Address homeAddress, Picture photo, Person createdBy, string correlationId)
+        public void CreateNew(string companyId, string companyName, string globalId, Login loginId, string firstName, string middleName, string lastName, Person createdBy, string correlationId)
         {
             var ev = new EmployeeCreated(
                 companyId: companyId,
@@ -41,13 +41,6 @@ namespace Contact.Domain.Aggregates
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
-                dateOfBirth: dateOfBirth,
-                jobTitle: jobTitle,
-                officeName: officeName,
-                phoneNumber: phoneNumber,
-                email: email,
-                homeAddress: homeAddress,
-                photo: photo,
                 created: DateTime.UtcNow,
                 createdBy: createdBy,
                 correlationId: correlationId);

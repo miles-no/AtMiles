@@ -53,9 +53,6 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
             var events2 = _fakeEmployeeRepository.GetThenEvents();
             if (events2.Count == 2)
             {
-                var dateOfBirth = ((Events.Employee.EmployeeCreated)events2[0]).DateOfBirth;
-                if (dateOfBirth.HasValue) _systemDateOfBirth = dateOfBirth.Value;
-
                 _timestamp21 = events2[0].Created;
                 _timestamp22 = events2[1].Created;
             }
@@ -127,9 +124,9 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
                     new Events.Global.CompanyCreated(CompanyId, CompanyName,_timestamp11, systemAsPerson, _correlationId),
 
                     new Events.Employee.EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, null, string.Empty, string.Empty,
-                        Constants.SystemUserId, _systemDateOfBirth, string.Empty, OfficeName, string.Empty, string.Empty, null, null, _timestamp21, systemAsPerson, _correlationId),
+                        Constants.SystemUserId, _timestamp21, systemAsPerson, _correlationId),
                     new Events.Employee.EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), AdminFirstName, string.Empty,
-                        AdminLastName, null, string.Empty, OfficeName, string.Empty, AdminEmail, null, null, _timestamp22, systemAsPerson, _correlationId),
+                        AdminLastName, _timestamp22, systemAsPerson, _correlationId),
                     new Events.Company.CompanyCreated(CompanyId, CompanyName, _timestamp31, systemAsPerson, _correlationId),
                     new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, Constants.SystemUserId, NameService.GetName(string.Empty, Constants.SystemUserId), _timestamp32, systemAsPerson, _correlationId),
                     new Events.Company.EmployeeAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), _timestamp33, systemAsPerson, _correlationId),

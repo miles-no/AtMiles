@@ -26,10 +26,9 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
-        private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
-        private readonly string employeeGlobalId = new Guid().ToString();
-        private readonly Login employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
+        private readonly string _employeeGlobalId = new Guid().ToString();
+        private readonly Login _employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
 
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";
@@ -81,14 +80,14 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, AdminDateOfBirth, string.Empty, OfficeName, string.Empty,string.Empty, null, null,DateTime.UtcNow,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
+                    new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
                 };
             return events;
         }
 
         public override AddEmployee When()
         {
-            var cmd = new AddEmployee(CompanyId, employeeGlobalId, employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName, string.Empty, string.Empty, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new AddEmployee(CompanyId, _employeeGlobalId, _employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName, string.Empty, string.Empty, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
         }
 
@@ -103,8 +102,8 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         {
             var events = new List<Event>
                 {
-                    new EmployeeCreated(CompanyId, CompanyName, employeeGlobalId, employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth,string.Empty, OfficeName, string.Empty,string.Empty, null, null, _timestamp1,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
-                    new EmployeeAdded(CompanyId, CompanyName, employeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), employeeLoginId, _timestamp2,new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new EmployeeCreated(CompanyId, CompanyName, _employeeGlobalId, _employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, _timestamp1, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
+                    new EmployeeAdded(CompanyId, CompanyName, _employeeGlobalId, NameService.GetName(EmployeeFirstName, EmployeeLastName), _employeeLoginId, _timestamp2, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

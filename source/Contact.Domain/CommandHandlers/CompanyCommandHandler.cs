@@ -81,8 +81,8 @@ namespace Contact.Domain.CommandHandlers
 
             var newEmployee = new Employee();
             newEmployee.CreateNew(company.Id, company.Name,
-                message.GlobalId, message.LoginId, message.FirstName, message.MiddleName, message.LastName, message.DateOfBirth,
-                message.JobTitle, message.OfficeName, message.PhoneNumber, message.Email, message.HomeAddress, message.Photo, new Person(admin.Id, admin.Name), message.CorrelationId);
+                message.GlobalId, message.LoginId, message.FirstName, message.MiddleName, message.LastName,
+                new Person(admin.Id, admin.Name), message.CorrelationId);
 
             company.AddNewEmployeeToCompany(newEmployee, new Person(admin.Id, admin.Name), message.CorrelationId);
 

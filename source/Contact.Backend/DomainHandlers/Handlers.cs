@@ -18,10 +18,6 @@ namespace Contact.Backend.DomainHandlers
     {
         public static void CreateHandlers(IMediator mediator, IUnityContainer container)
         {
-            // Add employee
-            RegisterAddEmployee(mediator, container);
-            RegisterTerminateEmployee(mediator, container);
-
             RegisterAddCompanyAdmin(mediator, container);
             RegisterRemoveCompanyAdmin(mediator, container);
 
@@ -150,72 +146,6 @@ namespace Contact.Backend.DomainHandlers
 
                     return Send(container, command);
 
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
-        }
-
-        private static void RegisterAddEmployee(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<AddEmployeeRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    Domain.ValueTypes.Address homeAddress = null;
-                    Domain.ValueTypes.Picture photo = null;
-                    if (req.HomeAddress != null)
-                    {
-                        homeAddress = new Domain.ValueTypes.Address(req.HomeAddress.Street,
-                            req.HomeAddress.PostalCode, req.HomeAddress.PostalName);
-                    }
-
-                    if (req.Photo != null)
-                    {
-                        var hash = MD5.Create().ComputeHash(req.Photo.Content);
-                        photo = new Domain.ValueTypes.Picture(req.Photo.Title, req.Photo.Extension,
-                            req.Photo.Content, req.Photo.ContentType, hash);
-                    }
-
-                    //TODO: Evaluate TODO below
-                    //TODO: Get version from readmodel
-
-
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-
-                    //RV: 19.08.2014:
-                    //TODO: Fix login here.
-                    //new Login is not the same as the user requesting the command
-
-                    var command = new AddEmployee(req.CompanyId, req.GlobalId ?? CreateNewGlobalId(), new Login(GetProviderFromIdentity(user), req.Email, Helpers.GetUserIdentity(user, identityResolver)), req.FirstName, req.LastName,
-                        req.DateOfBirth, req.JobTitle, req.OfficeName, req.PhoneNumber, req.Email, homeAddress, photo, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
-
-                    return Send(container, command);
-
-                }
-                catch (Exception ex)
-                {
-                    return Helpers.CreateErrorResponse(correlationId, ex.Message);
-                }
-            });
-        }
-
-        private static void RegisterTerminateEmployee(IMediator mediator, IUnityContainer container)
-        {
-            mediator.Subscribe<TerminateEmployeeRequest, Response>((req, user) =>
-            {
-                string correlationId = Helpers.CreateNewId();
-
-                try
-                {
-                    //TODO: Get version from readmodel
-                    var command = new TerminateEmployee(req.CompanyId, req.EmployeeId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
-
-                    return Send(container, command);
                 }
                 catch (Exception ex)
                 {

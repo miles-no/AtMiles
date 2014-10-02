@@ -83,7 +83,7 @@ namespace Contact.TestApp
             await Task.Run(() =>
             {
                 sender.Send(seedCommand);
-                sender.Send(importCommand);
+                //sender.Send(importCommand);
             });
             //TODO: wait for results to come back
         }

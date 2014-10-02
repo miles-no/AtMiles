@@ -53,37 +53,5 @@ namespace Contact.Backend.Controllers
             return _mediator.Send<RemoveCompanyAdminRequest, Response>(removeCompanyAdminRequest, User.Identity);
         
         }
-
-        /// <summary>
-        /// Creates an employee within a company
-        /// </summary>
-        /// <param name="companyId"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("api/company/{companyId}/employee")]
-        public Response CreateEmployee(string companyId, AddEmployeeRequest request)
-        {
-            request.CompanyId = companyId;
-            return _mediator.Send<AddEmployeeRequest, Response>(request, User.Identity);
-        }
-
-
-        /// <summary>
-        /// Terminate an employee
-        /// </summary>
-        /// <param name="companyId"></param>
-        /// <param name="officeId"></param>
-        /// <param name="employeeId"></param>
-        /// <returns></returns>
-        [HttpDelete]
-        [Route("api/company/{companyId}/office/{officeId}/employee/{employeeId}")]
-        public Response TerminateEmployee(string companyId, string officeId, string employeeId)
-        {
-            var terminateEmployeeRequest = new TerminateEmployeeRequest { CompanyId = companyId, EmployeeId = employeeId };
-            return _mediator.Send<TerminateEmployeeRequest, Response>(terminateEmployeeRequest, User.Identity);
-
-        }
-   
     }
 }
