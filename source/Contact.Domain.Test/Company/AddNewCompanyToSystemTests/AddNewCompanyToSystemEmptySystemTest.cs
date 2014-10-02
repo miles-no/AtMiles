@@ -123,7 +123,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
                 {
                     new Events.Global.CompanyCreated(CompanyId, CompanyName,_timestamp11, systemAsPerson, _correlationId),
 
-                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, null, string.Empty, string.Empty,
+                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, new Login(Constants.SystemUserId, Constants.SystemUserId), string.Empty, string.Empty,
                         Constants.SystemUserId, _timestamp21, systemAsPerson, _correlationId),
                     new Events.Employee.EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail), AdminFirstName, string.Empty,
                         AdminLastName, _timestamp22, systemAsPerson, _correlationId),

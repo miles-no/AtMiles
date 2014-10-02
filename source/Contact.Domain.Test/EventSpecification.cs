@@ -41,13 +41,6 @@ namespace Contact.Domain.Test
             }
             catch (Exception exception)
             {
-                /*
-                if (exception is UnitTestAssertException)
-                {
-                    Console.WriteLine(exception.Message);
-                    throw;
-                }
-                */
                 CaughtException = exception;
                 CompareExceptions(CaughtException, ExpectedException);
             }
