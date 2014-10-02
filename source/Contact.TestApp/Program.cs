@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Contact.Domain;
 using Contact.Domain.Commands;
@@ -65,11 +66,11 @@ namespace Contact.TestApp
             var admins = new List<SimpleUserInfo>();
 
             var admin1 = new SimpleUserInfo(Domain.Services.IdService.CreateNewId(), "Roy", string.Empty, "Veshovda",
-                new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no", string.Empty));
+                new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no"));
             admins.Add(admin1);
 
             var admin2 = new SimpleUserInfo(Domain.Services.IdService.CreateNewId(), "Stian", string.Empty, "Edvardsen",
-                new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no", string.Empty));
+                new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no"));
             admins.Add(admin2);
 
             var seedCommand = new AddNewCompanyToSystem(companyId, companyName, officeName, admins.ToArray(),
@@ -80,10 +81,14 @@ namespace Contact.TestApp
 
             var sender = new RabbitMqCommandSender(config.RabbitMqHost, config.RabbitMqUsername,
                 config.RabbitMqPassword, config.RabbitMqCommandExchangeName, config.RabbitMqUseSsl);
+            
+
+
             await Task.Run(() =>
             {
                 sender.Send(seedCommand);
-                //sender.Send(importCommand);
+                Thread.Sleep(10000);
+                sender.Send(importCommand);
             });
             //TODO: wait for results to come back
         }

@@ -35,9 +35,13 @@ namespace Contact.Infrastructure
                 {
                     var session = new CommandSession();
                     DomainBaseException capturedException = null;
+                    Exception internalException = null;
                     try
                     {
                         session.AddRequestCommand(command);
+                        //Call save to make sure to get info on long running processes
+                        await _commandSessionRepository.SaveAsync(session, Constants.IgnoreVersion);
+
                         await _handler.HandleCommand(command, t);
                         session.MarkCommandAsSuccess(command.CreatedBy, command.CorrelationId);
                     }
@@ -45,10 +49,19 @@ namespace Contact.Infrastructure
                     {
                         capturedException = domainException;
                     }
+                    catch (Exception error)
+                    {
+                        internalException = error;
+                    }
 
                     if (capturedException != null)
                     {
                         session.AddException(capturedException, command.CreatedBy, command.CorrelationId);
+                    }
+                    if (internalException != null)
+                    {
+                        session.AddException(new ValueException("Internal server error"), command.CreatedBy, command.CorrelationId);
+                        //TODO: Log error
                     }
 
                     await _commandSessionRepository.SaveAsync(session, Constants.IgnoreVersion);

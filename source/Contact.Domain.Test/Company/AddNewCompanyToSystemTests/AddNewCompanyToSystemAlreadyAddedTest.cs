@@ -16,7 +16,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
 
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
-        private FakeRepository<Aggregates.Global> _fakeGlobalRepository;
+        private FakeRepository<Global> _fakeGlobalRepository;
         private FakeCvPartnerImporter _fakeImporter;
 
         private const string CompanyId = "miles";
@@ -76,7 +76,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
             var admins = new List<SimpleUserInfo>
             {
                 new SimpleUserInfo(AdminId, AdminFirstName, string.Empty, AdminLastName,
-                    new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty))
+                    new Login(Constants.GoogleIdProvider, AdminEmail))
             };
             return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeName, admins.ToArray(), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
         }
@@ -85,7 +85,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            _fakeGlobalRepository = new FakeRepository<Aggregates.Global>(GivenGlobal());
+            _fakeGlobalRepository = new FakeRepository<Global>(GivenGlobal());
             _fakeImporter = new FakeCvPartnerImporter(new List<CvPartnerImportData>());
             return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository, _fakeImporter);
         }

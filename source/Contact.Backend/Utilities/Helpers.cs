@@ -7,7 +7,6 @@ using Contact.Backend.Models.Api.Status;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Domain.Exceptions;
 using Contact.Infrastructure;
-using Contact.ReadStore.UserStore;
 
 namespace Contact.Backend.Utilities
 {
@@ -48,7 +47,7 @@ namespace Contact.Backend.Utilities
         }
 
         
-        private static readonly ConcurrentDictionary<Tuple<string,string,string>,string> Cache = new ConcurrentDictionary<Tuple<string, string, string>, string>();
+        private static readonly ConcurrentDictionary<Tuple<string,string>,string> Cache = new ConcurrentDictionary<Tuple<string, string>, string>();
 
         public static string GetUserIdentity(IIdentity user, IResolveUserIdentity identityResolver)
         {
@@ -56,34 +55,20 @@ namespace Contact.Backend.Utilities
             if (identity == null) return string.Empty;
 
             var claims = identity;
-            var id = claims.FindFirst(ClaimTypes.NameIdentifier);
+            var subject = claims.FindFirst(ClaimTypes.NameIdentifier);
+
 
             string userId;
-            if (Cache.TryGetValue(new Tuple<string, string, string>(_companyId, id.Issuer, id.Value), out userId))
+            if (Cache.TryGetValue(new Tuple<string, string>(_companyId, subject.Value), out userId))
             {
                 return userId;
             }
-
-            userId = identityResolver.ResolveUserIdentityByProviderId(_companyId, id.Issuer, id.Value);
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                Cache.AddOrUpdate(new Tuple<string, string, string>(_companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
-                return userId;
-            }
-
-            //Resolve by Email
-            var email = claims.FindFirst(ClaimTypes.Email);
-
-            userId = identityResolver.ResolveUserIdentityByEmail(_companyId, id.Issuer, email.Value);
-
+            userId = identityResolver.ResolveUserIdentitySubject(_companyId, subject.Value);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                identityResolver.AttachLoginToUser(_companyId, UserLookupStore.GetRavenId(userId), id.Issuer, id.Value);
-                Cache.AddOrUpdate(new Tuple<string, string, string>(_companyId, id.Issuer, id.Value), userId, (key, oldvalue) => userId);
+                Cache.AddOrUpdate(new Tuple<string, string>(_companyId, subject.Value), userId, (key, oldvalue) => userId);
             }
-
             return userId;
         }
 

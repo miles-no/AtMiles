@@ -41,30 +41,24 @@ namespace Contact.Domain.Aggregates
         public bool HasUser(Login login)
         {
             if (login == null) return false;
-
-            if (!string.IsNullOrEmpty(login.Id))
-            {
-                return _employees.Any(u => u.LoginId.Provider == login.Provider && u.LoginId.Id == login.Id);
-            }
-            else
-            {
-                return _employees.Any(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
-            }
+            return _employees.Any(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
         }
 
         public string GetUserId(Login login)
         {
             if (login == null) return string.Empty;
-            if (!string.IsNullOrEmpty(login.Id))
+            if (!string.IsNullOrEmpty(login.Email))
             {
-                var employeeLoginInfo = _employees.FirstOrDefault(u => u.LoginId.Provider == login.Provider && u.LoginId.Id == login.Id);
+                var employeeLoginInfo =
+                    _employees.FirstOrDefault(
+                        u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
                 return employeeLoginInfo != null ? employeeLoginInfo.Id : string.Empty;
             }
             else
             {
-                var employeeLoginInfo = _employees.FirstOrDefault(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
-                return employeeLoginInfo != null ? employeeLoginInfo.Id : string.Empty;
+                return string.Empty;
             }
+            
         }
 
         public string GetUserIdByLoginId(Login login)
@@ -130,7 +124,7 @@ namespace Contact.Domain.Aggregates
                 correlationId: correlationId);
             ApplyChange(ev);
         }
-        
+
 
         public void AddNewEmployeeToCompany(Employee employee, Person createdBy, string correlationId)
         {

@@ -87,7 +87,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
             var admins = new List<SimpleUserInfo>
             {
                 new SimpleUserInfo(AdminId, AdminFirstName, string.Empty, AdminLastName,
-                    new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty))
+                    new Login(Constants.GoogleIdProvider, AdminEmail))
             };
             return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeName, admins.ToArray(),DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
         }
@@ -125,11 +125,11 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
 
                     new Events.Employee.EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, null, string.Empty, string.Empty,
                         Constants.SystemUserId, _timestamp21, systemAsPerson, _correlationId),
-                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), AdminFirstName, string.Empty,
+                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail), AdminFirstName, string.Empty,
                         AdminLastName, _timestamp22, systemAsPerson, _correlationId),
                     new Events.Company.CompanyCreated(CompanyId, CompanyName, _timestamp31, systemAsPerson, _correlationId),
                     new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, Constants.SystemUserId, NameService.GetName(string.Empty, Constants.SystemUserId), _timestamp32, systemAsPerson, _correlationId),
-                    new Events.Company.EmployeeAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail, string.Empty), _timestamp33, systemAsPerson, _correlationId),
+                    new Events.Company.EmployeeAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail), _timestamp33, systemAsPerson, _correlationId),
                     new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), _timestamp34, systemAsPerson, _correlationId)
                 };
             return events;

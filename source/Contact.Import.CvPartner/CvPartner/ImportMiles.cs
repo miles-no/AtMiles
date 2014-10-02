@@ -29,7 +29,7 @@ namespace Contact.Import.CvPartner.CvPartner
         {
             var importData = new List<CvPartnerImportData>();
 
-            var converter = new Converters.Convert("miles",null);
+            var converter = new Converters.Convert("miles", null);
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
@@ -37,7 +37,6 @@ namespace Contact.Import.CvPartner.CvPartner
             string employeesRaw = await client.DownloadStringTaskAsync("https://miles.cvpartner.no/api/v1/users");
             var employees = JsonConvert.DeserializeObject<List<Employee>>(employeesRaw);
             Log("Done - " + employees.Count + " users");
-            
 
             //TODO: Make this parallell using async
 
@@ -48,6 +47,7 @@ namespace Contact.Import.CvPartner.CvPartner
 
                 var importEmployee = converter.ToImportFromCvPartner(cv, employee, employeePhoto);
                 importData.Add(importEmployee);
+
             }
             return importData;
         }
@@ -60,7 +60,7 @@ namespace Contact.Import.CvPartner.CvPartner
             var cv = JsonConvert.DeserializeObject<Cv>(rawCv);
             return cv;
         }
-        
+
         private async Task<Picture> DownloadPhoto(Image image, string name)
         {
             Picture photo = null;
@@ -96,7 +96,7 @@ namespace Contact.Import.CvPartner.CvPartner
             }
             return photo;
         }
-        
+
         public void Log(string message)
         {
             Console.WriteLine(message);

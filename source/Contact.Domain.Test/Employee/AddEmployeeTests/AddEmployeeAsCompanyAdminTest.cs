@@ -28,7 +28,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private const string AdminLastName = "Adminson";
 
         private readonly string _employeeGlobalId = new Guid().ToString();
-        private readonly Login _employeeLoginId = new Login("Google", "mail@miles.no", "google:123456789");
+        private readonly Login _employeeLoginId = new Login(Constants.GoogleIdProvider, "mail@miles.no");
 
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";

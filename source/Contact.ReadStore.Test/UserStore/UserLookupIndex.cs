@@ -18,7 +18,6 @@ namespace Contact.ReadStore.UserStore
                     person.GlobalProviderEmail,
                     person.CompanyId,
                     person.Email,
-                    person.AdminForOffices,
                     person.CompanyAdmin
                 };
 
@@ -26,7 +25,6 @@ namespace Contact.ReadStore.UserStore
             Index(p => p.GlobalProviderId, FieldIndexing.NotAnalyzed);
             Index(p => p.GlobalProviderEmail, FieldIndexing.NotAnalyzed);
             Index(p => p.Email, FieldIndexing.NotAnalyzed);
-            Index(p => p.AdminForOffices, FieldIndexing.NotAnalyzed);
             Index(p => p.CompanyAdmin, FieldIndexing.NotAnalyzed);
         }
     }

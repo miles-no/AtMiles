@@ -34,7 +34,7 @@ namespace Contact.Domain.CommandHandlers
 
             var system = new Employee();
             system.CreateNew(message.CompanyId, message.CompanyName,
-                Constants.SystemUserId, null, string.Empty, string.Empty, Constants.SystemUserId,
+                Constants.SystemUserId, new Login(Constants.SystemUserId, Constants.SystemUserId), string.Empty, string.Empty, Constants.SystemUserId,
                 new Person(Constants.SystemUserId, Constants.SystemUserId), message.CorrelationId);
 
             await _employeeRepository.SaveAsync(system, Constants.NewVersion);
@@ -92,14 +92,14 @@ namespace Contact.Domain.CommandHandlers
                 //TODO: Remove users not in CV-Partner anymore
                 foreach (var cvPartnerImportData in importData)
                 {
-                    string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty));
+                    string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
                     var employee = await _employeeRepository.GetByIdAsync(userId);
 
                     if (employee == null)
                     {
                         employee = new Employee();
                         employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(),
-                            new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email, string.Empty),
+                            new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email),
                             cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,
                             message.CreatedBy, message.CorrelationId);
 

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Contact.Domain;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
 using Contact.Domain.Events.Import;
@@ -10,12 +11,12 @@ namespace Contact.ReadStore.UserStore
 {
     public class UserLookupStore
     {
-        private readonly UserLookupEngine engine;
+        private readonly UserLookupEngine _engine;
         private readonly IDocumentStore _documentStore;
 
         public UserLookupStore(UserLookupEngine engine, IDocumentStore documentStore)
         {
-            this.engine = engine;
+            this._engine = engine;
             this._documentStore = documentStore;
         }
 
@@ -50,22 +51,6 @@ namespace Contact.ReadStore.UserStore
                 await session.StoreAsync(existing);
                 await session.SaveChangesAsync();
             }
-        }
-
-        private static string CreateGlobalId(EmployeeCreated ev)
-        {
-            if (ev.LoginId == null) return string.Empty;
-            if (string.IsNullOrEmpty(ev.LoginId.Id)) return string.Empty;
-
-            return IdService.IdsToSingleLoginId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Id);
-        }
-
-        private static string CreateGlobalEmailId(EmployeeCreated ev)
-        {
-            if (ev.LoginId == null) return null;
-            if (string.IsNullOrEmpty(ev.LoginId.Email)) return string.Empty;
-
-            return IdService.IdsToSingleEmailId(ev.CompanyId, ev.LoginId.Provider, ev.LoginId.Email);
         }
 
         private async Task HandleCompanyAdminRemoved(CompanyAdminRemoved ev)
@@ -128,9 +113,10 @@ namespace Contact.ReadStore.UserStore
             return new UserLookupModel
             {
                 Id = GetRavenId(ev.EmployeeId),
-                GlobalProviderId = CreateGlobalId(ev),
-                GlobalProviderEmail = CreateGlobalEmailId(ev),
+                GlobalProviderId = ev.LoginId.Provider,
+                GlobalProviderEmail = ev.LoginId.Email,
                 GlobalId = ev.EmployeeId,
+                Email = ev.LoginId.Email,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 CompanyAdmin = false,
                 CompanyId = ev.CompanyId,
@@ -142,7 +128,9 @@ namespace Contact.ReadStore.UserStore
             return new UserLookupModel
             {
                 Id = GetRavenId(ev.EmployeeId),
-                //GlobalProviderEmail = CreateGlobalEmailId(ev),
+                GlobalProviderId = Constants.GoogleIdProvider,
+                GlobalProviderEmail = ev.Email,
+                GlobalId = ev.EmployeeId,
                 Email = ev.Email,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
                 CompanyAdmin = false,
@@ -170,7 +158,7 @@ namespace Contact.ReadStore.UserStore
 
         private static UserLookupModel Patch(UserLookupModel model, CompanyAdminRemoved ev)
         {
-            model.CompanyAdmin = true;
+            model.CompanyAdmin = false;
             return model;
         }
     }

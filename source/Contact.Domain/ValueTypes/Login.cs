@@ -4,13 +4,11 @@
     {
         public readonly string Provider;
         public readonly string Email;
-        public readonly string Id;
 
-        public Login(string provider, string email, string id)
+        public Login(string provider, string email)
         {
             Provider = provider;
             Email = email;
-            Id = id;
         }
     }
 }

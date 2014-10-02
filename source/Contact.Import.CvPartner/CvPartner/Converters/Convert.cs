@@ -24,22 +24,27 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
         public CvPartnerImportData ToImportFromCvPartner(Cv cv, Employee employee, Picture employeePhoto)
         {
-            string givenName = string.Empty, middleName = string.Empty;
+            string givenName = string.Empty, middleName = string.Empty, familyName = string.Empty;
 
-            var names = cv.Name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            string familyName = names.Last();
 
-            names = names.Take(names.Count() - 1).ToList();
-
-            // If you have 3 or more names, lets assume the second-to-last is your middlename. And hope we don't offent to many...
-            if (names.Count() > 2)
+            if (!string.IsNullOrEmpty(cv.Name))
             {
-                middleName = names.Last();
-            }
-            else
-            {
-                givenName = string.Join(" ", names);
+                var names = cv.Name.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                familyName = names.Last();
+
+                names = names.Take(names.Count() - 1).ToList();
+
+                // If you have 3 or more names, lets assume the second-to-last is your middlename. And hope we don't offent to many...
+                if (names.Count() > 2)
+                {
+                    middleName = names.Last();
+                }
+                else
+                {
+                    givenName = string.Join(" ", names);
+                }
             }
 
             DateTime? bornDate = null;
@@ -150,12 +155,13 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
             var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
 
-            var res = new AddEmployee(company,
-                id,
-                new Login(Constants.GoogleIdProvider, employee.Email, null),
-                givenName,
-                middleName,
-                familyName,
+            var res = new AddEmployee(
+                companyId: company,
+                globalId: id,
+                loginId: new Login(Constants.GoogleIdProvider, employee.Email),
+                firstName: givenName,
+                middleName: middleName,
+                lastName: familyName,
                 dateOfBirth: bornDate,
                 jobTitle: cv.Title,
                 officeName: employee.OfficeName,
@@ -170,19 +176,5 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
 
             return res;
         }
-
-        private static string GetTagFromArray(int position, string[] tags)
-        {
-            if (tags == null) return String.Empty;
-            if (position < 0 || position >= tags.Length - 1) return string.Empty;
-            return tags[position];
-        }
-
-        public byte[] GetPicture(string url)
-        {
-            var client = new WebClient();
-            return client.DownloadData(url);
-        }
     }
-
 }
