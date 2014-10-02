@@ -1,10 +1,7 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-
 using System.Web.Http;
-using Microsoft.AspNet.Identity;
 
 namespace Contact.Backend.Controllers
 {

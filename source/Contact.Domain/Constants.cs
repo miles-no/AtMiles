@@ -8,5 +8,6 @@
         public const string EventStoreAggregateClrTypeHeader = "AggregateClrTypeName";
         public const string GoogleIdProvider = "google-apps";
         public const string SystemUserId = "SYSTEM";
+        public const string JwtSubject = "sub";
     }
 }

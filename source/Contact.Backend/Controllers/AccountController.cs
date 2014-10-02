@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Contact.Backend.Utilities;
 using Contact.Domain.Exceptions;
 using Contact.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Contact.Backend.Models;
 using Contact.Backend.Results;
 
 namespace Contact.Backend.Controllers
