@@ -14,13 +14,12 @@ namespace Contact.Backend
 {
     public static class UnityConfig
     {
-        public static void RegisterComponents(Contact.Infrastructure.Configuration.Config config)
+        public static IUnityContainer RegisterComponents(Contact.Infrastructure.Configuration.Config config)
         {
             var container = new UnityContainer();
 
             container.RegisterType<AdminController>();
             container.RegisterType<StatusController>();
-            container.RegisterType<AccountController>();
             container.RegisterType<TestController>();
             container.RegisterType<HomeController>();
             container.RegisterType<SearchController>();
@@ -40,6 +39,7 @@ namespace Contact.Backend
                     config.RabbitMqUseSsl));
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
+            return container;
         }
     }
 }

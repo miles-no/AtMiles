@@ -4,7 +4,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Contact.Backend.Properties;
 using Contact.Backend.Utilities;
+using Contact.Infrastructure;
 using Microsoft.Owin;
+using Microsoft.Practices.Unity;
 using Owin;
 
 [assembly: OwinStartup(typeof(Contact.Backend.Startup))]
@@ -24,9 +26,11 @@ namespace Contact.Backend
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Helpers.Initialize(config.CompanyId, config.StatusEndpointUrl);
-            UnityConfig.RegisterComponents(config);
+            var container = UnityConfig.RegisterComponents(config);
             MapperConfig.Configure();
-            ConfigureAuth(app, config);
+
+            var identityResolver = container.Resolve<IResolveUserIdentity>();
+            ConfigureAuth(app, config, identityResolver);
         }
     }
 }

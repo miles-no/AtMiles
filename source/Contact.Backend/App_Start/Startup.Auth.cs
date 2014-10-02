@@ -2,7 +2,9 @@
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Contact.Backend.Utilities;
 using Contact.Domain;
+using Contact.Infrastructure;
 using Contact.Infrastructure.Configuration;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
@@ -21,7 +23,7 @@ namespace Contact.Backend
 
         public static string PublicClientId { get; private set; }
 
-        public void ConfigureAuth(IAppBuilder app, Config settings)
+        public void ConfigureAuth(IAppBuilder app, Config settings, IResolveUserIdentity resolveUserIdentity)
         {
             var issuer = settings.Auth0Issuer;
             var audience = settings.Auth0Audience;
@@ -71,13 +73,12 @@ namespace Contact.Backend
                                     }
                                 }
 
-                                //Helpers.GetUserIdentity()
-                                //TODO: try to get userid from ravenDB.
-                                //TODO: Create new user if not existing
-
-                                //context.Ticket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, subject));
-                                //TODO: Lookup and add userId here. If not existing: Add new user
-                                //TODO: Check if user has been terminated, and reject here if so
+                                var userId = Helpers.GetUserIdentity(subject, resolveUserIdentity);
+                                if (string.IsNullOrEmpty(userId))
+                                {
+                                    //TODO: Create new user if not existing
+                                }
+                                context.Ticket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
                             }
                             else
                             {

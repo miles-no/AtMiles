@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Security.Principal;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Tasks;

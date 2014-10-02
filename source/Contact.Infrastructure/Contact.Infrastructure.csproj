@@ -61,6 +61,7 @@
     <Compile Include="EventStoreDispatcher.cs" />
     <Compile Include="EventStoreGlobalPosition.cs" />
     <Compile Include="EventStoreRepository.cs" />
+    <Compile Include="ICreateUser.cs" />
     <Compile Include="IHandlePosition.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPersistGetEventStorePosition.cs" />

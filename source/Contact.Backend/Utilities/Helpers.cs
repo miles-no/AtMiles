@@ -5,7 +5,6 @@ using System.Security.Principal;
 using System.Web;
 using Contact.Backend.Models.Api.Status;
 using Contact.Backend.Models.Api.Tasks;
-using Contact.Domain.Exceptions;
 using Contact.Infrastructure;
 
 namespace Contact.Backend.Utilities
@@ -49,37 +48,30 @@ namespace Contact.Backend.Utilities
         
         private static readonly ConcurrentDictionary<Tuple<string,string>,string> Cache = new ConcurrentDictionary<Tuple<string, string>, string>();
 
-        public static string GetUserIdentity(IIdentity user, IResolveUserIdentity identityResolver)
+        public static string GetUserIdentity(string userSubject, IResolveUserIdentity identityResolver)
         {
-            var identity = user as ClaimsIdentity;
-            if (identity == null) return string.Empty;
-
-            var claims = identity;
-            var subject = claims.FindFirst(ClaimTypes.NameIdentifier);
-
-
             string userId;
-            if (Cache.TryGetValue(new Tuple<string, string>(_companyId, subject.Value), out userId))
+            if (Cache.TryGetValue(new Tuple<string, string>(_companyId, userSubject), out userId))
             {
                 return userId;
             }
-            userId = identityResolver.ResolveUserIdentitySubject(_companyId, subject.Value);
+            userId = identityResolver.ResolveUserIdentitySubject(_companyId, userSubject);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                Cache.AddOrUpdate(new Tuple<string, string>(_companyId, subject.Value), userId, (key, oldvalue) => userId);
+                Cache.AddOrUpdate(new Tuple<string, string>(_companyId, userSubject), userId, (key, oldvalue) => userId);
             }
             return userId;
         }
 
-        public static void CheckIdentity(IIdentity user, IResolveUserIdentity identityResolver)
+        public static string GetUserIdentity(IIdentity user, IResolveUserIdentity identityResolver)
         {
-            var userId = GetUserIdentity(user, identityResolver);
-            
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnknownUserException("Unknown user");
-            }
+            var identity = user as ClaimsIdentity;
+            if (identity == null) return string.Empty;
+            var claims = identity;
+            var id = claims.FindFirst(ClaimTypes.NameIdentifier);
+            if (id == null) return string.Empty;
+            return id.Value;
         }
 
         public static bool UserHasAccessToCompany(IIdentity user, string companyId, IResolveUserIdentity identityResolver)
