@@ -51,7 +51,7 @@ namespace Contact.Backend
                             {
                                 var notPadded = token.Split('.')[1];
                                 var claimsPart = Convert.FromBase64String(
-                                    notPadded.PadRight(notPadded.Length + (4 - notPadded.Length % 4) % 4, '='));
+                                    notPadded.PadRight(notPadded.Length + (4 - notPadded.Length%4)%4, '='));
 
                                 var obj = JObject.Parse(Encoding.UTF8.GetString(claimsPart, 0, claimsPart.Length));
 
@@ -63,8 +63,12 @@ namespace Contact.Backend
                                         context.Ticket.Identity.AddClaim(new Claim(prop.Name, prop.Value.Value<string>()));
                                     }
                                 }
-
                                 //TODO: Lookup and add userId here. If not existing: Add new user
+                                //TODO: Check if user has been terminated, and reject here if so
+                            }
+                            else
+                            {
+                                context.Rejected();
                             }
                             return Task.FromResult<object>(null);
                         }
