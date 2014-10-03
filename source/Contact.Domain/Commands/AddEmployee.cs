@@ -22,8 +22,5 @@ namespace Contact.Domain.Commands
             MiddleName = middleName;
             LastName = lastName;
         }
-
-        public AddEmployee(string companyId, string globalId, Login loginId, string firstName, string lastName, DateTime created, Person createdBy, string correlationId, Int32 basedOnVersion)
-            : this(companyId, globalId, loginId, firstName, string.Empty, lastName, created, createdBy, correlationId, basedOnVersion) { }
     }
 }

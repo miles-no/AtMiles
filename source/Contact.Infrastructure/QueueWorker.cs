@@ -47,7 +47,7 @@ namespace Contact.Infrastructure
             });
         }
 
-        protected override void Run()
+        protected override async void Run()
         {
             while (IsRunning)
             {
@@ -68,7 +68,7 @@ namespace Contact.Infrastructure
                         {
                             var headers = GetMessageHeader(args);
                             string type = GetMessageType(headers);
-                            _messageHandler(args.RoutingKey, args.Body, type, headers);
+                            await _messageHandler(args.RoutingKey, args.Body, type, headers);
                         }
                         catch (Exception error)
                         {

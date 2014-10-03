@@ -67,7 +67,6 @@ namespace Contact.Infrastructure
             }
             else
             {
-                int d = 0;
                 //TODO: Log error
             }
         }

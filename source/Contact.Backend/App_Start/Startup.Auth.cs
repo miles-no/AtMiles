@@ -80,7 +80,7 @@ namespace Contact.Backend
                                 {
                                     userId = Helpers.CreateNewId();
                                     var addEmployeeCommand = new Domain.Commands.AddEmployee(settings.CompanyId, userId, Login.CreateFromSubject(subject), string.Empty,
-                                        string.Empty, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),
+                                        string.Empty, string.Empty, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),
                                         IdService.CreateNewId(), Constants.IgnoreVersion);
                                     commandSender.Send(addEmployeeCommand);
                                 }
