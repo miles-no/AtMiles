@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Search;
-using NUnit.Framework;
 
 namespace Contact.Backend.Controllers
 {

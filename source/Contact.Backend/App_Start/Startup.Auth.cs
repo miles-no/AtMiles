@@ -77,8 +77,9 @@ namespace Contact.Backend
                                 if (string.IsNullOrEmpty(userId))
                                 {
                                     //TODO: Create new user if not existing
+                                    int d = 0;
                                 }
-                                context.Ticket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
+                                context.Ticket.Identity.AddClaim(new Claim(ClaimTypes.Sid, userId));
                             }
                             else
                             {

@@ -255,8 +255,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MetadataController.cs" />
-    <Compile Include="Controllers\PingController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -266,11 +264,11 @@
     <Compile Include="Infrastructure\Mediator.cs" />
     <Compile Include="Models\Api\Employee\EmployeeDetailsRequest.cs" />
     <Compile Include="Models\Api\Employee\EmployeeDetailsResponse.cs" />
-    <Compile Include="Models\Api\Metadata\MetadataModel.cs" />
     <Compile Include="Models\Api\Search\SearchresultModel.cs" />
     <Compile Include="Models\Api\Status\StatusRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddBusyTimeRequest.cs" />
     <Compile Include="Models\Api\Tasks\AddCompanyAdminRequest.cs" />
+    <Compile Include="Models\Api\Tasks\BaseRequest.cs" />
     <Compile Include="Models\Api\Tasks\ConfirmBusyTimeEntriesRequest.cs" />
     <Compile Include="Models\Api\Tasks\ImportFromCvPartnerRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveBusyTimeRequest.cs" />

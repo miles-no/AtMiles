@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
@@ -22,22 +24,24 @@ namespace Contact.Backend.Utilities
             _statusEndpointUrl = statusEndpointUrl;
         }
 
-        public static Response CreateResponse(string id = null, string message = null)
+        public static HttpResponseMessage CreateResponse(HttpRequestMessage request, string id = null, string message = null)
         {
             if (string.IsNullOrEmpty(id))
             {
                 id = Domain.Services.IdService.CreateNewId();
             }
-            return new Response { RequestId = id, Status = new StatusResponse { Url = _statusEndpointUrl + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
+            var response = new Response { RequestId = id, Status = new StatusResponse { Url = _statusEndpointUrl + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
+            return request.CreateResponse(HttpStatusCode.Accepted, response);
         }
 
-        public static Response CreateErrorResponse(string id, string errorMessage)
+        public static HttpResponseMessage CreateErrorResponse(HttpRequestMessage request, string id, string errorMessage)
         {
             if (string.IsNullOrEmpty(id))
             {
                 id = Domain.Services.IdService.CreateNewId();
             }
-            return new Response { RequestId = id, Status = new StatusResponse { Id = "failed", Status = errorMessage } };
+            var response = new Response { RequestId = id, Status = new StatusResponse { Id = "failed", Status = errorMessage } };
+            return request.CreateResponse(HttpStatusCode.BadRequest, response);
         }
 
         public static string CreateNewId()
@@ -69,7 +73,7 @@ namespace Contact.Backend.Utilities
             var identity = user as ClaimsIdentity;
             if (identity == null) return string.Empty;
             var claims = identity;
-            var id = claims.FindFirst(ClaimTypes.NameIdentifier);
+            var id = claims.FindFirst(ClaimTypes.Sid);
             if (id == null) return string.Empty;
             return id.Value;
         }

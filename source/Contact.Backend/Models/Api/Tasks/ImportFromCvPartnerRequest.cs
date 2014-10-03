@@ -1,7 +1,11 @@
-﻿namespace Contact.Backend.Models.Api.Tasks
+﻿using System.Net.Http;
+
+namespace Contact.Backend.Models.Api.Tasks
 {
-    public class ImportFromCvPartnerRequest
+    public class ImportFromCvPartnerRequest : BaseRequest
     {
+        public ImportFromCvPartnerRequest(HttpRequestMessage request) : base(request) { }
+
         public string CompanyId { get; set; }
     }
 }
