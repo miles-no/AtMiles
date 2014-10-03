@@ -21,6 +21,8 @@ namespace Contact.ReadStore.SearchStore
         public string Email { get; set; }
         public string Thumb { get; set; }
         public DateTime BusyTimeEntriesConfirmed { get; set; }
+        public Address PrivateAddress { get; set; }
+        public bool DateOfBirthSetManually { get; set; }
 
         public Tag[] Competency
         {
@@ -61,6 +63,13 @@ namespace Contact.ReadStore.SearchStore
         {
             public string InternationalDescription { get; set; }
             public string LocalDescription { get; set; }
+        }
+
+        public class Address
+        {
+            public string Street { get; set; }
+            public string PostalCode { get; set; }
+            public string PostalName { get; set; }
         }
     }
     

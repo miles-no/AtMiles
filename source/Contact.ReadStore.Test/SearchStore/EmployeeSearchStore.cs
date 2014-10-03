@@ -41,6 +41,8 @@ namespace Contact.ReadStore.SearchStore
             handler.RegisterHandler<BusyTimeRemoved>(HandleBusyTimeRemoved);
             handler.RegisterHandler<BusyTimeUpdatedNewEndDate>(HandleBusyTimeNewEndDate);
             handler.RegisterHandler<BusyTimeUpdatedNewPercentage>(HandleBusyTimeNewPercentage);
+            handler.RegisterHandler<DateOfBirthSet>(HandleBirthDateSet);
+            handler.RegisterHandler<PrivateAddressSet>(HandlePrivateAddressSet);
         }
 
         private static List<string> CreateKeyQalifications(IEnumerable<CvPartnerKeyQualification> keyQualifications)
@@ -194,6 +196,28 @@ namespace Contact.ReadStore.SearchStore
             }
         }
 
+        private async Task HandlePrivateAddressSet(PrivateAddressSet ev)
+        {
+            using (var session = _documentStore.OpenAsyncSession())
+            {
+                var employee = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                employee = Patch(employee, ev);
+                await session.StoreAsync(employee);
+                await session.SaveChangesAsync();
+            }
+        }
+
+        private async Task HandleBirthDateSet(DateOfBirthSet ev)
+        {
+            using (var session = _documentStore.OpenAsyncSession())
+            {
+                var employee = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                employee = Patch(employee, ev);
+                await session.StoreAsync(employee);
+                await session.SaveChangesAsync();
+            }
+        }
+
         private static EmployeeSearchModel ConvertTo(EmployeeCreated ev)
         {
             var model = new EmployeeSearchModel
@@ -205,7 +229,8 @@ namespace Contact.ReadStore.SearchStore
                 BusyTimeEntriesConfirmed = DateTime.MinValue,
                 Competency = null,
                 KeyQualifications = new List<string>(),
-                BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>()
+                BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>(),
+                DateOfBirthSetManually = false
             };
 
             return model;
@@ -228,7 +253,8 @@ namespace Contact.ReadStore.SearchStore
                 Competency = CreateCompetency(ev.Technologies),
                 KeyQualifications = CreateKeyQalifications(ev.KeyQualifications),
                 Descriptions = CreateDescritpions(ev.KeyQualifications),
-                BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>()
+                BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>(),
+                DateOfBirthSetManually = false
             };
             return model;
         }
@@ -236,7 +262,10 @@ namespace Contact.ReadStore.SearchStore
         private static EmployeeSearchModel Patch(EmployeeSearchModel model, ImportedFromCvPartner ev)
         {
             model.Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName);
-            model.DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue;
+            if (!model.DateOfBirthSetManually)
+            {
+                model.DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue;
+            }
             model.JobTitle = ev.Title;
             model.PhoneNumber = ev.Phone;
             model.Email = ev.Email;
@@ -291,6 +320,30 @@ namespace Contact.ReadStore.SearchStore
                     model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId).End = ev.NewEnd;
                 }
             }
+            return model;
+        }
+
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, PrivateAddressSet ev)
+        {
+            model.PrivateAddress = ConvertTo(ev.PrivateAddress);
+            return model;
+        }
+
+        private static EmployeeSearchModel.Address ConvertTo(Address privateAddress)
+        {
+            if (privateAddress == null) return null;
+            return new EmployeeSearchModel.Address
+            {
+                Street = privateAddress.Street,
+                PostalCode = privateAddress.PostalCode,
+                PostalName = privateAddress.PostalName
+            };
+        }
+
+        private static EmployeeSearchModel Patch(EmployeeSearchModel model, DateOfBirthSet ev)
+        {
+            model.DateOfBirth = ev.DateOfBirth;
+            model.DateOfBirthSetManually = true;
             return model;
         }
 
