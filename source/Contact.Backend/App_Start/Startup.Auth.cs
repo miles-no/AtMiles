@@ -79,8 +79,8 @@ namespace Contact.Backend
                                 if (string.IsNullOrEmpty(userId))
                                 {
                                     userId = Helpers.CreateNewId();
-                                    var addEmployeeCommand = new Domain.Commands.AddEmployee(settings.CompanyId, userId, new Login(subject), string.Empty,
-                                        string.Empty, DateTime.UtcNow, new Person(subject, subject),
+                                    var addEmployeeCommand = new Domain.Commands.AddEmployee(settings.CompanyId, userId, Login.CreateFromSubject(subject), string.Empty,
+                                        string.Empty, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),
                                         IdService.CreateNewId(), Constants.IgnoreVersion);
                                     commandSender.Send(addEmployeeCommand);
                                 }
@@ -96,11 +96,8 @@ namespace Contact.Backend
                 });
 
             app.UseCors(CorsOptions.AllowAll);
-
-            // Only use external cookie for authentication
             var config = GlobalConfiguration.Configuration;
             config.SuppressDefaultHostAuthentication();
-            //config.Filters.Add(new HostAuthenticationFilter(DefaultAuthenticationTypes.ExternalCookie));
         }
     }
 }

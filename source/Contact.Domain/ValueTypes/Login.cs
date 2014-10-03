@@ -13,11 +13,12 @@ namespace Contact.Domain.ValueTypes
             Email = email;
         }
 
-        public Login(string subject)
+        public static Login CreateFromSubject(string subject)
         {
             var splitted = IdService.SplitLoginSubject(subject);
-            Provider = splitted.Item1;
-            Email = splitted.Item2;
+            var provider = splitted.Item1;
+            var email = splitted.Item2;
+            return new Login(provider, email);
         }
     }
 }
