@@ -4,6 +4,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Contact.Backend.Properties;
 using Contact.Backend.Utilities;
+using Contact.Domain;
 using Contact.Infrastructure;
 using Microsoft.Owin;
 using Microsoft.Practices.Unity;
@@ -30,7 +31,8 @@ namespace Contact.Backend
             MapperConfig.Configure();
 
             var identityResolver = container.Resolve<IResolveUserIdentity>();
-            ConfigureAuth(app, config, identityResolver);
+            var commandSender = container.Resolve<ICommandSender>();
+            ConfigureAuth(app, config, identityResolver, commandSender);
         }
     }
 }

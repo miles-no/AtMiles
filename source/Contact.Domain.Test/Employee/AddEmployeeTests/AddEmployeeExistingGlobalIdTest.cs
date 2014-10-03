@@ -20,7 +20,6 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-        private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -30,7 +29,6 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
         private readonly Login _employeeLoginId = new Login(Constants.GoogleIdProvider, "mail@miles.no");
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";
-        private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
         public async void add_employee_existing_global_id()
@@ -77,7 +75,7 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         public override AddEmployee When()
         {
-            var cmd = new AddEmployee(CompanyId, _employeeGlobalId, _employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, EmployeeDateOfBirth, string.Empty, OfficeName, string.Empty, string.Empty, null, null, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
+            var cmd = new AddEmployee(CompanyId, _employeeGlobalId, _employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
         }
 

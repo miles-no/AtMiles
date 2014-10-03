@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Contact.Backend.Utilities;
 using Contact.Domain;
+using Contact.Domain.Services;
+using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 using Contact.Infrastructure.Configuration;
 using Microsoft.Owin.Cors;
@@ -23,7 +25,7 @@ namespace Contact.Backend
 
         public static string PublicClientId { get; private set; }
 
-        public void ConfigureAuth(IAppBuilder app, Config settings, IResolveUserIdentity resolveUserIdentity)
+        public void ConfigureAuth(IAppBuilder app, Config settings, IResolveUserIdentity resolveUserIdentity, ICommandSender commandSender)
         {
             var issuer = settings.Auth0Issuer;
             var audience = settings.Auth0Audience;
@@ -76,8 +78,11 @@ namespace Contact.Backend
                                 var userId = Helpers.GetUserIdentity(subject, resolveUserIdentity);
                                 if (string.IsNullOrEmpty(userId))
                                 {
-                                    //TODO: Create new user if not existing
-                                    int d = 0;
+                                    userId = Helpers.CreateNewId();
+                                    var addEmployeeCommand = new Domain.Commands.AddEmployee(settings.CompanyId, userId, new Login(subject), string.Empty,
+                                        string.Empty, DateTime.UtcNow, new Person(subject, subject),
+                                        IdService.CreateNewId(), Constants.IgnoreVersion);
+                                    commandSender.Send(addEmployeeCommand);
                                 }
                                 context.Ticket.Identity.AddClaim(new Claim(ClaimTypes.Sid, userId));
                             }

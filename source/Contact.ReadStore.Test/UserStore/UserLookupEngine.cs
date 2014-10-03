@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Contact.Domain.Services;
 using Contact.Infrastructure;
 using Raven.Client;
 
@@ -15,11 +16,9 @@ namespace Contact.ReadStore.UserStore
 
         public string ResolveUserIdentitySubject(string companyId, string subject)
         {
-            if (subject == null) return string.Empty;
-            var parts = subject.Split('|');
-            if (parts.Length != 2) return string.Empty;
-            string provider = parts[0];
-            var email = parts[1];
+            var splitted = IdService.SplitLoginSubject(subject);
+            var provider = splitted.Item1;
+            var email = splitted.Item2;
 
             UserLookupModel res;
             using (var session = _store.OpenSession())

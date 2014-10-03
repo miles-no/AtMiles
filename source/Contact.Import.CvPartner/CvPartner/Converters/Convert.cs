@@ -153,8 +153,6 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                 givenName = string.Join(" ", names);
             }
 
-            var bornDate = new DateTime(cv.BornYear.Value, cv.BornMonth.Value, cv.BornDay.Value);
-
             var res = new AddEmployee(
                 companyId: company,
                 globalId: id,
@@ -162,13 +160,6 @@ namespace Contact.Import.CvPartner.CvPartner.Converters
                 firstName: givenName,
                 middleName: middleName,
                 lastName: familyName,
-                dateOfBirth: bornDate,
-                jobTitle: cv.Title,
-                officeName: employee.OfficeName,
-                phoneNumber: cv.Phone,
-                email: employee.Email,
-                homeAddress: null,
-                photo: employeePhoto,
                 created: DateTime.UtcNow,
                 createdBy: createdBy,
                 correlationId: new Guid().ToString(), 

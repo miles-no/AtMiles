@@ -43,7 +43,7 @@ namespace Contact.Infrastructure
                 Connect();
             }
             if (IsConnected())
-            {   
+            {
                 {
                     IBasicProperties properties = _model.CreateBasicProperties();
                     properties.SetPersistent(true);
@@ -64,6 +64,11 @@ namespace Contact.Infrastructure
                         throw new Exception("Not able to send to queue", error);
                     }
                 }
+            }
+            else
+            {
+                int d = 0;
+                //TODO: Log error
             }
         }
 

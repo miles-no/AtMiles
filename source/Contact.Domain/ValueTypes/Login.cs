@@ -1,4 +1,6 @@
-﻿namespace Contact.Domain.ValueTypes
+﻿using Contact.Domain.Services;
+
+namespace Contact.Domain.ValueTypes
 {
     public class Login
     {
@@ -9,6 +11,13 @@
         {
             Provider = provider;
             Email = email;
+        }
+
+        public Login(string subject)
+        {
+            var splitted = IdService.SplitLoginSubject(subject);
+            Provider = splitted.Item1;
+            Email = splitted.Item2;
         }
     }
 }
