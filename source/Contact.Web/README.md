@@ -3,11 +3,7 @@ Install node.js
 http://nodejs.org/
 
 Install packages:
-run: npm install express
-run: npm install passport
-run: npm install connect-flash
-run: npm install cookie-parser
-run: npm install express-session
+run: npm install
 
 Requires tools for Visual Studio:
 http://nodejstools.codeplex.com/
