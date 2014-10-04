@@ -25,6 +25,8 @@ namespace Contact.Domain.CommandHandlers
             cmdHandler.RegisterHandler<Commands.ConfirmBusyTimeEntries>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.UpdateBusyTimeSetEndDate>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.UpdateBusyTimeChangePercentage>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.SetDateOfBirth>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.SetPrivateAddress>(cmdHandlerCompany.Handle);
             return cmdHandler;
         }
     }

@@ -84,5 +84,23 @@ namespace Contact.Backend.Controllers
             var request = new ConfirmBusyTimeEntriesRequest(Request) { CompanyId = companyId };
             return _mediator.Send<ConfirmBusyTimeEntriesRequest, HttpResponseMessage>(request, User.Identity);
         }
+
+        [HttpPost]
+        [Route("api/company/{companyId}/employee/setdateofbirth")]
+        [ResponseType(typeof(Response))]
+        public HttpResponseMessage SetPrivateAddress(string companyId, DateTime dateOfBirth)
+        {
+            var request = new SetDateOfBirthRequest(Request) { CompanyId = companyId, DateOfBirth = dateOfBirth};
+            return _mediator.Send<SetDateOfBirthRequest, HttpResponseMessage>(request, User.Identity);
+        }
+
+        [HttpPost]
+        [Route("api/company/{companyId}/employee/setprivateaddress")]
+        [ResponseType(typeof(Response))]
+        public HttpResponseMessage SetPrivateAddress(string companyId, string street, string postalcode, string postalname)
+        {
+            var request = new SetPrivateAddressRequest(Request) { CompanyId = companyId, Street = street, PostalCode = postalcode, PostalName = postalname };
+            return _mediator.Send<SetPrivateAddressRequest, HttpResponseMessage>(request, User.Identity);
+        }
     }
 }

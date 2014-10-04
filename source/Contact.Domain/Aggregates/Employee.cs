@@ -197,6 +197,34 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
+        public void SetPrivateAddress(string companyId, string companyName, Address privateAddress, Person createdBy, string correlationId)
+        {
+            var ev = new PrivateAddressSet(
+                companyId: companyId,
+                companyName: companyName,
+                employeeId: _id,
+                employeeName: Name,
+                privateAddress: privateAddress,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
+            ApplyChange(ev);
+        }
+
+        public void SetDateOfBirth(string companyId, string companyName, DateTime dateOfBirth, Person createdBy, string correlationId)
+        {
+            var ev = new DateOfBirthSet(
+                companyId: companyId,
+                companyName: companyName,
+                employeeId: _id,
+                employeeName: Name,
+                dateOfBirth: dateOfBirth,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
+            ApplyChange(ev);
+        }
+
         private bool AnyConflictWithExistingBusyTimeEntries(DateTime start, DateTime? end)
         {
             foreach (var busyTimeEntry in _busyTimeEntries)
@@ -295,6 +323,7 @@ namespace Contact.Domain.Aggregates
             _busyTimeEntries.Add(newBusyTime);
         }
 
+        [UsedImplicitly] //To keep resharper happy
         private void Apply(BusyTimeUpdatedNewPercentage ev)
         {
             var oldBusyTime = _busyTimeEntries.First(bt => bt.Id == ev.BusyTimeId);
@@ -302,6 +331,18 @@ namespace Contact.Domain.Aggregates
             var newBusyTime = new BusyTimeEntry(oldBusyTime.Id, oldBusyTime.Start, oldBusyTime.End,
                 ev.NewPercentageOccpied, oldBusyTime.Comment);
             _busyTimeEntries.Add(newBusyTime);
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(DateOfBirthSet ev)
+        {
+            //Empty for now
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(PrivateAddressSet ev)
+        {
+            //Empty for now
         }
     }
 }

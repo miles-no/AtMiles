@@ -273,6 +273,8 @@
     <Compile Include="Models\Api\Tasks\ImportFromCvPartnerRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveBusyTimeRequest.cs" />
     <Compile Include="Models\Api\Tasks\RemoveCompanyAdminRequest.cs" />
+    <Compile Include="Models\Api\Tasks\SetDateOfBirthRequest.cs" />
+    <Compile Include="Models\Api\Tasks\SetPrivateAddressRequest.cs" />
     <Compile Include="Models\Api\Tasks\UpdateBusyTimeChangePercentageRequest.cs" />
     <Compile Include="Models\Api\Tasks\UpdateBusyTimeSetEndRequest.cs" />
     <Compile Include="Models\ExternalLoginViewModel.cs" />

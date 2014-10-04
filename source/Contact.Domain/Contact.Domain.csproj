@@ -62,6 +62,8 @@
     <Compile Include="Commands\RemoveBusyTime.cs" />
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
     <Compile Include="Commands\AddNewCompanyToSystem.cs" />
+    <Compile Include="Commands\SetDateOfBirth.cs" />
+    <Compile Include="Commands\SetPrivateAddress.cs" />
     <Compile Include="Commands\TerminateEmployee.cs" />
     <Compile Include="Commands\UpdateBusyTimeChangePercentage.cs" />
     <Compile Include="Commands\UpdateBusyTimeSetEndDate.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Events\Company\CompanyAdminRemoved.cs" />
     <Compile Include="Events\Company\CompanyCreated.cs" />
     <Compile Include="Events\Company\EmployeeAdded.cs" />
+    <Compile Include="Events\Employee\DateOfBirthSet.cs" />
     <Compile Include="Events\Employee\BusyTimeAdded.cs" />
     <Compile Include="Events\Employee\BusyTimeConfirmed.cs" />
     <Compile Include="Events\Employee\BusyTimeRemoved.cs" />
@@ -83,6 +86,7 @@
     <Compile Include="Events\Employee\EmployeeCreated.cs" />
     <Compile Include="Events\Company\EmployeeRemoved.cs" />
     <Compile Include="Events\Employee\EmployeeTerminated.cs" />
+    <Compile Include="Events\Employee\PrivateAddressSet.cs" />
     <Compile Include="Events\Global\CompanyCreated.cs" />
     <Compile Include="Events\Import\ImportedFromCvPartner.cs" />
     <Compile Include="Exceptions\AlreadyExistingItemException.cs" />

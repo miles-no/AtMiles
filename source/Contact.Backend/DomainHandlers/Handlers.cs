@@ -29,6 +29,49 @@ namespace Contact.Backend.DomainHandlers
             RegisterUpdateBusyTimeSetEnd(mediator, container);
             RegisterUpdateBusyTimeChangePercentage(mediator, container);
 
+            RegisterSetDateOfBirth(mediator, container);
+            RegisterSetPrivateAddress(mediator, container);
+
+        }
+
+        private static void RegisterSetPrivateAddress(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<SetPrivateAddressRequest, HttpResponseMessage>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new SetPrivateAddress(req.CompanyId, createdBy.Identifier, new Address(req.Street, req.PostalCode, req.PostalName), DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(req.Request, container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(req.Request, correlationId, ex.Message);
+                }
+            });
+        }
+
+        private static void RegisterSetDateOfBirth(IMediator mediator, IUnityContainer container)
+        {
+            mediator.Subscribe<SetDateOfBirthRequest, HttpResponseMessage>((req, user) =>
+            {
+                string correlationId = Helpers.CreateNewId();
+
+                try
+                {
+                    var identityResolver = container.Resolve<IResolveUserIdentity>();
+                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var command = new SetDateOfBirth(req.CompanyId, createdBy.Identifier, req.DateOfBirth, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
+                    return Send(req.Request, container, command);
+                }
+                catch (Exception ex)
+                {
+                    return Helpers.CreateErrorResponse(req.Request, correlationId, ex.Message);
+                }
+            });
         }
 
         private static void RegisterUpdateBusyTimeChangePercentage(IMediator mediator, IUnityContainer container)
