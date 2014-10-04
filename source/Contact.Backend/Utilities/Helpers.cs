@@ -68,7 +68,7 @@ namespace Contact.Backend.Utilities
             return userId;
         }
 
-        public static string GetUserIdentity(IIdentity user, IResolveUserIdentity identityResolver)
+        public static string GetUserIdentity(IIdentity user)
         {
             var identity = user as ClaimsIdentity;
             if (identity == null) return string.Empty;

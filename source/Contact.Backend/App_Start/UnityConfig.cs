@@ -29,6 +29,7 @@ namespace Contact.Backend
             container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType(typeof(IResolveUserIdentity), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
+            container.RegisterType(typeof(IResolveNameOfUser), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
 
             container.RegisterInstance(typeof(ICommandSender),
                 new RabbitMqCommandSender(

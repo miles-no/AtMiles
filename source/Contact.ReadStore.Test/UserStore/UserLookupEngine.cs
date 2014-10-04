@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Contact.Domain.Services;
 using Contact.Infrastructure;
 using Raven.Client;
 
 namespace Contact.ReadStore.UserStore
 {
-    public class UserLookupEngine : IResolveUserIdentity
+    public class UserLookupEngine : IResolveUserIdentity, IResolveNameOfUser
     {
         private readonly IDocumentStore _store;
 
@@ -30,6 +31,20 @@ namespace Contact.ReadStore.UserStore
                 return res.GlobalId;
             }
             return null;
+        }
+
+        public string ResolveUserNameById(string companyId, string userId)
+        {
+            UserLookupModel res;
+            using (var session = _store.OpenSession())
+            {
+                res = session.Load<UserLookupModel>("users/" + userId);
+            }
+            if (res != null)
+            {
+                return res.Name;
+            }
+            return string.Empty;
         }
     }
 }

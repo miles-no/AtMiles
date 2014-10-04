@@ -65,6 +65,7 @@
     <Compile Include="IHandlePosition.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IPersistGetEventStorePosition.cs" />
+    <Compile Include="IResolveNameOfUser.cs" />
     <Compile Include="IResolveUserIdentity.cs" />
     <Compile Include="LongRunningProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

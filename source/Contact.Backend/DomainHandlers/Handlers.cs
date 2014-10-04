@@ -42,8 +42,8 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var nameResolver = container.Resolve<IResolveNameOfUser>();
+                    var createdBy = GetCreatedBy(req.CompanyId, user, nameResolver);
                     var command = new SetPrivateAddress(req.CompanyId, createdBy.Identifier, new Address(req.Street, req.PostalCode, req.PostalName), DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -62,8 +62,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var createdBy = GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>());
                     var command = new SetDateOfBirth(req.CompanyId, createdBy.Identifier, req.DateOfBirth, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -82,8 +81,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var createdBy = GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>());
                     var command = new UpdateBusyTimeChangePercentage(req.CompanyId, createdBy.Identifier, req.BustTimeEntryId, req.NewPercentageOccupied, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -102,8 +100,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var createdBy = GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>());
                     var command = new UpdateBusyTimeSetEndDate(req.CompanyId, createdBy.Identifier, req.BustTimeEntryId, req.NewEnd, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -122,8 +119,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var createdBy = GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>());
                     var command = new AddBusyTime(req.CompanyId, createdBy.Identifier, req.Start, req.End, req.PercentageOccupied, req.Comment, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -142,8 +138,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var createdBy = GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>());
                     var command = new RemoveBusyTime(req.CompanyId, createdBy.Identifier, req.BustTimeEntryId, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -162,8 +157,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-                    var createdBy = GetCreatedBy(user, identityResolver);
+                    var createdBy = GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>());
                     var command = new ConfirmBusyTimeEntries(req.CompanyId, createdBy.Identifier, DateTime.UtcNow, createdBy, correlationId, Domain.Constants.IgnoreVersion);
                     return Send(req.Request, container, command);
                 }
@@ -182,9 +176,7 @@ namespace Contact.Backend.DomainHandlers
 
                 try
                 {
-                    var identityResolver = container.Resolve<IResolveUserIdentity>();
-
-                    var command = new ImportDataFromCvPartner(req.CompanyId, DateTime.UtcNow, GetCreatedBy(user, identityResolver), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new ImportDataFromCvPartner(req.CompanyId, DateTime.UtcNow, GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>()), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(req.Request, container, command);
 
@@ -205,7 +197,7 @@ namespace Contact.Backend.DomainHandlers
                 try
                 {
                     //TODO: Get version from readmodel
-                    var command = new AddCompanyAdmin(req.CompanyId, req.NewAdminId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new AddCompanyAdmin(req.CompanyId, req.NewAdminId, DateTime.UtcNow, GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>()), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(req.Request, container, command);
                 }
@@ -225,7 +217,7 @@ namespace Contact.Backend.DomainHandlers
                 try
                 {
                     //TODO: Get version from readmodel
-                    var command = new RemoveCompanyAdmin(req.CompanyId, req.AdminId, DateTime.UtcNow, GetCreatedBy(user, container.Resolve<IResolveUserIdentity>()), correlationId, Domain.Constants.IgnoreVersion);
+                    var command = new RemoveCompanyAdmin(req.CompanyId, req.AdminId, DateTime.UtcNow, GetCreatedBy(req.CompanyId, user, container.Resolve<IResolveNameOfUser>()), correlationId, Domain.Constants.IgnoreVersion);
 
                     return Send(req.Request, container, command);
                 }
@@ -236,9 +228,11 @@ namespace Contact.Backend.DomainHandlers
             });
         }
 
-        private static Person GetCreatedBy(IIdentity user, IResolveUserIdentity identityResolver)
+        private static Person GetCreatedBy(string companyId, IIdentity user, IResolveNameOfUser nameResolver)
         {
-            return new Person(Helpers.GetUserIdentity(user, identityResolver), user.GetUserName());
+            var userId = Helpers.GetUserIdentity(user);
+            var name = nameResolver.ResolveUserNameById(companyId, userId);
+            return new Person(userId, name);
         }
 
         private static HttpResponseMessage Send(HttpRequestMessage request, IUnityContainer container, Command command)
