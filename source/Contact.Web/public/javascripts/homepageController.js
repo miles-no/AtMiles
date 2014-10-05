@@ -219,7 +219,7 @@
    
 }
 
-var atMiles = angular.module('AtMiles', ['ngAnimate','auth0']).config(function ($locationProvider, authProvider) {
+var atMiles = angular.module('AtMiles', ['ngAnimate','auth0']).config(function ($locationProvider, $httpProvider, authProvider) {
     
     $locationProvider.html5Mode(true);
     authProvider.init({
@@ -227,6 +227,7 @@ var atMiles = angular.module('AtMiles', ['ngAnimate','auth0']).config(function (
         clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',
         callbackURL: location.href
     });
+    $httpProvider.interceptors.push('authInterceptor');
 })
 
 .run(function (auth) {
