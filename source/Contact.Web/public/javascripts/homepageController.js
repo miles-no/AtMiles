@@ -1,15 +1,30 @@
-﻿var homepageController = function ($scope, $http, $timeout, $location) {
+﻿var homepageController = function ($scope, $http, $timeout, $location, auth) {
 
-    //$scope.apiRoot = "http://milescontact.cloudapp.net";
-    $scope.apiRoot = "/";
+    $scope.apiRoot = "http://milescontact.cloudapp.net/";
+   
 
     $scope.queryTerm = "";
 
     $scope.errors = [];
     
+    $scope.isAuthenticated = false;
+    
+    $scope.login = function () {
+        
+        auth.signin({
+            popup: true
+        }, function () {
+            $scope.isAuthenticated = true;
+        }, function () {
+            $scope.isAuthenticated = false;
+        });
+    }
+
     var getCompany = function () {
-        var p = $location.path().split("/");
-        return p[1] || "Unknown";  
+        // Used to divide into companies. Useless just now
+        return '';
+        //var p = $location.path().split("/");
+        //return p[1] || "Unknown";  
     }
     var lastQueryTerm = null;
     var maxSearchResults = 9;
@@ -204,10 +219,20 @@
    
 }
 
-var atMiles = angular.module('AtMiles', ['ngAnimate']);
-atMiles.config([
-    '$locationProvider', function ($locationProvider) {
+var atMiles = angular.module('AtMiles', ['ngAnimate','auth0']).config(function ($locationProvider, authProvider) {
+    
     $locationProvider.html5Mode(true);
-}
-]);
-atMiles.controller('homepageController', ['$scope', '$http', '$timeout','$location', homepageController]);
+    authProvider.init({
+        domain: 'atmiles.auth0.com',
+        clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',
+        callbackURL: location.href
+    });
+})
+
+.run(function (auth) {
+    // This hooks al auth events to check everything as soon as the app starts
+    auth.hookEvents();
+});
+
+
+atMiles.controller('homepageController', ['$scope', '$http', '$timeout','$location','auth', homepageController]);
