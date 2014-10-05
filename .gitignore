@@ -170,3 +170,13 @@ source/Contact.WebClient/Scripts/home_*.js
 source/Contact.Web/*.dat
 source/Contact.Web/.sass-cache
 source/Contact.Web/node_modules
+
+# User-specific configurations
+source/Contact.Web/.idea/encodings.xml
+source/Contact.Web/.idea/jsLibraryMappings.xml
+source/Contact.Web/.idea/misc.xml
+source/Contact.Web/.idea/modules.xml
+source/Contact.Web/.idea/scopes/scope_settings.xml
+source/Contact.Web/.idea/vcs.xml
+source/Contact.Web/.idea/workspace.xml
+source/Contact.Web/.idea/Contact.Web.iml
