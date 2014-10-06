@@ -1,14 +1,13 @@
 package no.miles.atmiles;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -16,15 +15,12 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+
+import no.miles.atmiles.employee.SearchResultModel;
 
 
 /**
@@ -202,17 +198,21 @@ public class EmployeeListActivity extends Activity
             }
 
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        is, "iso-8859-1"), 8);
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                is.close();
-                String json = sb.toString();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                        is, "iso-8859-1"), 8);
+//                StringBuilder sb = new StringBuilder();
+//                String line = null;
+//                while ((line = reader.readLine()) != null) {
+//                    sb.append(line + "\n");
+//                }
+//                is.close();
+//                String json = sb.toString();
+
+                ObjectMapper mapper = new ObjectMapper();
+                SearchResultModel result = mapper.readValue(is, SearchResultModel.class);
                 int d=0;
             } catch (Exception e) {
+                int f=0;
                 //Log.e("Buffer Error", "Error converting result " + e.toString());
             }
 
