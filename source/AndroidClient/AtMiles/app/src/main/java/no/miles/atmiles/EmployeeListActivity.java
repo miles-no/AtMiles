@@ -198,21 +198,13 @@ public class EmployeeListActivity extends Activity
             }
 
             try {
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(
-//                        is, "iso-8859-1"), 8);
-//                StringBuilder sb = new StringBuilder();
-//                String line = null;
-//                while ((line = reader.readLine()) != null) {
-//                    sb.append(line + "\n");
-//                }
-//                is.close();
-//                String json = sb.toString();
-
                 ObjectMapper mapper = new ObjectMapper();
                 SearchResultModel result = mapper.readValue(is, SearchResultModel.class);
-                int d=0;
+                String total = Integer.toString(result.Total);
+                showToastOnUiThread(this, total);
+
             } catch (Exception e) {
-                int f=0;
+                int d=0;
                 //Log.e("Buffer Error", "Error converting result " + e.toString());
             }
 
