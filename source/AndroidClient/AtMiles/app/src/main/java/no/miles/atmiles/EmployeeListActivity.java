@@ -10,10 +10,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 
 /**
@@ -156,17 +167,54 @@ public class EmployeeListActivity extends Activity
     @Override
     public void OnSearchStringChanged(String searchString) {
         if(!searchString.isEmpty()) {
+            final String token = new AuthenticationHelper().getJsonWebToken(this);
             showToastOnUiThread(this, searchString);
 
-            //DefaultHttpClient httpClient = new DefaultHttpClient();
-            //httpClient.
-            //HttpPost httpPost = new HttpPost("http://milescontact.cloudapp.net/api/search/Fulltext?query="+searchString);
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet("http://milescontact.cloudapp.net/api/search/Fulltext?query="+searchString);
+            Header header = new Header() {
+                @Override
+                public String getName() {
+                    return "Authorization";
+                }
 
+                @Override
+                public String getValue() {
 
+                    return "Bearer "+token;
+                }
 
+                @Override
+                public HeaderElement[] getElements() throws ParseException {
+                    return new HeaderElement[0];
+                }
+            };
 
+            httpGet.addHeader(header);
 
+            InputStream is = null;
+            try {
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                is.close();
+                String json = sb.toString();
+                int d=0;
+            } catch (Exception e) {
+                //Log.e("Buffer Error", "Error converting result " + e.toString());
+            }
 
             //TODO: Start async method
         }
