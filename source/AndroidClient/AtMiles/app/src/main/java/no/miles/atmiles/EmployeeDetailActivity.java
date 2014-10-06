@@ -73,9 +73,6 @@ public class EmployeeDetailActivity extends Activity {
         int id = item.getItemId();
 
         switch(id){
-            case android.R.id.home:
-                navigateUpTo(new Intent(this, EmployeeListActivity.class));
-                break;
             case R.id.action_menu_favorites:
                 startActivity(new Intent(this, FavoritesActivity.class));
                 break;

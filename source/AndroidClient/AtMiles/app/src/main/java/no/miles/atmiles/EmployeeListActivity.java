@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -119,9 +121,6 @@ public class EmployeeListActivity extends Activity
             case R.id.action_menu_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
-            case R.id.action_menu_exit:
-                finish();
-                break;
             default:
                 handled = super.onOptionsItemSelected(item);
         }
@@ -156,8 +155,32 @@ public class EmployeeListActivity extends Activity
 
     @Override
     public void OnSearchStringChanged(String searchString) {
-        //TODO: Figure out why this does not show. Could it be wrong thread/looper?
-        Toast.makeText(this, searchString, Toast.LENGTH_LONG).show();
-        //TODO: Start async method
+        if(!searchString.isEmpty()) {
+            showToastOnUiThread(this, searchString);
+
+            //DefaultHttpClient httpClient = new DefaultHttpClient();
+            //httpClient.
+            //HttpPost httpPost = new HttpPost("http://milescontact.cloudapp.net/api/search/Fulltext?query="+searchString);
+
+
+
+
+
+
+
+            //TODO: Start async method
+        }
+        else{
+            //TODO: Clear search-results
+        }
+    }
+
+    private void showToastOnUiThread(final Activity activity, final String message){
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

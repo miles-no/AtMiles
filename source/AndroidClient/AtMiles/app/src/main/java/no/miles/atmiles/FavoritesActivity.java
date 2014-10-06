@@ -45,9 +45,6 @@ public class FavoritesActivity extends Activity {
         int id = item.getItemId();
 
         switch(id){
-            case android.R.id.home:
-                navigateUpTo(new Intent(this, EmployeeListActivity.class));
-                break;
             case R.id.action_menu_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;

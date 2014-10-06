@@ -42,9 +42,6 @@ public class ProfileActivity extends Activity {
         int id = item.getItemId();
 
         switch(id){
-            case android.R.id.home:
-                navigateUpTo(new Intent(this, EmployeeListActivity.class));
-                break;
             case R.id.action_menu_favorites:
                 startActivity(new Intent(this, FavoritesActivity.class));
                 break;
@@ -77,6 +74,6 @@ public class ProfileActivity extends Activity {
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        //ODO: Restore state
+        //TODO: Restore state
     }
 }

@@ -1,11 +1,19 @@
 package no.miles.atmiles;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.ContactsContract;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import no.miles.atmiles.employee.EmployeeDummyContent;
 import no.miles.atmiles.employee.EmployeeItem;
@@ -38,6 +46,7 @@ public class EmployeeDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
@@ -45,6 +54,65 @@ public class EmployeeDetailFragment extends Fragment {
             // to load content from a content provider.
             mItem = EmployeeDummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        boolean call = true;
+        //TODO: Check if employee has phone-number
+        if(call) {
+            getActivity().getMenuInflater().inflate(R.menu.call_employee, menu);
+        }
+        getActivity().getMenuInflater().inflate(R.menu.add_employee_to_contacts, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean handled = true;
+        int id = item.getItemId();
+
+        switch(id){
+            case R.id.action_menu_call_employee:
+                transferToPhone();
+                break;
+            case R.id.action_menu_add_employee_to_contatcs:
+                addToContacts();
+                break;
+            default:
+                handled = super.onOptionsItemSelected(item);
+        }
+        return handled;
+    }
+
+    private void addToContacts() {
+        //TODO: Get info from employee
+        String email = "roy.veshovda@miles.no";
+        String name = "Roy Veshovda";
+        String title = "Senior Consultant";
+        String company = "Miles";
+        String notes = "Office: Stavanger";
+
+
+        Intent contactIntent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+        contactIntent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.NAME, name);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.JOB_TITLE, title);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company);
+        contactIntent.putExtra(ContactsContract.Intents.Insert.NOTES, notes);
+        startActivity(contactIntent);
+    }
+
+    private void transferToPhone() {
+        //TODO: call actuall phone-number for employee
+        String phoneNumber = "+4740102040";
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:"+Uri.encode(phoneNumber.trim())));
+        startActivity(callIntent);
     }
 
     @Override

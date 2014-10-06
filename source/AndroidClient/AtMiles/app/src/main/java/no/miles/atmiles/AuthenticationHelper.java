@@ -9,7 +9,6 @@ public class AuthenticationHelper {
     static final String ClientID = "6jsWdVCPDiKSdSKi2n7naqmy7eeO703H";
     static final String Tenant = "atmiles";
     static final String Callback = "oob://atmiles/android";
-    //static final String Connection = "";
 
     public void checkLogin(Activity activity) {
         SharedPreferences settings = activity.getSharedPreferences(Constants.SETTINGS_NAME, 0);
