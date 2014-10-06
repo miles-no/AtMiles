@@ -156,7 +156,8 @@ public class EmployeeListActivity extends Activity
 
     @Override
     public void OnSearchStringChanged(String searchString) {
-        Toast.makeText(this, searchString, Toast.LENGTH_SHORT).show();
+        //TODO: Figure out why this does not show. Could it be wrong thread/looper?
+        Toast.makeText(this, searchString, Toast.LENGTH_LONG).show();
         //TODO: Start async method
     }
 }

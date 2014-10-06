@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -11,16 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class SearchFragment extends Fragment {
     private EditText mEditTextSearch;
 
@@ -57,10 +51,24 @@ public class SearchFragment extends Fragment {
 
         EditText search = (EditText)view.findViewById(R.id.editview_search);
         search.addTextChangedListener(new TextWatcher() {
+            private Timer timer=new Timer();
+            private final long DELAY = 500; // in ms
+
             public void afterTextChanged(Editable s) {
-                if(mListener != null) {
-                    mListener.OnSearchStringChanged(getEditTextSearch().getText().toString());
-                }
+                //Delay call to ensure to many calls
+                timer.cancel();
+                timer = new Timer();
+                final String searchTerm = getEditTextSearch().getText().toString();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        if(mListener!=null)
+                        {
+                            mListener.OnSearchStringChanged(searchTerm);
+                        }
+                    }
+                },DELAY);
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -80,6 +80,14 @@ public class EmployeeListFragment extends ListFragment {
                 EmployeeDummyContent.ITEMS));
     }
 
+    /*
+    Code to show image
+    byte[] decodedString = Base64.decode(json_my_img, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,
+                    0, decodedString.length);
+            imv_emp_imv.setImageBitmap(decodedByte);
+     */
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
