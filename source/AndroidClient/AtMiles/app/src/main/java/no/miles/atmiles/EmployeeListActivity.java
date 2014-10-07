@@ -2,6 +2,7 @@ package no.miles.atmiles;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +18,13 @@ import org.apache.http.ParseException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import no.miles.atmiles.employee.SearchResultModel;
 
@@ -163,52 +169,18 @@ public class EmployeeListActivity extends Activity
     @Override
     public void OnSearchStringChanged(String searchString) {
         if(!searchString.isEmpty()) {
-            final String token = new AuthenticationHelper().getJsonWebToken(this);
+
+            //TODO: Remove after proper implementation
             showToastOnUiThread(this, searchString);
 
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet("http://milescontact.cloudapp.net/api/search/Fulltext?query="+searchString);
-            Header header = new Header() {
-                @Override
-                public String getName() {
-                    return "Authorization";
-                }
+            final String token = new AuthenticationHelper().getJsonWebToken(this);
 
-                @Override
-                public String getValue() {
+            //TODO: Implement paging
+            String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query="+searchString;
 
-                    return "Bearer "+token;
-                }
 
-                @Override
-                public HeaderElement[] getElements() throws ParseException {
-                    return new HeaderElement[0];
-                }
-            };
-
-            httpGet.addHeader(header);
-
-            InputStream is = null;
-            try {
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                SearchResultModel result = mapper.readValue(is, SearchResultModel.class);
-                String total = Integer.toString(result.Total);
-                showToastOnUiThread(this, total);
-
-            } catch (Exception e) {
-                int d=0;
-                //Log.e("Buffer Error", "Error converting result " + e.toString());
-            }
-
-            //TODO: Start async method
+            //TODO: Save reference to be able to cancel if new search is started before the previous is completed
+            new CallSearchApi().execute(searchUrl, token);
         }
         else{
             //TODO: Clear search-results
@@ -222,5 +194,54 @@ public class EmployeeListActivity extends Activity
             }
         });
 
+    }
+
+    private class CallSearchApi extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String urlString=params[0]; // URL to call
+            String token=params[1]; // JWT
+
+            String resultToDisplay = "";
+            InputStream in = null;
+
+// HTTP Get
+            try {
+                URL url = new URL(urlString);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("Authorization", "Bearer "+token);
+                in = new BufferedInputStream(urlConnection.getInputStream());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+                resultToDisplay = out.toString();
+                reader.close();
+            } catch (Exception e ) {
+                //TODO: Log better
+                System.out.println(e.getMessage());
+                return e.getMessage();
+            }
+            return resultToDisplay;
+        }
+
+        protected void onPostExecute(String result) {
+            ObjectMapper mapper = new ObjectMapper();
+            SearchResultModel resultObject = null;
+            try {
+                resultObject = mapper.readValue(result, SearchResultModel.class);
+            } catch (IOException e) {
+                //TODO: Log better
+                e.printStackTrace();
+            }
+            String message = "Total: " + resultObject.Total;
+            showToastOnUiThread(EmployeeListActivity.this, message);
+
+            //TODO: Post object to Activity
+        }
     }
 }
