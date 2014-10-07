@@ -26,7 +26,7 @@ namespace Contact.ReadStore.SearchStore
             _documentStore = documentStore;
         }
 
-        private static string GetRavenId(string id)
+        public static string GetRavenId(string id)
         {
             return "employees/" + id;
         }

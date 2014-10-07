@@ -5,6 +5,7 @@ using Contact.Import.CvPartner.CvPartner;
 using Contact.Infrastructure.Configuration;
 using Contact.Infrastructure.SingleServer.Properties;
 using Contact.ReadStore;
+using Contact.ReadStore.BusyTimeStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Contact.ReadStore.UserStore;
@@ -61,6 +62,7 @@ namespace Contact.Infrastructure.SingleServer
             new EmployeeSearchStore(store).PrepareHandler(handlers);
             new CommandStatusStore(store).PrepareHandler(handlers);
             new UserLookupStore(new UserLookupEngine(store), store).PrepareHandler(handlers);
+            new BusyTimeStore(store).PrepareHandler(handlers);
             var positionSaver = new PositionSaver(store);
             var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { }, positionSaver);
             await read.Start();

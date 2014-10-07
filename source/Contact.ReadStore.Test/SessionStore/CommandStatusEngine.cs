@@ -4,19 +4,19 @@ namespace Contact.ReadStore.SessionStore
 {
     public class CommandStatusEngine
     {
-        private readonly IDocumentStore documentStore;
+        private readonly IDocumentStore _documentStore;
 
         public CommandStatusEngine(IDocumentStore documentStore)
         {
-            this.documentStore = documentStore;
+            _documentStore = documentStore;
         }
 
         public CommandStatus GetStatus(string commandId)
         {
             CommandStatus res;
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
-                var id = CommandStatusConstants.Prefix + commandId;
+                var id = CommandStatusStore.GetRavenId(commandId);
                 res = session.Load<CommandStatus>(id);
             }
             if (res == null)

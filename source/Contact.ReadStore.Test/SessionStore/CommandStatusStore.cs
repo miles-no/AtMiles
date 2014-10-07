@@ -14,6 +14,11 @@ namespace Contact.ReadStore.SessionStore
             this._documentStore = documentStore;
         }
 
+        public static string GetRavenId(string id)
+        {
+            return "CommandStatus/" + id;
+        }
+
         public void PrepareHandler(ReadModelHandler handler)
         {
             handler.RegisterHandler<CommandRequested>(HandleRequested);
@@ -23,7 +28,7 @@ namespace Contact.ReadStore.SessionStore
 
         private async Task HandleSuccess(CommandSucceded commandSucceded)
         {
-            var commandSession = new CommandStatus {Id = CommandStatusConstants.Prefix + commandSucceded.CorrelationId, Status = CommandStatusConstants.OkStatus};
+            var commandSession = new CommandStatus {Id = GetRavenId(commandSucceded.CorrelationId), Status = CommandStatusConstants.OkStatus};
             
             using (var session = _documentStore.OpenAsyncSession())
             {
@@ -34,7 +39,7 @@ namespace Contact.ReadStore.SessionStore
 
         private async Task HandleException(CommandException commandException)
         {
-            var commandSession = new CommandStatus { Id = CommandStatusConstants.Prefix + commandException.CorrelationId, ErrorMessage = commandException.ExceptionMessage, Status = CommandStatusConstants.FailedStatus };
+            var commandSession = new CommandStatus { Id = GetRavenId(commandException.CorrelationId), ErrorMessage = commandException.ExceptionMessage, Status = CommandStatusConstants.FailedStatus };
 
             using (var session = _documentStore.OpenAsyncSession())
             {
@@ -45,7 +50,7 @@ namespace Contact.ReadStore.SessionStore
 
         private async Task HandleRequested(CommandRequested commandRequested)
         {
-            var commandSession = new CommandStatus { Id = CommandStatusConstants.Prefix + commandRequested.CorrelationId, Status = CommandStatusConstants.PendingStatus };
+            var commandSession = new CommandStatus { Id = GetRavenId(commandRequested.CorrelationId), Status = CommandStatusConstants.PendingStatus };
 
             using (var session = _documentStore.OpenAsyncSession())
             {

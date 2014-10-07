@@ -8,7 +8,6 @@ using Contact.Domain;
 using Contact.Domain.Commands;
 using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
-using Microsoft.AspNet.Identity;
 using Microsoft.Practices.Unity;
 
 namespace Contact.Backend.DomainHandlers

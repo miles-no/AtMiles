@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Busy;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
@@ -38,7 +39,15 @@ namespace Contact.Backend.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, res);
         }
-        
+
+        [HttpGet]
+        [Route("api/company/{companyId}/employee/busytime")]
+        [ResponseType(typeof(Response))]
+        public BusyTimeResponse GetBusyTime(string companyId)
+        {
+            var request = new BusyTimeRequest(Request) {  };
+            return _mediator.Send<BusyTimeRequest, BusyTimeResponse>(request, User.Identity);
+        }
 
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime")]

@@ -2,9 +2,12 @@
 using AutoMapper;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Busy;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Search;
 using Contact.Backend.Models.Api.Status;
+using Contact.Backend.Utilities;
+using Contact.ReadStore.BusyTimeStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Microsoft.Practices.Unity;
@@ -53,6 +56,13 @@ namespace Contact.Backend
                 return Mapper.Map<EmployeeSearchModel, EmployeeDetailsResponse>(employee);
             });
 
+            mediator.Subscribe<BusyTimeRequest, BusyTimeResponse>((request, user) =>
+            {
+                var employeeId = Helpers.GetUserIdentity(user);
+                var engine = container.Resolve<BusyTimeEngine>();
+                var data = engine.GetBusyTime(employeeId);
+                return Mapper.Map<BusyTimeModel, BusyTimeResponse>(data);
+            });
             return mediator;
         }
     }
