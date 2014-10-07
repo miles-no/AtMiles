@@ -42,7 +42,7 @@ namespace Contact.Backend.Controllers
 
         [HttpGet]
         [Route("api/company/{companyId}/employee/busytime")]
-        [ResponseType(typeof(Response))]
+        [ResponseType(typeof(BusyTimeResponse))]
         public BusyTimeResponse GetBusyTime(string companyId)
         {
             var request = new BusyTimeRequest(Request) {  };
