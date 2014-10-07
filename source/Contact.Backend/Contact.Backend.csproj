@@ -259,7 +259,6 @@
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="DomainHandlers\Handlers.cs" />
-    <Compile Include="Infrastructure\FulltextSearchEngineMock.cs" />
     <Compile Include="Infrastructure\IMediator.cs" />
     <Compile Include="Infrastructure\Mediator.cs" />
     <Compile Include="Models\Api\Employee\EmployeeDetailsRequest.cs" />
