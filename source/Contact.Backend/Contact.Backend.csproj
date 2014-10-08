@@ -243,6 +243,8 @@
     <Compile Include="DomainHandlers\Handlers.cs" />
     <Compile Include="Infrastructure\IMediator.cs" />
     <Compile Include="Infrastructure\Mediator.cs" />
+    <Compile Include="Models\Api\Admins\GetCompanyAdminsRequest.cs" />
+    <Compile Include="Models\Api\Admins\GetCompanyAdminsResponse.cs" />
     <Compile Include="Models\Api\Busy\BusyTimeRequest.cs" />
     <Compile Include="Models\Api\Busy\BusyTimeResponse.cs" />
     <Compile Include="Models\Api\Employee\EmployeeDetailsRequest.cs" />

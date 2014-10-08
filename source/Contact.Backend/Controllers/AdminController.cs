@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Admins;
 using Contact.Backend.Models.Api.Tasks;
 
 namespace Contact.Backend.Controllers
@@ -28,6 +29,15 @@ namespace Contact.Backend.Controllers
             var importRequest = new ImportFromCvPartnerRequest(Request) { CompanyId = companyId };
             return _mediator.Send<ImportFromCvPartnerRequest, HttpResponseMessage>(importRequest, User.Identity);
             
+        }
+
+        [HttpGet]
+        [Route("api/company/{companyId}/admin")]
+        [ResponseType(typeof(Response))]
+        public GetCompanyAdminsResponse GetAllAdmins(string companyId)
+        {
+            var getCompanyAdmins = new GetCompanyAdminsRequest(Request){CompanyId = companyId};
+            return _mediator.Send<GetCompanyAdminsRequest, GetCompanyAdminsResponse>(getCompanyAdmins, User.Identity);
         }
 
         /// <summary>
@@ -59,16 +69,5 @@ namespace Contact.Backend.Controllers
             var removeCompanyAdminRequest = new RemoveCompanyAdminRequest(Request) { CompanyId = companyId, AdminId = adminId };
             return _mediator.Send<RemoveCompanyAdminRequest, HttpResponseMessage>(removeCompanyAdminRequest, User.Identity);
         }
-
-        /*
-        [HttpGet]
-        [Route("api/company/{companyId}/admin")]
-        [ResponseType(typeof(Response))]
-        public HttpResponseMessage GetAdmins(string companyId)
-        {
-            var removeCompanyAdminRequest = new RemoveCompanyAdminRequest(Request) { CompanyId = companyId, AdminId = adminId };
-            return _mediator.Send<RemoveCompanyAdminRequest, HttpResponseMessage>(removeCompanyAdminRequest, User.Identity);
-        }
-        */
     }
 }

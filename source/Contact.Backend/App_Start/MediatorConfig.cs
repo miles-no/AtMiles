@@ -2,6 +2,7 @@
 using AutoMapper;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Admins;
 using Contact.Backend.Models.Api.Busy;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Search;
@@ -10,6 +11,7 @@ using Contact.Backend.Utilities;
 using Contact.ReadStore.BusyTimeStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
+using Contact.ReadStore.UserStore;
 using Microsoft.Practices.Unity;
 
 namespace Contact.Backend
@@ -63,7 +65,28 @@ namespace Contact.Backend
                 var data = engine.GetBusyTime(employeeId);
                 return Convert(data);
             });
+
+            mediator.Subscribe<GetCompanyAdminsRequest, GetCompanyAdminsResponse>((request, user) =>
+            {
+                var engine = container.Resolve<UserLookupEngine>();
+                var data = engine.GetAllCompanyAdmins(request.CompanyId);
+                return Convert(data);
+            });
+
             return mediator;
+        }
+
+        private static GetCompanyAdminsResponse Convert(IEnumerable<UserLookupModel> busyTimeEnties)
+        {
+            var response = new GetCompanyAdminsResponse {Admins = new List<GetCompanyAdminsResponse.Admin>()};
+            if (busyTimeEnties != null)
+            {
+                foreach (var userLookupModel in busyTimeEnties)
+                {
+                    response.Admins.Add(new GetCompanyAdminsResponse.Admin(){Id = userLookupModel.GlobalId, Name = userLookupModel.Name});
+                }
+            }
+            return response;
         }
 
         private static BusyTimeResponse Convert(BusyTimeModel data)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Contact.Domain.Services;
 using Contact.Infrastructure;
 using Raven.Client;
@@ -45,6 +44,16 @@ namespace Contact.ReadStore.UserStore
                 return res.Name;
             }
             return string.Empty;
+        }
+
+        public UserLookupModel[] GetAllCompanyAdmins(string companyId)
+        {
+            UserLookupModel[] res;
+            using (var session = _store.OpenSession())
+            {
+                res = session.Query<UserLookupModel>().Where(w => w.CompanyId == companyId && w.CompanyAdmin == true).ToArray();
+            }
+            return res;
         }
     }
 }
