@@ -26,7 +26,7 @@ namespace Contact.ReadStore.SearchStore
             _documentStore = documentStore;
         }
 
-        private static string GetRavenId(string id)
+        public static string GetRavenId(string id)
         {
             return "employees/" + id;
         }
@@ -248,7 +248,8 @@ namespace Contact.ReadStore.SearchStore
                 JobTitle = ev.Title,
                 PhoneNumber = ev.Phone,
                 Email = ev.Email,
-                Thumb = CreateThumb(ev.Photo, 80, 0),
+                OfficeName = ev.OfficeName,
+                Thumb = CreateThumb(ev.Photo, 80),
                 BusyTimeEntriesConfirmed = DateTime.MinValue,
                 Competency = CreateCompetency(ev.Technologies),
                 KeyQualifications = CreateKeyQalifications(ev.KeyQualifications),
@@ -266,10 +267,11 @@ namespace Contact.ReadStore.SearchStore
             {
                 model.DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue;
             }
+            model.OfficeName = ev.OfficeName;
             model.JobTitle = ev.Title;
             model.PhoneNumber = ev.Phone;
             model.Email = ev.Email;
-            model.Thumb = CreateThumb(ev.Photo, 80, 0);
+            model.Thumb = CreateThumb(ev.Photo, 80);
             model.Competency = CreateCompetency(ev.Technologies);
             model.KeyQualifications = CreateKeyQalifications(ev.KeyQualifications);
             model.Descriptions = CreateDescritpions(ev.KeyQualifications);

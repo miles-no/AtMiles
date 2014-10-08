@@ -18,7 +18,7 @@ namespace Contact.ReadStore.SearchStore
         {
             using (var session = store.OpenSession())
             {
-                return session.Load<EmployeeSearchModel>("employees/" + employeeId);
+                return session.Load<EmployeeSearchModel>(EmployeeSearchStore.GetRavenId(employeeId));
             }
         }
 

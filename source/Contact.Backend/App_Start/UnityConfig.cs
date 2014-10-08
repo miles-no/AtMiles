@@ -2,6 +2,7 @@ using Contact.Backend.Controllers;
 using Contact.Domain;
 using Contact.Infrastructure;
 using Contact.ReadStore;
+using Contact.ReadStore.BusyTimeStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Contact.ReadStore.UserStore;
@@ -27,7 +28,7 @@ namespace Contact.Backend
             container.RegisterInstance(MediatorConfig.Create(container));
             container.RegisterType<EmployeeSearchEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
-            container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
+            container.RegisterType<BusyTimeEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType(typeof(IResolveUserIdentity), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
             container.RegisterType(typeof(IResolveNameOfUser), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
 

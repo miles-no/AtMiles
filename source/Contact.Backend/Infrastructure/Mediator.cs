@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Principal;
-using NUnit.Framework;
 
 namespace Contact.Backend.Infrastructure
 {
@@ -23,26 +22,6 @@ namespace Contact.Backend.Infrastructure
             }
             
             return subscribed[subscription](@from, user);
-        }
-    }
-
-    public class MediatorTest
-    {
-        class UserMock : IIdentity
-        {
-            public string Name { get; set; }
-            public string AuthenticationType { get; set; }
-            public bool IsAuthenticated { get; set; }
-        }
-        [Test]
-        public void SubscribeTest()
-        {
-            var m = new Mediator();
-            m.Subscribe<int, string>((number, user) => number.ToString());
-
-            var res = m.Send<int, string>(789,new UserMock{AuthenticationType = "None", IsAuthenticated = true, Name = "test"});
-            
-            Assert.AreEqual("789", res);
         }
     }
 }

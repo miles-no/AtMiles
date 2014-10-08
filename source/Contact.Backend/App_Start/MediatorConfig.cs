@@ -2,9 +2,12 @@
 using AutoMapper;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
+using Contact.Backend.Models.Api.Busy;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Search;
 using Contact.Backend.Models.Api.Status;
+using Contact.Backend.Utilities;
+using Contact.ReadStore.BusyTimeStore;
 using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Microsoft.Practices.Unity;
@@ -53,7 +56,49 @@ namespace Contact.Backend
                 return Mapper.Map<EmployeeSearchModel, EmployeeDetailsResponse>(employee);
             });
 
+            mediator.Subscribe<BusyTimeRequest, BusyTimeResponse>((request, user) =>
+            {
+                var employeeId = Helpers.GetUserIdentity(user);
+                var engine = container.Resolve<BusyTimeEngine>();
+                var data = engine.GetBusyTime(employeeId);
+                return Convert(data);
+            });
             return mediator;
+        }
+
+        private static BusyTimeResponse Convert(BusyTimeModel data)
+        {
+            if (data == null) return null;
+            var response = new BusyTimeResponse();
+            response.ExpiryDate = data.ExpiryDate;
+            response.BusyTimeEntries = new List<BusyTimeResponse.BusyTime>();
+            if (data.BusyTimeEntries != null)
+            {
+                foreach (var busyTimeEntry in data.BusyTimeEntries)
+                {
+                    var time = Convert(busyTimeEntry);
+                    if (time != null)
+                    {
+                        response.BusyTimeEntries.Add(time);
+                    }
+                }
+            }
+            return response;
+        }
+
+        private static BusyTimeResponse.BusyTime Convert(BusyTimeModel.BusyTime busyTimeEntry)
+        {
+            if (busyTimeEntry == null) return null;
+            var time = new BusyTimeResponse.BusyTime
+            {
+                Id = busyTimeEntry.Id,
+                Start = busyTimeEntry.Start,
+                End = busyTimeEntry.End,
+                PercentageOccupied = busyTimeEntry.PercentageOccupied,
+                Comment = busyTimeEntry.Comment
+            };
+
+            return time;
         }
     }
 }
