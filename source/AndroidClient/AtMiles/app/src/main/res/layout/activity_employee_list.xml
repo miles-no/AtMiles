@@ -10,7 +10,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:name="no.miles.atmiles.SearchFragment"
-        tools:context=".SearchFragment" />
+        tools:context=".SearchFragment"
+        tools:layout="@layout/fragment_search" />
 
     <fragment
     android:id="@+id/employee_list"

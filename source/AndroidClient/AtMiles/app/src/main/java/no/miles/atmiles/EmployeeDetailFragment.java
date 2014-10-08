@@ -1,22 +1,27 @@
 package no.miles.atmiles;
 
+import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.ContactsContract;
-import android.view.ContextMenu;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import no.miles.atmiles.employee.EmployeeDummyContent;
-import no.miles.atmiles.employee.EmployeeItem;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import no.miles.atmiles.employee.SearchResultModel;
 
 /**
  * A fragment representing a single Employee detail screen.
@@ -30,11 +35,12 @@ public class EmployeeDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ITEM = "item";
 
     /**
      * The dummy content this fragment is presenting.
      */
-    private EmployeeItem mItem;
+    private SearchResultModel.Result mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -47,14 +53,9 @@ public class EmployeeDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = EmployeeDummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+        if (getArguments().containsKey(ARG_ITEM)) {
+            mItem = (SearchResultModel.Result)getArguments().get(ARG_ITEM);
         }
-
     }
 
     @Override
@@ -122,9 +123,25 @@ public class EmployeeDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.employee_detail)).setText(mItem.id + " " + mItem.content);
+            ((TextView) rootView.findViewById(R.id.employee_detail)).setText(mItem.GlobalId + " " + mItem.Name);
+
+            Bitmap decodedByte = ConvertToImage(mItem.Thumb);
+            ((ImageView)rootView.findViewById(R.id.employee_thumbnail)).setImageBitmap(decodedByte);
         }
 
         return rootView;
+    }
+
+    public static Bitmap ConvertToImage(String image){
+        try{
+            String imageDataBytes = image.substring(image.indexOf(",")+1);
+            InputStream stream = new ByteArrayInputStream(Base64.decode(imageDataBytes.getBytes(), Base64.DEFAULT));
+            Bitmap bitmap = BitmapFactory.decodeStream(stream);
+            return bitmap;
+        }
+        catch (Exception e) {
+            Log.e("Convert", e.getMessage());
+            return null;
+        }
     }
 }

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import no.miles.atmiles.employee.SearchResultModel;
 
@@ -118,6 +119,7 @@ public class EmployeeListActivity extends Activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, EmployeeDetailActivity.class);
             detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
     }
@@ -171,29 +173,39 @@ public class EmployeeListActivity extends Activity
         if(!searchString.isEmpty()) {
 
             //TODO: Remove after proper implementation
-            showToastOnUiThread(this, searchString);
+            //showToastOnUiThread(this, searchString);
 
             final String token = new AuthenticationHelper().getJsonWebToken(this);
 
+            //TODO: Get base from a more sentral place
             //TODO: Implement paging
-            String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query="+searchString;
+            String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query="+ URLEncoder.encode(searchString);
 
 
             //TODO: Save reference to be able to cancel if new search is started before the previous is completed
             new CallSearchApi().execute(searchUrl, token);
         }
         else{
-            //TODO: Clear search-results
+            emptyListOnUIThread();
         }
     }
 
-    private void showToastOnUiThread(final Activity activity, final String message){
+    private void emptyListOnUIThread()
+    {
         runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                ((EmployeeListFragment)getFragmentManager().findFragmentById(R.id.employee_list)).emptyEmployees();
             }
         });
+    }
 
+    private void updateListOnUIThread(final SearchResultModel data)
+    {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                ((EmployeeListFragment)getFragmentManager().findFragmentById(R.id.employee_list)).updateEmployees(data);
+            }
+        });
     }
 
     private class CallSearchApi extends AsyncTask<String, String, String> {
@@ -238,10 +250,7 @@ public class EmployeeListActivity extends Activity
                 //TODO: Log better
                 e.printStackTrace();
             }
-            String message = "Total: " + resultObject.Total;
-            showToastOnUiThread(EmployeeListActivity.this, message);
-
-            //TODO: Post object to Activity
+            updateListOnUIThread(resultObject);
         }
     }
 }

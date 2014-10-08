@@ -1,15 +1,15 @@
 package no.miles.atmiles;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.ListFragment;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.Arrays;
 
-import no.miles.atmiles.employee.EmployeeDummyContent;
-import no.miles.atmiles.employee.EmployeeItem;
+import no.miles.atmiles.employee.EmployeeAdapter;
+import no.miles.atmiles.employee.SearchResultModel;
 
 /**
  * A list fragment representing a list of Employees. This fragment
@@ -22,6 +22,7 @@ import no.miles.atmiles.employee.EmployeeItem;
  */
 public class EmployeeListFragment extends ListFragment {
 
+    private EmployeeAdapter employeeAdapter;
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
@@ -68,25 +69,32 @@ public class EmployeeListFragment extends ListFragment {
     public EmployeeListFragment() {
     }
 
+    public void updateEmployees(SearchResultModel data){
+        if(data != null) {
+            employeeAdapter.updateEmployees(Arrays.asList(data.Results));
+        }
+        else{
+            emptyEmployees();
+        }
+    }
+
+    public void emptyEmployees() {
+        employeeAdapter.emptyEmployees();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<EmployeeItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                EmployeeDummyContent.ITEMS));
-    }
+        employeeAdapter = new EmployeeAdapter(getActivity());
+        setListAdapter(employeeAdapter);
 
-    /*
-    Code to show image
-    byte[] decodedString = Base64.decode(json_my_img, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,
-                    0, decodedString.length);
-            imv_emp_imv.setImageBitmap(decodedByte);
-     */
+//        setListAdapter(new ArrayAdapter<EmployeeItem>(
+//                getActivity(),
+//                R.layout.listitem_search_result,
+//                R.id.employee_list_name,
+//                EmployeeDummyContent.ITEMS));
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -125,7 +133,7 @@ public class EmployeeListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(EmployeeDummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(employeeAdapter.getItem(position).GlobalId);
     }
 
     @Override
