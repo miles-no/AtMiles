@@ -54,11 +54,8 @@ namespace Contact.Domain.Aggregates
                         u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
                 return employeeLoginInfo != null ? employeeLoginInfo.Id : string.Empty;
             }
-            else
-            {
-                return string.Empty;
-            }
-            
+
+            return string.Empty;
         }
 
         public string GetUserIdByLoginId(Login login)
@@ -153,6 +150,23 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
+        public List<string> GetAllUserIdsForUsersNotInList(List<CvPartnerImportData> importData)
+        {
+            var userIds = new List<string>();
+            foreach (var employee in _employees)
+            {
+                if (importData.All(i => i.Email != employee.LoginId.Email))
+                {
+                    if (employee.Id != Constants.SystemUserId)
+                    {
+                        userIds.Add(employee.Id);
+                    }
+                }
+
+            }
+            return userIds;
+        }
+
         private bool OnlyOneCompanyAdminLeft()
         {
             return _companyAdmins.Count == 1;
@@ -169,14 +183,6 @@ namespace Contact.Domain.Aggregates
         public void RemoveEmployee(string employeeId)
         {
             _employees.RemoveAll(item => item.Id == employeeId);
-        }
-
-        private void CheckIfTryingToDisconnectSelf(Employee adminToBeRemoved, Person createdBy)
-        {
-            if (adminToBeRemoved.Id == createdBy.Identifier)
-            {
-                if (!IsCompanyAdmin(adminToBeRemoved.Id)) throw new NoAccessException("Cannot remove self");
-            }
         }
 
         [UsedImplicitly] //To keep resharper happy

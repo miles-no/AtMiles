@@ -61,12 +61,6 @@ namespace Contact.Domain.CommandHandlers
                         adminId = Services.IdService.CreateNewId();
                     }
 
-                    string email = string.Empty;
-                    if (adminInfo.LoginId != null)
-                    {
-                        email = adminInfo.LoginId.Email;
-                    }
-
                     admin.CreateNew(message.CompanyId, message.CompanyName, adminId, adminInfo.LoginId, adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName, message.CreatedBy, message.CorrelationId);
                     await _employeeRepository.SaveAsync(admin, Constants.NewVersion);
                     company.AddNewEmployeeToCompany(admin,message.CreatedBy, message.CorrelationId);
@@ -89,28 +83,50 @@ namespace Contact.Domain.CommandHandlers
 
             if (importData != null)
             {
-                //TODO: Remove users not in CV-Partner anymore
-                foreach (var cvPartnerImportData in importData)
+                await AddOrUpdateUsers(message, importData, company);
+
+                await RemoveUsersNotInCvPartnerAnyMore(message, company, importData);
+            }
+        }
+
+        private async Task AddOrUpdateUsers(ImportDataFromCvPartner message, List<CvPartnerImportData> importData, Company company)
+        {
+            foreach (var cvPartnerImportData in importData)
+            {
+                var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
+                var employee = await _employeeRepository.GetByIdAsync(userId);
+
+                if (employee == null)
                 {
-                    string userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
-                    var employee = await _employeeRepository.GetByIdAsync(userId);
-
-                    if (employee == null)
-                    {
-                        employee = new Employee();
-                        employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(),
-                            new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email),
-                            cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,
-                            message.CreatedBy, message.CorrelationId);
-
-                        company.AddNewEmployeeToCompany(employee, message.CreatedBy, message.CorrelationId);
-                        await _companyRepository.SaveAsync(company, Constants.IgnoreVersion);
-                    }
-
-                    employee.ImportData(company.Id, company.Name, cvPartnerImportData, message.CreatedBy, message.CorrelationId);
-
-                    await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
+                    employee = await AddNewUserFromImport(message, company, cvPartnerImportData);
                 }
+                
+                employee.ImportData(company.Id, company.Name, cvPartnerImportData, message.CreatedBy, message.CorrelationId);
+                await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
+            }
+        }
+
+        private async Task<Employee> AddNewUserFromImport(ImportDataFromCvPartner message, Company company,
+            CvPartnerImportData cvPartnerImportData)
+        {
+            var employee = new Employee();
+            employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(),
+                new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email),
+                cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,
+                message.CreatedBy, message.CorrelationId);
+
+            company.AddNewEmployeeToCompany(employee, message.CreatedBy, message.CorrelationId);
+            await _companyRepository.SaveAsync(company, Constants.IgnoreVersion);
+            return employee;
+        }
+
+        private async Task RemoveUsersNotInCvPartnerAnyMore(ImportDataFromCvPartner message, Company company, List<CvPartnerImportData> importData)
+        {
+            var userIdList = company.GetAllUserIdsForUsersNotInList(importData);
+            foreach (var userId in userIdList)
+            {
+                var employee = await _employeeRepository.GetByIdAsync(userId);
+                company.RemoveEmployee(employee, message.CreatedBy, message.CorrelationId);
             }
         }
     }
