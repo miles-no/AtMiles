@@ -29,57 +29,17 @@ import java.net.URLEncoder;
 
 import no.miles.atmiles.employee.SearchResultModel;
 
-
-/**
- * An activity representing a list of Employees. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link EmployeeDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- * <p>
- * The activity makes heavy use of fragments. The list of items is a
- * {@link EmployeeListFragment} and the item details
- * (if present) is a {@link EmployeeDetailFragment}.
- * <p>
- * This activity also implements the required
- * {@link EmployeeListFragment.Callbacks} interface
- * to listen for item selections.
- */
 public class EmployeeListActivity extends Activity
         implements EmployeeListFragment.Callbacks, OnSearchStringChangeListener {
-
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_list);
 
-        if (findViewById(R.id.employee_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-large and
-            // res/values-sw600dp). If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            ((EmployeeListFragment) getFragmentManager()
-                    .findFragmentById(R.id.employee_list))
-                    .setActivateOnItemClick(true);
-        }
-
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             restoreState(savedInstanceState);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     @Override
@@ -102,26 +62,9 @@ public class EmployeeListActivity extends Activity
      */
     @Override
     public void onItemSelected(String id) {
-        if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(EmployeeDetailFragment.ARG_ITEM_ID, id);
-            EmployeeDetailFragment fragment = new EmployeeDetailFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.employee_detail_container, fragment)
-                    .commit();
-
-        } else {
-            // In single-pane mode, simply start the detail activity
-            // for the selected item ID.
-            Intent detailIntent = new Intent(this, EmployeeDetailActivity.class);
-            detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
-            detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);
-        }
+        Intent detailIntent = new Intent(this, EmployeeDetailActivity.class);
+        detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
+        startActivity(detailIntent);
     }
 
     @Override
@@ -129,7 +72,7 @@ public class EmployeeListActivity extends Activity
         boolean handled = true;
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             case R.id.action_menu_favorites:
                 startActivity(new Intent(this, FavoritesActivity.class));
                 break;
@@ -146,11 +89,9 @@ public class EmployeeListActivity extends Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent authActivityResult) {
         super.onActivityResult(requestCode, resultCode, authActivityResult);
 
-        switch(requestCode)
-        {
+        switch (requestCode) {
             case AuthenticationActivity.AUTH_REQUEST_COMPLETE:
-                if(resultCode!=RESULT_OK)
-                {
+                if (resultCode != RESULT_OK) {
                     Toast.makeText(this, "Not able to sign in", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -170,59 +111,57 @@ public class EmployeeListActivity extends Activity
 
     @Override
     public void OnSearchStringChanged(String searchString) {
-        if(!searchString.isEmpty()) {
+        if (!searchString.isEmpty()) {
 
             //TODO: Remove after proper implementation
             //showToastOnUiThread(this, searchString);
 
             final String token = new AuthenticationHelper().getJsonWebToken(this);
 
-            //TODO: Get base from a more sentral place
+            //TODO: Get base from a more central place
             //TODO: Implement paging
-            String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query="+ URLEncoder.encode(searchString);
+            //String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query=" + URLEncoder.encode(searchString);
+            String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query=" + URLEncoder.encode(searchString)+"&take=200";
 
 
             //TODO: Save reference to be able to cancel if new search is started before the previous is completed
             new CallSearchApi().execute(searchUrl, token);
-        }
-        else{
+        } else {
             emptyListOnUIThread();
         }
     }
 
-    private void emptyListOnUIThread()
-    {
+    private void emptyListOnUIThread() {
         runOnUiThread(new Runnable() {
             public void run() {
-                ((EmployeeListFragment)getFragmentManager().findFragmentById(R.id.employee_list)).emptyEmployees();
+                ((EmployeeListFragment) getFragmentManager().findFragmentById(R.id.employee_list)).emptyEmployees();
             }
         });
     }
 
-    private void updateListOnUIThread(final SearchResultModel data)
-    {
+    private void updateListOnUIThread(final SearchResultModel data) {
         runOnUiThread(new Runnable() {
             public void run() {
-                ((EmployeeListFragment)getFragmentManager().findFragmentById(R.id.employee_list)).updateEmployees(data);
+                ((EmployeeListFragment) getFragmentManager().findFragmentById(R.id.employee_list)).updateEmployees(data);
             }
         });
     }
 
+
+    //TODO: Move to service
     private class CallSearchApi extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... params) {
-            String urlString=params[0]; // URL to call
-            String token=params[1]; // JWT
+            String urlString = params[0]; // URL to call
+            String token = params[1]; // JWT
 
             String resultToDisplay = "";
             InputStream in = null;
-
-// HTTP Get
             try {
                 URL url = new URL(urlString);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestProperty("Authorization", "Bearer "+token);
+                urlConnection.setRequestProperty("Authorization", "Bearer " + token);
                 in = new BufferedInputStream(urlConnection.getInputStream());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -233,7 +172,7 @@ public class EmployeeListActivity extends Activity
                 }
                 resultToDisplay = out.toString();
                 reader.close();
-            } catch (Exception e ) {
+            } catch (Exception e) {
                 //TODO: Log better
                 System.out.println(e.getMessage());
                 return e.getMessage();

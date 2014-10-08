@@ -4,7 +4,6 @@ public class EmployeeDetailsResponse {
     public String Id;
     public String GlobalId;
     public String CompanyId;
-    public String OfficeId;
     public String OfficeName;
     public String Name;
     public String DateOfBirth;
@@ -35,7 +34,7 @@ public class EmployeeDetailsResponse {
         public String Comment;
     }
 
-    public class Description
+    public static class Description
     {
         public String InternationalDescription;
         public String LocalDescription;
