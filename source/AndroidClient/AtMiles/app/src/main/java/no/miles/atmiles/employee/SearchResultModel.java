@@ -21,14 +21,9 @@ public class SearchResultModel {
         public String PhoneNumber;
         public String Email;
         public String Thumb;
-        public Tag[] Competency;
-
-        public static class Tag {
-            public String Category;
-            public String Competency;
-            public String InternationalCategory;
-            public String InternationalCompentency;
-        }
+        public String Address_Street;
+        public String Address_PostalCode;
+        public String Address_PostalName;
     }
 }
 
