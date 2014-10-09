@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
@@ -32,7 +33,7 @@ namespace Contact.Backend
                 var resSearch = engine.FulltextSearch(s.Query, s.Take, s.Skip, out total);
 
                 var res = new SearchResultModel {Skipped = s.Skip, Total = total};
-                res.Results = Mapper.Map<List<EmployeeSearchModel>,List<Result>>(resSearch);
+                res.Results = Convert(resSearch);
                 
                 return res;
 
@@ -74,6 +75,37 @@ namespace Contact.Backend
             });
 
             return mediator;
+        }
+
+        private static List<Result> Convert(IEnumerable<EmployeeSearchModel> busyTimeEnties)
+        {
+            var result = new List<Result>();
+            if (busyTimeEnties != null)
+            {
+                foreach (var entry in busyTimeEnties)
+                {
+                    var convertedEntry = new Result
+                    {
+                        CompanyId = entry.CompanyId,
+                        OfficeName = entry.OfficeName,
+                        GlobalId = entry.GlobalId,
+                        Name = entry.Name,
+                        DateOfBirth = entry.DateOfBirth,
+                        JobTitle = entry.JobTitle,
+                        PhoneNumber = entry.PhoneNumber,
+                        Email = entry.Email,
+                        Thumb = entry.Thumb
+                    };
+                    if (entry.PrivateAddress != null)
+                    {
+                        convertedEntry.Address_Street = entry.PrivateAddress.Street;
+                        convertedEntry.Address_PostalCode = entry.PrivateAddress.PostalCode;
+                        convertedEntry.Address_PostalName = entry.PrivateAddress.PostalName;
+                    }
+                    result.Add(convertedEntry);
+                }
+            }
+            return result;
         }
 
         private static GetCompanyAdminsResponse Convert(IEnumerable<UserLookupModel> busyTimeEnties)

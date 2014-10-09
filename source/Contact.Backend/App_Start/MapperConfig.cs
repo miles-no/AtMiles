@@ -22,11 +22,9 @@ namespace Contact.Backend
     {
         protected override void Configure()
         {
-            Mapper.CreateMap<EmployeeSearchModel, Result>();
             Mapper.CreateMap<EmployeeSearchModel, EmployeeDetailsResponse>();
             Mapper.CreateMap<EmployeeSearchModel.BusyTime, EmployeeDetailsResponse.BusyTime>();
-            Mapper.CreateMap<EmployeeSearchModel.Description, EmployeeDetailsResponse.Description>(); 
-            Mapper.CreateMap<Tag, Models.Api.Search.Tag>();
+            Mapper.CreateMap<EmployeeSearchModel.Description, EmployeeDetailsResponse.Description>();
         }
     }
 }
