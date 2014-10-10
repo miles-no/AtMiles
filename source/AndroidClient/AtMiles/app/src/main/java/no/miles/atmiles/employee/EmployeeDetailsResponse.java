@@ -10,7 +10,7 @@ public class EmployeeDetailsResponse {
     public String JobTitle;
     public String PhoneNumber;
     public String Email;
-    public String Address;
+    public Address PrivateAddress;
     public String Thumb;
     public Tag[] Competency;
     public BusyTime[] BusyTimeEntries;
@@ -38,5 +38,11 @@ public class EmployeeDetailsResponse {
     {
         public String InternationalDescription;
         public String LocalDescription;
+    }
+
+    public static class Address {
+        public String Street;
+        public String PostalCode;
+        public String PostalName;
     }
 }
