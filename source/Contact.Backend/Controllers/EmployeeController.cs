@@ -1,27 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Busy;
 using Contact.Backend.Models.Api.Employee;
 using Contact.Backend.Models.Api.Tasks;
 using Contact.Backend.Utilities;
+using Contact.Domain;
+using Contact.Domain.Commands;
+using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
+using Contact.ReadStore.BusyTimeStore;
+using Contact.ReadStore.SearchStore;
 
 namespace Contact.Backend.Controllers
 {
     [Authorize]
     public class EmployeeController : ApiController
     {
-        private readonly IMediator _mediator;
         private readonly IResolveUserIdentity _identityResolver;
+        private readonly IResolveNameOfUser _nameResolver;
+        private readonly ICommandSender _commandSender;
+        private readonly BusyTimeEngine _busyTimeEngine;
+        private readonly EmployeeSearchEngine _employeeEngine;
 
-        public EmployeeController(IMediator mediator, IResolveUserIdentity identityResolver)
+        public EmployeeController(IResolveUserIdentity identityResolver, IResolveNameOfUser nameResolver, ICommandSender commandSender, BusyTimeEngine busyTimeEngine, EmployeeSearchEngine employeeEngine)
         {
-            _mediator = mediator;
             _identityResolver = identityResolver;
+            _nameResolver = nameResolver;
+            _commandSender = commandSender;
+            _busyTimeEngine = busyTimeEngine;
+            _employeeEngine = employeeEngine;
         }
 
         [HttpGet]
@@ -29,9 +40,9 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage GetEmployeeDetails(string employeeId)
         {
-            var res =
-                _mediator.Send<EmployeeDetailsRequest, EmployeeDetailsResponse>(
-                    new EmployeeDetailsRequest {EmployeeId = employeeId}, User.Identity);
+            var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
+            var res = Convert(employee);
+
             if (Helpers.UserHasAccessToCompany(User.Identity, res.CompanyId, _identityResolver) == false)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
@@ -45,8 +56,10 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(BusyTimeResponse))]
         public BusyTimeResponse GetBusyTime(string companyId)
         {
-            var request = new BusyTimeRequest(Request) {  };
-            return _mediator.Send<BusyTimeRequest, BusyTimeResponse>(request, User.Identity);
+
+            var employeeId = Helpers.GetUserIdentity(User.Identity);
+            var data = _busyTimeEngine.GetBusyTime(employeeId);
+            return Convert(data);
         }
 
         [HttpPost]
@@ -54,8 +67,18 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage AddBusyTime(string companyId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
-            var request = new AddBusyTimeRequest(Request) { CompanyId = companyId, Start = start, End = end, PercentageOccupied = percentageOccupied, Comment = comment};
-            return _mediator.Send<AddBusyTimeRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new AddBusyTime(companyId, createdBy.Identifier, start, end, percentageOccupied, comment, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         [HttpDelete]
@@ -63,8 +86,17 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage RemoveBusyTime(string companyId, string busyTimeId)
         {
-            var request = new RemoveBusyTimeRequest(Request) { CompanyId = companyId, BustTimeEntryId = busyTimeId };
-            return _mediator.Send<RemoveBusyTimeRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new RemoveBusyTime(companyId, createdBy.Identifier, busyTimeId, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -72,8 +104,18 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage UpdateBusyTimeNewEnd(string companyId, string busyTimeId, DateTime? newend)
         {
-            var request = new UpdateBusyTimeSetEndRequest(Request) { CompanyId = companyId, BustTimeEntryId = busyTimeId, NewEnd = newend };
-            return _mediator.Send<UpdateBusyTimeSetEndRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new UpdateBusyTimeSetEndDate(companyId, createdBy.Identifier, busyTimeId, newend, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -81,8 +123,17 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage UpdateBusyTimeChangePercentage(string companyId, string busyTimeId, short newpercentageOccupied)
         {
-            var request = new UpdateBusyTimeChangePercentageRequest(Request) { CompanyId = companyId, BustTimeEntryId = busyTimeId, NewPercentageOccupied = newpercentageOccupied};
-            return _mediator.Send<UpdateBusyTimeChangePercentageRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new UpdateBusyTimeChangePercentage(companyId, createdBy.Identifier, busyTimeId, newpercentageOccupied, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -90,17 +141,37 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage ConfirmBusyTimeEntries(string companyId)
         {
-            var request = new ConfirmBusyTimeEntriesRequest(Request) { CompanyId = companyId };
-            return _mediator.Send<ConfirmBusyTimeEntriesRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new ConfirmBusyTimeEntries(companyId, createdBy.Identifier, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("api/company/{companyId}/employee/setdateofbirth")]
         [ResponseType(typeof(Response))]
-        public HttpResponseMessage SetPrivateAddress(string companyId, DateTime dateOfBirth)
+        public HttpResponseMessage SetDateOfBirth(string companyId, DateTime dateOfBirth)
         {
-            var request = new SetDateOfBirthRequest(Request) { CompanyId = companyId, DateOfBirth = dateOfBirth};
-            return _mediator.Send<SetDateOfBirthRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new SetDateOfBirth(companyId, createdBy.Identifier, dateOfBirth, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -108,8 +179,141 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage SetPrivateAddress(string companyId, string street, string postalcode, string postalname)
         {
-            var request = new SetPrivateAddressRequest(Request) { CompanyId = companyId, Street = street, PostalCode = postalcode, PostalName = postalname };
-            return _mediator.Send<SetPrivateAddressRequest, HttpResponseMessage>(request, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
+                var command = new SetPrivateAddress(companyId, createdBy.Identifier, new Address(street, postalcode, postalname), DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
+        }
+
+        private static BusyTimeResponse Convert(BusyTimeModel data)
+        {
+            if (data == null) return null;
+            var response = new BusyTimeResponse();
+            response.ExpiryDate = data.ExpiryDate;
+            response.BusyTimeEntries = new List<BusyTimeResponse.BusyTime>();
+            if (data.BusyTimeEntries != null)
+            {
+                foreach (var busyTimeEntry in data.BusyTimeEntries)
+                {
+                    var time = Convert(busyTimeEntry);
+                    if (time != null)
+                    {
+                        response.BusyTimeEntries.Add(time);
+                    }
+                }
+            }
+            return response;
+        }
+
+        private static BusyTimeResponse.BusyTime Convert(BusyTimeModel.BusyTime busyTimeEntry)
+        {
+            if (busyTimeEntry == null) return null;
+            var time = new BusyTimeResponse.BusyTime
+            {
+                Id = busyTimeEntry.Id,
+                Start = busyTimeEntry.Start,
+                End = busyTimeEntry.End,
+                PercentageOccupied = busyTimeEntry.PercentageOccupied,
+                Comment = busyTimeEntry.Comment
+            };
+
+            return time;
+        }
+
+        private static EmployeeDetailsResponse Convert(EmployeeSearchModel searchResult)
+        {
+            var response = new EmployeeDetailsResponse();
+            if (searchResult != null)
+            {
+                response.Id = searchResult.Id;
+                response.GlobalId = searchResult.GlobalId;
+                response.CompanyId = searchResult.CompanyId;
+                response.OfficeName = searchResult.OfficeName;
+                response.Name = searchResult.Name;
+                response.DateOfBirth = searchResult.DateOfBirth;
+                response.JobTitle = searchResult.JobTitle;
+                response.PhoneNumber = searchResult.PhoneNumber;
+                response.Email = searchResult.Email;
+                response.PrivateAddress = Convert(searchResult.PrivateAddress);
+                response.Thumb = searchResult.Thumb;
+                response.Competency = Convert(searchResult.Competency);
+                response.BusyTimeEntries = Convert(searchResult.BusyTimeEntries);
+                response.KeyQualifications = searchResult.KeyQualifications;
+                response.Descriptions = Convert(searchResult.Descriptions);
+                response.Score = searchResult.Score;
+            }
+            return response;
+        }
+
+
+        private static List<EmployeeDetailsResponse.Description> Convert(IEnumerable<EmployeeSearchModel.Description> i)
+        {
+            var o = new List<EmployeeDetailsResponse.Description>();
+
+            if (i != null)
+            {
+                foreach (var description in i)
+                {
+                    o.Add(new EmployeeDetailsResponse.Description { LocalDescription = description.LocalDescription, InternationalDescription = description.InternationalDescription });
+                }
+            }
+
+            return o;
+        }
+
+        private static List<EmployeeDetailsResponse.BusyTime> Convert(IEnumerable<EmployeeSearchModel.BusyTime> i)
+        {
+            var o = new List<EmployeeDetailsResponse.BusyTime>();
+            if (i != null)
+            {
+                foreach (var busyTime in i)
+                {
+                    o.Add(new EmployeeDetailsResponse.BusyTime
+                    {
+                        Id = busyTime.Id,
+                        Start = busyTime.Start,
+                        End = busyTime.End,
+                        PercentageOccupied = busyTime.PercentageOccupied,
+                        Comment = busyTime.Comment
+                    });
+                }
+            }
+
+            return o;
+        }
+
+        private static EmployeeDetailsResponse.Tag[] Convert(IEnumerable<Tag> i)
+        {
+            var o = new List<EmployeeDetailsResponse.Tag>();
+            if (i != null)
+            {
+                foreach (var tag in i)
+                {
+                    o.Add(new EmployeeDetailsResponse.Tag { Category = tag.Category, Competency = tag.Competency, InternationalCompentency = tag.InternationalCompentency, InternationalCategory = tag.InternationalCategory });
+                }
+            }
+            return o.ToArray();
+        }
+
+        private static EmployeeDetailsResponse.Address Convert(EmployeeSearchModel.Address i)
+        {
+            var o = new EmployeeDetailsResponse.Address();
+            if (i != null)
+            {
+                o.Street = i.Street;
+                o.PostalCode = i.PostalCode;
+                o.PostalName = i.PostalName;
+            }
+
+            return o;
         }
     }
 }

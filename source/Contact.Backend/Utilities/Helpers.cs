@@ -7,6 +7,8 @@ using System.Security.Principal;
 using System.Web;
 using Contact.Backend.Models.Api.Status;
 using Contact.Backend.Models.Api.Tasks;
+using Contact.Domain;
+using Contact.Domain.ValueTypes;
 using Contact.Infrastructure;
 
 namespace Contact.Backend.Utilities
@@ -82,6 +84,20 @@ namespace Contact.Backend.Utilities
         {
             // This doesnt really make sense before we have more than one company
             return companyId == _companyId;
+        }
+
+        public static Person GetCreatedBy(string companyId, IIdentity user, IResolveNameOfUser nameResolver)
+        {
+            var userId = Helpers.GetUserIdentity(user);
+            var name = nameResolver.ResolveUserNameById(companyId, userId);
+            return new Person(userId, name);
+        }
+
+        public static HttpResponseMessage Send(HttpRequestMessage request, ICommandSender sender, Command command)
+        {
+            sender.Send(command);
+            var response = Helpers.CreateResponse(request, command.CorrelationId);
+            return response;
         }
     }
 }

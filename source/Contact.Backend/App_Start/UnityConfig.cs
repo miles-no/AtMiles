@@ -25,7 +25,6 @@ namespace Contact.Backend
             container.RegisterType<SearchController>();
             container.RegisterType<StatusController>();
             container.RegisterInstance(typeof(IDocumentStore), RavenDocumentStore.CreateStore(config.RavenDbUrl));
-            container.RegisterInstance(MediatorConfig.Create(container));
             container.RegisterType<EmployeeSearchEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<CommandStatusEngine>(new ContainerControlledLifetimeManager());
             container.RegisterType<BusyTimeEngine>(new ContainerControlledLifetimeManager());

@@ -40,6 +40,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -152,7 +153,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\MediatorConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -161,9 +161,6 @@
     <Compile Include="Controllers\RootController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
-    <Compile Include="DomainHandlers\Handlers.cs" />
-    <Compile Include="Infrastructure\IMediator.cs" />
-    <Compile Include="Infrastructure\Mediator.cs" />
     <Compile Include="Models\Api\Admins\GetCompanyAdminsRequest.cs" />
     <Compile Include="Models\Api\Admins\GetCompanyAdminsResponse.cs" />
     <Compile Include="Models\Api\Busy\BusyTimeRequest.cs" />
@@ -211,7 +208,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DomainHandlers\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

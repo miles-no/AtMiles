@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Admins;
 using Contact.Backend.Models.Api.Tasks;
+using Contact.Backend.Utilities;
+using Contact.Domain;
+using Contact.Domain.Commands;
+using Contact.Infrastructure;
+using Contact.ReadStore.UserStore;
 
 namespace Contact.Backend.Controllers
 {
@@ -13,11 +19,15 @@ namespace Contact.Backend.Controllers
     [Authorize]
     public class AdminController : ApiController
     {
-        private readonly IMediator _mediator;
+        private readonly IResolveNameOfUser _nameResolver;
+        private readonly ICommandSender _commandSender;
+        private readonly UserLookupEngine _engine;
 
-        public AdminController(IMediator mediator)
+        public AdminController(IResolveNameOfUser nameResolver, ICommandSender commandSender, UserLookupEngine engine)
         {
-            this._mediator = mediator;
+            _nameResolver = nameResolver;
+            _commandSender = commandSender;
+            _engine = engine;
         }
 
         [HttpPost]
@@ -25,9 +35,18 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage ImportFromCvPartner(string companyId)
         {
-            //HttpResponseMessage 
-            var importRequest = new ImportFromCvPartnerRequest(Request) { CompanyId = companyId };
-            return _mediator.Send<ImportFromCvPartnerRequest, HttpResponseMessage>(importRequest, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+            try
+            {
+                var command = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver), correlationId, Constants.IgnoreVersion);
+
+                return Helpers.Send(Request, _commandSender, command);
+
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
             
         }
 
@@ -36,8 +55,8 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public GetCompanyAdminsResponse GetAllAdmins(string companyId)
         {
-            var getCompanyAdmins = new GetCompanyAdminsRequest(Request){CompanyId = companyId};
-            return _mediator.Send<GetCompanyAdminsRequest, GetCompanyAdminsResponse>(getCompanyAdmins, User.Identity);
+            var data = _engine.GetAllCompanyAdmins(companyId);
+            return Convert(data);
         }
 
         /// <summary>
@@ -51,8 +70,18 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage AddAdmin(string companyId, string employeeId)
         {
-            var addCompanyAdminRequest = new AddCompanyAdminRequest(Request) { CompanyId = companyId, NewAdminId = employeeId };
-            return _mediator.Send<AddCompanyAdminRequest, HttpResponseMessage>(addCompanyAdminRequest, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var command = new AddCompanyAdmin(companyId, employeeId, DateTime.UtcNow, Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver), correlationId, Constants.IgnoreVersion);
+
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
         }
 
         /// <summary>
@@ -66,8 +95,31 @@ namespace Contact.Backend.Controllers
         [ResponseType(typeof(Response))]
         public HttpResponseMessage RemoveAdmin(string companyId, string adminId)
         {
-            var removeCompanyAdminRequest = new RemoveCompanyAdminRequest(Request) { CompanyId = companyId, AdminId = adminId };
-            return _mediator.Send<RemoveCompanyAdminRequest, HttpResponseMessage>(removeCompanyAdminRequest, User.Identity);
+            string correlationId = Helpers.CreateNewId();
+
+            try
+            {
+                var command = new RemoveCompanyAdmin(companyId, adminId, DateTime.UtcNow, Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver), correlationId, Constants.IgnoreVersion);
+
+                return Helpers.Send(Request, _commandSender, command);
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
+        }
+
+        private static GetCompanyAdminsResponse Convert(IEnumerable<UserLookupModel> i)
+        {
+            var response = new GetCompanyAdminsResponse { Admins = new List<GetCompanyAdminsResponse.Admin>() };
+            if (i != null)
+            {
+                foreach (var userLookupModel in i)
+                {
+                    response.Admins.Add(new GetCompanyAdminsResponse.Admin { Id = userLookupModel.GlobalId, Name = userLookupModel.Name });
+                }
+            }
+            return response;
         }
     }
 }

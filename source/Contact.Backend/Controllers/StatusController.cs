@@ -1,17 +1,17 @@
 ﻿using System.Web.Http;
-using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Status;
+using Contact.ReadStore.SessionStore;
 
 namespace Contact.Backend.Controllers
 {
     [Authorize]
     public class StatusController : ApiController
     {
-        private readonly IMediator mediator;
+        private readonly CommandStatusEngine _engine;
 
-        public StatusController(IMediator mediator)
+        public StatusController(CommandStatusEngine engine)
         {
-            this.mediator = mediator;
+            _engine = engine;
         }
 
         /// <summary>
@@ -21,9 +21,15 @@ namespace Contact.Backend.Controllers
         [Route("api/status/{id}")]
         public StatusResponse Get(string id)
         {
-            return mediator.Send<StatusRequest, StatusResponse>(new StatusRequest {Id = id, SenderUrl = Request.RequestUri.AbsoluteUri}, User.Identity);
+
+            var res = _engine.GetStatus(id);
+            return new StatusResponse
+            {
+                Id = id,
+                Status = res.Status,
+                ErrorMessage = res.ErrorMessage,
+                Url = Request.RequestUri.AbsoluteUri
+            };
         }
-         
     }
-   
 }
