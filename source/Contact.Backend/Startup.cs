@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using System.Web.Mvc;
 using Contact.Backend.Properties;
 using Contact.Backend.Utilities;
 using Contact.Domain;
@@ -17,7 +18,7 @@ namespace Contact.Backend
         {
             var config = Contact.Infrastructure.Configuration.ConfigManager.GetConfig(Settings.Default.ConfigFile);
 
-            //AreaRegistration.RegisterAllAreas();
+            AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             Helpers.Initialize(config.CompanyId, config.StatusEndpointUrl);
