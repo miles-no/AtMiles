@@ -1,6 +1,4 @@
 ﻿using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Optimization;
 using System.Web.Routing;
 using Contact.Backend.Properties;
 using Contact.Backend.Utilities;
@@ -20,11 +18,8 @@ namespace Contact.Backend
         {
             var config = Contact.Infrastructure.Configuration.ConfigManager.GetConfig(Settings.Default.ConfigFile);
 
-            AreaRegistration.RegisterAllAreas();
+            //AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Helpers.Initialize(config.CompanyId, config.StatusEndpointUrl);
             var container = UnityConfig.RegisterComponents(config);
