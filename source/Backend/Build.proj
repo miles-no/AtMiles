@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--EXTERNAL_PROPERTIES: DeployDir-->
+<!--EXTERNAL_PROPERTIES: OutputPathWebFiles;WebSiteName-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	
+	<Target Name="Clean">
+    <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))" />
+  </Target>
+  
+  <Target Name="BuildSolution" DependsOnTargets="SetVersions;Clean">
+    <MSBuild Projects="$(SolutionFileName)" Properties="Configuration=Release;OutputPath=$(OutputPath)" />
+  </Target>
+
+  <Target Name="RunTests" DependsOnTargets="BuildSolution">
+
+    <ItemGroup>
+      <TestDLLs Include="$(OutputPath)\*Test.dll" />
+    </ItemGroup>
+
+    <Exec Command="MSTest.exe @(TestDLLs->'/testcontainer:%(FullPath)', ' ')" 
+          IgnoreExitCode="false" 
+          WorkingDirectory="$(OutputPath)">
+      <Output PropertyName="TestSuccess" TaskParameter="ExitCode"/>
+    </Exec>
+    
+    <Error Condition="TestSuccess == false" />
+           
+
+  </Target>
+  
+  <Target Name="SetVersions">
+    <ItemGroup>
+      <AssemblyInfoFiles Include="$(ProjectDir)\**\AssemblyInfo.cs" />
+    </ItemGroup>
+
+    <MSBuild.ExtensionPack.Framework.AssemblyInfo AssemblyInfoFiles="@(AssemblyInfoFiles)"
+                                              AssemblyFileMajorVersion="$(MajorVersion)"
+                                              AssemblyFileMinorVersion="$(MinorVersion)" />
+
+  </Target>
+
+  <Target Name="Deploy" DependsOnTargets="BuildSolution">
+    
+    <!-- make the pysical dir if it isn't there -->
+    <MakeDir Directories="$(DeployDir)" Condition="!Exists($(DeployDir))" />
+
+    <!-- copy physical files -->
+    <MSBuild.ExtensionPack.FileSystem.RoboCopy Source="$(OutputPathWebFiles)" Destination="$(DeployDir)" Files="*.*" Options="/E /PURGE" />
+
+  </Target>
+
+  <Import Project="Common.targets"/>
+  <Import Project="C:\Program Files\MSBuild\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks"/>
+
+</Project>
