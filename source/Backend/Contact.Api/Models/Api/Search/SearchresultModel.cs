@@ -28,8 +28,13 @@ namespace Contact.Backend.Models.Api.Search
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Thumb { get; set; }
-        public string Address_Street { get; set; }
-        public string Address_PostalCode { get; set; }
-        public string Address_PostalName { get; set; }
+        public Address PrivateAddress { get; set; }
+
+        public class Address
+        {
+            public string Street { get; set; }
+            public string PostalCode { get; set; }
+            public string PostalName { get; set; }
+        }
     }
 }

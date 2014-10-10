@@ -21,10 +21,15 @@ public class SearchResultModel {
         public String PhoneNumber;
         public String Email;
         public String Thumb;
-        public String Address_Street;
-        public String Address_PostalCode;
-        public String Address_PostalName;
+        public Address PrivateAddress;
     }
+
+    public static class Address {
+        public String Street;
+        public String PostalCode;
+        public String PostalName;
+    }
+
 }
 
 

@@ -51,13 +51,14 @@ namespace Contact.Backend.Controllers
                         JobTitle = entry.JobTitle,
                         PhoneNumber = entry.PhoneNumber,
                         Email = entry.Email,
-                        Thumb = entry.Thumb
+                        Thumb = entry.Thumb,
+                        PrivateAddress = new Result.Address()
                     };
                     if (entry.PrivateAddress != null)
                     {
-                        convertedEntry.Address_Street = entry.PrivateAddress.Street;
-                        convertedEntry.Address_PostalCode = entry.PrivateAddress.PostalCode;
-                        convertedEntry.Address_PostalName = entry.PrivateAddress.PostalName;
+                        convertedEntry.PrivateAddress.Street = entry.PrivateAddress.Street;
+                        convertedEntry.PrivateAddress.PostalCode = entry.PrivateAddress.PostalCode;
+                        convertedEntry.PrivateAddress.PostalName = entry.PrivateAddress.PostalName;
                     }
                     result.Add(convertedEntry);
                 }
