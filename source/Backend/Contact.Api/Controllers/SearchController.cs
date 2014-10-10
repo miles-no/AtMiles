@@ -16,7 +16,7 @@ namespace Contact.Backend.Controllers
         }
 
         [HttpGet]
-        [Route("api/search")]
+        [Route("api/search/Fulltext")]
         public SearchResultModel Fulltext(string query, int? skip = 0, int? take = 10)
         {
             var request = new SearchRequestModel {Query = query, Skip = skip ?? 0, Take = take ?? 10};
