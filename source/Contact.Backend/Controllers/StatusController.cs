@@ -4,7 +4,6 @@ using Contact.Backend.Models.Api.Status;
 
 namespace Contact.Backend.Controllers
 {
-
     [Authorize]
     public class StatusController : ApiController
     {
@@ -19,6 +18,7 @@ namespace Contact.Backend.Controllers
         /// Gets the status of a request
         /// </summary>
         /// <param name="id"></param>
+        [Route("api/status/{id}")]
         public StatusResponse Get(string id)
         {
             return mediator.Send<StatusRequest, StatusResponse>(new StatusRequest {Id = id, SenderUrl = Request.RequestUri.AbsoluteUri}, User.Identity);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using System.Collections.Generic;
 using Contact.Backend.DomainHandlers;
 using Contact.Backend.Infrastructure;
 using Contact.Backend.Models.Api.Admins;
@@ -56,7 +54,7 @@ namespace Contact.Backend
             {
                 var engine = container.Resolve<EmployeeSearchEngine>();
                 var employee = engine.GetEmployeeSearchModel(request.EmployeeId);
-                return Mapper.Map<EmployeeSearchModel, EmployeeDetailsResponse>(employee);
+                return Convert(employee);
             });
 
             mediator.Subscribe<BusyTimeRequest, BusyTimeResponse>((request, user) =>
@@ -75,6 +73,96 @@ namespace Contact.Backend
             });
 
             return mediator;
+        }
+
+        private static EmployeeDetailsResponse Convert(EmployeeSearchModel searchResult)
+        {
+            EmployeeDetailsResponse response = new EmployeeDetailsResponse();
+
+            if (searchResult != null)
+            {
+                response.Id = searchResult.Id;
+                response.GlobalId = searchResult.GlobalId;
+                response.CompanyId = searchResult.CompanyId;
+                response.OfficeName = searchResult.OfficeName;
+                response.Name = searchResult.Name;
+                response.DateOfBirth = searchResult.DateOfBirth;
+                response.JobTitle = searchResult.JobTitle;
+                response.PhoneNumber = searchResult.PhoneNumber;
+                response.Email = searchResult.Email;
+                response.PrivateAddress = Convert(searchResult.PrivateAddress);
+                response.Thumb = searchResult.Thumb;
+                response.Competency = Convert(searchResult.Competency);
+                response.BusyTimeEntries = Convert(searchResult.BusyTimeEntries);
+                response.KeyQualifications = searchResult.KeyQualifications;
+                response.Descriptions = Convert(searchResult.Descriptions);
+                response.Score = searchResult.Score;
+            }
+
+
+            return response;
+        }
+
+        private static List<EmployeeDetailsResponse.Description> Convert(IEnumerable<EmployeeSearchModel.Description> i)
+        {
+            var o = new List<EmployeeDetailsResponse.Description>();
+
+            if (i != null)
+            {
+                foreach (var description in i)
+                {
+                    o.Add(new EmployeeDetailsResponse.Description {LocalDescription = description.LocalDescription, InternationalDescription = description.InternationalDescription});
+                }
+            }
+
+            return o;
+        }
+
+        private static List<EmployeeDetailsResponse.BusyTime> Convert(IEnumerable<EmployeeSearchModel.BusyTime> i)
+        {
+            var o = new List<EmployeeDetailsResponse.BusyTime>();
+            if (i != null)
+            {
+                foreach (var busyTime in i)
+                {
+                    o.Add(new EmployeeDetailsResponse.BusyTime
+                    {
+                        Id = busyTime.Id,
+                        Start = busyTime.Start,
+                        End = busyTime.End,
+                        PercentageOccupied = busyTime.PercentageOccupied,
+                        Comment = busyTime.Comment
+                    });
+                }
+            }
+
+            return o;
+        }
+
+        private static EmployeeDetailsResponse.Tag[] Convert(IEnumerable<Tag> i)
+        {
+            var o = new List<EmployeeDetailsResponse.Tag>();
+            if (i != null)
+            {
+                foreach (var tag in i)
+                {
+                    o.Add(new EmployeeDetailsResponse.Tag {Category = tag.Category, Competency = tag.Competency, InternationalCompentency = tag.InternationalCompentency, InternationalCategory = tag.InternationalCategory});
+                }
+            }
+            return o.ToArray();
+        }
+
+        private static EmployeeDetailsResponse.Address Convert(EmployeeSearchModel.Address i)
+        {
+            var o = new EmployeeDetailsResponse.Address();
+            if (i != null)
+            {
+                o.Street = i.Street;
+                o.PostalCode = i.PostalCode;
+                o.PostalName = i.PostalName;
+            }
+
+            return o;
         }
 
         private static List<Result> Convert(IEnumerable<EmployeeSearchModel> busyTimeEnties)
@@ -115,7 +203,7 @@ namespace Contact.Backend
             {
                 foreach (var userLookupModel in busyTimeEnties)
                 {
-                    response.Admins.Add(new GetCompanyAdminsResponse.Admin(){Id = userLookupModel.GlobalId, Name = userLookupModel.Name});
+                    response.Admins.Add(new GetCompanyAdminsResponse.Admin {Id = userLookupModel.GlobalId, Name = userLookupModel.Name});
                 }
             }
             return response;

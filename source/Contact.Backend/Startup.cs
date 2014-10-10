@@ -28,7 +28,6 @@ namespace Contact.Backend
 
             Helpers.Initialize(config.CompanyId, config.StatusEndpointUrl);
             var container = UnityConfig.RegisterComponents(config);
-            MapperConfig.Configure();
 
             var identityResolver = container.Resolve<IResolveUserIdentity>();
             var commandSender = container.Resolve<ICommandSender>();

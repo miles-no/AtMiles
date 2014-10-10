@@ -15,7 +15,7 @@ namespace Contact.Backend.Models.Api.Employee
         public string JobTitle { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
+        public Address PrivateAddress { get; set; }
         public string Thumb { get; set; }
         
         public Tag[] Competency { get; set; }
@@ -41,6 +41,21 @@ namespace Contact.Backend.Models.Api.Employee
         {
             public string InternationalDescription { get; set; }
             public string LocalDescription { get; set; }
-        } 
+        }
+
+        public class Address
+        {
+            public string Street { get; set; }
+            public string PostalCode { get; set; }
+            public string PostalName { get; set; }
+        }
+
+        public class Tag
+        {
+            public string Category;
+            public string Competency;
+            public string InternationalCompentency;
+            public string InternationalCategory;
+        }
     }
 }

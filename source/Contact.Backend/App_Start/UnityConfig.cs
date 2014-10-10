@@ -20,10 +20,10 @@ namespace Contact.Backend
             var container = new UnityContainer();
 
             container.RegisterType<AdminController>();
-            container.RegisterType<StatusController>();
-            container.RegisterType<TestController>();
-            container.RegisterType<HomeController>();
+            container.RegisterType<EmployeeController>();
+            container.RegisterType<RootController>();
             container.RegisterType<SearchController>();
+            container.RegisterType<StatusController>();
             container.RegisterInstance(typeof(IDocumentStore), RavenDocumentStore.CreateStore(config.RavenDbUrl));
             container.RegisterInstance(MediatorConfig.Create(container));
             container.RegisterType<EmployeeSearchEngine>(new ContainerControlledLifetimeManager());
