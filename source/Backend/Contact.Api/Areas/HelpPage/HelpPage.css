@@ -1,24 +1,11 @@
-.help-page h1,
-.help-page .h1,
-.help-page h2,
-.help-page .h2,
-.help-page h3,
-.help-page .h3,
-#body.help-page,
-.help-page-table th,
-.help-page-table pre,
-.help-page-table p {
-    font-family: "Segoe UI Light", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-}
-
-.help-page pre.wrapped {
+pre.wrapped {
     white-space: -moz-pre-wrap;
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     white-space: pre-wrap;
 }
 
-.help-page .warning-message-container {
+.warning-message-container {
     margin-top: 20px;
     padding: 0 10px;
     color: #525252;
@@ -28,27 +15,23 @@
 
 .help-page-table {
     width: 100%;
-    border-collapse: collapse;
     text-align: left;
     margin: 0px 0px 20px 0px;
-    border-top: 1px solid #D4D4D4;
+    border-top: 2px solid #D4D4D4;
+    border-collapse: separate;
+    border-spacing: 0px 10px;
 }
 
 .help-page-table th {
     text-align: left;
     font-weight: bold;
-    border-bottom: 1px solid #D4D4D4;
-    padding: 5px 6px 5px 6px;
+    border-bottom: 2px solid #D4D4D4;
+    padding: 8px 6px 8px 6px;
 }
 
-.help-page-table td {
-    border-bottom: 1px solid #D4D4D4;
-    padding: 10px 8px 10px 8px;
-    vertical-align: top;
-}
 
-.help-page-table pre,
-.help-page-table p {
+
+.help-page-table pre, .help-page-table p {
     margin: 0px;
     padding: 0px;
     font-family: inherit;
@@ -56,16 +39,17 @@
 }
 
 .help-page-table tbody tr:hover td {
-    background-color: #F3F3F3;
+    background-color: #EEE;
 }
 
-.help-page a:hover {
+a:hover {
     background-color: transparent;
+    text-decoration: none;
 }
 
-.help-page .sample-header {
+.sample-header {
     border: 2px solid #D4D4D4;
-    background: #00497E;
+    background: #76B8DB;
     color: #FFFFFF;
     padding: 8px 15px;
     border-bottom: none;
@@ -73,7 +57,7 @@
     margin: 10px 0px 0px 0px;
 }
 
-.help-page .sample-content {
+.sample-content {
     display: block;
     border-width: 0;
     padding: 15px 20px;
@@ -82,53 +66,81 @@
     margin: 0px 0px 10px 0px;
 }
 
-.help-page .api-name {
+.api-name {
     width: 40%;
 }
 
-.help-page .api-documentation {
+.api-name a {
+    color: black;
+}
+
+.api-documentation {
     width: 60%;
+    text-align: right;
+    padding-right: 10px;
 }
 
-.help-page .parameter-name {
+.parameter-name {
     width: 20%;
 }
 
-.help-page .parameter-documentation {
-    width: 40%;
+.parameter-documentation {
+    width: 50%;
 }
 
-.help-page .parameter-type {
-    width: 20%;
+.parameter-source {
+    width: 30%;
 }
 
-.help-page .parameter-annotations {
-    width: 20%;
+.api-method {
+    font-size: 12px;
+    color: white;
+    line-height: 34px;
+    padding: 11px 10px 11px 10px;
+    border-radius: 5px;
 }
 
-.help-page h1,
-.help-page .h1 {
-    font-size: 36px;
-    line-height: normal;
-}
-
-.help-page h2,
-.help-page .h2 {
-    font-size: 24px;
-}
-
-.help-page h3,
-.help-page .h3 {
-    font-size: 20px;
-}
-
-#body.help-page {
-    font-size: 14px;
-    line-height: 143%;
-    color: #333;
-}
-
-.help-page a {
-    color: #0000EE;
+.api-method{
     text-decoration: none;
+} 
+
+.api-method-row {   
+    height: 36px;
+    line-height: 36px;
+} 
+
+.api-method-row-GET{
+    background-color: #e7f0f7;
+} 
+
+.api-method-row-DELETE {
+    background-color: #f5e8e8;
+} 
+
+.api-method-row-PUT {
+    background-color: #f9f2e9;
+} 
+
+.api-method-row-POST {
+    background-color: #e7f6ec;
+} 
+
+.api-method-GET{
+    background-color: #0f6ab4;
+}
+
+.api-method-PUT{
+    background-color: #D38042;
+}
+
+.api-method-POST{
+    background-color: #10a54a;
+}
+
+.api-method-DELETE{
+    background-color: #a41e22;
+}
+
+.api-path:before {
+    content: "/";
 }
