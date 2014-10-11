@@ -10,7 +10,6 @@ using Contact.ReadStore.SearchStore;
 using Contact.ReadStore.SessionStore;
 using Contact.ReadStore.UserStore;
 
-
 namespace Contact.Infrastructure.SingleServer
 {
     class Program

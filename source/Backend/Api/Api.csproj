@@ -290,17 +290,17 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contact.Domain\Contact.Domain.csproj">
-      <Project>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</Project>
-      <Name>Contact.Domain</Name>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
+      <Name>Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contact.Infrastructure\Contact.Infrastructure.csproj">
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{1994013e-7c31-4057-9793-daf0f1be40b2}</Project>
-      <Name>Contact.Infrastructure</Name>
+      <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contact.ReadStore\Contact.ReadStore.csproj">
+    <ProjectReference Include="..\ReadStore\ReadStore.csproj">
       <Project>{dc681094-ce50-4e07-a14e-3cda4554ffb1}</Project>
-      <Name>Contact.ReadStore</Name>
+      <Name>ReadStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
