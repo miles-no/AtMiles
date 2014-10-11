@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.ReadStore.SearchStore;
 
-namespace Contact.Backend.Models.Api.Employee
+namespace no.miles.at.Backend.Api.Models.Api.Employee
 {
     public class EmployeeDetailsResponse
     {

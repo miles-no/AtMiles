@@ -1,10 +1,10 @@
 ﻿using System;
-using Contact.Domain.Annotations;
-using Contact.Domain.Events.CommandSession;
-using Contact.Domain.Exceptions;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Events.CommandSession;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.Properties;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Aggregates
+namespace no.miles.at.Backend.Domain.Aggregates
 {
     public class CommandSession : AggregateRoot
     {

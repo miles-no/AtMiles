@@ -1,4 +1,4 @@
-namespace Contact.Backend.Areas.HelpPage
+namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Contact.Domain.Annotations;
-using Contact.Domain.Events.Employee;
-using Contact.Domain.Events.Import;
-using Contact.Domain.Exceptions;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Events.Import;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.Properties;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Aggregates
+namespace no.miles.at.Backend.Domain.Aggregates
 {
     public class Employee : AggregateRoot
     {

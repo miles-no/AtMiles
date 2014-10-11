@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Raven.Client;
 
-namespace Contact.ReadStore.BusyTimeStore
+namespace no.miles.at.Backend.ReadStore.BusyTimeStore
 {
     public class BusyTimeEngine
     {
@@ -18,7 +18,7 @@ namespace Contact.ReadStore.BusyTimeStore
             BusyTimeModel res;
             using (var session = _documentStore.OpenSession())
             {
-                var id = BusyTimeStore.GetRavenId(employeeId);
+                var id = no.miles.at.Backend.ReadStore.BusyTimeStore.BusyTimeStore.GetRavenId(employeeId);
                 res = session.Load<BusyTimeModel>(id);
             }
             if (res == null)

@@ -2,7 +2,7 @@
 using Raven.Client.Document;
 using Raven.Client.Indexes;
 
-namespace Contact.ReadStore
+namespace no.miles.at.Backend.ReadStore
 {
     public class RavenDocumentStore
     {

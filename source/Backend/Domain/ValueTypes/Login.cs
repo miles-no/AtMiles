@@ -1,6 +1,6 @@
-﻿using Contact.Domain.Services;
+﻿using no.miles.at.Backend.Domain.Services;
 
-namespace Contact.Domain.ValueTypes
+namespace no.miles.at.Backend.Domain.ValueTypes
 {
     public class Login
     {

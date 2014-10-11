@@ -1,6 +1,6 @@
 using System;
 
-namespace Contact.Backend.Areas.HelpPage
+namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 {
     /// <summary>
     /// This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Contact.Domain
+namespace no.miles.at.Backend.Domain
 {
     public abstract class AggregateRoot
     {

@@ -1,4 +1,4 @@
-﻿namespace Contact.Domain
+﻿namespace no.miles.at.Backend.Domain
 {
     public interface IEventPublisher
     {

@@ -1,7 +1,8 @@
 using System.Web.Http;
 using System.Web.Mvc;
+using no.miles.at.Backend.Api.Areas.HelpPage.App_Start;
 
-namespace Contact.Backend.Areas.HelpPage
+namespace no.miles.at.Backend.Api.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

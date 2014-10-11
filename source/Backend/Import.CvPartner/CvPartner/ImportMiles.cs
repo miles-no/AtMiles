@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Contact.Domain;
-using Contact.Domain.ValueTypes;
-using Contact.Import.CvPartner.CvPartner.Models.Cv;
-using Contact.Import.CvPartner.CvPartner.Models.Employee;
 using Newtonsoft.Json;
-using Image = Contact.Import.CvPartner.CvPartner.Models.Cv.Image;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
+using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
+using Convert = no.miles.at.Backend.Import.CvPartner.CvPartner.Converters.Convert;
+using Image = no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv.Image;
 
-namespace Contact.Import.CvPartner.CvPartner
+namespace no.miles.at.Backend.Import.CvPartner.CvPartner
 {
     public class ImportMiles : IImportDataFromCvPartner
     {
@@ -29,7 +30,7 @@ namespace Contact.Import.CvPartner.CvPartner
         {
             var importData = new List<CvPartnerImportData>();
 
-            var converter = new Converters.Convert("miles", null);
+            var converter = new Convert("miles", null);
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 

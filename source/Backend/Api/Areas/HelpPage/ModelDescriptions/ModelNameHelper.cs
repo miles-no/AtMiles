@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Contact.Backend.Areas.HelpPage.ModelDescriptions
+namespace no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {

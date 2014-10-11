@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.CommandHandlers;
-using Contact.Domain.Commands;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Events.Company;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
+namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
 {
     [TestFixture]
     [Category("BDD: Domain")]
@@ -16,7 +19,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
 
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
-        private FakeRepository<Aggregates.Global> _fakeGlobalRepository;
+        private FakeRepository<Global> _fakeGlobalRepository;
         private FakeCvPartnerImporter _fakeImporter;
         private DateTime _timestamp11 = DateTime.MinValue;
         private DateTime _timestamp21 = DateTime.MinValue;
@@ -95,7 +98,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
-            _fakeGlobalRepository = new FakeRepository<Aggregates.Global>(GivenGlobal());
+            _fakeGlobalRepository = new FakeRepository<Global>(GivenGlobal());
             _fakeImporter = new FakeCvPartnerImporter(new List<CvPartnerImportData>());
             return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository,_fakeImporter);
         }
@@ -122,14 +125,14 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
                 {
                     new Events.Global.CompanyCreated(CompanyId, CompanyName,_timestamp11, systemAsPerson, _correlationId),
 
-                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, new Login(Constants.SystemUserId, Constants.SystemUserId), string.Empty, string.Empty,
+                    new EmployeeCreated(CompanyId, CompanyName, Constants.SystemUserId, new Login(Constants.SystemUserId, Constants.SystemUserId), string.Empty, string.Empty,
                         Constants.SystemUserId, _timestamp21, systemAsPerson, _correlationId),
-                    new Events.Employee.EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail), AdminFirstName, string.Empty,
+                    new EmployeeCreated(CompanyId, CompanyName, AdminId, new Login(Constants.GoogleIdProvider, AdminEmail), AdminFirstName, string.Empty,
                         AdminLastName, _timestamp22, systemAsPerson, _correlationId),
-                    new Events.Company.CompanyCreated(CompanyId, CompanyName, _timestamp31, systemAsPerson, _correlationId),
-                    new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, Constants.SystemUserId, NameService.GetName(string.Empty, Constants.SystemUserId), _timestamp32, systemAsPerson, _correlationId),
-                    new Events.Company.EmployeeAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail), _timestamp33, systemAsPerson, _correlationId),
-                    new Events.Company.CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), _timestamp34, systemAsPerson, _correlationId)
+                    new CompanyCreated(CompanyId, CompanyName, _timestamp31, systemAsPerson, _correlationId),
+                    new CompanyAdminAdded(CompanyId, CompanyName, Constants.SystemUserId, NameService.GetName(string.Empty, Constants.SystemUserId), _timestamp32, systemAsPerson, _correlationId),
+                    new EmployeeAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), new Login(Constants.GoogleIdProvider, AdminEmail), _timestamp33, systemAsPerson, _correlationId),
+                    new CompanyAdminAdded(CompanyId, CompanyName, AdminId, NameService.GetName(AdminFirstName, AdminLastName), _timestamp34, systemAsPerson, _correlationId)
                 };
             return events;
         }

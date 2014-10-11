@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using Contact.Domain;
 using Newtonsoft.Json;
+using no.miles.at.Backend.Domain;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class CommandSenderMock : ICommandSender
     {

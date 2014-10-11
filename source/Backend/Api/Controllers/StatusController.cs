@@ -1,8 +1,8 @@
 ﻿using System.Web.Http;
-using Contact.Backend.Models.Api.Status;
-using Contact.ReadStore.SessionStore;
+using no.miles.at.Backend.Api.Models.Api.Status;
+using no.miles.at.Backend.ReadStore.SessionStore;
 
-namespace Contact.Backend.Controllers
+namespace no.miles.at.Backend.Api.Controllers
 {
     [Authorize]
     public class StatusController : ApiController

@@ -7,8 +7,8 @@
     <ProjectGuid>{72C5EE3B-9C34-45EE-8CAA-BCBDE6D49FF4}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.TestApp</RootNamespace>
-    <AssemblyName>Contact.TestApp</AssemblyName>
+    <RootNamespace>no.miles.at.Backend.TestApp</RootNamespace>
+    <AssemblyName>no.miles.at.Backend.TestApp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

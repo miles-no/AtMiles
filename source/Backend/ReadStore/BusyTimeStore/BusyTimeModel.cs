@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Contact.ReadStore.BusyTimeStore
+namespace no.miles.at.Backend.ReadStore.BusyTimeStore
 {
     public class BusyTimeModel
     {

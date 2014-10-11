@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Contact.Import.CvPartner.CvPartner.Models.Cv
+namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv
 {
     
     public class KeyQualification
@@ -405,8 +405,11 @@ namespace Contact.Import.CvPartner.CvPartner.Models.Cv
 
     public class Cv
     {
+// ReSharper disable once InconsistentNaming
         private int? bornYear;
+// ReSharper disable once InconsistentNaming
         private int? bornMonth;
+// ReSharper disable once InconsistentNaming
         private int? bornDay;
 
         [JsonProperty(PropertyName = "_id")]

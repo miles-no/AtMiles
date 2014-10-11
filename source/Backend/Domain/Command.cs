@@ -1,7 +1,7 @@
 ﻿using System;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain
+namespace no.miles.at.Backend.Domain
 {
     public abstract class Command : Message
     {

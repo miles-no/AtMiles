@@ -1,4 +1,4 @@
-namespace Contact.ReadStore.SearchStore
+namespace no.miles.at.Backend.ReadStore.SearchStore
 {
     public class Tag
     {

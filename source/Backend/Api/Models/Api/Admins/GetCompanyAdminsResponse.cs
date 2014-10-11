@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Contact.Backend.Models.Api.Admins
+namespace no.miles.at.Backend.Api.Models.Api.Admins
 {
     public class GetCompanyAdminsResponse
     {

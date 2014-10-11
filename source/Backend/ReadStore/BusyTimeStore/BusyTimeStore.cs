@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Contact.Domain;
-using Contact.Domain.Events.Employee;
-using Contact.Infrastructure;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore.BusyTimeStore
+namespace no.miles.at.Backend.ReadStore.BusyTimeStore
 {
     public class BusyTimeStore
     {

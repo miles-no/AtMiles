@@ -5,13 +5,14 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
-using Contact.Backend.Models.Api.Status;
-using Contact.Backend.Models.Api.Tasks;
-using Contact.Domain;
-using Contact.Domain.ValueTypes;
-using Contact.Infrastructure;
+using no.miles.at.Backend.Api.Models.Api.Status;
+using no.miles.at.Backend.Api.Models.Api.Tasks;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Infrastructure;
 
-namespace Contact.Backend.Utilities
+namespace no.miles.at.Backend.Api.Utilities
 {
     public class Helpers
     {
@@ -30,7 +31,7 @@ namespace Contact.Backend.Utilities
         {
             if (string.IsNullOrEmpty(id))
             {
-                id = Domain.Services.IdService.CreateNewId();
+                id = IdService.CreateNewId();
             }
             var response = new Response { RequestId = id, Status = new StatusResponse { Url = _statusEndpointUrl + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
             return request.CreateResponse(HttpStatusCode.Accepted, response);
@@ -40,7 +41,7 @@ namespace Contact.Backend.Utilities
         {
             if (string.IsNullOrEmpty(id))
             {
-                id = Domain.Services.IdService.CreateNewId();
+                id = IdService.CreateNewId();
             }
             var response = new Response { RequestId = id, Status = new StatusResponse { Id = "failed", Status = errorMessage } };
             return request.CreateResponse(HttpStatusCode.BadRequest, response);
@@ -48,7 +49,7 @@ namespace Contact.Backend.Utilities
 
         public static string CreateNewId()
         {
-            return Domain.Services.IdService.CreateNewId();
+            return IdService.CreateNewId();
         }
 
         

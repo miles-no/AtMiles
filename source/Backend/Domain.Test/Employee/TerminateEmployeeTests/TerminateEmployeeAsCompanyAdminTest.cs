@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.CommandHandlers;
-using Contact.Domain.Commands;
-using Contact.Domain.Events.Company;
-using Contact.Domain.Events.Employee;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Events.Company;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Employee.TerminateEmployeeTests
+namespace no.miles.at.Backend.Domain.Test.Employee.TerminateEmployeeTests
 {
     [TestFixture]
     [Category("BDD: Domain")]

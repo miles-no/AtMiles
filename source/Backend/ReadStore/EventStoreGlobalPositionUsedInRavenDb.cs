@@ -1,4 +1,4 @@
-﻿namespace Contact.ReadStore
+﻿namespace no.miles.at.Backend.ReadStore
 {
     public class EventStoreGlobalPositionUsedInRavenDb
     {

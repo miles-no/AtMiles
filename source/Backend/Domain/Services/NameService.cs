@@ -1,4 +1,4 @@
-﻿namespace Contact.Domain.Services
+﻿namespace no.miles.at.Backend.Domain.Services
 {
     public class NameService
     {

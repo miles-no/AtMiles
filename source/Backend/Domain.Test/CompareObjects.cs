@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Contact.Domain.Test
+namespace no.miles.at.Backend.Domain.Test
 {
     //VERSION 1.4.2.0
     //http://comparenetobjects.codeplex.com/

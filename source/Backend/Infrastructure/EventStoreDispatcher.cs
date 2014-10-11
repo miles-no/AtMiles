@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Contact.Domain;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using no.miles.at.Backend.Domain;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class EventStoreDispatcher : LongRunningProcess
     {

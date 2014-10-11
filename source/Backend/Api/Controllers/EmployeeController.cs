@@ -4,18 +4,18 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Contact.Backend.Models.Api.Busy;
-using Contact.Backend.Models.Api.Employee;
-using Contact.Backend.Models.Api.Tasks;
-using Contact.Backend.Utilities;
-using Contact.Domain;
-using Contact.Domain.Commands;
-using Contact.Domain.ValueTypes;
-using Contact.Infrastructure;
-using Contact.ReadStore.BusyTimeStore;
-using Contact.ReadStore.SearchStore;
+using no.miles.at.Backend.Api.Models.Api.Busy;
+using no.miles.at.Backend.Api.Models.Api.Employee;
+using no.miles.at.Backend.Api.Models.Api.Tasks;
+using no.miles.at.Backend.Api.Utilities;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.ReadStore.BusyTimeStore;
+using no.miles.at.Backend.ReadStore.SearchStore;
 
-namespace Contact.Backend.Controllers
+namespace no.miles.at.Backend.Api.Controllers
 {
     [Authorize]
     public class EmployeeController : ApiController

@@ -1,7 +1,7 @@
 ﻿using System;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Events.Global
+namespace no.miles.at.Backend.Domain.Events.Global
 {
     public class CompanyCreated : Event
     {

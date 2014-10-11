@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.Aggregates;
-using Contact.Domain.CommandHandlers;
-using Contact.Domain.Commands;
-using Contact.Domain.Events.Company;
-using Contact.Domain.Events.Employee;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Events.Company;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Events.Import;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
+namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
 {
     [TestFixture]
     [Category("BDD: Domain")]
@@ -124,7 +125,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<Event>
                 {
-                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

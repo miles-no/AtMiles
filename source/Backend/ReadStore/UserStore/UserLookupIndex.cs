@@ -2,9 +2,8 @@ using System.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
-namespace Contact.ReadStore.UserStore
-{
-    
+namespace no.miles.at.Backend.ReadStore.UserStore
+{   
     public class UserLookupIndex : AbstractIndexCreationTask<UserLookupModel>
     {
         public UserLookupIndex()

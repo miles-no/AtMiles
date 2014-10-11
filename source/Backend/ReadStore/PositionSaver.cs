@@ -1,7 +1,7 @@
-﻿using Contact.Infrastructure;
+﻿using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore
+namespace no.miles.at.Backend.ReadStore
 {
     public class PositionSaver : IHandlePosition
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using Contact.Backend.Models.Api.Search;
-using Contact.ReadStore.SearchStore;
+using no.miles.at.Backend.Api.Models.Api.Search;
+using no.miles.at.Backend.ReadStore.SearchStore;
 
-namespace Contact.Backend.Controllers
+namespace no.miles.at.Backend.Api.Controllers
 {
     [Authorize]
     public class SearchController : ApiController

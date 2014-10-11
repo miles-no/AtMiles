@@ -7,8 +7,8 @@
     <ProjectGuid>{79FB25AE-8CF3-4BC3-95BB-F47111ECC74A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.Domain.Test</RootNamespace>
-    <AssemblyName>Contact.Domain.Test</AssemblyName>
+    <RootNamespace>no.miles.at.Backend.Domain.Test</RootNamespace>
+    <AssemblyName>no.miles.at.Backend.Domain.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

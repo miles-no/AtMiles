@@ -1,4 +1,4 @@
-﻿namespace Contact.Backend.Models.Api.Employee
+﻿namespace no.miles.at.Backend.Api.Models.Api.Employee
 {
     public class EmployeeDetailsRequest
     {

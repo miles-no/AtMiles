@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contact.Domain;
+using no.miles.at.Backend.Domain;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class ReadModelHandler : IEventPublisher
     {

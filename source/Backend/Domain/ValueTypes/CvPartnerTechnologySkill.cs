@@ -1,4 +1,4 @@
-﻿namespace Contact.Domain.ValueTypes
+﻿namespace no.miles.at.Backend.Domain.ValueTypes
 {
     public class CvPartnerTechnologySkill
     {

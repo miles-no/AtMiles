@@ -1,6 +1,6 @@
 using System;
 
-namespace Contact.Backend.Areas.HelpPage
+namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 {
     /// <summary>
     /// This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.

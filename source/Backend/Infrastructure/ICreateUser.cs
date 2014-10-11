@@ -1,6 +1,6 @@
-﻿using Contact.Domain.ValueTypes;
+﻿using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public interface ICreateUser
     {

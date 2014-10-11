@@ -1,4 +1,4 @@
-﻿namespace Contact.ReadStore.SessionStore
+﻿namespace no.miles.at.Backend.ReadStore.SessionStore
 {
     public class CommandStatusConstants
     {

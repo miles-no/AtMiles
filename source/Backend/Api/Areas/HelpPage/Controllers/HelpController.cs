@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using Contact.Backend.Areas.HelpPage.ModelDescriptions;
-using Contact.Backend.Areas.HelpPage.Models;
+using no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions;
+using no.miles.at.Backend.Api.Areas.HelpPage.Models;
 
-namespace Contact.Backend.Areas.HelpPage.Controllers
+namespace no.miles.at.Backend.Api.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

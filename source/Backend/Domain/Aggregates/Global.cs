@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.Annotations;
-using Contact.Domain.Events.Global;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Events.Global;
+using no.miles.at.Backend.Domain.Properties;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Aggregates
+namespace no.miles.at.Backend.Domain.Aggregates
 {
     public class Global : AggregateRoot
     {

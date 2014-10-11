@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 
-namespace Contact.Backend
+namespace no.miles.at.Backend.Api
 {
     public static class WebApiConfig
     {

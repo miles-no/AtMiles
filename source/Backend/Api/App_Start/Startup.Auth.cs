@@ -2,22 +2,23 @@
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Contact.Backend.Utilities;
-using Contact.Domain;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
-using Contact.Infrastructure;
-using Contact.Infrastructure.Configuration;
+using System.Web.Http;
 using Microsoft.Owin.Cors;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Linq;
+using no.miles.at.Backend.Api.Utilities;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.Infrastructure.Configuration;
 using Owin;
-using Microsoft.Owin.Security.Jwt;
-using System.Web.Http;
-using Microsoft.Owin.Security.DataHandler.Encoder;
-using Microsoft.Owin.Security;
 
-namespace Contact.Backend
+namespace no.miles.at.Backend.Api
 {
     public partial class Startup
     {
@@ -79,7 +80,7 @@ namespace Contact.Backend
                                 if (string.IsNullOrEmpty(userId))
                                 {
                                     userId = Helpers.CreateNewId();
-                                    var addEmployeeCommand = new Domain.Commands.AddEmployee(settings.CompanyId, userId, Login.CreateFromSubject(subject), string.Empty,
+                                    var addEmployeeCommand = new AddEmployee(settings.CompanyId, userId, Login.CreateFromSubject(subject), string.Empty,
                                         string.Empty, string.Empty, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId),
                                         IdService.CreateNewId(), Constants.IgnoreVersion);
                                     commandSender.Send(addEmployeeCommand);

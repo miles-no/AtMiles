@@ -1,6 +1,6 @@
 ﻿using EventStore.ClientAPI;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public interface IPersistGetEventStorePosition
     {

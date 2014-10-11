@@ -1,16 +1,17 @@
 ﻿using System.Threading.Tasks;
-using Contact.Domain.Aggregates;
-using Contact.Domain.CommandHandlers;
-using Contact.Import.CvPartner.CvPartner;
-using Contact.Infrastructure.Configuration;
-using Contact.Infrastructure.SingleServer.Properties;
-using Contact.ReadStore;
-using Contact.ReadStore.BusyTimeStore;
-using Contact.ReadStore.SearchStore;
-using Contact.ReadStore.SessionStore;
-using Contact.ReadStore.UserStore;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Import.CvPartner.CvPartner;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.Infrastructure.Configuration;
+using no.miles.at.Backend.ReadStore;
+using no.miles.at.Backend.ReadStore.BusyTimeStore;
+using no.miles.at.Backend.ReadStore.SearchStore;
+using no.miles.at.Backend.ReadStore.SessionStore;
+using no.miles.at.Backend.ReadStore.UserStore;
+using no.miles.at.Backend.Worker.Properties;
 
-namespace Contact.Infrastructure.SingleServer
+namespace no.miles.at.Backend.Worker
 {
     class Program
     {

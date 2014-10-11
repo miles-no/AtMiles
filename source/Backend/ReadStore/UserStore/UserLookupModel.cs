@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Contact.ReadStore.UserStore
+﻿namespace no.miles.at.Backend.ReadStore.UserStore
 {
     public class UserLookupModel
     {

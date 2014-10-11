@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contact.Domain.Aggregates;
-using Contact.Domain.Commands;
-using Contact.Domain.Exceptions;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.CommandHandlers
+namespace no.miles.at.Backend.Domain.CommandHandlers
 {
     public class GlobalCommandHandler :
         Handles<AddNewCompanyToSystem>,
@@ -58,7 +59,7 @@ namespace Contact.Domain.CommandHandlers
                     var adminId = adminInfo.Id;
                     if (string.IsNullOrEmpty(adminId))
                     {
-                        adminId = Services.IdService.CreateNewId();
+                        adminId = IdService.CreateNewId();
                     }
 
                     admin.CreateNew(message.CompanyId, message.CompanyName, adminId, adminInfo.LoginId, adminInfo.FirstName, adminInfo.MiddleName, adminInfo.LastName, message.CreatedBy, message.CorrelationId);
@@ -110,7 +111,7 @@ namespace Contact.Domain.CommandHandlers
             CvPartnerImportData cvPartnerImportData)
         {
             var employee = new Employee();
-            employee.CreateNew(company.Id, company.Name, Services.IdService.CreateNewId(),
+            employee.CreateNew(company.Id, company.Name, IdService.CreateNewId(),
                 new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email),
                 cvPartnerImportData.FirstName, cvPartnerImportData.MiddleName, cvPartnerImportData.LastName,
                 message.CreatedBy, message.CorrelationId);

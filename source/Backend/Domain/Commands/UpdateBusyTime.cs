@@ -1,7 +1,7 @@
 ﻿using System;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Commands
+namespace no.miles.at.Backend.Domain.Commands
 {
     public class UpdateBusyTime : Command
     {

@@ -1,4 +1,4 @@
-﻿namespace Contact.Backend.Models.Api.Status
+﻿namespace no.miles.at.Backend.Api.Models.Api.Status
 {
     public class StatusResponse
     {

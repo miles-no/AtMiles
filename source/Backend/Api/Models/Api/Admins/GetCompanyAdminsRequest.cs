@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
-using Contact.Backend.Models.Api.Tasks;
+using no.miles.at.Backend.Api.Models.Api.Tasks;
 
-namespace Contact.Backend.Models.Api.Admins
+namespace no.miles.at.Backend.Api.Models.Api.Admins
 {
     public class GetCompanyAdminsRequest : BaseRequest
     {

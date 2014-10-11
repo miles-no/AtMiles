@@ -7,15 +7,15 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Contact.Domain;
-using Contact.Domain.Events.Employee;
-using Contact.Domain.Events.Import;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
-using Contact.Infrastructure;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Events.Import;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore.SearchStore
+namespace no.miles.at.Backend.ReadStore.SearchStore
 {
     public class EmployeeSearchStore
     {

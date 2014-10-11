@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Contact.Domain.Test
+namespace no.miles.at.Backend.Domain.Test
 {
     public class FakeRepository<T> : IRepository<T> where T : AggregateRoot, new()
     {

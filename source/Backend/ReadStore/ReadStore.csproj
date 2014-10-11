@@ -7,8 +7,8 @@
     <ProjectGuid>{DC681094-CE50-4E07-A14E-3CDA4554FFB1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.ReadStore</RootNamespace>
-    <AssemblyName>Contact.ReadStore</AssemblyName>
+    <RootNamespace>no.miles.at.Backend.ReadStore</RootNamespace>
+    <AssemblyName>no.miles.at.Backend.ReadStore</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

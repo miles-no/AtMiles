@@ -1,16 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
-using Contact.Domain;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using no.miles.at.Backend.Domain;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class EventStoreRepository<T> : IRepository<T> where T : AggregateRoot, new()
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{B544EFBD-81E6-44A0-9423-84ABCF1C0B46}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.Import.CvPartner</RootNamespace>
-    <AssemblyName>Contact.Import.CvPartner</AssemblyName>
+    <RootNamespace>no.miles.at.Backend.Import.CvPartner</RootNamespace>
+    <AssemblyName>no.miles.at.Backend.Import.CvPartner</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

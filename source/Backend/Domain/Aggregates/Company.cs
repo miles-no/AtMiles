@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.Annotations;
 using System.Linq;
-using Contact.Domain.Events.Company;
-using Contact.Domain.Exceptions;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Events.Company;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.Properties;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Aggregates
+namespace no.miles.at.Backend.Domain.Aggregates
 {
     public class Company : AggregateRoot
     {

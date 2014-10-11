@@ -1,8 +1,10 @@
-﻿namespace Contact.Backend.Models.Api.Tasks
+﻿using no.miles.at.Backend.Api.Models.Api.Status;
+
+namespace no.miles.at.Backend.Api.Models.Api.Tasks
 {
     public class Response
     {
         public string RequestId { get; set; }
-        public Status.StatusResponse Status { get; set; }
+        public StatusResponse Status { get; set; }
     }
 }

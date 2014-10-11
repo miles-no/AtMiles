@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Contact.Backend.Models.Api.Search
+namespace no.miles.at.Backend.Api.Models.Api.Search
 {
     public class SearchRequestModel
     {

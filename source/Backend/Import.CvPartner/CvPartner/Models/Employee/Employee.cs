@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Contact.Import.CvPartner.CvPartner.Models.Employee
+namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee
 {
     public class Thumb
     {

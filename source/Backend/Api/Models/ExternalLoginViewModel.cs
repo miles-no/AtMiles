@@ -1,4 +1,4 @@
-﻿namespace Contact.Backend.Models
+﻿namespace no.miles.at.Backend.Api.Models
 {
     // Models returned by AccountController actions.
 

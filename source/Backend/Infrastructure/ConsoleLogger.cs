@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class ConsoleLogger : ILog
     {

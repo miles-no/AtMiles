@@ -1,22 +1,24 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
-using Contact.Backend.Properties;
-using Contact.Backend.Utilities;
-using Contact.Domain;
-using Contact.Infrastructure;
 using Microsoft.Owin;
 using Microsoft.Practices.Unity;
+using no.miles.at.Backend.Api;
+using no.miles.at.Backend.Api.Properties;
+using no.miles.at.Backend.Api.Utilities;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.Infrastructure.Configuration;
 using Owin;
 
-[assembly: OwinStartup(typeof(Contact.Backend.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 
-namespace Contact.Backend
+namespace no.miles.at.Backend.Api
 {
     public partial class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = Contact.Infrastructure.Configuration.ConfigManager.GetConfig(Settings.Default.ConfigFile);
+            var config = ConfigManager.GetConfig(Settings.Default.ConfigFile);
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using YamlDotNet.Serialization;
 
-namespace Contact.Infrastructure.Configuration
+namespace no.miles.at.Backend.Infrastructure.Configuration
 {
     public class ConfigManager
     {

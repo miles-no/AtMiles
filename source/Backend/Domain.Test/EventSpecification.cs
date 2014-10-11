@@ -1,4 +1,5 @@
 ﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test
+namespace no.miles.at.Backend.Domain.Test
 {
     public abstract class EventSpecification<TCommand>
         where TCommand : Command

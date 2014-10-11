@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Contact.Domain
+namespace no.miles.at.Backend.Domain
 {
     public class DelegateAdjuster
     {

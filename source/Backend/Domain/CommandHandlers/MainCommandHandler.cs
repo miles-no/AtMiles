@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Contact.Domain.CommandHandlers
+namespace no.miles.at.Backend.Domain.CommandHandlers
 {
     public class MainCommandHandler
     {

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Contact.Domain.Events.CommandSession;
-using Contact.Infrastructure;
+using no.miles.at.Backend.Domain.Events.CommandSession;
+using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore.SessionStore
+namespace no.miles.at.Backend.ReadStore.SessionStore
 {
     public class CommandStatusStore
     {

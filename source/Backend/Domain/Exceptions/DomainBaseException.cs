@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Contact.Domain.Exceptions
+namespace no.miles.at.Backend.Domain.Exceptions
 {
     public abstract class DomainBaseException : Exception
     {

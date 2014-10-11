@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Contact.Backend.Models.Api.Admins;
-using Contact.Backend.Models.Api.Tasks;
-using Contact.Backend.Utilities;
-using Contact.Domain;
-using Contact.Domain.Commands;
-using Contact.Infrastructure;
-using Contact.ReadStore.UserStore;
+using no.miles.at.Backend.Api.Models.Api.Admins;
+using no.miles.at.Backend.Api.Models.Api.Tasks;
+using no.miles.at.Backend.Api.Utilities;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.ReadStore.UserStore;
 
-namespace Contact.Backend.Controllers
+namespace no.miles.at.Backend.Api.Controllers
 {
     /// <summary>
     /// Administrative interface

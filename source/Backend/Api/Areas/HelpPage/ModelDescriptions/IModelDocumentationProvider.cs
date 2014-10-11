@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Contact.Backend.Areas.HelpPage.ModelDescriptions
+namespace no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions
 {
     public interface IModelDocumentationProvider
     {

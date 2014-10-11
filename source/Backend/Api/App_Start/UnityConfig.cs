@@ -1,21 +1,22 @@
-using Contact.Backend.Controllers;
-using Contact.Domain;
-using Contact.Infrastructure;
-using Contact.ReadStore;
-using Contact.ReadStore.BusyTimeStore;
-using Contact.ReadStore.SearchStore;
-using Contact.ReadStore.SessionStore;
-using Contact.ReadStore.UserStore;
-using Microsoft.Practices.Unity;
 using System.Web.Http;
+using Microsoft.Practices.Unity;
+using no.miles.at.Backend.Api.Controllers;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.Infrastructure.Configuration;
+using no.miles.at.Backend.ReadStore;
+using no.miles.at.Backend.ReadStore.BusyTimeStore;
+using no.miles.at.Backend.ReadStore.SearchStore;
+using no.miles.at.Backend.ReadStore.SessionStore;
+using no.miles.at.Backend.ReadStore.UserStore;
 using Raven.Client;
 using Unity.WebApi;
 
-namespace Contact.Backend
+namespace no.miles.at.Backend.Api
 {
     public static class UnityConfig
     {
-        public static IUnityContainer RegisterComponents(Contact.Infrastructure.Configuration.Config config)
+        public static IUnityContainer RegisterComponents(Config config)
         {
             var container = new UnityContainer();
 

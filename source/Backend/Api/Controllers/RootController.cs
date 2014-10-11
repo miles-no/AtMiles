@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Web.Http;
 
-namespace Contact.Backend.Controllers
+namespace no.miles.at.Backend.Api.Controllers
 {
     public class RootController : ApiController
     {

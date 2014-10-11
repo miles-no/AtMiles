@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Contact.Domain;
-using Contact.Domain.Commands;
-using Contact.Domain.ValueTypes;
-using Contact.Import.CvPartner.CvPartner.Models.Cv;
-using Contact.Import.CvPartner.CvPartner.Models.Employee;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
+using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
 
-namespace Contact.Import.CvPartner.CvPartner.Converters
+namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 {
     public class Convert
 

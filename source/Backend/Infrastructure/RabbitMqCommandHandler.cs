@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Contact.Domain;
-using Contact.Domain.Aggregates;
-using Contact.Domain.CommandHandlers;
-using Contact.Domain.Exceptions;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Domain.Exceptions;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class RabbitMqCommandHandler
     {

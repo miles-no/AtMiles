@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace Contact.Backend.Areas.HelpPage
+namespace no.miles.at.Backend.Api.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

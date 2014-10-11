@@ -11,10 +11,11 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using Contact.Backend.Areas.HelpPage.ModelDescriptions;
-using Contact.Backend.Areas.HelpPage.Models;
+using no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions;
+using no.miles.at.Backend.Api.Areas.HelpPage.Models;
+using no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration;
 
-namespace Contact.Backend.Areas.HelpPage
+namespace no.miles.at.Backend.Api.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

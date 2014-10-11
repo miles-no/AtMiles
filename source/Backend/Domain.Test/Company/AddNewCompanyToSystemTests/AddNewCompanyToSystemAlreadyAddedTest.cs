@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.Aggregates;
-using Contact.Domain.CommandHandlers;
-using Contact.Domain.Commands;
-using Contact.Domain.Exceptions;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Events.Global;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
+namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
 {
     [TestFixture]
     [Category("BDD: Domain")]
@@ -57,7 +58,7 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(Global.GlobalId, new Events.Global.CompanyCreated(CompanyId, CompanyName,new DateTime(2014,1,1),new Person(Constants.SystemUserId, Constants.SystemUserId), "SYSTEM INIT" ))
+                    new FakeStreamEvent(Global.GlobalId, new CompanyCreated(CompanyId, CompanyName,new DateTime(2014,1,1),new Person(Constants.SystemUserId, Constants.SystemUserId), "SYSTEM INIT" ))
                 };
             return events;
         }

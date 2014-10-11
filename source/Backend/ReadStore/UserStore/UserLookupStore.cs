@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
-using Contact.Domain;
-using Contact.Domain.Events.Company;
-using Contact.Domain.Events.Employee;
-using Contact.Domain.Events.Import;
-using Contact.Domain.Services;
-using Contact.Infrastructure;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Events.Company;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Events.Import;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore.UserStore
+namespace no.miles.at.Backend.ReadStore.UserStore
 {
     public class UserLookupStore
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Contact.Domain.Test
+﻿namespace no.miles.at.Backend.Domain.Test
 {
     public class FakeStreamEvent
     {

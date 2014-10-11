@@ -1,9 +1,9 @@
 ﻿using System;
-using Contact.Domain.Exceptions;
-using Contact.Domain.ValueTypes;
 using Newtonsoft.Json;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Events.CommandSession
+namespace no.miles.at.Backend.Domain.Events.CommandSession
 {
     public class CommandException : Event
     {

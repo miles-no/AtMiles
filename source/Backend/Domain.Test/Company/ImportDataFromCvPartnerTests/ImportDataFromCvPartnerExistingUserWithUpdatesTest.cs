@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contact.Domain.Aggregates;
-using Contact.Domain.CommandHandlers;
-using Contact.Domain.Commands;
-using Contact.Domain.Events.Company;
-using Contact.Domain.Events.Employee;
-using Contact.Domain.Services;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.CommandHandlers;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Events.Company;
+using no.miles.at.Backend.Domain.Events.Employee;
+using no.miles.at.Backend.Domain.Events.Import;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
+namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
 {
     [TestFixture]
     [Category("BDD: Domain")]
@@ -105,7 +106,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
                 {
                     new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId)),
                     new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, new Login(Constants.GoogleIdProvider,_importData1.Email), _importData1.FirstName, _importData1.MiddleName, _importData1.LastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
-                    new FakeStreamEvent(EmployeeId, new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData1.FirstName, _importData1.MiddleName, _importData1.LastName, _importData1.DateOfBirth,_importData1.Email, _importData1.Phone, _importData1.Title, _importData1.OfficeName, _importData1.UpdatedAt, _importData1.KeyQualifications, _importData1.Technologies, _importData1.Photo,DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), "IMPORT1"))
+                    new FakeStreamEvent(EmployeeId, new ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData1.FirstName, _importData1.MiddleName, _importData1.LastName, _importData1.DateOfBirth,_importData1.Email, _importData1.Phone, _importData1.Title, _importData1.OfficeName, _importData1.UpdatedAt, _importData1.KeyQualifications, _importData1.Technologies, _importData1.Photo,DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), "IMPORT1"))
                 };
             return events;
         }
@@ -140,7 +141,7 @@ namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<Event>
                 {
-                    new Events.Import.ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData2.FirstName, _importData2.MiddleName, _importData2.LastName, _importData2.DateOfBirth ,_importData2.Email, _importData2.Phone, _importData2.Title, _importData2.OfficeName, _importData2.UpdatedAt, _importData2.KeyQualifications, _importData2.Technologies, _importData2.Photo, _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData2.FirstName, _importData2.MiddleName, _importData2.LastName, _importData2.DateOfBirth ,_importData2.Email, _importData2.Phone, _importData2.Title, _importData2.OfficeName, _importData2.UpdatedAt, _importData2.KeyQualifications, _importData2.Technologies, _importData2.Photo, _timestamp, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

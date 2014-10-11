@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.Test
+namespace no.miles.at.Backend.Domain.Test
 {
     public class FakeCvPartnerImporter : IImportDataFromCvPartner
     {

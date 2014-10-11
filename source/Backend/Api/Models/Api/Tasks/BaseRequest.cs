@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace Contact.Backend.Models.Api.Tasks
+namespace no.miles.at.Backend.Api.Models.Api.Tasks
 {
     public class BaseRequest
     {

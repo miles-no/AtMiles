@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Contact.Domain.Aggregates;
-using Contact.Domain.Commands;
-using Contact.Domain.Exceptions;
-using Contact.Domain.ValueTypes;
+using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Exceptions;
+using no.miles.at.Backend.Domain.ValueTypes;
 
-namespace Contact.Domain.CommandHandlers
+namespace no.miles.at.Backend.Domain.CommandHandlers
 {
     public class CompanyCommandHandler :
         Handles<AddCompanyAdmin>,

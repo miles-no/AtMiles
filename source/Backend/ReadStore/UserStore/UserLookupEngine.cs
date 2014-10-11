@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Contact.Domain.Services;
-using Contact.Infrastructure;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
 
-namespace Contact.ReadStore.UserStore
+namespace no.miles.at.Backend.ReadStore.UserStore
 {
     public class UserLookupEngine : IResolveUserIdentity, IResolveNameOfUser
     {
@@ -51,7 +51,7 @@ namespace Contact.ReadStore.UserStore
             UserLookupModel[] res;
             using (var session = _store.OpenSession())
             {
-                res = session.Query<UserLookupModel>().Where(w => w.CompanyId == companyId && w.CompanyAdmin == true).ToArray();
+                res = session.Query<UserLookupModel>().Where(w => w.CompanyId == companyId && w.CompanyAdmin).ToArray();
             }
             return res;
         }

@@ -1,6 +1,7 @@
-﻿using Contact.Domain.Aggregates;
+﻿using no.miles.at.Backend.Domain.Aggregates;
+using no.miles.at.Backend.Domain.Commands;
 
-namespace Contact.Domain.CommandHandlers
+namespace no.miles.at.Backend.Domain.CommandHandlers
 {
     public class MainCommandHandlerFactory
     {
@@ -10,22 +11,22 @@ namespace Contact.Domain.CommandHandlers
 
             var globalCommandHandler = new GlobalCommandHandler(repositoryCompany, repositoryEmployee, repositoryGlobal, cvPartnerImporter);
 
-            cmdHandler.RegisterHandler<Commands.ImportDataFromCvPartner>(globalCommandHandler.Handle);
-            cmdHandler.RegisterHandler<Commands.AddNewCompanyToSystem>(globalCommandHandler.Handle);
+            cmdHandler.RegisterHandler<ImportDataFromCvPartner>(globalCommandHandler.Handle);
+            cmdHandler.RegisterHandler<AddNewCompanyToSystem>(globalCommandHandler.Handle);
 
 
             var cmdHandlerCompany = new CompanyCommandHandler(repositoryCompany, repositoryEmployee);
 
-            cmdHandler.RegisterHandler<Commands.AddCompanyAdmin>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.AddEmployee>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.RemoveCompanyAdmin>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.TerminateEmployee>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.AddBusyTime>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.RemoveBusyTime>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.ConfirmBusyTimeEntries>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.UpdateBusyTime>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.SetDateOfBirth>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.SetPrivateAddress>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<AddCompanyAdmin>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<AddEmployee>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<RemoveCompanyAdmin>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<TerminateEmployee>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<AddBusyTime>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<RemoveBusyTime>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<ConfirmBusyTimeEntries>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<UpdateBusyTime>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<SetDateOfBirth>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<SetPrivateAddress>(cmdHandlerCompany.Handle);
             return cmdHandler;
         }
     }

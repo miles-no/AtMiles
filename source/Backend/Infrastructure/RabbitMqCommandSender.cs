@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Contact.Domain;
 using Newtonsoft.Json;
+using no.miles.at.Backend.Domain;
 using RabbitMQ.Client;
 
-namespace Contact.Infrastructure
+namespace no.miles.at.Backend.Infrastructure
 {
     public class RabbitMqCommandSender : ICommandSender, IDisposable
     {

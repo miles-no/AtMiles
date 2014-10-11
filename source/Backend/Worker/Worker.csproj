@@ -7,8 +7,8 @@
     <ProjectGuid>{3EDB2953-9C1A-4EEC-9539-C8B0D60BAC22}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Contact.Infrastructure.SingleServer</RootNamespace>
-    <AssemblyName>Contact.Infrastructure.SingleServer</AssemblyName>
+    <RootNamespace>no.miles.at.Backend.Worker</RootNamespace>
+    <AssemblyName>Worker</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

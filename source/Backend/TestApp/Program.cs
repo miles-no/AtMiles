@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Contact.Domain;
-using Contact.Domain.Commands;
-using Contact.Domain.ValueTypes;
-using Contact.Infrastructure;
-using Contact.Infrastructure.Configuration;
-using Contact.TestApp.Properties;
+using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Services;
+using no.miles.at.Backend.Domain.ValueTypes;
+using no.miles.at.Backend.Infrastructure;
+using no.miles.at.Backend.Infrastructure.Configuration;
+using no.miles.at.Backend.TestApp.Properties;
 
-namespace Contact.TestApp
+namespace no.miles.at.Backend.TestApp
 {
     class Program
     {
@@ -65,11 +66,11 @@ namespace Contact.TestApp
 
             var admins = new List<SimpleUserInfo>();
 
-            var admin1 = new SimpleUserInfo(Domain.Services.IdService.CreateNewId(), "Roy", string.Empty, "Veshovda",
+            var admin1 = new SimpleUserInfo(IdService.CreateNewId(), "Roy", string.Empty, "Veshovda",
                 new Login(Constants.GoogleIdProvider, "roy.veshovda@miles.no"));
             admins.Add(admin1);
 
-            var admin2 = new SimpleUserInfo(Domain.Services.IdService.CreateNewId(), "Stian", string.Empty, "Edvardsen",
+            var admin2 = new SimpleUserInfo(IdService.CreateNewId(), "Stian", string.Empty, "Edvardsen",
                 new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no"));
             admins.Add(admin2);
 

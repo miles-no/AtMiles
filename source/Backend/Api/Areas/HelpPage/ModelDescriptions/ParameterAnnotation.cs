@@ -1,6 +1,6 @@
 using System;
 
-namespace Contact.Backend.Areas.HelpPage.ModelDescriptions
+namespace no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions
 {
     public class ParameterAnnotation
     {
