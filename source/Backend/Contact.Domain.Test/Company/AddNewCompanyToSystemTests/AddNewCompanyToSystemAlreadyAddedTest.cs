@@ -10,6 +10,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class AddNewCompanyToSystemAlreadyAddedTest : EventSpecification<AddNewCompanyToSystem>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

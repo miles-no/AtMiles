@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Employee.SetPrivateAddressTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class SetPrivateAddressTest : EventSpecification<SetPrivateAddress>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

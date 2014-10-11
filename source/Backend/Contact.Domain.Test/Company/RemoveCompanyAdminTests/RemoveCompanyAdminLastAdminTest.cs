@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class RemoveCompanyAdminLastAdminTest : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
@@ -24,10 +25,6 @@ namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
         private const string ExistingAdminId = "old1";
         private const string ExistingAdminFirstName = "Existing";
         private const string ExistingAdminLastName = "Admin";
-        private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
-
-        private const string OfficeId = "office1";
-        private const string OfficeName = "Stavanger";
 
         [Test]
         public async void remove_company_admin_last_admin()

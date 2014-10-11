@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.RemoveCompanyAdminTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class RemoveCompanyAdminWithoutPermissionTest : EventSpecification<RemoveCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

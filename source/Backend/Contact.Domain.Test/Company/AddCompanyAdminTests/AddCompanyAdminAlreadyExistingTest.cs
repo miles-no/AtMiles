@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class AddCompanyAdminAlreadyExistingTest : EventSpecification<AddCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

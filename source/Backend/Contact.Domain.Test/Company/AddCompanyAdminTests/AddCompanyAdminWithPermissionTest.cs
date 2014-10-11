@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class AddCompanyAdminWithPermissionTest : EventSpecification<AddCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

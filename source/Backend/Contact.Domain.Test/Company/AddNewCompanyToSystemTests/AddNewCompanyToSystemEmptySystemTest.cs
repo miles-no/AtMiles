@@ -9,6 +9,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class AddNewCompanyToSystemEmptySystemTest : EventSpecification<AddNewCompanyToSystem>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
@@ -24,8 +25,6 @@ namespace Contact.Domain.Test.Company.AddNewCompanyToSystemTests
         private DateTime _timestamp32 = DateTime.MinValue;
         private DateTime _timestamp33 = DateTime.MinValue;
         private DateTime _timestamp34 = DateTime.MinValue;
-
-        private DateTime _systemDateOfBirth = DateTime.MinValue;
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";

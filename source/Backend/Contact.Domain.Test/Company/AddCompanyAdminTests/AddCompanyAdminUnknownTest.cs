@@ -11,6 +11,8 @@ using NUnit.Framework;
 
 namespace Contact.Domain.Test.Company.AddCompanyAdminTests
 {
+    [TestFixture]
+    [Category("BDD: Domain")]
     public class AddCompanyAdminUnknownTest : EventSpecification<AddCompanyAdmin>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
@@ -23,12 +25,7 @@ namespace Contact.Domain.Test.Company.AddCompanyAdminTests
         private const string ExistingAdminId = "old1";
         private const string ExistingAdminFirstName = "Existing";
         private const string ExistingAdminLastName = "Admin";
-        private static readonly DateTime ExistingAdminDateOfBirth = new DateTime(1980, 01, 01);
-
         private const string NewAdminId = "new1";
-
-        private const string OfficeName = "Stavanger";
-
 
         [Test]
         public async void add_company_admin_unknown_employee()

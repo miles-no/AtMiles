@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Company.ImportDataFromCvPartnerTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class ImportDataFromCvPartnerExistingUserFirstImportTest : EventSpecification<ImportDataFromCvPartner>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

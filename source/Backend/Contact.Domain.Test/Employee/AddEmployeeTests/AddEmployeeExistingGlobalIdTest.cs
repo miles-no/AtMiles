@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Employee.AddEmployeeTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class AddEmployeeExistingGlobalIdTest : EventSpecification<AddEmployee>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Employee.UpdateBusyTimeTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class UpdateBusyTimeUnknownTest : EventSpecification<UpdateBusyTime>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();

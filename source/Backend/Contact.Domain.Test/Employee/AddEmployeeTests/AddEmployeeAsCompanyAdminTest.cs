@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace Contact.Domain.Test.Employee.AddEmployeeTests
 {
     [TestFixture]
+    [Category("BDD: Domain")]
     public class AddEmployeeAsCompanyAdminTest : EventSpecification<AddEmployee>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
@@ -21,7 +22,6 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-        private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
@@ -32,7 +32,6 @@ namespace Contact.Domain.Test.Employee.AddEmployeeTests
 
         private const string EmployeeFirstName = "Kurt";
         private const string EmployeeLastName = "Kurtson";
-        private static readonly DateTime EmployeeDateOfBirth = new DateTime(2000, 01, 01);
 
         [Test]
         public async void add_employee_as_company_admin()
