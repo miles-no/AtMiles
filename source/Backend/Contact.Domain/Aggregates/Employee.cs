@@ -111,7 +111,7 @@ namespace Contact.Domain.Aggregates
                 if (end.Value <= start) throw new ValueException("Start date must be before end date.");
             }
 
-            if (AnyConflictWithExistingBusyTimeEntries(start, end)) throw new AlreadyExistingItemException("Existing busy time items already defined in this range.");
+            CheckIfMoreThan100PercentageInAnyPeriode();
 
             var busyTimeId = IdService.CreateNewId();
             var ev = new BusyTimeAdded(
@@ -128,6 +128,36 @@ namespace Contact.Domain.Aggregates
                 createdBy: createdBy,
                 correlationId: correlationId);
 
+            ApplyChange(ev);
+        }
+
+        public void UpdateBusyTimeEnd(string companyId, string companyName, string busyTimeId, DateTime start, DateTime? end, short percentageOccpied, string comment, Person createdBy, string correlationId)
+        {
+            if (createdBy.Identifier != _id) throw new NoAccessException("Can only update busy-time to self");
+            
+            BusyTimeEntry busyTime = _busyTimeEntries.FirstOrDefault(b => b.Id == busyTimeId);
+            if (busyTime == null) throw new UnknownItemException("Unknown ID for Busy time entry");
+
+            if (end.HasValue)
+            {
+                if (end.Value <= start) throw new ValueException("Start date must be before end date.");
+            }
+
+            CheckIfMoreThan100PercentageInAnyPeriode();
+
+            var ev = new BusyTimeUpdated(
+                companyId: companyId,
+                companyName: companyName,
+                employeeId: _id,
+                employeeName: Name,
+                busyTimeId: busyTime.Id,
+                start: start,
+                end: end,
+                percentageOccpied: percentageOccpied,
+                comment: comment,
+                created: DateTime.UtcNow,
+                createdBy: createdBy,
+                correlationId: correlationId);
             ApplyChange(ev);
         }
 
@@ -149,48 +179,6 @@ namespace Contact.Domain.Aggregates
                 end: busyTime.End,
                 percentageOccpied: busyTime.PercentageOccpied,
                 comment: busyTime.Comment,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void SetBusyTimeEnd(string companyId, string companyName, string busyTimeId, DateTime? newEnd, Person createdBy, string correlationId)
-        {
-            if (createdBy.Identifier != _id) throw new NoAccessException("Can only add busy-time to self");
-
-            BusyTimeEntry busyTime = _busyTimeEntries.FirstOrDefault(b => b.Id == busyTimeId);
-
-            if (busyTime == null) throw new UnknownItemException("Unknown ID for Busy time entry");
-
-            var ev = new BusyTimeUpdatedNewEndDate(
-                companyId: companyId,
-                companyName: companyName,
-                employeeId: _id,
-                employeeName: Name,
-                busyTimeId: busyTime.Id,
-                newEnd: newEnd,
-                created: DateTime.UtcNow,
-                createdBy: createdBy,
-                correlationId: correlationId);
-            ApplyChange(ev);
-        }
-
-        public void SetPercentageOccupied(string companyId, string companyName, string busyTimeId, short newPercentageOccupied, Person createdBy, string correlationId)
-        {
-            if (createdBy.Identifier != _id) throw new NoAccessException("Can only add busy-time to self");
-
-            BusyTimeEntry busyTime = _busyTimeEntries.FirstOrDefault(b => b.Id == busyTimeId);
-
-            if (busyTime == null) throw new UnknownItemException("Unknown ID for Busy time entry");
-
-            var ev = new BusyTimeUpdatedNewPercentage(
-                companyId: companyId,
-                companyName: companyName,
-                employeeId: _id,
-                employeeName: Name,
-                busyTimeId: busyTime.Id,
-                newPercentageOccpied: newPercentageOccupied,
                 created: DateTime.UtcNow,
                 createdBy: createdBy,
                 correlationId: correlationId);
@@ -225,52 +213,9 @@ namespace Contact.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        private bool AnyConflictWithExistingBusyTimeEntries(DateTime start, DateTime? end)
+        private void CheckIfMoreThan100PercentageInAnyPeriode()
         {
-            foreach (var busyTimeEntry in _busyTimeEntries)
-            {
-                DateTime startExisting = busyTimeEntry.Start;
-                DateTime endExisting = busyTimeEntry.End.HasValue ? busyTimeEntry.End.Value : DateTime.MaxValue;
-
-                DateTime endConverted = end.HasValue ? end.Value : DateTime.MaxValue;
-
-                if (TimePeriodOverlap(startExisting, endExisting, start, endConverted))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool TimePeriodOverlap(DateTime bs, DateTime be, DateTime ts, DateTime te)
-        {
-            return (
-                // 1. Case:
-                //
-                //       TS-------TE
-                //    BS------BE 
-                //
-                // TS is after BS but before BE
-                (ts >= bs && ts < be)
-                || // or
-
-                // 2. Case
-                //
-                //    TS-------TE
-                //        BS---------BE
-                //
-                // TE is before BE but after BS
-                (te <= be && te > bs)
-                || // or
-
-                // 3. Case
-                //
-                //  TS----------TE
-                //     BS----BE
-                //
-                // TS is before BS and TE is after BE
-                (ts <= bs && te >= be)
-            );
+            //TODO: Check if more than 100% in any given periode
         }
 
         [UsedImplicitly] //To keep resharper happy
@@ -314,22 +259,12 @@ namespace Contact.Domain.Aggregates
         }
 
         [UsedImplicitly] //To keep resharper happy
-        private void Apply(BusyTimeUpdatedNewEndDate ev)
+        private void Apply(BusyTimeUpdated ev)
         {
             var oldBusyTime = _busyTimeEntries.First(bt => bt.Id == ev.BusyTimeId);
             _busyTimeEntries.RemoveAll(b => b.Id == ev.BusyTimeId);
-            var newBusyTime = new BusyTimeEntry(oldBusyTime.Id, oldBusyTime.Start, ev.NewEnd,
-                oldBusyTime.PercentageOccpied, oldBusyTime.Comment);
-            _busyTimeEntries.Add(newBusyTime);
-        }
-
-        [UsedImplicitly] //To keep resharper happy
-        private void Apply(BusyTimeUpdatedNewPercentage ev)
-        {
-            var oldBusyTime = _busyTimeEntries.First(bt => bt.Id == ev.BusyTimeId);
-            _busyTimeEntries.RemoveAll(b => b.Id == ev.BusyTimeId);
-            var newBusyTime = new BusyTimeEntry(oldBusyTime.Id, oldBusyTime.Start, oldBusyTime.End,
-                ev.NewPercentageOccpied, oldBusyTime.Comment);
+            var newBusyTime = new BusyTimeEntry(oldBusyTime.Id, ev.Start, ev.End,
+                ev.PercentageOccpied, ev.Comment);
             _busyTimeEntries.Add(newBusyTime);
         }
 

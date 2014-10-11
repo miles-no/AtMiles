@@ -14,8 +14,7 @@ namespace Contact.Domain.CommandHandlers
         Handles<AddBusyTime>,
         Handles<RemoveBusyTime>,
         Handles<ConfirmBusyTimeEntries>,
-        Handles<UpdateBusyTimeSetEndDate>,
-        Handles<UpdateBusyTimeChangePercentage>,
+        Handles<UpdateBusyTime>,
         Handles<SetDateOfBirth>,
         Handles<SetPrivateAddress>
     {
@@ -136,22 +135,12 @@ namespace Contact.Domain.CommandHandlers
             await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
         }
 
-        public async Task Handle(UpdateBusyTimeSetEndDate message)
+        public async Task Handle(UpdateBusyTime message)
         {
             var company = await GetCompanyById(message.CompanyId);
             var employee = await GetEmployeeById(message.EmployeeId);
 
-            employee.SetBusyTimeEnd(company.Id, company.Name, message.BusyTimeId, message.NewEnd, message.CreatedBy, message.CorrelationId);
-
-            await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
-        }
-
-        public async Task Handle(UpdateBusyTimeChangePercentage message)
-        {
-            var company = await GetCompanyById(message.CompanyId);
-            var employee = await GetEmployeeById(message.EmployeeId);
-
-            employee.SetPercentageOccupied(company.Id, company.Name, message.BusyTimeId, message.NewpercentageOccpied, message.CreatedBy, message.CorrelationId);
+            employee.UpdateBusyTimeEnd(company.Id, company.Name, message.BusyTimeId, message.Start, message.End, message.PercentageOccpied, message.Comment, message.CreatedBy, message.CorrelationId);
 
             await _employeeRepository.SaveAsync(employee, message.BasedOnVersion);
         }

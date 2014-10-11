@@ -18,7 +18,6 @@ namespace Contact.Domain.Test
         public abstract Handles<TCommand> OnHandler();
         public abstract IEnumerable<Event> Expect();
         public Exception ExpectedException;
-        private Guid _playgroundId = Guid.Empty;
 
         public async Task Setup()
         {

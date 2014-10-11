@@ -9,10 +9,10 @@ using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Employee.AddBusyTimeTests
+namespace Contact.Domain.Test.Employee.UpdateBusyTimeTests
 {
     [TestFixture]
-    public class AddBusyTimeConflict2Test : EventSpecification<AddBusyTime>
+    public class UpdateBusyTimeTestNotSelf : EventSpecification<UpdateBusyTime>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
@@ -25,21 +25,24 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         private const string EmployeeFirstName = "Ole";
         private const string EmployeeLastName = "Jensen";
 
+        private const string EmployeeId2 = "id2";
+        private const string EmployeeFirstName2 = "Jens";
+        private const string EmployeeLastName2 = "Olsen";
+
         private static readonly DateTime Start1 = new DateTime(2014, 01, 01);
+        private static readonly DateTime Start2 = new DateTime(2014, 01, 02);
         private static readonly DateTime End1 = new DateTime(2015, 01, 01);
+        private static readonly DateTime End2 = new DateTime(2015, 07, 01);
         private const short Percentage1 = 100;
+        private const short Percentage2 = 80;
         private const string Comment1 = "Client A";
+        private const string Comment2 = "Client A - some extra";
         private const string BusyTimeId1 = "BT01";
 
-        private static readonly DateTime Start2 = new DateTime(2014, 05, 05);
-        private static readonly DateTime End2 = new DateTime(2015, 05, 05);
-        private const short Percentage2 = 100;
-        private const string Comment2 = "Client B";
-
         [Test]
-        public async void add_busy_time_conflict_2()
+        public async void update_busy_time_not_on_self()
         {
-            ExpectedException = new AlreadyExistingItemException("Existing busy time items already defined in this range.");
+            ExpectedException = new NoAccessException("Can only update busy-time to self");
             await Setup();
         }
 
@@ -65,7 +68,8 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, system, "INIT")),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT"))
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT")),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId2,NameService.GetName(EmployeeFirstName2, EmployeeLastName2),null,DateTime.UtcNow,system, "INIT"))
                 };
             return events;
         }
@@ -75,17 +79,18 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT")),
-                    new FakeStreamEvent(EmployeeId, new BusyTimeAdded(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), BusyTimeId1, Start1, End1, Percentage1, Comment1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),"FIRST"))
+                    new FakeStreamEvent(EmployeeId2, new EmployeeCreated(CompanyId, CompanyName, EmployeeId2, null, EmployeeFirstName2, string.Empty, EmployeeLastName2, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT")),
+                    new FakeStreamEvent(EmployeeId2, new BusyTimeAdded(CompanyId, CompanyName, EmployeeId2, NameService.GetName(EmployeeFirstName2, EmployeeLastName2), BusyTimeId1, Start1, End1, Percentage1, Comment1, DateTime.UtcNow, new Person(EmployeeId2, NameService.GetName(EmployeeFirstName2, EmployeeLastName2)),"FIRST")),
                 };
             return events;
         }
 
-        public override AddBusyTime When()
+        public override UpdateBusyTime When()
         {
-            return new AddBusyTime(CompanyId, EmployeeId, Start2, End2, Percentage2, Comment2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
+            return new UpdateBusyTime(CompanyId, EmployeeId2, BusyTimeId1, Start2, End2, Percentage2, Comment2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<AddBusyTime> OnHandler()
+        public override Handles<UpdateBusyTime> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

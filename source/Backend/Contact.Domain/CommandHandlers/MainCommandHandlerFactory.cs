@@ -23,8 +23,7 @@ namespace Contact.Domain.CommandHandlers
             cmdHandler.RegisterHandler<Commands.AddBusyTime>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.RemoveBusyTime>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.ConfirmBusyTimeEntries>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.UpdateBusyTimeSetEndDate>(cmdHandlerCompany.Handle);
-            cmdHandler.RegisterHandler<Commands.UpdateBusyTimeChangePercentage>(cmdHandlerCompany.Handle);
+            cmdHandler.RegisterHandler<Commands.UpdateBusyTime>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.SetDateOfBirth>(cmdHandlerCompany.Handle);
             cmdHandler.RegisterHandler<Commands.SetPrivateAddress>(cmdHandlerCompany.Handle);
             return cmdHandler;

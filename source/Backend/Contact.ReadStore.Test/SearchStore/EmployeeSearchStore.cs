@@ -39,8 +39,7 @@ namespace Contact.ReadStore.SearchStore
             handler.RegisterHandler<BusyTimeAdded>(HandleBusyTimeAdded);
             handler.RegisterHandler<BusyTimeConfirmed>(HandleBusyTimeConfirmed);
             handler.RegisterHandler<BusyTimeRemoved>(HandleBusyTimeRemoved);
-            handler.RegisterHandler<BusyTimeUpdatedNewEndDate>(HandleBusyTimeNewEndDate);
-            handler.RegisterHandler<BusyTimeUpdatedNewPercentage>(HandleBusyTimeNewPercentage);
+            handler.RegisterHandler<BusyTimeUpdated>(HandleBusyTimeUpdated);
             handler.RegisterHandler<DateOfBirthSet>(HandleBirthDateSet);
             handler.RegisterHandler<PrivateAddressSet>(HandlePrivateAddressSet);
         }
@@ -174,18 +173,7 @@ namespace Contact.ReadStore.SearchStore
             }
         }
 
-        private async Task HandleBusyTimeNewPercentage(BusyTimeUpdatedNewPercentage ev)
-        {
-            using (var session = _documentStore.OpenAsyncSession())
-            {
-                var employee = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
-                employee = Patch(employee, ev);
-                await session.StoreAsync(employee);
-                await session.SaveChangesAsync();
-            }
-        }
-
-        private async Task HandleBusyTimeNewEndDate(BusyTimeUpdatedNewEndDate ev)
+        private async Task HandleBusyTimeUpdated(BusyTimeUpdated ev)
         {
             using (var session = _documentStore.OpenAsyncSession())
             {
@@ -300,26 +288,17 @@ namespace Contact.ReadStore.SearchStore
             return model;
         }
 
-        private static EmployeeSearchModel Patch(EmployeeSearchModel model, BusyTimeUpdatedNewPercentage ev)
+        private EmployeeSearchModel Patch(EmployeeSearchModel model, BusyTimeUpdated ev)
         {
             if (model.BusyTimeEntries != null)
             {
                 if (model.BusyTimeEntries.Any(bt => bt.Id == ev.BusyTimeId))
                 {
-                    model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId).PercentageOccupied =
-                        ev.NewPercentageOccpied;
-                }
-            }
-            return model;
-        }
-
-        private static EmployeeSearchModel Patch(EmployeeSearchModel model, BusyTimeUpdatedNewEndDate ev)
-        {
-            if (model.BusyTimeEntries != null)
-            {
-                if (model.BusyTimeEntries.Any(bt => bt.Id == ev.BusyTimeId))
-                {
-                    model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId).End = ev.NewEnd;
+                    var busy = model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId);
+                    busy.Start = ev.Start;
+                    busy.End = ev.End;
+                    busy.PercentageOccupied = ev.PercentageOccpied;
+                    busy.Comment = ev.Comment;
                 }
             }
             return model;

@@ -4,17 +4,17 @@ using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
+using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Employee.UpdateBusyTimeSetFinishDateTests
+namespace Contact.Domain.Test.Employee.RemoveBusyTimeTests
 {
     [TestFixture]
-    public class UpdateBusyTimeSetFinishDateTest : EventSpecification<UpdateBusyTimeSetEndDate>
+    public class RemoveBusyTimeTestNotSelf : EventSpecification<RemoveBusyTime>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
-        private DateTime _timestamp = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -25,26 +25,26 @@ namespace Contact.Domain.Test.Employee.UpdateBusyTimeSetFinishDateTests
         private const string EmployeeFirstName = "Ole";
         private const string EmployeeLastName = "Jensen";
 
+        private const string EmployeeId2 = "id2";
+        private const string EmployeeFirstName2 = "Jens";
+        private const string EmployeeLastName2 = "Olsen";
+
         private static readonly DateTime Start1 = new DateTime(2014, 01, 01);
         private static readonly DateTime End1 = new DateTime(2015, 01, 01);
-        private static readonly DateTime End2 = new DateTime(2015, 07, 01);
         private const short Percentage1 = 100;
         private const string Comment1 = "Client A";
         private const string BusyTimeId1 = "BT01";
 
         [Test]
-        public async void update_busy_time_set_end()
+        public async void remove_busy_time_not_on_self()
         {
+            ExpectedException = new NoAccessException("Can only add busy-time to self");
             await Setup();
         }
 
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeEmployeeRepository.GetThenEvents();
-            if (events.Count == 1)
-            {
-                _timestamp = events[0].Created;
-            }
             return events;
         }
 
@@ -64,7 +64,8 @@ namespace Contact.Domain.Test.Employee.UpdateBusyTimeSetFinishDateTests
             var events = new List<FakeStreamEvent>
                 {
                     new FakeStreamEvent(CompanyId, new CompanyCreated(CompanyId, CompanyName, DateTime.UtcNow, system, "INIT")),
-                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT"))
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId,NameService.GetName(EmployeeFirstName, EmployeeLastName),null,DateTime.UtcNow,system, "INIT")),
+                    new FakeStreamEvent(CompanyId, new EmployeeAdded(CompanyId, CompanyName, EmployeeId2,NameService.GetName(EmployeeFirstName2, EmployeeLastName2),null,DateTime.UtcNow,system, "INIT"))
                 };
             return events;
         }
@@ -73,18 +74,19 @@ namespace Contact.Domain.Test.Employee.UpdateBusyTimeSetFinishDateTests
         {
             var events = new List<FakeStreamEvent>
                 {
-                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT")),
-                    new FakeStreamEvent(EmployeeId, new BusyTimeAdded(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), BusyTimeId1, Start1, End1, Percentage1, Comment1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),"FIRST"))
+                    new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, null, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT")),
+                    new FakeStreamEvent(EmployeeId2, new EmployeeCreated(CompanyId, CompanyName, EmployeeId2, null, EmployeeFirstName2, string.Empty, EmployeeLastName2, DateTime.UtcNow,new Person(Constants.SystemUserId, Constants.SystemUserId), "INIT")),
+                    new FakeStreamEvent(EmployeeId2, new BusyTimeAdded(CompanyId, CompanyName, EmployeeId2, NameService.GetName(EmployeeFirstName2, EmployeeLastName2), BusyTimeId1, Start1, End1, Percentage1, Comment1, DateTime.UtcNow, new Person(EmployeeId2, NameService.GetName(EmployeeFirstName2, EmployeeLastName2)),"FIRST"))
                 };
             return events;
         }
 
-        public override UpdateBusyTimeSetEndDate When()
+        public override RemoveBusyTime When()
         {
-            return new UpdateBusyTimeSetEndDate(CompanyId, EmployeeId, BusyTimeId1, End2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
+            return new RemoveBusyTime(CompanyId, EmployeeId2, BusyTimeId1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<UpdateBusyTimeSetEndDate> OnHandler()
+        public override Handles<RemoveBusyTime> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
@@ -93,11 +95,7 @@ namespace Contact.Domain.Test.Employee.UpdateBusyTimeSetFinishDateTests
 
         public override IEnumerable<Event> Expect()
         {
-            var events = new List<Event>
-                {
-                    new BusyTimeUpdatedNewEndDate(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), BusyTimeId1, End2, _timestamp, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),_correlationId)
-                };
-            return events;
+            yield break;
         }
     }
 }

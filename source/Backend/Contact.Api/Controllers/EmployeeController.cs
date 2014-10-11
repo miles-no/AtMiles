@@ -100,34 +100,16 @@ namespace Contact.Backend.Controllers
         }
 
         [HttpPost]
-        [Route("api/company/{companyId}/employee/busytime/{busyTimeId}/newend")]
+        [Route("api/company/{companyId}/employee/busytime/{busyTimeId}")]
         [ResponseType(typeof(Response))]
-        public HttpResponseMessage UpdateBusyTimeNewEnd(string companyId, string busyTimeId, DateTime? newend)
+        public HttpResponseMessage UpdateBusyTimeNewEnd(string companyId, string busyTimeId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
             string correlationId = Helpers.CreateNewId();
 
             try
             {
                 var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
-                var command = new UpdateBusyTimeSetEndDate(companyId, createdBy.Identifier, busyTimeId, newend, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
-                return Helpers.Send(Request, _commandSender, command);
-            }
-            catch (Exception ex)
-            {
-                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("api/company/{companyId}/employee/busytime/{busyTimeId}/newpercentage")]
-        [ResponseType(typeof(Response))]
-        public HttpResponseMessage UpdateBusyTimeChangePercentage(string companyId, string busyTimeId, short newpercentageOccupied)
-        {
-            string correlationId = Helpers.CreateNewId();
-            try
-            {
-                var createdBy = Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver);
-                var command = new UpdateBusyTimeChangePercentage(companyId, createdBy.Identifier, busyTimeId, newpercentageOccupied, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
+                var command = new UpdateBusyTime(companyId, createdBy.Identifier, busyTimeId, start, end, percentageOccupied, comment, DateTime.UtcNow, createdBy, correlationId, Constants.IgnoreVersion);
                 return Helpers.Send(Request, _commandSender, command);
             }
             catch (Exception ex)

@@ -4,17 +4,17 @@ using Contact.Domain.CommandHandlers;
 using Contact.Domain.Commands;
 using Contact.Domain.Events.Company;
 using Contact.Domain.Events.Employee;
-using Contact.Domain.Exceptions;
 using Contact.Domain.Services;
 using Contact.Domain.ValueTypes;
 using NUnit.Framework;
 
-namespace Contact.Domain.Test.Employee.AddBusyTimeTests
+namespace Contact.Domain.Test.Employee.UpdateBusyTimeTests
 {
     [TestFixture]
-    public class AddBusyTimeConflict4Test : EventSpecification<AddBusyTime>
+    public class UpdateBusyTimeSetFinishDateTest : EventSpecification<UpdateBusyTime>
     {
         private readonly string _correlationId = Guid.NewGuid().ToString();
+        private DateTime _timestamp = DateTime.MinValue;
         private FakeRepository<Aggregates.Company> _fakeCompanyRepository;
         private FakeRepository<Aggregates.Employee> _fakeEmployeeRepository;
 
@@ -26,26 +26,28 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
         private const string EmployeeLastName = "Jensen";
 
         private static readonly DateTime Start1 = new DateTime(2014, 01, 01);
+        private static readonly DateTime Start2 = new DateTime(2014, 01, 02);
         private static readonly DateTime End1 = new DateTime(2015, 01, 01);
+        private static readonly DateTime End2 = new DateTime(2015, 07, 01);
         private const short Percentage1 = 100;
+        private const short Percentage2 = 80;
         private const string Comment1 = "Client A";
+        private const string Comment2 = "Client A - some extra";
         private const string BusyTimeId1 = "BT01";
 
-        private static readonly DateTime Start2 = new DateTime(2013, 01, 01);
-        private static readonly DateTime End2 = new DateTime(2016, 01, 01);
-        private const short Percentage2 = 100;
-        private const string Comment2 = "Client B";
-
         [Test]
-        public async void add_busy_time_conflict_4()
+        public async void update_busy_time()
         {
-            ExpectedException = new AlreadyExistingItemException("Existing busy time items already defined in this range.");
             await Setup();
         }
 
         public override IEnumerable<Event> Produced()
         {
             var events = _fakeEmployeeRepository.GetThenEvents();
+            if (events.Count == 1)
+            {
+                _timestamp = events[0].Created;
+            }
             return events;
         }
 
@@ -80,12 +82,12 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
             return events;
         }
 
-        public override AddBusyTime When()
+        public override UpdateBusyTime When()
         {
-            return new AddBusyTime(CompanyId, EmployeeId, Start2, End2, Percentage2, Comment2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
+            return new UpdateBusyTime(CompanyId, EmployeeId, BusyTimeId1, Start2, End2, Percentage2, Comment2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<AddBusyTime> OnHandler()
+        public override Handles<UpdateBusyTime> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
@@ -94,7 +96,11 @@ namespace Contact.Domain.Test.Employee.AddBusyTimeTests
 
         public override IEnumerable<Event> Expect()
         {
-            yield break;
+            var events = new List<Event>
+                {
+                    new BusyTimeUpdated(CompanyId, CompanyName, EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName), BusyTimeId1, Start2, End2, Percentage2, Comment2, _timestamp, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)),_correlationId)
+                };
+            return events;
         }
     }
 }

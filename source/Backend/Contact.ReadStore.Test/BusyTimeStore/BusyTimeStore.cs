@@ -29,8 +29,7 @@ namespace Contact.ReadStore.BusyTimeStore
             handler.RegisterHandler<BusyTimeAdded>(HandleBusyTimeAdded);
             handler.RegisterHandler<BusyTimeConfirmed>(HandleBusyTimeConfirmed);
             handler.RegisterHandler<BusyTimeRemoved>(HandleBusyTimeRemoved);
-            handler.RegisterHandler<BusyTimeUpdatedNewEndDate>(HandleBusyTimeNewEndDate);
-            handler.RegisterHandler<BusyTimeUpdatedNewPercentage>(HandleBusyTimeNewPercentage);
+            handler.RegisterHandler<BusyTimeUpdated>(HandleBusyTimeNewUpdated);
         }
 
         private async Task HandleEmployeeCreated(EmployeeCreated ev)
@@ -56,18 +55,7 @@ namespace Contact.ReadStore.BusyTimeStore
             }
         }
 
-        private async Task HandleBusyTimeNewPercentage(BusyTimeUpdatedNewPercentage ev)
-        {
-            using (var session = _documentStore.OpenAsyncSession())
-            {
-                var model = await session.LoadAsync<BusyTimeModel>(GetRavenId(ev.EmployeeId));
-                model = Patch(model, ev);
-                await session.StoreAsync(model);
-                await session.SaveChangesAsync();
-            }
-        }
-
-        private async Task HandleBusyTimeNewEndDate(BusyTimeUpdatedNewEndDate ev)
+        private async Task HandleBusyTimeNewUpdated(BusyTimeUpdated ev)
         {
             using (var session = _documentStore.OpenAsyncSession())
             {
@@ -109,26 +97,17 @@ namespace Contact.ReadStore.BusyTimeStore
             return UpdateExpiryDate(model, ev.Created);
         }
 
-        private static BusyTimeModel Patch(BusyTimeModel model, BusyTimeUpdatedNewEndDate ev)
+        private BusyTimeModel Patch(BusyTimeModel model, BusyTimeUpdated ev)
         {
             if (model.BusyTimeEntries != null)
             {
                 if (model.BusyTimeEntries.Any(bt => bt.Id == ev.BusyTimeId))
                 {
-                    model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId).End = ev.NewEnd;
-                }
-            }
-            return UpdateExpiryDate(model, ev.Created);
-        }
-
-        private static BusyTimeModel Patch(BusyTimeModel model, BusyTimeUpdatedNewPercentage ev)
-        {
-            if (model.BusyTimeEntries != null)
-            {
-                if (model.BusyTimeEntries.Any(bt => bt.Id == ev.BusyTimeId))
-                {
-                    model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId).PercentageOccupied =
-                        ev.NewPercentageOccpied;
+                    var busy = model.BusyTimeEntries.First(bt => bt.Id == ev.BusyTimeId);
+                    busy.Start = ev.Start;
+                    busy.End = ev.End;
+                    busy.PercentageOccupied = ev.PercentageOccpied;
+                    busy.Comment = ev.Comment;
                 }
             }
             return UpdateExpiryDate(model, ev.Created);
