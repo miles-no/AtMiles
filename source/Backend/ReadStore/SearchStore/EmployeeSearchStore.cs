@@ -352,8 +352,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                     graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                     graphics.DrawImage(srcImage, new Rectangle(0, 0, width, height));
-                    byte[] imageBytes;
-                    using (MemoryStream ms = new MemoryStream())
+                    using (var ms = new MemoryStream())
                     {
                         // Convert Image to byte[]
                         if (photo.Extension == "png")
@@ -365,7 +364,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                             newImage.Save(ms, ImageFormat.Jpeg);
                         }
 
-                        imageBytes = ms.ToArray();
+                        byte[] imageBytes = ms.ToArray();
                         var res = "data:image/" + photo.Extension + ";base64," + Convert.ToBase64String(imageBytes);
                         Debug.WriteLine(res);
                         return res;

@@ -19,16 +19,13 @@ namespace no.miles.at.Backend.Api.Controllers
         [Route("api/search/Fulltext")]
         public SearchResultModel Fulltext(string query, int? skip = 0, int? take = 10)
         {
-            var request = new SearchRequestModel {Query = query, Skip = skip ?? 0, Take = take ?? 10};
-
             int takeNumber = take ?? 10;
             int skipNumber = skip ?? 0;
 
             int total;
             var resSearch = _engine.FulltextSearch(query, takeNumber, skipNumber, out total);
 
-            var res = new SearchResultModel { Skipped = skipNumber, Total = total };
-            res.Results = Convert(resSearch);
+            var res = new SearchResultModel {Skipped = skipNumber, Total = total, Results = Convert(resSearch)};
 
             return res;
 

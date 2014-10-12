@@ -11,13 +11,11 @@ namespace no.miles.at.Backend.ReadStore.UserStore
 {
     public class UserLookupStore
     {
-        private readonly UserLookupEngine _engine;
         private readonly IDocumentStore _documentStore;
 
-        public UserLookupStore(UserLookupEngine engine, IDocumentStore documentStore)
+        public UserLookupStore(IDocumentStore documentStore)
         {
-            this._engine = engine;
-            this._documentStore = documentStore;
+            _documentStore = documentStore;
         }
 
         public static string GetRavenId(string id)
@@ -138,6 +136,7 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             };
         }
 
+// ReSharper disable once UnusedParameter.Local
         private static UserLookupModel Patch(UserLookupModel model, ImportedFromCvPartner ev)
         {
             return model;
@@ -150,12 +149,14 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             return model;
         }
 
+// ReSharper disable once UnusedParameter.Local
         private static UserLookupModel Patch(UserLookupModel model, CompanyAdminAdded ev)
         {
             model.CompanyAdmin = true;
             return model;
         }
 
+// ReSharper disable once UnusedParameter.Local
         private static UserLookupModel Patch(UserLookupModel model, CompanyAdminRemoved ev)
         {
             model.CompanyAdmin = false;

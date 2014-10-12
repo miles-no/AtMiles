@@ -237,7 +237,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
         private static HelpPageApiModel GenerateApiModel(ApiDescription apiDescription, HttpConfiguration config)
         {
-            HelpPageApiModel apiModel = new HelpPageApiModel()
+            var apiModel = new HelpPageApiModel
             {
                 ApiDescription = apiDescription,
             };
@@ -305,13 +305,13 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
                         if (!parameterDescriptor.IsOptional)
                         {
-                            uriParameter.Annotations.Add(new ParameterAnnotation() { Documentation = "Required" });
+                            uriParameter.Annotations.Add(new ParameterAnnotation { Documentation = "Required" });
                         }
 
                         object defaultValue = parameterDescriptor.DefaultValue;
                         if (defaultValue != null)
                         {
-                            uriParameter.Annotations.Add(new ParameterAnnotation() { Documentation = "Default value is " + Convert.ToString(defaultValue, CultureInfo.InvariantCulture) });
+                            uriParameter.Annotations.Add(new ParameterAnnotation { Documentation = "Default value is " + Convert.ToString(defaultValue, CultureInfo.InvariantCulture) });
                         }
                     }
                     else
@@ -341,7 +341,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
         private static ParameterDescription AddParameterDescription(HelpPageApiModel apiModel,
             ApiParameterDescription apiParameter, ModelDescription typeDescription)
         {
-            ParameterDescription parameterDescription = new ParameterDescription
+            var parameterDescription = new ParameterDescription
             {
                 Name = apiParameter.Name,
                 Documentation = apiParameter.Documentation,
@@ -359,14 +359,14 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
             {
                 if (apiParameter.Source == ApiParameterSource.FromBody)
                 {
-                    Type parameterType = apiParameter.ParameterDescriptor.ParameterType;
+                    var parameterType = apiParameter.ParameterDescriptor.ParameterType;
                     apiModel.RequestModelDescription = modelGenerator.GetOrCreateModelDescription(parameterType);
                     apiModel.RequestDocumentation = apiParameter.Documentation;
                 }
                 else if (apiParameter.ParameterDescriptor != null &&
                     apiParameter.ParameterDescriptor.ParameterType == typeof(HttpRequestMessage))
                 {
-                    Type parameterType = sampleGenerator.ResolveHttpRequestMessageType(apiDescription);
+                    var parameterType = sampleGenerator.ResolveHttpRequestMessageType(apiDescription);
 
                     if (parameterType != null)
                     {
@@ -442,7 +442,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
         private static ModelDescriptionGenerator InitializeModelDescriptionGenerator(HttpConfiguration config)
         {
-            ModelDescriptionGenerator modelGenerator = new ModelDescriptionGenerator(config);
+            var modelGenerator = new ModelDescriptionGenerator(config);
             Collection<ApiDescription> apis = config.Services.GetApiExplorer().ApiDescriptions;
             foreach (ApiDescription api in apis)
             {
@@ -458,7 +458,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
         private static void LogInvalidSampleAsError(HelpPageApiModel apiModel, object sample)
         {
-            InvalidSample invalidSample = sample as InvalidSample;
+            var invalidSample = sample as InvalidSample;
             if (invalidSample != null)
             {
                 apiModel.ErrorMessages.Add(invalidSample.ErrorMessage);

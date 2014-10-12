@@ -18,7 +18,7 @@ namespace no.miles.at.Backend.ReadStore.BusyTimeStore
             BusyTimeModel res;
             using (var session = _documentStore.OpenSession())
             {
-                var id = no.miles.at.Backend.ReadStore.BusyTimeStore.BusyTimeStore.GetRavenId(employeeId);
+                var id = BusyTimeStore.GetRavenId(employeeId);
                 res = session.Load<BusyTimeModel>(id);
             }
             if (res == null)

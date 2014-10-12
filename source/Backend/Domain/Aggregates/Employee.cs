@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using no.miles.at.Backend.Domain.Annotations;
 using no.miles.at.Backend.Domain.Events.Employee;
 using no.miles.at.Backend.Domain.Events.Import;
 using no.miles.at.Backend.Domain.Exceptions;
-using no.miles.at.Backend.Domain.Properties;
 using no.miles.at.Backend.Domain.Services;
 using no.miles.at.Backend.Domain.ValueTypes;
 

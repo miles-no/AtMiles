@@ -178,9 +178,11 @@ namespace no.miles.at.Backend.Api.Controllers
         private static BusyTimeResponse Convert(BusyTimeModel data)
         {
             if (data == null) return null;
-            var response = new BusyTimeResponse();
-            response.ExpiryDate = data.ExpiryDate;
-            response.BusyTimeEntries = new List<BusyTimeResponse.BusyTime>();
+            var response = new BusyTimeResponse
+            {
+                ExpiryDate = data.ExpiryDate,
+                BusyTimeEntries = new List<BusyTimeResponse.BusyTime>()
+            };
             if (data.BusyTimeEntries != null)
             {
                 foreach (var busyTimeEntry in data.BusyTimeEntries)

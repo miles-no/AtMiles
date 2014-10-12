@@ -1,7 +1,7 @@
 ﻿using System;
+using no.miles.at.Backend.Domain.Annotations;
 using no.miles.at.Backend.Domain.Events.CommandSession;
 using no.miles.at.Backend.Domain.Exceptions;
-using no.miles.at.Backend.Domain.Properties;
 using no.miles.at.Backend.Domain.ValueTypes;
 
 namespace no.miles.at.Backend.Domain.Aggregates

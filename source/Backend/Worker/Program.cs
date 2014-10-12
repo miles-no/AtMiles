@@ -61,7 +61,7 @@ namespace no.miles.at.Backend.Worker
             var store = RavenDocumentStore.CreateStore(config.RavenDbUrl);
             new EmployeeSearchStore(store).PrepareHandler(handlers);
             new CommandStatusStore(store).PrepareHandler(handlers);
-            new UserLookupStore(new UserLookupEngine(store), store).PrepareHandler(handlers);
+            new UserLookupStore(store).PrepareHandler(handlers);
             new BusyTimeStore(store).PrepareHandler(handlers);
             var positionSaver = new PositionSaver(store);
             var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { }, positionSaver);

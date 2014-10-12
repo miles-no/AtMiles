@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 
@@ -9,19 +7,8 @@ namespace no.miles.at.Backend.Domain
     //FROM http://blogs.msdn.com/b/davidebb/archive/2010/01/18/use-c-4-0-dynamic-to-drastically-simplify-your-private-reflection-code.aspx
     class PrivateReflectionDynamicObject : DynamicObject
     {
-
-        private static IDictionary<Type, IDictionary<string, IProperty>> _propertiesOnType = new ConcurrentDictionary<Type, IDictionary<string, IProperty>>();
-
-        // Simple abstraction to make field and property access consistent
-        interface IProperty
-        {
-            string Name { get; }
-            object GetValue(object obj, object[] index);
-            void SetValue(object obj, object val, object[] index);
-        }
-
         private object RealObject { get; set; }
-        private const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic;
 
         internal static object WrapObjectIfNeeded(object o)
         {
@@ -29,7 +16,7 @@ namespace no.miles.at.Backend.Domain
             if (o == null || o.GetType().IsPrimitive || o is string)
                 return o;
 
-            return new PrivateReflectionDynamicObject() { RealObject = o };
+            return new PrivateReflectionDynamicObject { RealObject = o };
         }
 
         // Called when a method is called
@@ -50,7 +37,7 @@ namespace no.miles.at.Backend.Domain
                 // Try to incoke the method
                 return type.InvokeMember(
                     name,
-                    BindingFlags.InvokeMethod | bindingFlags,
+                    BindingFlags.InvokeMethod | BindingFlags,
                     null,
                     target,
                     args);

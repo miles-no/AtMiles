@@ -89,7 +89,7 @@ namespace no.miles.at.Backend.Api.Utilities
 
         public static Person GetCreatedBy(string companyId, IIdentity user, IResolveNameOfUser nameResolver)
         {
-            var userId = Helpers.GetUserIdentity(user);
+            var userId = GetUserIdentity(user);
             var name = nameResolver.ResolveUserNameById(companyId, userId);
             return new Person(userId, name);
         }
@@ -97,7 +97,7 @@ namespace no.miles.at.Backend.Api.Utilities
         public static HttpResponseMessage Send(HttpRequestMessage request, ICommandSender sender, Command command)
         {
             sender.Send(command);
-            var response = Helpers.CreateResponse(request, command.CorrelationId);
+            var response = CreateResponse(request, command.CorrelationId);
             return response;
         }
     }

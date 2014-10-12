@@ -65,10 +65,10 @@ namespace no.miles.at.Backend.Infrastructure
                     }
                 }
             }
-            else
-            {
+            //else
+            //{
                 //TODO: Log error
-            }
+            //}
         }
 
         private string GetRoutingKey()
@@ -80,9 +80,7 @@ namespace no.miles.at.Backend.Infrastructure
         {
             if (_useSsl)
             {
-                var ssl = new SslOption();
-                ssl.Enabled = true;
-                ssl.ServerName = _hostName;
+                var ssl = new SslOption {Enabled = true, ServerName = _hostName};
 
                 _connectionFactory = new ConnectionFactory
                 {
@@ -113,6 +111,7 @@ namespace no.miles.at.Backend.Infrastructure
                     return _model != null && _model.IsOpen;
                 }
             }
+// ReSharper disable once EmptyGeneralCatchClause
             catch (Exception)
             { }
             return false;  // Failed to create connection

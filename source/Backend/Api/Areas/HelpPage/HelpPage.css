@@ -16,10 +16,10 @@ pre.wrapped {
 .help-page-table {
     width: 100%;
     text-align: left;
-    margin: 0px 0px 20px 0px;
+    margin: 0 0 20px 0;
     border-top: 2px solid #D4D4D4;
     border-collapse: separate;
-    border-spacing: 0px 10px;
+    border-spacing: 0 10px;
 }
 
 .help-page-table th {
@@ -32,8 +32,8 @@ pre.wrapped {
 
 
 .help-page-table pre, .help-page-table p {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     font-family: inherit;
     font-size: 100%;
 }
@@ -54,7 +54,7 @@ a:hover {
     padding: 8px 15px;
     border-bottom: none;
     display: inline-block;
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0 0 0;
 }
 
 .sample-content {
@@ -63,7 +63,7 @@ a:hover {
     padding: 15px 20px;
     background: #FFFFFF;
     border: 2px solid #D4D4D4;
-    margin: 0px 0px 10px 0px;
+    margin: 0 0 10px 0;
 }
 
 .api-name {

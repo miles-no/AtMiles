@@ -87,7 +87,7 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             var company = await GetCompanyById(message.CompanyId);
             var employee = await GetEmployeeById(message.EmployeeId);
 
-            CheckIfHandlingSelf(admin, employee);
+            CheckIfHandlingSelf(admin.Id, employee.Id);
 
             if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
 
@@ -98,9 +98,11 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             await _companyRepository.SaveAsync(company, message.BasedOnVersion);
         }
 
-        private static void CheckIfHandlingSelf(Employee admin, Employee employee)
+        private static void CheckIfHandlingSelf(string adminId, string employeeId)
         {
-            if (admin.Id == employee.Id) throw new NoAccessException("Cannot perform operation on self");
+            if (adminId == null || employeeId == null) return;
+            
+            if (adminId == employeeId) throw new NoAccessException("Cannot perform operation on self");
         }
 
         public async Task Handle(AddBusyTime message)

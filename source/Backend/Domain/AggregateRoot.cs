@@ -26,7 +26,7 @@ namespace no.miles.at.Backend.Domain
             _changes.Clear();
         }
 
-        public void LoadsFromHistory(IEnumerable<Event> history, bool keepHistory = false)
+        public void LoadsFromHistory(Event[] history, bool keepHistory = false)
         {
             foreach (var e in history)
             {

@@ -97,11 +97,12 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             string actionName = api.ActionDescriptor.ActionName;
             IEnumerable<string> parameterNames = api.ParameterDescriptions.Select(p => p.Name);
             Collection<MediaTypeFormatter> formatters;
-            Type type = ResolveType(api, controllerName, actionName, parameterNames, sampleDirection, out formatters);
+            var enumerable = parameterNames as string[] ?? parameterNames.ToArray();
+            var type = ResolveType(api, controllerName, actionName, enumerable, sampleDirection, out formatters);
             var samples = new Dictionary<MediaTypeHeaderValue, object>();
 
             // Use the samples provided directly for actions
-            var actionSamples = GetAllActionSamples(controllerName, actionName, parameterNames, sampleDirection);
+            var actionSamples = GetAllActionSamples(controllerName, actionName, enumerable, sampleDirection);
             foreach (var actionSample in actionSamples)
             {
                 samples.Add(actionSample.Key.MediaType, WrapSampleIfString(actionSample.Value));
@@ -118,7 +119,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                     {
                         if (!samples.ContainsKey(mediaType))
                         {
-                            object sample = GetActionSample(controllerName, actionName, parameterNames, type, formatter, mediaType, sampleDirection);
+                            object sample = GetActionSample(controllerName, actionName, enumerable, type, formatter, mediaType, sampleDirection);
 
                             // If no sample found, try generate sample using formatter and sample object
                             if (sample == null && sampleObject != null)
@@ -246,7 +247,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                 ActualHttpMessageTypes.TryGetValue(new HelpPageSampleKey(sampleDirection, controllerName, actionName, new[] { "*" }), out type))
             {
                 // Re-compute the supported formatters based on type
-                Collection<MediaTypeFormatter> newFormatters = new Collection<MediaTypeFormatter>();
+                var newFormatters = new Collection<MediaTypeFormatter>();
                 foreach (var formatter in api.ActionDescriptor.Configuration.Formatters)
                 {
                     if (IsFormatSupported(sampleDirection, formatter, type))
@@ -265,7 +266,6 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                         type = requestBodyParameter == null ? null : requestBodyParameter.ParameterDescriptor.ParameterType;
                         formatters = api.SupportedRequestBodyFormatters;
                         break;
-                    case SampleDirection.Response:
                     default:
                         type = api.ResponseDescription.ResponseType ?? api.ResponseDescription.DeclaredType;
                         formatters = api.SupportedResponseFormatters;
@@ -296,7 +296,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                 throw new ArgumentNullException("mediaType");
             }
 
-            object sample = String.Empty;
+            object sample;
             MemoryStream ms = null;
             HttpContent content = null;
             try
@@ -307,7 +307,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                     content = new ObjectContent(type, value, formatter, mediaType);
                     formatter.WriteToStreamAsync(type, value, ms, content, null).Wait();
                     ms.Position = 0;
-                    StreamReader reader = new StreamReader(ms);
+                    var reader = new StreamReader(ms);
                     string serializedSampleString = reader.ReadToEnd();
                     if (mediaType.MediaType.ToUpperInvariant().Contains("XML"))
                     {
@@ -356,7 +356,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 
         internal static Exception UnwrapException(Exception exception)
         {
-            AggregateException aggregateException = exception as AggregateException;
+            var aggregateException = exception as AggregateException;
             if (aggregateException != null)
             {
                 return aggregateException.Flatten().InnerException;
@@ -368,7 +368,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         private static object DefaultSampleObjectFactory(HelpPageSampleGenerator sampleGenerator, Type type)
         {
             // Try to create a default sample object
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             return objectGenerator.GenerateObject(type);
         }
 
@@ -416,7 +416,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 
         private IEnumerable<KeyValuePair<HelpPageSampleKey, object>> GetAllActionSamples(string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection)
         {
-            HashSet<string> parameterNamesSet = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
+            var parameterNamesSet = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
             foreach (var sample in ActionSamples)
             {
                 HelpPageSampleKey sampleKey = sample.Key;
@@ -432,7 +432,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 
         private static object WrapSampleIfString(object sample)
         {
-            string stringSample = sample as string;
+            var stringSample = sample as string;
             if (stringSample != null)
             {
                 return new TextSample(stringSample);

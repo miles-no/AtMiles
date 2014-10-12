@@ -12,13 +12,13 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
     public class Convert
 
     {
-        private readonly string company;
-        private readonly Person createdBy;
+        private readonly string _company;
+        private readonly Person _createdBy;
 
         public Convert(string company, Person createdBy)
         {
-            this.company = company;
-            this.createdBy = createdBy;
+            _company = company;
+            _createdBy = createdBy;
         }
 
         public CvPartnerImportData ToImportFromCvPartner(Cv cv, Employee employee, Picture employeePhoto)
@@ -153,14 +153,14 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
             }
 
             var res = new AddEmployee(
-                companyId: company,
+                companyId: _company,
                 globalId: id,
                 loginId: new Login(Constants.GoogleIdProvider, employee.Email),
                 firstName: givenName,
                 middleName: middleName,
                 lastName: familyName,
                 created: DateTime.UtcNow,
-                createdBy: createdBy,
+                createdBy: _createdBy,
                 correlationId: new Guid().ToString(), 
                 basedOnVersion: Constants.IgnoreVersion);
 

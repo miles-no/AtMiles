@@ -9,7 +9,8 @@
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace no.miles.at.Backend.Domain.Properties
+// ReSharper disable once CheckNamespace
+namespace no.miles.at.Backend.Domain.Annotations
 {
   /// <summary>
   /// Indicates that the value of the marked element could be <c>null</c> sometimes,

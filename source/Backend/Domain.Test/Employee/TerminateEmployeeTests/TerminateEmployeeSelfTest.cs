@@ -21,12 +21,10 @@ namespace no.miles.at.Backend.Domain.Test.Employee.TerminateEmployeeTests
 
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
-        private const string OfficeName = "Stavanger";
 
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
-        private static readonly DateTime AdminDateOfBirth = new DateTime(1980, 01, 01);
 
         [Test]
         public async void terminate_employee_self()

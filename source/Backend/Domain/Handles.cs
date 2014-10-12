@@ -2,7 +2,8 @@
 
 namespace no.miles.at.Backend.Domain
 {
-    public interface Handles<T> where T : Message
+// ReSharper disable once InconsistentNaming
+    public interface Handles<in T> where T : Message
     {
         Task Handle(T message);
     }

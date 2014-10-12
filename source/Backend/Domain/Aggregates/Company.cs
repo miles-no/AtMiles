@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using no.miles.at.Backend.Domain.Annotations;
 using no.miles.at.Backend.Domain.Events.Company;
 using no.miles.at.Backend.Domain.Exceptions;
-using no.miles.at.Backend.Domain.Properties;
 using no.miles.at.Backend.Domain.ValueTypes;
 
 namespace no.miles.at.Backend.Domain.Aggregates

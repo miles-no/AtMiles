@@ -77,8 +77,8 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
                     picture = await client.DownloadDataTaskAsync(image.Url);
                     contentType = client.ResponseHeaders["Content-Type"];
 
-                    var urlWithoutQueryParameters = image.Url.Substring(0, image.Url.IndexOf("?"));
-                    extension = urlWithoutQueryParameters.Substring(image.Url.LastIndexOf("."))
+                    var urlWithoutQueryParameters = image.Url.Substring(0, image.Url.IndexOf("?", StringComparison.Ordinal));
+                    extension = urlWithoutQueryParameters.Substring(image.Url.LastIndexOf(".", StringComparison.Ordinal))
                         .Replace(".", string.Empty);
 
 

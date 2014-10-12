@@ -89,7 +89,7 @@ namespace no.miles.at.Backend.Domain.Test
         /// <summary>
         /// Reflection Cache for methods
         /// </summary>
-        private static readonly Dictionary<Type, MethodInfo[]> _methodList = new Dictionary<Type, MethodInfo[]>();
+        private static readonly Dictionary<Type, MethodInfo[]> MethodList = new Dictionary<Type, MethodInfo[]>();
         #endregion
 
         #region Properties
@@ -167,7 +167,7 @@ namespace no.miles.at.Backend.Domain.Test
         {
             get
             {
-                StringBuilder sb = new StringBuilder(4096);
+                var sb = new StringBuilder(4096);
 
                 sb.Append("\r\nBegin Differences:\r\n");
 
@@ -270,7 +270,7 @@ namespace no.miles.at.Backend.Domain.Test
         {
             _propertyCache.Clear();
             _fieldCache.Clear();
-            _methodList.Clear();
+            MethodList.Clear();
         }
 
         #endregion
@@ -386,8 +386,8 @@ namespace no.miles.at.Backend.Domain.Test
 
         private void CompareType(object object1, object object2, string breadCrumb)
         {
-            Type t1 = (Type)object1;
-            Type t2 = (Type)object2;
+            var t1 = (Type)object1;
+            var t2 = (Type)object2;
 
             if (t1.FullName != t2.FullName)
             {
@@ -426,8 +426,8 @@ namespace no.miles.at.Backend.Domain.Test
         private void ComparePointer(object object1, object object2, string breadCrumb)
         {
             if (
-                (object1.GetType() == typeof(IntPtr) && object2.GetType() == typeof(IntPtr) && ((IntPtr)object1) != ((IntPtr)object2)) ||
-                (object1.GetType() == typeof(UIntPtr) && object2.GetType() == typeof(UIntPtr) && ((UIntPtr)object1) != ((UIntPtr)object2))
+                (object1 is IntPtr && object2 is IntPtr && ((IntPtr)object1) != ((IntPtr)object2)) ||
+                (object1 is UIntPtr && object2 is UIntPtr && ((UIntPtr)object1) != ((UIntPtr)object2))
                 )
             {
                 Differences.Add(string.Format("object1{0} != object2{0}", breadCrumb));
@@ -460,7 +460,7 @@ namespace no.miles.at.Backend.Domain.Test
             if (object2 == null) //This should never happen, null check happens one level up
                 throw new ArgumentNullException("object2");
 
-            IComparable valOne = object1 as IComparable;
+            var valOne = object1 as IComparable;
 
             if (valOne == null) //This should never happen, null check happens one level up
                 throw new ArgumentNullException("object1");
@@ -717,8 +717,8 @@ namespace no.miles.at.Backend.Domain.Test
         private void CompareIndexer(PropertyInfo info, object object1, object object2, string breadCrumb)
         {
             string currentCrumb;
-            int indexerCount1 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object1, new object[] { });
-            int indexerCount2 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object2, new object[] { });
+            var indexerCount1 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object1, new object[] { });
+            var indexerCount2 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object2, new object[] { });
 
             //Indexers must be the same length
             if (indexerCount1 != indexerCount2)
@@ -752,8 +752,8 @@ namespace no.miles.at.Backend.Domain.Test
         /// <param name="breadCrumb"></param>
         private void CompareIDictionary(object object1, object object2, string breadCrumb)
         {
-            IDictionary iDict1 = object1 as IDictionary;
-            IDictionary iDict2 = object2 as IDictionary;
+            var iDict1 = object1 as IDictionary;
+            var iDict2 = object2 as IDictionary;
 
             if (iDict1 == null) //This should never happen, null check happens one level up
                 throw new ArgumentNullException("object1");
@@ -811,8 +811,8 @@ namespace no.miles.at.Backend.Domain.Test
         /// <param name="breadCrumb"></param>
         private void CompareIList(object object1, object object2, string breadCrumb)
         {
-            IList ilist1 = object1 as IList;
-            IList ilist2 = object2 as IList;
+            var ilist1 = object1 as IList;
+            var ilist2 = object2 as IList;
 
             if (ilist1 == null) //This should never happen, null check happens one level up
                 throw new ArgumentNullException("object1");
@@ -869,8 +869,8 @@ namespace no.miles.at.Backend.Domain.Test
                 Type t1 = object1.GetType();
 
                 //Get count by reflection since we can't cast it to HashSet<>
-                int hashSet1Count = (int)GetPropertyValue(t1, object1, "Count");
-                int hashSet2Count = (int)GetPropertyValue(t1, object2, "Count");
+                var hashSet1Count = (int)GetPropertyValue(t1, object1, "Count");
+                var hashSet2Count = (int)GetPropertyValue(t1, object2, "Count");
 
                 //Objects must be the same length
                 if (hashSet1Count != hashSet2Count)
@@ -884,8 +884,8 @@ namespace no.miles.at.Backend.Domain.Test
 
                 //Get enumerators by reflection
                 MethodInfo methodInfo = GetMethod(t1, "GetEnumerator");
-                IEnumerator enumerator1 = (IEnumerator)methodInfo.Invoke(object1, null);
-                IEnumerator enumerator2 = (IEnumerator)methodInfo.Invoke(object2, null);
+                var enumerator1 = (IEnumerator)methodInfo.Invoke(object1, null);
+                var enumerator2 = (IEnumerator)methodInfo.Invoke(object2, null);
 
                 int count = 0;
 
@@ -951,7 +951,7 @@ namespace no.miles.at.Backend.Domain.Test
 
         private bool IsSimpleType(Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 type = Nullable.GetUnderlyingType(type);
             }
@@ -1015,7 +1015,7 @@ namespace no.miles.at.Backend.Domain.Test
         private bool IsHashSet(Type type)
         {
             return type.IsGenericType
-                && type.GetGenericTypeDefinition().Equals(typeof(HashSet<>));
+                && type.GetGenericTypeDefinition() == typeof(HashSet<>);
         }
 
         #endregion
@@ -1077,13 +1077,13 @@ namespace no.miles.at.Backend.Domain.Test
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private MethodInfo[] GetMethods(Type type)
+        private IEnumerable<MethodInfo> GetMethods(Type type)
         {
-            if (_methodList.ContainsKey(type))
-                return _methodList[type];
+            if (MethodList.ContainsKey(type))
+                return MethodList[type];
 
             MethodInfo[] myMethodInfo = type.GetMethods();
-            _methodList.Add(type, myMethodInfo);
+            MethodList.Add(type, myMethodInfo);
             return myMethodInfo;
         }
 
@@ -1135,7 +1135,7 @@ namespace no.miles.at.Backend.Domain.Test
         {
             bool useIndex = !String.IsNullOrEmpty(index);
             bool useName = name.Length > 0;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(existing);
 
@@ -1149,8 +1149,8 @@ namespace no.miles.at.Backend.Domain.Test
 
             if (useIndex)
             {
-                int result = -1;
-                sb.AppendFormat(Int32.TryParse(index, out result) ? "[{0}]" : "[\"{0}\"]", index);
+                int result;
+                sb.AppendFormat(Int32.TryParse(index, out result) ? "[{0}]" : "[\"{0}\"]", result);
             }
             return sb.ToString();
         }

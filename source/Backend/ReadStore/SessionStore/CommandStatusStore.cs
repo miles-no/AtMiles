@@ -11,7 +11,7 @@ namespace no.miles.at.Backend.ReadStore.SessionStore
 
         public CommandStatusStore(IDocumentStore documentStore)
         {
-            this._documentStore = documentStore;
+            _documentStore = documentStore;
         }
 
         public static string GetRavenId(string id)

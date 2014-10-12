@@ -132,7 +132,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 
         public override bool Equals(object obj)
         {
-            HelpPageSampleKey otherKey = obj as HelpPageSampleKey;
+            var otherKey = obj as HelpPageSampleKey;
             if (otherKey == null)
             {
                 return false;

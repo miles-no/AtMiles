@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using no.miles.at.Backend.Domain.Annotations;
 using no.miles.at.Backend.Domain.Events.Global;
-using no.miles.at.Backend.Domain.Properties;
 using no.miles.at.Backend.Domain.ValueTypes;
 
 namespace no.miles.at.Backend.Domain.Aggregates

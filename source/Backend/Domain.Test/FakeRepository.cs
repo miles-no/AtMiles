@@ -44,7 +44,7 @@ namespace no.miles.at.Backend.Domain.Test
                     return null;
                 }
 
-                T aggregate = new T();
+                var aggregate = new T();
 
                 aggregate.LoadsFromHistory(GetEventsById(id), keepHistory);
 
@@ -56,7 +56,7 @@ namespace no.miles.at.Backend.Domain.Test
             });
         }
 
-        private List<Event> GetEventsById(string id)
+        private Event[] GetEventsById(string id)
         {
             var events = new List<Event>();
             if (GivenEvents != null)
@@ -69,7 +69,7 @@ namespace no.miles.at.Backend.Domain.Test
                     }
                 }
             }
-            return events;
+            return events.ToArray();
         }
     }
 }

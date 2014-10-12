@@ -90,7 +90,7 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             }
         }
 
-        private async Task AddOrUpdateUsers(ImportDataFromCvPartner message, List<CvPartnerImportData> importData, Company company)
+        private async Task AddOrUpdateUsers(ImportDataFromCvPartner message, IEnumerable<CvPartnerImportData> importData, Company company)
         {
             foreach (var cvPartnerImportData in importData)
             {

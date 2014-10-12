@@ -7,16 +7,16 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
 {
     public class EmployeeSearchEngine
     {
-        private readonly IDocumentStore store;
+        private readonly IDocumentStore _documentStore;
 
-        public EmployeeSearchEngine(IDocumentStore documentStore)
+        public EmployeeSearchEngine(IDocumentStore documentDocumentStore)
         {
-            store = documentStore;
+            _documentStore = documentDocumentStore;
         }
 
         public EmployeeSearchModel GetEmployeeSearchModel(string employeeId)
         {
-            using (var session = store.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
                 return session.Load<EmployeeSearchModel>(EmployeeSearchStore.GetRavenId(employeeId));
             }
@@ -28,15 +28,14 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             searchString = searchString ?? string.Empty;
             //Maybe more special character handling is needed here
             searchString = searchString.Replace("#", "sharp");
-            
-            RavenQueryStatistics stats;
+
             var search = searchString
                 .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => string.Format("{0}* ", x)).ToList();
             List<EmployeeSearchModel> results;
-            using (var session = store.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
-                
+                RavenQueryStatistics stats;
                 var tmp = session.Query<EmployeeSearchModelIndex.Result, EmployeeSearchModelIndex>()
                     .Statistics(out stats);
 

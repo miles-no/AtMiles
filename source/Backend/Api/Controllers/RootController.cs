@@ -9,7 +9,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [Route("")]
         public HttpResponseMessage Get()
         {
-            var res = "root";
+            const string res = "root";
             return Request.CreateResponse(HttpStatusCode.OK, res);
         }
     }

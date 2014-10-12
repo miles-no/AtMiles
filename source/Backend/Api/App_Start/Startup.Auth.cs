@@ -22,10 +22,6 @@ namespace no.miles.at.Backend.Api
 {
     public partial class Startup
     {
-        public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-
-        public static string PublicClientId { get; private set; }
-
         public void ConfigureAuth(IAppBuilder app, Config settings, IResolveUserIdentity resolveUserIdentity, ICommandSender commandSender)
         {
             var issuer = settings.Auth0Issuer;

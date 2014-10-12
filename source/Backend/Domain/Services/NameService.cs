@@ -9,7 +9,7 @@
 
         public static string GetName(string firstName, string middleName, string lastName)
         {
-            string name = firstName;
+            var name = firstName;
             if (name == null)
             {
                 name = string.Empty;

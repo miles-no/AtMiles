@@ -7,7 +7,7 @@ namespace no.miles.at.Backend.Infrastructure.Configuration
     {
         public static Config GetConfig(string configFilename)
         {
-            Config config = null;
+            Config config;
             using (var reader = File.OpenText(configFilename))
             {
                 var deserializer = new Deserializer();

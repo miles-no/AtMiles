@@ -139,7 +139,7 @@ namespace no.miles.at.Backend.Infrastructure
                             events.Add((Event)deserializedEvent);
                         }
                     }
-                    obj.LoadsFromHistory(events, keepHistory);
+                    obj.LoadsFromHistory(events.ToArray(), keepHistory);
                     startPosition += batchSize;
                     evStream = await connection.ReadStreamEventsForwardAsync(streamName, startPosition, batchSize, false, _credentials);
                 }

@@ -14,7 +14,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
     /// </summary>
     public class XmlDocumentationProvider : IDocumentationProvider, IModelDocumentationProvider
     {
-        private XPathNavigator _documentNavigator;
+        private readonly XPathNavigator _documentNavigator;
         private const string TypeExpression = "/doc/members/member[@name='T:{0}']";
         private const string MethodExpression = "/doc/members/member[@name='M:{0}']";
         private const string PropertyExpression = "/doc/members/member[@name='P:{0}']";
@@ -31,7 +31,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
             {
                 throw new ArgumentNullException("documentPath");
             }
-            XPathDocument xpath = new XPathDocument(documentPath);
+            var xpath = new XPathDocument(documentPath);
             _documentNavigator = xpath.CreateNavigator();
         }
 
@@ -49,7 +49,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
         public virtual string GetDocumentation(HttpParameterDescriptor parameterDescriptor)
         {
-            ReflectedHttpParameterDescriptor reflectedParameterDescriptor = parameterDescriptor as ReflectedHttpParameterDescriptor;
+            var reflectedParameterDescriptor = parameterDescriptor as ReflectedHttpParameterDescriptor;
             if (reflectedParameterDescriptor != null)
             {
                 XPathNavigator methodNode = GetMethodNode(reflectedParameterDescriptor.ActionDescriptor);
@@ -90,7 +90,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
         private XPathNavigator GetMethodNode(HttpActionDescriptor actionDescriptor)
         {
-            ReflectedHttpActionDescriptor reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;
+            var reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;
             if (reflectedActionDescriptor != null)
             {
                 string selectExpression = String.Format(CultureInfo.InvariantCulture, MethodExpression, GetMemberName(reflectedActionDescriptor.MethodInfo));

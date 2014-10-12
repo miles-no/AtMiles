@@ -24,7 +24,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 
         public override bool Equals(object obj)
         {
-            ImageSample other = obj as ImageSample;
+            var other = obj as ImageSample;
             return other != null && Src == other.Src;
         }
 

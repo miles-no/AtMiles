@@ -97,7 +97,7 @@ namespace no.miles.at.Backend.Infrastructure
         private static IDictionary<string, object> GetMessageHeader(BasicDeliverEventArgs args)
         {
             if (args == null) return new Dictionary<string, object>();
-            if (args.BasicProperties == null) return new Dictionary<string, object>(); ;
+            if (args.BasicProperties == null) return new Dictionary<string, object>();
             return args.BasicProperties.Headers;
         }
 
@@ -158,7 +158,8 @@ namespace no.miles.at.Backend.Infrastructure
                 {
                     _brokerConnection.Dispose();
                 }
-                catch { }
+// ReSharper disable once EmptyGeneralCatchClause
+                catch{ }
                 _brokerConnection = null;
             }
         }

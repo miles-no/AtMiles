@@ -5,10 +5,10 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
 {
     public class EmployeeSearchModel
     {
-        private Tag[] competency =new List<Tag>().ToArray();
-        private List<string> keyQualifications = new List<string>();
-        private List<BusyTime> busyTimeEntries = new List<BusyTime>();
-        private List<Description> descriptions = new List<Description>();
+        private Tag[] _competency =new List<Tag>().ToArray();
+        private List<string> _keyQualifications = new List<string>();
+        private List<BusyTime> _busyTimeEntries = new List<BusyTime>();
+        private List<Description> _descriptions = new List<Description>();
         
         public string Id { get; set; }
         public string GlobalId { get; set; }
@@ -26,26 +26,26 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
 
         public Tag[] Competency
         {
-            get { return competency; }
-            set { competency = value; }
+            get { return _competency; }
+            set { _competency = value; }
         }
 
         public List<BusyTime> BusyTimeEntries
         {
-            get { return busyTimeEntries; }
-            set { busyTimeEntries = value; }
+            get { return _busyTimeEntries; }
+            set { _busyTimeEntries = value; }
         }
 
         public List<string> KeyQualifications
         {
-            get { return keyQualifications; }
-            set { keyQualifications = value; }
+            get { return _keyQualifications; }
+            set { _keyQualifications = value; }
         }
 
         public List<Description> Descriptions
         {
-            get { return descriptions; }
-            set { descriptions = value; }
+            get { return _descriptions; }
+            set { _descriptions = value; }
         }
 
         public double Score { get; set; }

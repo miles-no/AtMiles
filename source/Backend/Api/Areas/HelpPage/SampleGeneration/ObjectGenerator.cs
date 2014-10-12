@@ -14,7 +14,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
     public class ObjectGenerator
     {
         internal const int DefaultCollectionSize = 2;
-        private readonly SimpleTypeObjectGenerator SimpleObjectGenerator = new SimpleTypeObjectGenerator();
+        private readonly SimpleTypeObjectGenerator _simpleObjectGenerator = new SimpleTypeObjectGenerator();
 
         /// <summary>
         /// Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
@@ -42,7 +42,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             {
                 if (SimpleTypeObjectGenerator.CanGenerateObject(type))
                 {
-                    return SimpleObjectGenerator.GenerateObject(type);
+                    return _simpleObjectGenerator.GenerateObject(type);
                 }
 
                 if (type.IsArray)
@@ -168,9 +168,9 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         private static object GenerateTuple(Type type, Dictionary<Type, object> createdObjectReferences)
         {
             Type[] genericArgs = type.GetGenericArguments();
-            object[] parameterValues = new object[genericArgs.Length];
+            var parameterValues = new object[genericArgs.Length];
             bool failedToCreateTuple = true;
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             for (int i = 0; i < genericArgs.Length; i++)
             {
                 parameterValues[i] = objectGenerator.GenerateObject(genericArgs[i], createdObjectReferences);
@@ -201,7 +201,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             Type[] genericArgs = keyValuePairType.GetGenericArguments();
             Type typeK = genericArgs[0];
             Type typeV = genericArgs[1];
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             object keyObject = objectGenerator.GenerateObject(typeK, createdObjectReferences);
             object valueObject = objectGenerator.GenerateObject(typeV, createdObjectReferences);
             if (keyObject == null && valueObject == null)
@@ -218,7 +218,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             Type type = arrayType.GetElementType();
             Array result = Array.CreateInstance(type, size);
             bool areAllElementsNull = true;
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             for (int i = 0; i < size; i++)
             {
                 object element = objectGenerator.GenerateObject(type, createdObjectReferences);
@@ -248,7 +248,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             object result = Activator.CreateInstance(dictionaryType);
             MethodInfo addMethod = dictionaryType.GetMethod("Add") ?? dictionaryType.GetMethod("TryAdd");
             MethodInfo containsMethod = dictionaryType.GetMethod("Contains") ?? dictionaryType.GetMethod("ContainsKey");
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             for (int i = 0; i < size; i++)
             {
                 object newKey = objectGenerator.GenerateObject(typeK, createdObjectReferences);
@@ -258,11 +258,11 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                     return null;
                 }
 
-                bool containsKey = (bool)containsMethod.Invoke(result, new object[] { newKey });
+                var containsKey = (bool)containsMethod.Invoke(result, new[] { newKey });
                 if (!containsKey)
                 {
                     object newValue = objectGenerator.GenerateObject(typeV, createdObjectReferences);
-                    addMethod.Invoke(result, new object[] { newKey, newValue });
+                    addMethod.Invoke(result, new[] { newKey, newValue });
                 }
             }
 
@@ -314,11 +314,11 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             object result = Activator.CreateInstance(collectionType);
             MethodInfo addMethod = collectionType.GetMethod("Add");
             bool areAllElementsNull = true;
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             for (int i = 0; i < size; i++)
             {
                 object element = objectGenerator.GenerateObject(type, createdObjectReferences);
-                addMethod.Invoke(result, new object[] { element });
+                addMethod.Invoke(result, new[] { element });
                 areAllElementsNull &= element == null;
             }
 
@@ -333,13 +333,13 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         private static object GenerateNullable(Type nullableType, Dictionary<Type, object> createdObjectReferences)
         {
             Type type = nullableType.GetGenericArguments()[0];
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             return objectGenerator.GenerateObject(type, createdObjectReferences);
         }
 
         private static object GenerateComplexObject(Type type, Dictionary<Type, object> createdObjectReferences)
         {
-            object result = null;
+            object result;
 
             if (createdObjectReferences.TryGetValue(type, out result))
             {
@@ -371,7 +371,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         private static void SetPublicProperties(Type type, object obj, Dictionary<Type, object> createdObjectReferences)
         {
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite)
@@ -385,7 +385,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         private static void SetPublicFields(Type type, object obj, Dictionary<Type, object> createdObjectReferences)
         {
             FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-            ObjectGenerator objectGenerator = new ObjectGenerator();
+            var objectGenerator = new ObjectGenerator();
             foreach (FieldInfo field in fields)
             {
                 object fieldValue = objectGenerator.GenerateObject(field.FieldType, createdObjectReferences);
@@ -395,7 +395,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
 
         private class SimpleTypeObjectGenerator
         {
-            private long _index = 0;
+            private long _index;
             private static readonly Dictionary<Type, Func<long, object>> DefaultGenerators = InitializeGenerators();
 
             [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "These are simple type factories and cannot be split up.")]
@@ -410,11 +410,11 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                     { typeof(DateTimeOffset), index => new DateTimeOffset(DateTime.Now) },
                     { typeof(DBNull), index => DBNull.Value },
                     { typeof(Decimal), index => (Decimal)index },
-                    { typeof(Double), index => (Double)(index + 0.1) },
+                    { typeof(Double), index => index + 0.1 },
                     { typeof(Guid), index => Guid.NewGuid() },
                     { typeof(Int16), index => (Int16)(index % Int16.MaxValue) },
                     { typeof(Int32), index => (Int32)(index % Int32.MaxValue) },
-                    { typeof(Int64), index => (Int64)index },
+                    { typeof(Int64), index => index },
                     { typeof(Object), index => new object() },
                     { typeof(SByte), index => (SByte)64 },
                     { typeof(Single), index => (Single)(index + 0.1) },

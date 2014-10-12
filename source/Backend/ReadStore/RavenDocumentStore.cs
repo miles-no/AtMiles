@@ -8,7 +8,7 @@ namespace no.miles.at.Backend.ReadStore
     {
         public static IDocumentStore CreateStore(string url)
         {
-            var documentStore = new DocumentStore(){Url = url, DefaultDatabase = "Contact"};
+            var documentStore = new DocumentStore {Url = url, DefaultDatabase = "Contact"};
              documentStore.Initialize();
             //documentStore.Conventions.RegisterIdConvention<UserLookupModel>((dbname, commands, user) => "users_lookup/" + user.Id);
             //documentStore.Conventions.RegisterIdConvention<EmployeeSearchModel>((dbname, commands, user) => "employee_search/" + user.Id);

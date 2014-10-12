@@ -7,12 +7,12 @@ namespace no.miles.at.Backend.ReadStore.BusyTimeStore
     {
         public string Id { get; set; }
         public DateTime ExpiryDate { get; set; }
-        private List<BusyTime> busyTimeEntries = new List<BusyTime>();
+        private List<BusyTime> _busyTimeEntries = new List<BusyTime>();
 
         public List<BusyTime> BusyTimeEntries
         {
-            get { return busyTimeEntries; }
-            set { busyTimeEntries = value; }
+            get { return _busyTimeEntries; }
+            set { _busyTimeEntries = value; }
         }
 
         public class BusyTime

@@ -10,7 +10,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions
         // Modify this to provide custom model name mapping.
         public static string GetModelName(Type type)
         {
-            ModelNameAttribute modelNameAttribute = type.GetCustomAttribute<ModelNameAttribute>();
+            var modelNameAttribute = type.GetCustomAttribute<ModelNameAttribute>();
             if (modelNameAttribute != null && !String.IsNullOrEmpty(modelNameAttribute.Name))
             {
                 return modelNameAttribute.Name;
