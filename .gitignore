@@ -180,3 +180,5 @@ source/Contact.Web/.idea/scopes/scope_settings.xml
 source/Contact.Web/.idea/vcs.xml
 source/Contact.Web/.idea/workspace.xml
 source/Contact.Web/.idea/Contact.Web.iml
+source/Backend/Api/output/no.miles.at.Backend.Api.zip
+source/Backend/Worker/output/Worker.zip

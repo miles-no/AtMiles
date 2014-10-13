@@ -335,10 +335,33 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <!-- Start Zip target -->
+  <ItemGroup>
+    <!-- 
+      Add all *.dll files found in the root of the "bin" folder as link files.
+      - Use Files="@(Content);@(Link)" in the zip target the include both content files as build output in the zip content. 
+      - Using the "@(Content);@(Link)" notation, will merge ItemGroup Content and ItemGroup Link into one property. 
+      - The ".\" before the "bin" folder name in the Include, results in a zip package containing the bin folder.
+      - If you do not want to include the "bin" folder itself but only the files, use "bin\*.dll".
+      - If you want to include subfolders use ".\bin\**\*.dll"
+    -->
+    <Link Include=".\bin\*.dll" />
+    <Link Include=".\bin\*.exe" />
+    <Link Include=".\bin\*.exe.config" />
+  </ItemGroup>
+  <!-- 
+    A relative path will start from the *.csproj file location, 
+    so to get to the MSBuild.Community.Tasks.Targets file, we must add "..\.build\".
+  -->
+  <Import Project="..\.build\MSBuild.Community.Tasks.Targets" />
+  <!-- 
+    The afterbuild target will only be executed, when the project is build in "Release" mode.
+  -->
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ReleasePath>bin</ReleasePath>
+    </PropertyGroup>
+    <Zip Files="@(Content);@(Link)" WorkingDirectory="$(ReleasePath)" ZipFileName="output\$(AssemblyName).zip" ZipLevel="9" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target> -->
+  <!-- End Zip target -->
 </Project>

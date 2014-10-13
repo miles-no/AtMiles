@@ -117,11 +117,18 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+
+  <!-- Start Zip target -->
+  <ItemGroup>
+    <Link Include="bin\Release\**\*.*" Exclude="*.zip" />
+  </ItemGroup>
+  <Import Project="..\.build\MSBuild.Community.Tasks.Targets" />
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ReleasePath>bin\Release</ReleasePath>
+    </PropertyGroup>
+    <Zip Files="@(Link)" WorkingDirectory="$(ReleasePath)" ZipFileName="output\$(AssemblyName).zip" ZipLevel="9" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <!-- End Zip target -->
+  
 </Project>
