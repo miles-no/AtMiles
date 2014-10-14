@@ -5,15 +5,15 @@ namespace no.miles.at.Backend.Api.Models.Api.Busy
 {
     public class BusyTimeResponse
     {
-        public DateTime ExpiryDate { get; set; }
-        public List<BusyTime> BusyTimeEntries { get; set; }
+        public DateTime ExpiryDate;
+        public List<BusyTime> BusyTimeEntries;
         public class BusyTime
         {
-            public string Id { get; set; }
-            public DateTime Start { get; set; }
-            public DateTime? End { get; set; }
-            public short PercentageOccupied { get; set; }
-            public string Comment { get; set; }
+            public string Id;
+            public DateTime Start;
+            public DateTime? End;
+            public short PercentageOccupied;
+            public string Comment;
         }
     }
 }

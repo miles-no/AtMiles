@@ -21,15 +21,13 @@ namespace no.miles.at.Backend.Api.Controllers
     [Authorize]
     public class EmployeeController : ApiController
     {
-        private readonly IResolveUserIdentity _identityResolver;
         private readonly IResolveNameOfUser _nameResolver;
         private readonly ICommandSender _commandSender;
         private readonly BusyTimeEngine _busyTimeEngine;
         private readonly EmployeeSearchEngine _employeeEngine;
 
-        public EmployeeController(IResolveUserIdentity identityResolver, IResolveNameOfUser nameResolver, ICommandSender commandSender, BusyTimeEngine busyTimeEngine, EmployeeSearchEngine employeeEngine)
+        public EmployeeController(IResolveNameOfUser nameResolver, ICommandSender commandSender, BusyTimeEngine busyTimeEngine, EmployeeSearchEngine employeeEngine)
         {
-            _identityResolver = identityResolver;
             _nameResolver = nameResolver;
             _commandSender = commandSender;
             _busyTimeEngine = busyTimeEngine;

@@ -8,8 +8,8 @@ namespace no.miles.at.Backend.Api.Models.Api.Admins
 
         public class Admin
         {
-            public string Id { get; set; }
-            public string Name { get; set; }
+            public string Id;
+            public string Name;
         }
     }
 }

@@ -5,48 +5,48 @@ namespace no.miles.at.Backend.Api.Models.Api.Employee
 {
     public class EmployeeDetailsResponse
     {
-        public string Id { get; set; }
-        public string GlobalId { get; set; }
-        public string CompanyId { get; set; }
-        public string OfficeName { get; set; }
-        public string Name { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string JobTitle { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public Address PrivateAddress { get; set; }
-        public string Thumb { get; set; }
-        
-        public Tag[] Competency { get; set; }
-        
-        public List<BusyTime> BusyTimeEntries { get; set; }
-        
-        public List<string> KeyQualifications { get; set; }
-        
-        public List<Description> Descriptions { get; set; }
-        
-        public double Score { get; set; }
+        public string Id;
+        public string GlobalId;
+        public string CompanyId;
+        public string OfficeName;
+        public string Name;
+        public DateTime DateOfBirth;
+        public string JobTitle;
+        public string PhoneNumber;
+        public string Email;
+        public Address PrivateAddress;
+        public string Thumb;
+
+        public Tag[] Competency;
+
+        public List<BusyTime> BusyTimeEntries;
+
+        public List<string> KeyQualifications;
+
+        public List<Description> Descriptions;
+
+        public double Score;
 
         public class BusyTime
         {
-            public string Id { get; set; }
-            public DateTime Start { get; set; }
-            public DateTime? End { get; set; }
-            public short PercentageOccupied { get; set; }
-            public string Comment { get; set; }
+            public string Id;
+            public DateTime Start;
+            public DateTime? End;
+            public short PercentageOccupied;
+            public string Comment;
         }
 
         public class Description
         {
-            public string InternationalDescription { get; set; }
-            public string LocalDescription { get; set; }
+            public string InternationalDescription;
+            public string LocalDescription;
         }
 
         public class Address
         {
-            public string Street { get; set; }
-            public string PostalCode { get; set; }
-            public string PostalName { get; set; }
+            public string Street;
+            public string PostalCode;
+            public string PostalName;
         }
 
         public class Tag

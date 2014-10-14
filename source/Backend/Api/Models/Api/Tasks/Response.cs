@@ -4,7 +4,7 @@ namespace no.miles.at.Backend.Api.Models.Api.Tasks
 {
     public class Response
     {
-        public string RequestId { get; set; }
-        public StatusResponse Status { get; set; }
+        public string RequestId;
+        public StatusResponse Status;
     }
 }
