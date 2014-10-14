@@ -26,35 +26,36 @@ namespace no.miles.at.Backend.ReadStore.SessionStore
             handler.RegisterHandler<CommandSucceded>(HandleSuccess);
         }
 
-        private async Task HandleSuccess(CommandSucceded commandSucceded)
+        private async Task HandleSuccess(CommandSucceded ev)
         {
-            var commandSession = new CommandStatus {Id = GetRavenId(commandSucceded.CorrelationId), Status = CommandStatusConstants.OkStatus};
-            
             using (var session = _documentStore.OpenAsyncSession())
             {
-                await session.StoreAsync(commandSession);
+                var model = await session.LoadAsync<CommandStatus>(GetRavenId(ev.CorrelationId));
+                model = Patch(model, ev);
+                await session.StoreAsync(model);
                 await session.SaveChangesAsync();
             }
         }
 
-        private async Task HandleException(CommandException commandException)
+        private async Task HandleException(CommandException ev)
         {
-            var commandSession = new CommandStatus { Id = GetRavenId(commandException.CorrelationId), ErrorMessage = commandException.ExceptionMessage, Status = CommandStatusConstants.FailedStatus };
-
             using (var session = _documentStore.OpenAsyncSession())
             {
-                await session.StoreAsync(commandSession);
+                var model = await session.LoadAsync<CommandStatus>(GetRavenId(ev.CorrelationId));
+                model = Patch(model, ev);
+                await session.StoreAsync(model);
                 await session.SaveChangesAsync();
             }
         }
 
-        private async Task HandleRequested(CommandRequested commandRequested)
+        private async Task HandleRequested(CommandRequested ev)
         {
             var commandSession = new CommandStatus
             {
-                Id = GetRavenId(commandRequested.CorrelationId),
-                CommandName = commandRequested.CommandName,
-                Status = CommandStatusConstants.PendingStatus
+                Id = GetRavenId(ev.CorrelationId),
+                CommandName = ev.CommandName,
+                Status = CommandStatusConstants.PendingStatus,
+                Started = ev.Created
             };
 
             using (var session = _documentStore.OpenAsyncSession())
@@ -62,6 +63,21 @@ namespace no.miles.at.Backend.ReadStore.SessionStore
                 await session.StoreAsync(commandSession);
                 await session.SaveChangesAsync();
             }
+        }
+
+        private CommandStatus Patch(CommandStatus model, CommandSucceded ev)
+        {
+            model.Finished = ev.Created;
+            model.Status = CommandStatusConstants.OkStatus;
+            return model;
+        }
+
+        private CommandStatus Patch(CommandStatus model, CommandException ev)
+        {
+            model.Finished = ev.Created;
+            model.ErrorMessage = ev.ExceptionMessage;
+            model.Status = CommandStatusConstants.FailedStatus;
+            return model;
         }
     }
 }
