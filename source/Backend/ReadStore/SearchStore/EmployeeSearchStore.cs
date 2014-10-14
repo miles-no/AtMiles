@@ -72,15 +72,10 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             var res = new List<EmployeeSearchModel.Description>();
             if (keyQualifications != null)
             {
-                foreach (var cvPartnerKeyQualification in keyQualifications)
+                res.AddRange(keyQualifications.Select(cvPartnerKeyQualification => new EmployeeSearchModel.Description
                 {
-                    var desc = new EmployeeSearchModel.Description
-                    {
-                        InternationalDescription = cvPartnerKeyQualification.InternationalDescription,
-                        LocalDescription = cvPartnerKeyQualification.LocalDescription
-                    };
-                    res.Add(desc);
-                }
+                    InternationalDescription = cvPartnerKeyQualification.InternationalDescription, LocalDescription = cvPartnerKeyQualification.LocalDescription
+                }));
             }
             return res;
         }
@@ -94,16 +89,10 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             var categories = technologies.GroupBy(g =>new {g.LocalCategory,g.InternationalCategory});
             foreach (var category in categories)
             {
-                foreach (var skill in category.ToList().SelectMany(s=>s.Skills))
+                res.AddRange(category.ToList().SelectMany(s => s.Skills).Select(skill => new Tag
                 {
-                    res.Add(new Tag
-                    {
-                        Category = category.Key.LocalCategory, 
-                        InternationalCategory = category.Key.InternationalCategory, 
-                        Competency = skill.LocalName, 
-                        InternationalCompentency = skill.InternationalName
-                    });
-                }
+                    Category = category.Key.LocalCategory, InternationalCategory = category.Key.InternationalCategory, Competency = skill.LocalName, InternationalCompentency = skill.InternationalName
+                }));
             }
             return res.ToArray();
         }

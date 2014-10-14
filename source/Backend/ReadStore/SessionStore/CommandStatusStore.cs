@@ -50,7 +50,12 @@ namespace no.miles.at.Backend.ReadStore.SessionStore
 
         private async Task HandleRequested(CommandRequested commandRequested)
         {
-            var commandSession = new CommandStatus { Id = GetRavenId(commandRequested.CorrelationId), Status = CommandStatusConstants.PendingStatus };
+            var commandSession = new CommandStatus
+            {
+                Id = GetRavenId(commandRequested.CorrelationId),
+                CommandName = commandRequested.CommandName,
+                Status = CommandStatusConstants.PendingStatus
+            };
 
             using (var session = _documentStore.OpenAsyncSession())
             {

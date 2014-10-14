@@ -30,7 +30,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
 
-        public readonly string EmployeeId = "emp1";
+        public const string EmployeeId = "emp1";
 
         private readonly CvPartnerImportData _importData = new CvPartnerImportData(
             firstName: "Ole",

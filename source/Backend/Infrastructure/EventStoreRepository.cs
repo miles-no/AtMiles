@@ -93,7 +93,7 @@ namespace no.miles.at.Backend.Infrastructure
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders));
         }
 
-        public object DeserializeEvent(byte[] metadata, byte[] data)
+        private object DeserializeEvent(byte[] metadata, byte[] data)
         {
             var eventClrTypeName = JObject.Parse(Encoding.UTF8.GetString(metadata)).Property(Constants.EventStoreEventClrTypeHeader).Value;
             return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data), Type.GetType((string)eventClrTypeName));
@@ -130,16 +130,7 @@ namespace no.miles.at.Backend.Infrastructure
                 }
                 while (evStream.Events != null && evStream.Events.Length > 0)
                 {
-                    var events = new List<Event>();
-                    foreach (var ev in evStream.Events)
-                    {
-                        var deserializedEvent = DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data);
-                        if (deserializedEvent is Event)
-                        {
-                            events.Add((Event)deserializedEvent);
-                        }
-                    }
-                    obj.LoadsFromHistory(events.ToArray(), keepHistory);
+                    obj.LoadsFromHistory(evStream.Events.Select(ev => DeserializeEvent(ev.OriginalEvent.Metadata, ev.OriginalEvent.Data)).OfType<Event>().ToArray(), keepHistory);
                     startPosition += batchSize;
                     evStream = await connection.ReadStreamEventsForwardAsync(streamName, startPosition, batchSize, false, _credentials);
                 }

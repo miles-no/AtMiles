@@ -59,7 +59,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.UpdateBusyTimeTests
         }
 
 
-        public IEnumerable<FakeStreamEvent> GivenCompany()
+        private IEnumerable<FakeStreamEvent> GivenCompany()
         {
             var system = new Person(Constants.SystemUserId, Constants.SystemUserId);
             var events = new List<FakeStreamEvent>
@@ -70,7 +70,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.UpdateBusyTimeTests
             return events;
         }
 
-        public IEnumerable<FakeStreamEvent> GivenEmployee()
+        private IEnumerable<FakeStreamEvent> GivenEmployee()
         {
             var events = new List<FakeStreamEvent>
                 {

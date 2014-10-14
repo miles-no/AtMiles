@@ -23,7 +23,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
         }
 
    
-        public List<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
+        public IEnumerable<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {
             searchString = searchString ?? string.Empty;
             //Maybe more special character handling is needed here
@@ -39,12 +39,9 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 var tmp = session.Query<EmployeeSearchModelIndex.Result, EmployeeSearchModelIndex>()
                     .Statistics(out stats);
 
-                foreach (var s in search)
-                {
-                    tmp = tmp.Search(x => x.Content, s, 1, SearchOptions.And, EscapeQueryOptions.AllowPostfixWildcard);
-                }
+                tmp = search.Aggregate(tmp, (current, s) => current.Search(x => x.Content, s, 1, SearchOptions.And, EscapeQueryOptions.AllowPostfixWildcard));
 
-         
+
                 results = tmp
                         .Skip(skip) 
                         .Take(take)

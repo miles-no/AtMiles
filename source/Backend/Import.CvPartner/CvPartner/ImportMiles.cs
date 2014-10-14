@@ -98,7 +98,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
             return photo;
         }
 
-        public void Log(string message)
+        private void Log(string message)
         {
             Console.WriteLine(message);
         }

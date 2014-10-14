@@ -1,6 +1,6 @@
 ﻿namespace no.miles.at.Backend.Domain.Services
 {
-    public class NameService
+    public static class NameService
     {
         public static string GetName(string firstName, string lastName)
         {

@@ -18,7 +18,7 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             _documentStore = documentStore;
         }
 
-        public static string GetRavenId(string id)
+        private static string GetRavenId(string id)
         {
             return "users/" + id;
         }

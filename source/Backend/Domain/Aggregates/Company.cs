@@ -31,20 +31,13 @@ namespace no.miles.at.Backend.Domain.Aggregates
             return _companyAdmins.Contains(identifier);
         }
 
-        public bool HasUser(string userId)
-        {
-            if (string.IsNullOrEmpty(userId)) return false;
-
-            return _employees.Any(u => u.Id == userId);
-        }
-
-        public bool HasUser(Login login)
+        private bool HasUser(Login login)
         {
             if (login == null) return false;
             return _employees.Any(u => u.LoginId.Provider == login.Provider && u.LoginId.Email == login.Email);
         }
 
-        public string GetUserId(Login login)
+        private string GetUserId(Login login)
         {
             if (login == null) return string.Empty;
             if (!string.IsNullOrEmpty(login.Email))
@@ -150,21 +143,13 @@ namespace no.miles.at.Backend.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        public List<string> GetAllUserIdsForUsersNotInList(List<CvPartnerImportData> importData)
+        public IEnumerable<string> GetAllUserIdsForUsersNotInList(List<CvPartnerImportData> importData)
         {
-            var userIds = new List<string>();
-            foreach (var employee in _employees)
-            {
-                if (importData.All(i => i.Email != employee.LoginId.Email))
-                {
-                    if (employee.Id != Constants.SystemUserId)
-                    {
-                        userIds.Add(employee.Id);
-                    }
-                }
-
-            }
-            return userIds;
+            return (from employee in _employees
+                    where importData.All(i => i.Email != employee.LoginId.Email)
+                    where employee.Id != Constants.SystemUserId
+                    select employee.Id)
+                    .ToList();
         }
 
         private bool OnlyOneCompanyAdminLeft()
@@ -172,7 +157,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             return _companyAdmins.Count == 1;
         }
 
-        public void AddEmployee(EmployeeLoginInfo employeeInfo)
+        private void AddEmployee(EmployeeLoginInfo employeeInfo)
         {
             if (_employees.All(e => e.Id != employeeInfo.Id))
             {
@@ -180,7 +165,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             }
         }
 
-        public void RemoveEmployee(string employeeId)
+        private void RemoveEmployee(string employeeId)
         {
             _employees.RemoveAll(item => item.Id == employeeId);
         }

@@ -84,15 +84,13 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
                 var convertedKeyPoints = new List<CvPartnerKeyPoint>();
                 if (keyQualification.KeyPoints != null)
                 {
-                    foreach (var keyPoint in keyQualification.KeyPoints)
-                    {
-                        var kpIntName = keyPoint.IntName;
-                        var kpLocalName = keyPoint.LocalName;
-                        var kpIntDescription = keyPoint.IntDescription;
-                        var kpLocalDescription = keyPoint.LocalDescription;
-                        var convertedKeyPoint = new CvPartnerKeyPoint(kpIntName, kpLocalName,kpIntDescription, kpLocalDescription);
-                        convertedKeyPoints.Add(convertedKeyPoint);
-                    }
+                    convertedKeyPoints.AddRange(
+                        from keyPoint in keyQualification.KeyPoints
+                        let kpIntName = keyPoint.IntName
+                        let kpLocalName = keyPoint.LocalName
+                        let kpIntDescription = keyPoint.IntDescription
+                        let kpLocalDescription = keyPoint.LocalDescription
+                        select new CvPartnerKeyPoint(kpIntName, kpLocalName, kpIntDescription, kpLocalDescription));
                 }
                 var convertedQualification = new CvPartnerKeyQualification(internationalDescription,localDescription, convertedKeyPoints.ToArray());
                 convertedQualifications.Add(convertedQualification);

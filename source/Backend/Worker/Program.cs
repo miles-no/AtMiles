@@ -13,7 +13,7 @@ using no.miles.at.Backend.Worker.Properties;
 
 namespace no.miles.at.Backend.Worker
 {
-    class Program
+    static class Program
     {
         
 

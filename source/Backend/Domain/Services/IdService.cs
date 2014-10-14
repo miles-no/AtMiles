@@ -2,7 +2,7 @@
 
 namespace no.miles.at.Backend.Domain.Services
 {
-    public class IdService
+    public static class IdService
     {
         public static string CreateNewId()
         {

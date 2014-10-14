@@ -7,7 +7,7 @@ using RabbitMQ.Client;
 
 namespace no.miles.at.Backend.Infrastructure
 {
-    public class RabbitMqCommandSender : ICommandSender, IDisposable
+    public sealed class RabbitMqCommandSender : ICommandSender, IDisposable
     {
         private readonly string _hostName;
         private readonly string _username;
@@ -34,6 +34,7 @@ namespace no.miles.at.Backend.Infrastructure
         public void Dispose()
         {
             Disconnect();
+            GC.SuppressFinalize(obj: this);
         }
 
         public void Send<T>(T command) where T : Command
@@ -45,7 +46,7 @@ namespace no.miles.at.Backend.Infrastructure
             if (IsConnected())
             {
                 {
-                    IBasicProperties properties = _model.CreateBasicProperties();
+                    var properties = _model.CreateBasicProperties();
                     properties.SetPersistent(true);
                     properties.Headers = new Dictionary<string, object>
                     {

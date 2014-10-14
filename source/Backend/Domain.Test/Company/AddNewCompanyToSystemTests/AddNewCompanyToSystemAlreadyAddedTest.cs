@@ -24,8 +24,6 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
         private const string CompanyId = "miles";
         private const string CompanyName = "Miles";
 
-        private const string OfficeName = "Stavanger";
-
         private const string AdminId = "adm1";
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
@@ -80,7 +78,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
                 new SimpleUserInfo(AdminId, AdminFirstName, string.Empty, AdminLastName,
                     new Login(Constants.GoogleIdProvider, AdminEmail))
             };
-            return new AddNewCompanyToSystem(CompanyId, CompanyName, OfficeName, admins.ToArray(), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
+            return new AddNewCompanyToSystem(CompanyId, CompanyName, admins.ToArray(), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
         }
 
         public override Handles<AddNewCompanyToSystem> OnHandler()

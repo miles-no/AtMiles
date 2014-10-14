@@ -27,16 +27,6 @@ namespace no.miles.at.Backend.Api.Utilities
             _statusEndpointUrl = statusEndpointUrl;
         }
 
-        public static HttpResponseMessage CreateResponse(HttpRequestMessage request, string id = null, string message = null)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                id = IdService.CreateNewId();
-            }
-            var response = new Response { RequestId = id, Status = new StatusResponse { Url = _statusEndpointUrl + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message} };
-            return request.CreateResponse(HttpStatusCode.Accepted, response);
-        }
-
         public static HttpResponseMessage CreateErrorResponse(HttpRequestMessage request, string id, string errorMessage)
         {
             if (string.IsNullOrEmpty(id))
@@ -99,6 +89,16 @@ namespace no.miles.at.Backend.Api.Utilities
             sender.Send(command);
             var response = CreateResponse(request, command.CorrelationId);
             return response;
+        }
+
+        private static HttpResponseMessage CreateResponse(HttpRequestMessage request, string id = null, string message = null)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = IdService.CreateNewId();
+            }
+            var response = new Response { RequestId = id, Status = new StatusResponse { Url = _statusEndpointUrl + "/api/status/" + HttpUtility.UrlEncode(id), Id = "pending", Status = message } };
+            return request.CreateResponse(HttpStatusCode.Accepted, response);
         }
     }
 }

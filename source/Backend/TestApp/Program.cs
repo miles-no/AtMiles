@@ -12,7 +12,7 @@ using no.miles.at.Backend.TestApp.Properties;
 
 namespace no.miles.at.Backend.TestApp
 {
-    class Program
+    static class Program
     {
         static void Main()
         {
@@ -58,7 +58,6 @@ namespace no.miles.at.Backend.TestApp
         {
             string companyId = config.CompanyId;
             const string companyName = "Miles";
-            const string officeName = "Stavanger";
 
             const string initCorrelationId1 = "SYSTEM INIT 1";
             const string initCorrelationId2 = "SYSTEM INIT 2";
@@ -74,7 +73,7 @@ namespace no.miles.at.Backend.TestApp
                 new Login(Constants.GoogleIdProvider, "stian.edvardsen@miles.no"));
             admins.Add(admin2);
 
-            var seedCommand = new AddNewCompanyToSystem(companyId, companyName, officeName, admins.ToArray(),
+            var seedCommand = new AddNewCompanyToSystem(companyId, companyName, admins.ToArray(),
                 DateTime.UtcNow, systemAsPerson, initCorrelationId1, Constants.IgnoreVersion);
 
             var importCommand = new ImportDataFromCvPartner(companyId, DateTime.UtcNow, systemAsPerson,

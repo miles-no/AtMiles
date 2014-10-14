@@ -22,7 +22,7 @@ namespace no.miles.at.Backend.Api
 {
     public partial class Startup
     {
-        public void ConfigureAuth(IAppBuilder app, Config settings, IResolveUserIdentity resolveUserIdentity, ICommandSender commandSender)
+        private static void ConfigureAuth(IAppBuilder app, Config settings, IResolveUserIdentity resolveUserIdentity, ICommandSender commandSender)
         {
             var issuer = settings.Auth0Issuer;
             var audience = settings.Auth0Audience;

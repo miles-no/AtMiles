@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -244,10 +245,7 @@ namespace no.miles.at.Backend.Api.Controllers
 
             if (i != null)
             {
-                foreach (var description in i)
-                {
-                    o.Add(new EmployeeDetailsResponse.Description { LocalDescription = description.LocalDescription, InternationalDescription = description.InternationalDescription });
-                }
+                o.AddRange(i.Select(description => new EmployeeDetailsResponse.Description {LocalDescription = description.LocalDescription, InternationalDescription = description.InternationalDescription}));
             }
 
             return o;
@@ -258,17 +256,10 @@ namespace no.miles.at.Backend.Api.Controllers
             var o = new List<EmployeeDetailsResponse.BusyTime>();
             if (i != null)
             {
-                foreach (var busyTime in i)
+                o.AddRange(i.Select(busyTime => new EmployeeDetailsResponse.BusyTime
                 {
-                    o.Add(new EmployeeDetailsResponse.BusyTime
-                    {
-                        Id = busyTime.Id,
-                        Start = busyTime.Start,
-                        End = busyTime.End,
-                        PercentageOccupied = busyTime.PercentageOccupied,
-                        Comment = busyTime.Comment
-                    });
-                }
+                    Id = busyTime.Id, Start = busyTime.Start, End = busyTime.End, PercentageOccupied = busyTime.PercentageOccupied, Comment = busyTime.Comment
+                }));
             }
 
             return o;
@@ -279,10 +270,7 @@ namespace no.miles.at.Backend.Api.Controllers
             var o = new List<EmployeeDetailsResponse.Tag>();
             if (i != null)
             {
-                foreach (var tag in i)
-                {
-                    o.Add(new EmployeeDetailsResponse.Tag { Category = tag.Category, Competency = tag.Competency, InternationalCompentency = tag.InternationalCompentency, InternationalCategory = tag.InternationalCategory });
-                }
+                o.AddRange(i.Select(tag => new EmployeeDetailsResponse.Tag {Category = tag.Category, Competency = tag.Competency, InternationalCompentency = tag.InternationalCompentency, InternationalCategory = tag.InternationalCategory}));
             }
             return o.ToArray();
         }

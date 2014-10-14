@@ -50,7 +50,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.RemoveCompanyAdminTests
             return all;
         }
 
-        public IEnumerable<FakeStreamEvent> GivenCompany()
+        private IEnumerable<FakeStreamEvent> GivenCompany()
         {
             var events = new List<FakeStreamEvent>
                 {
@@ -60,7 +60,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.RemoveCompanyAdminTests
             return events;
         }
 
-        public IEnumerable<FakeStreamEvent> GivenEmployee()
+        private IEnumerable<FakeStreamEvent> GivenEmployee()
         {
             var events = new List<FakeStreamEvent>
                 {

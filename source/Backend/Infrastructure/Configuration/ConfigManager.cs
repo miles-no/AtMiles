@@ -3,7 +3,7 @@ using YamlDotNet.Serialization;
 
 namespace no.miles.at.Backend.Infrastructure.Configuration
 {
-    public class ConfigManager
+    public static class ConfigManager
     {
         public static Config GetConfig(string configFilename)
         {

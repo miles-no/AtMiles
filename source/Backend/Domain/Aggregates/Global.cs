@@ -12,11 +12,6 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         private readonly List<string> _companies;
 
-        public string[] Companies
-        {
-            get { return _companies.ToArray(); }
-        }
-
         public Global()
         {
             _id = GlobalId;

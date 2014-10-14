@@ -3,7 +3,7 @@ using no.miles.at.Backend.Domain.Commands;
 
 namespace no.miles.at.Backend.Domain.CommandHandlers
 {
-    public class MainCommandHandlerFactory
+    public static class MainCommandHandlerFactory
     {
         public static MainCommandHandler Initialize(IRepository<Company> repositoryCompany, IRepository<Employee> repositoryEmployee, IRepository<Global> repositoryGlobal, IImportDataFromCvPartner cvPartnerImporter)
         {
