@@ -34,7 +34,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
         private DateTime _timestamp1 = DateTime.MinValue;
         private DateTime _timestamp2 = DateTime.MinValue;
 
-        public string EmployeeId = string.Empty;
+        private string _employeeId = string.Empty;
 
         private readonly CvPartnerImportData _importData = new CvPartnerImportData(
             firstName: "Ole",
@@ -65,7 +65,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
                 _timestamp1 = events[0].Created;
                 _timestamp2 = events[1].Created;
 
-                EmployeeId = ((EmployeeCreated) events[0]).EmployeeId;
+                _employeeId = ((EmployeeCreated) events[0]).EmployeeId;
             }
             return events;
         }
@@ -127,8 +127,8 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
         {
             var events = new List<Event>
                 {
-                    new EmployeeCreated(CompanyId, CompanyName, EmployeeId, new Login(Constants.GoogleIdProvider,_importData.Email), _importData.FirstName, _importData.MiddleName, _importData.LastName, _timestamp1, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
-                    new ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp2, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new EmployeeCreated(CompanyId, CompanyName, _employeeId, new Login(Constants.GoogleIdProvider,_importData.Email), _importData.FirstName, _importData.MiddleName, _importData.LastName, _timestamp1, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
+                    new ImportedFromCvPartner(CompanyId, CompanyName, _employeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp2, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }

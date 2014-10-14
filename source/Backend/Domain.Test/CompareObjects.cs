@@ -99,53 +99,53 @@ namespace no.miles.at.Backend.Domain.Test
         /// Case sensitive.
         /// </summary>
         /// <example>ElementsToIgnore.Add("CreditCardNumber")</example>
-        public List<string> ElementsToIgnore { get; set; }
+        private List<string> ElementsToIgnore { get; set; }
 
         //Security restriction in Silverlight prevents getting private properties and fields
 
         /// <summary>
         /// If true, private properties and fields will be compared. The default is false.
         /// </summary>
-        public bool ComparePrivateProperties { get; set; }
+        private bool ComparePrivateProperties { get; set; }
 
         /// <summary>
         /// If true, private fields will be compared. The default is false.
         /// </summary>
-        public bool ComparePrivateFields { get; set; }
+        private bool ComparePrivateFields { get; set; }
 
         /// <summary>
         /// If true, static properties will be compared.  The default is true.
         /// </summary>
-        public bool CompareStaticProperties { get; set; }
+        private bool CompareStaticProperties { get; set; }
 
         /// <summary>
         /// If true, static fields will be compared.  The default is true.
         /// </summary>
-        public bool CompareStaticFields { get; set; }
+        private bool CompareStaticFields { get; set; }
 
         /// <summary>
         /// If true, child objects will be compared. The default is true. 
         /// If false, and a list or array is compared list items will be compared but not their children.
         /// </summary>
-        public bool CompareChildren { get; set; }
+        private bool CompareChildren { get; set; }
 
         /// <summary>
         /// If true, compare read only properties (only the getter is implemented).
         /// The default is true.
         /// </summary>
-        public bool CompareReadOnly { get; set; }
+        private bool CompareReadOnly { get; set; }
 
         /// <summary>
         /// If true, compare fields of a class (see also CompareProperties).
         /// The default is true.
         /// </summary>
-        public bool CompareFields { get; set; }
+        private bool CompareFields { get; set; }
 
         /// <summary>
         /// If true, compare properties of a class (see also CompareFields).
         /// The default is true.
         /// </summary>
-        public bool CompareProperties { get; set; }
+        private bool CompareProperties { get; set; }
 
         /// <summary>
         /// The maximum number of differences to detect
@@ -153,12 +153,12 @@ namespace no.miles.at.Backend.Domain.Test
         /// <remarks>
         /// Default is 1 for performance reasons.
         /// </remarks>
-        public int MaxDifferences { get; set; }
+        private int MaxDifferences { get; set; }
 
         /// <summary>
         /// The differences found during the compare
         /// </summary>
-        public List<String> Differences { get; set; }
+        private List<String> Differences { get; set; }
 
         /// <summary>
         /// The differences found in a string suitable for a textbox

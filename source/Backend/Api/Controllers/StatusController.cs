@@ -23,12 +23,20 @@ namespace no.miles.at.Backend.Api.Controllers
         {
 
             var res = _engine.GetStatus(id);
+            if (res == null || res.Id != id)
+            {
+                //TODO: Log and return
+                return null;
+            }
             return new StatusResponse
             {
-                Id = id,
+                Id = res.Id,
+                CommandName = res.CommandName,
                 Status = res.Status,
                 ErrorMessage = res.ErrorMessage,
-                Url = Request.RequestUri.AbsoluteUri
+                Url = Request.RequestUri.AbsoluteUri,
+                Started = res.Started,
+                Finished = res.Finished
             };
         }
     }
