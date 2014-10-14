@@ -82,7 +82,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddCompanyAdminTests
             return cmd;
         }
 
-        public override Handles<AddCompanyAdmin> OnHandler()
+        protected override Handles<AddCompanyAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

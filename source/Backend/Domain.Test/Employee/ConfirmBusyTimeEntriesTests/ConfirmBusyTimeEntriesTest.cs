@@ -77,7 +77,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.ConfirmBusyTimeEntriesTests
             return new ConfirmBusyTimeEntries(CompanyId, EmployeeId, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<ConfirmBusyTimeEntries> OnHandler()
+        protected override Handles<ConfirmBusyTimeEntries> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

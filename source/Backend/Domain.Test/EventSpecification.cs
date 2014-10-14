@@ -14,7 +14,7 @@ namespace no.miles.at.Backend.Domain.Test
         protected abstract IEnumerable<Event> Produced();
         public abstract IEnumerable<FakeStreamEvent> Given();
         protected abstract TCommand When();
-        public abstract Handles<TCommand> OnHandler();
+        protected abstract Handles<TCommand> OnHandler();
         protected abstract IEnumerable<Event> Expect();
         protected Exception ExpectedException;
 

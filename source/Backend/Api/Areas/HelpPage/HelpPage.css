@@ -97,6 +97,7 @@ a:hover {
     color: white;
     line-height: 34px;
     padding: 11px 10px 11px 10px;
+    /* ReSharper disable once CssBrowserCompatibility */
     border-radius: 5px;
 }
 

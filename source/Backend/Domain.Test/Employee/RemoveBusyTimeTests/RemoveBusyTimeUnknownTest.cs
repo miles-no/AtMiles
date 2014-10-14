@@ -76,7 +76,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.RemoveBusyTimeTests
             return new RemoveBusyTime(CompanyId, EmployeeId, BusyTimeId1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<RemoveBusyTime> OnHandler()
+        protected override Handles<RemoveBusyTime> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

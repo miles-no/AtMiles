@@ -8,399 +8,399 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "disabled")]
-        public bool Disabled { get; set; }
+        public bool Disabled;
 
         [JsonProperty(PropertyName = "int_long_description")]
-        public string IntLongDescription { get; set; }
+        public string IntLongDescription;
 
         [JsonProperty(PropertyName = "int_tag_line")]
-        public object IntTagLine { get; set; }
+        public object IntTagLine;
 
         [JsonProperty(PropertyName = "key_points")]
-        public KeyPoint[] KeyPoints { get; set; }
+        public KeyPoint[] KeyPoints;
 
         [JsonProperty(PropertyName = "local_long_description")]
-        public string LocalLongDescription { get; set; }
+        public string LocalLongDescription;
 
         [JsonProperty(PropertyName = "local_tag_line")]
-        public object LocalTagLine { get; set; }
+        public object LocalTagLine;
 
         [JsonProperty(PropertyName = "long_description")]
-        public object LongDescription { get; set; }
+        public object LongDescription;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "order")]
-        public int? Order { get; set; }
+        public int? Order;
 
         [JsonProperty(PropertyName = "starred")]
-        public bool Starred { get; set; }
+        public bool Starred;
 
         [JsonProperty(PropertyName = "tag_line")]
-        public object TagLine { get; set; }
+        public object TagLine;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
     }
 
     public class KeyPoint
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "int_name")]
-        public string IntName { get; set; }
+        public string IntName;
 
         [JsonProperty(PropertyName = "local_name")]
-        public string LocalName { get; set; }
+        public string LocalName;
 
         [JsonProperty(PropertyName = "int_long_description")]
-        public string IntDescription { get; set; }
+        public string IntDescription;
 
         [JsonProperty(PropertyName = "local_long_description")]
-        public string LocalDescription { get; set; }
+        public string LocalDescription;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
     }
 
     public class Language
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "disabled")]
-        public bool Disabled { get; set; }
+        public bool Disabled;
 
         [JsonProperty(PropertyName = "int_level")]
-        public string IntLevel { get; set; }
+        public string IntLevel;
 
         [JsonProperty(PropertyName = "int_name")]
-        public string IntName { get; set; }
+        public string IntName;
 
         [JsonProperty(PropertyName = "level")]
-        public string Level { get; set; }
+        public string Level;
 
         [JsonProperty(PropertyName = "local_level")]
-        public string LocalLevel { get; set; }
+        public string LocalLevel;
 
         [JsonProperty(PropertyName = "local_name")]
-        public string LocalName { get; set; }
+        public string LocalName;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
+        public string Name;
 
         [JsonProperty(PropertyName = "order")]
-        public int? Order { get; set; }
+        public int? Order;
 
         [JsonProperty(PropertyName = "starred")]
-        public bool Starred { get; set; }
+        public bool Starred;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
     }
 
     public class Role
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "disabled")]
-        public bool Disabled { get; set; }
+        public bool Disabled;
 
         [JsonProperty(PropertyName = "int_long_description")]
-        public object IntLongDescription { get; set; }
+        public object IntLongDescription;
 
         [JsonProperty(PropertyName = "int_name")]
-        public object IntName { get; set; }
+        public object IntName;
 
         [JsonProperty(PropertyName = "local_long_description")]
-        public object LocalLongDescription { get; set; }
+        public object LocalLongDescription;
 
         [JsonProperty(PropertyName = "local_name")]
-        public object LocalName { get; set; }
+        public object LocalName;
 
         [JsonProperty(PropertyName = "long_description")]
-        public object LongDescription { get; set; }
+        public object LongDescription;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "name")]
-        public object Name { get; set; }
+        public object Name;
 
         [JsonProperty(PropertyName = "order")]
-        public int? Order { get; set; }
+        public int? Order;
 
         [JsonProperty(PropertyName = "starred")]
-        public bool Starred { get; set; }
+        public bool Starred;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
     }
 
     public class ProjectExperience
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "customer")]
-        public object Customer { get; set; }
+        public object Customer;
 
         [JsonProperty(PropertyName = "customer_description")]
-        public object CustomerDescription { get; set; }
+        public object CustomerDescription;
 
         [JsonProperty(PropertyName = "customer_value_proposition")]
-        public object CustomerValueProposition { get; set; }
+        public object CustomerValueProposition;
 
         [JsonProperty(PropertyName = "description")]
-        public string Description { get; set; }
+        public string Description;
 
         [JsonProperty(PropertyName = "disabled")]
-        public bool? Disabled { get; set; }
+        public bool? Disabled;
 
         [JsonProperty(PropertyName = "exclude_tags")]
-        public object[] ExcludeTags { get; set; }
+        public object[] ExcludeTags;
 
         [JsonProperty(PropertyName = "expected_roll_off_date")]
-        public object ExpectedRollOffDate { get; set; }
+        public object ExpectedRollOffDate;
 
         [JsonProperty(PropertyName = "industry")]
-        public object Industry { get; set; }
+        public object Industry;
 
         [JsonProperty(PropertyName = "int_customer")]
-        public object IntCustomer { get; set; }
+        public object IntCustomer;
 
         [JsonProperty(PropertyName = "int_customer_description")]
-        public object IntCustomerDescription { get; set; }
+        public object IntCustomerDescription;
 
         [JsonProperty(PropertyName = "int_customer_value_proposition")]
-        public object IntCustomerValueProposition { get; set; }
+        public object IntCustomerValueProposition;
 
         [JsonProperty(PropertyName = "int_description")]
-        public object IntDescription { get; set; }
+        public object IntDescription;
 
         [JsonProperty(PropertyName = "int_industry")]
-        public object IntIndustry { get; set; }
+        public object IntIndustry;
 
         [JsonProperty(PropertyName = "int_long_description")]
-        public object IntLongDescription { get; set; }
+        public object IntLongDescription;
 
         [JsonProperty(PropertyName = "int_month_from")]
-        public object IntMonthFrom { get; set; }
+        public object IntMonthFrom;
 
         [JsonProperty(PropertyName = "int_month_to")]
-        public object IntMonthTo { get; set; }
+        public object IntMonthTo;
 
         [JsonProperty(PropertyName = "int_related_work_experience_id")]
-        public object IntRelatedWorkExperienceId { get; set; }
+        public object IntRelatedWorkExperienceId;
 
         [JsonProperty(PropertyName = "int_tags")]
-        public object[] IntTags { get; set; }
+        public object[] IntTags;
 
         [JsonProperty(PropertyName = "int_year_from")]
-        public object IntYearFrom { get; set; }
+        public object IntYearFrom;
 
         [JsonProperty(PropertyName = "int_year_to")]
-        public object IntYearTo { get; set; }
+        public object IntYearTo;
 
         [JsonProperty(PropertyName = "local_customer")]
-        public object LocalCustomer { get; set; }
+        public object LocalCustomer;
 
         [JsonProperty(PropertyName = "local_customer_description")]
-        public object LocalCustomerDescription { get; set; }
+        public object LocalCustomerDescription;
 
         [JsonProperty(PropertyName = "local_customer_value_proposition")]
-        public object LocalCustomerValueProposition { get; set; }
+        public object LocalCustomerValueProposition;
 
         [JsonProperty(PropertyName = "local_description")]
-        public object LocalDescription { get; set; }
+        public object LocalDescription;
 
         [JsonProperty(PropertyName = "local_industry")]
-        public object LocalIndustry { get; set; }
+        public object LocalIndustry;
 
         [JsonProperty(PropertyName = "local_long_description")]
-        public object LocalLongDescription { get; set; }
+        public object LocalLongDescription;
 
         [JsonProperty(PropertyName = "local_month_from")]
-        public object LocalMonthFrom { get; set; }
+        public object LocalMonthFrom;
 
         [JsonProperty(PropertyName = "local_month_to")]
-        public object LocalMonthTo { get; set; }
+        public object LocalMonthTo;
 
         [JsonProperty(PropertyName = "local_related_work_experience_id")]
-        public object LocalRelatedWorkExperienceId { get; set; }
+        public object LocalRelatedWorkExperienceId;
 
         [JsonProperty(PropertyName = "local_tags")]
-        public object[] LocalTags { get; set; }
+        public object[] LocalTags;
 
         [JsonProperty(PropertyName = "local_year_from")]
-        public object LocalYearFrom { get; set; }
+        public object LocalYearFrom;
 
         [JsonProperty(PropertyName = "local_year_to")]
-        public object LocalYearTo { get; set; }
+        public object LocalYearTo;
 
         [JsonProperty(PropertyName = "long_description")]
-        public object LongDescription { get; set; }
+        public object LongDescription;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "month_from")]
-        public object MonthFrom { get; set; }
+        public object MonthFrom;
 
         [JsonProperty(PropertyName = "month_to")]
-        public object MonthTo { get; set; }
+        public object MonthTo;
 
         [JsonProperty(PropertyName = "order")]
-        public int? Order { get; set; }
+        public int? Order;
 
         [JsonProperty(PropertyName = "related_work_experience_id")]
-        public object RelatedWorkExperienceId { get; set; }
+        public object RelatedWorkExperienceId;
 
         [JsonProperty(PropertyName = "roles")]
-        public Role[] Roles { get; set; }
+        public Role[] Roles;
 
         [JsonProperty(PropertyName = "starred")]
-        public bool? Starred { get; set; }
+        public bool? Starred;
 
         [JsonProperty(PropertyName = "tags")]
-        public object[] Tags { get; set; }
+        public object[] Tags;
 
         [JsonProperty(PropertyName = "version")]
-        public int Version { get; set; }
+        public int Version;
 
         [JsonProperty(PropertyName = "year_from")]
-        public object YearFrom { get; set; }
+        public object YearFrom;
 
         [JsonProperty(PropertyName = "year_to")]
-        public object YearTo { get; set; }
+        public object YearTo;
     }
 
     public class Tags
     {
 
         [JsonProperty(PropertyName = "no")]
-        public string No { get; set; }
+        public string No;
 
         [JsonProperty(PropertyName = "int")]
-        public string Int { get; set; }
+        public string Int;
     }
 
     public class TechnologySkill
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "order")]
-        public int? Order { get; set; }
+        public int? Order;
 
         [JsonProperty(PropertyName = "tags")]
-        public Tags Tags { get; set; }
+        public Tags Tags;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
     }
 
     public class Technology
     {
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "category")]
-        public string Category { get; set; }
+        public string Category;
 
         [JsonProperty(PropertyName = "disabled")]
-        public bool? Disabled { get; set; }
+        public bool? Disabled;
 
         [JsonProperty(PropertyName = "exclude_tags")]
-        public object[] ExcludeTags { get; set; }
+        public object[] ExcludeTags;
 
         [JsonProperty(PropertyName = "int_category")]
-        public string IntCategory { get; set; }
+        public string IntCategory;
 
         [JsonProperty(PropertyName = "int_tags")]
-        public string[] IntTags { get; set; }
+        public string[] IntTags;
 
         [JsonProperty(PropertyName = "local_category")]
-        public string LocalCategory { get; set; }
+        public string LocalCategory;
 
         [JsonProperty(PropertyName = "local_tags")]
-        public string[] LocalTags { get; set; }
+        public string[] LocalTags;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "order")]
-        public int? Order { get; set; }
+        public int? Order;
 
         [JsonProperty(PropertyName = "starred")]
-        public object Starred { get; set; }
+        public object Starred;
 
         [JsonProperty(PropertyName = "tags")]
-        public string[] Tags { get; set; }
+        public string[] Tags;
 
         [JsonProperty(PropertyName = "technology_skills")]
-        public TechnologySkill[] TechnologySkills { get; set; }
+        public TechnologySkill[] TechnologySkills;
 
         [JsonProperty(PropertyName = "uncategorized")]
-        public bool Uncategorized { get; set; }
+        public bool Uncategorized;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
     }
 
     public class Thumb
     {
 
         [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
+        public string Url;
     }
 
     public class FitThumb
     {
 
         [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
+        public string Url;
     }
 
     public class SmallThumb
     {
 
         [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
+        public string Url;
     }
 
     public class Image
     {
 
         [JsonProperty(PropertyName = "url")]
-        public string Url { get; set; }
+        public string Url;
 
         [JsonProperty(PropertyName = "thumb")]
-        public Thumb Thumb { get; set; }
+        public Thumb Thumb;
 
         [JsonProperty(PropertyName = "fit_thumb")]
-        public FitThumb FitThumb { get; set; }
+        public FitThumb FitThumb;
 
         [JsonProperty(PropertyName = "small_thumb")]
-        public SmallThumb SmallThumb { get; set; }
+        public SmallThumb SmallThumb;
     }
 
     public class Cv
@@ -413,7 +413,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv
         private int? bornDay;
 
         [JsonProperty(PropertyName = "_id")]
-        public string Id { get; set; }
+        public string Id;
 
         [JsonProperty(PropertyName = "born_day")]
         public int? BornDay
@@ -459,94 +459,94 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv
         }
 
         [JsonProperty(PropertyName = "bruker_id")]
-        public string UserId { get; set; }
+        public string UserId;
 
         [JsonProperty(PropertyName = "created_at")]
-        public string CreatedAt { get; set; }
+        public string CreatedAt;
 
         [JsonProperty(PropertyName = "default")]
-        public bool Default { get; set; }
+        public bool Default;
 
         [JsonProperty(PropertyName = "default_international")]
-        public bool DefaultInternational { get; set; }
+        public bool DefaultInternational;
 
         [JsonProperty(PropertyName = "int_nationality")]
-        public object IntNationality { get; set; }
+        public object IntNationality;
 
         [JsonProperty(PropertyName = "int_place_of_residence")]
-        public object IntPlaceOfResidence { get; set; }
+        public object IntPlaceOfResidence;
 
         [JsonProperty(PropertyName = "int_title")]
-        public object IntTitle { get; set; }
+        public object IntTitle;
 
         [JsonProperty(PropertyName = "key_qualifications")]
-        public KeyQualification[] KeyQualifications { get; set; }
+        public KeyQualification[] KeyQualifications;
 
         [JsonProperty(PropertyName = "language_code")]
-        public string LanguageCode { get; set; }
+        public string LanguageCode;
 
         [JsonProperty(PropertyName = "languages")]
-        public Language[] Languages { get; set; }
+        public Language[] Languages;
 
         [JsonProperty(PropertyName = "local_nationality")]
-        public string LocalNationality { get; set; }
+        public string LocalNationality;
 
         [JsonProperty(PropertyName = "local_place_of_residence")]
-        public string LocalPlaceOfResidence { get; set; }
+        public string LocalPlaceOfResidence;
 
         [JsonProperty(PropertyName = "local_title")]
-        public string LocalTitle { get; set; }
+        public string LocalTitle;
 
         [JsonProperty(PropertyName = "modifier_id")]
-        public object ModifierId { get; set; }
+        public object ModifierId;
 
         [JsonProperty(PropertyName = "nationality")]
-        public string Nationality { get; set; }
+        public string Nationality;
 
         [JsonProperty(PropertyName = "navn")]
-        public string Name { get; set; }
+        public string Name;
 
         [JsonProperty(PropertyName = "place_of_residence")]
-        public string PlaceOfResidence { get; set; }
+        public string PlaceOfResidence;
 
         [JsonProperty(PropertyName = "project_experiences")]
-        public ProjectExperience[] ProjectExperiences { get; set; }
+        public ProjectExperience[] ProjectExperiences;
 
         [JsonProperty(PropertyName = "technologies")]
-        public Technology[] Technologies { get; set; }
+        public Technology[] Technologies;
 
         [JsonProperty(PropertyName = "telefon")]
-        public string Phone { get; set; }
+        public string Phone;
 
         [JsonProperty(PropertyName = "tilbud_id")]
-        public object TilbudId { get; set; }
+        public object TilbudId;
 
         [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
+        public string Title;
 
         [JsonProperty(PropertyName = "twitter")]
-        public object Twitter { get; set; }
+        public object Twitter;
 
         [JsonProperty(PropertyName = "updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt;
 
         [JsonProperty(PropertyName = "version")]
-        public int? Version { get; set; }
+        public int? Version;
 
         [JsonProperty(PropertyName = "email")]
-        public string Email { get; set; }
+        public string Email;
 
         [JsonProperty(PropertyName = "country_code")]
-        public string CountryCode { get; set; }
+        public string CountryCode;
 
         [JsonProperty(PropertyName = "language_codes")]
-        public string[] LanguageCodes { get; set; }
+        public string[] LanguageCodes;
 
         [JsonProperty(PropertyName = "image")]
-        public Image Image { get; set; }
+        public Image Image;
 
         [JsonProperty(PropertyName = "can_write")]
-        public bool CanWrite { get; set; }
+        public bool CanWrite;
     }
 
 

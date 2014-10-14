@@ -76,7 +76,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.TerminateEmployeeTests
             return cmd;
         }
 
-        public override Handles<TerminateEmployee> OnHandler()
+        protected override Handles<TerminateEmployee> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

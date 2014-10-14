@@ -78,7 +78,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.RemoveCompanyAdminTests
             return cmd;
         }
 
-        public override Handles<RemoveCompanyAdmin> OnHandler()
+        protected override Handles<RemoveCompanyAdmin> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

@@ -66,7 +66,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// </summary>
         /// <param name="api">The <see cref="ApiDescription"/>.</param>
         /// <returns>The samples keyed by media type.</returns>
-        public IDictionary<MediaTypeHeaderValue, object> GetSampleRequests(ApiDescription api)
+        public IEnumerable<KeyValuePair<MediaTypeHeaderValue, object>> GetSampleRequests(ApiDescription api)
         {
             return GetSample(api, SampleDirection.Request);
         }
@@ -76,7 +76,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// </summary>
         /// <param name="api">The <see cref="ApiDescription"/>.</param>
         /// <returns>The samples keyed by media type.</returns>
-        public IDictionary<MediaTypeHeaderValue, object> GetSampleResponses(ApiDescription api)
+        public IEnumerable<KeyValuePair<MediaTypeHeaderValue, object>> GetSampleResponses(ApiDescription api)
         {
             return GetSample(api, SampleDirection.Response);
         }

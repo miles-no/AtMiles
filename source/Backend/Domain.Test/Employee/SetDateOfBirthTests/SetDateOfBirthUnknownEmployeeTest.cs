@@ -77,7 +77,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetDateOfBirthTests
             return new SetDateOfBirth(CompanyId, EmployeeId2, _dateOfBirth, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<SetDateOfBirth> OnHandler()
+        protected override Handles<SetDateOfBirth> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

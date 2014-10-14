@@ -187,25 +187,25 @@ namespace no.miles.at.Backend.Domain.Test
         /// </summary>
         /// <seealso cref="Caching"/>
         /// <seealso cref="ClearCache"/>
-        public bool AutoClearCache { get; set; }
+        private bool AutoClearCache { get; set; }
 
         /// <summary>
         /// By default properties and fields for types are cached for each compare.  By default this cache is cleared after each compare.
         /// </summary>
         /// <seealso cref="AutoClearCache"/>
         /// <seealso cref="ClearCache"/>
-        public bool Caching { get; set; }
+        private bool Caching { get; set; }
 
         /// <summary>
         /// A list of attributes to ignore a class, property or field
         /// </summary>
         /// <example>AttributesToIgnore.Add(typeof(XmlIgnoreAttribute));</example>
-        public List<Type> AttributesToIgnore { get; set; }
+        private List<Type> AttributesToIgnore { get; set; }
 
         /// <summary>
         /// If true, objects will be compared ignore their type diferences
         /// </summary>
-        public bool IgnoreObjectTypes { get; set; }
+        private bool IgnoreObjectTypes { get; set; }
 
         #endregion
 
@@ -266,7 +266,7 @@ namespace no.miles.at.Backend.Domain.Test
         /// </summary>
         /// <seealso cref="AutoClearCache"/>
         /// <seealso cref="Caching"/>
-        public void ClearCache()
+        private void ClearCache()
         {
             _propertyCache.Clear();
             _fieldCache.Clear();

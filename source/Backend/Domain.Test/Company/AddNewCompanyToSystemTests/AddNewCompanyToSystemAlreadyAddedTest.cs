@@ -81,7 +81,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             return new AddNewCompanyToSystem(CompanyId, CompanyName, admins.ToArray(), DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<AddNewCompanyToSystem> OnHandler()
+        protected override Handles<AddNewCompanyToSystem> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

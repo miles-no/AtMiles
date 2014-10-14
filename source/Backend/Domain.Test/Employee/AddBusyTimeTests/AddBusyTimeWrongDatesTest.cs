@@ -80,7 +80,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.AddBusyTimeTests
             return new AddBusyTime(CompanyId, EmployeeId, Start1, End1, Percentage1, Comment1, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<AddBusyTime> OnHandler()
+        protected override Handles<AddBusyTime> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

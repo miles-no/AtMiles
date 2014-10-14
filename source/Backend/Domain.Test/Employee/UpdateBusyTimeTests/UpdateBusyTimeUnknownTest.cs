@@ -85,7 +85,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.UpdateBusyTimeTests
             return new UpdateBusyTime(CompanyId, EmployeeId, BusyTimeId2, Start2, End2, Percentage2, Comment2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<UpdateBusyTime> OnHandler()
+        protected override Handles<UpdateBusyTime> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

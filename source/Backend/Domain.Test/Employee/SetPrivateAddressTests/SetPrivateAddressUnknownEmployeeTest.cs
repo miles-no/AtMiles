@@ -78,7 +78,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetPrivateAddressTests
             return new SetPrivateAddress(CompanyId, EmployeeId2, _privateAddress, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
 
-        public override Handles<SetPrivateAddress> OnHandler()
+        protected override Handles<SetPrivateAddress> OnHandler()
         {
             _fakeCompanyRepository = new FakeRepository<Aggregates.Company>(GivenCompany());
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());

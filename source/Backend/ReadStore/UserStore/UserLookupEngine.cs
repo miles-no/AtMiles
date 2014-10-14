@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using no.miles.at.Backend.Domain.Services;
 using no.miles.at.Backend.Infrastructure;
 using Raven.Client;
@@ -46,7 +47,7 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             return string.Empty;
         }
 
-        public UserLookupModel[] GetAllCompanyAdmins(string companyId)
+        public IEnumerable<UserLookupModel> GetAllCompanyAdmins(string companyId)
         {
             UserLookupModel[] res;
             using (var session = _store.OpenSession())
