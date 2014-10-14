@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.Http.Headers;
 
 namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
@@ -161,12 +162,8 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             {
                 hashCode ^= ParameterType.GetHashCode();
             }
-            foreach (string parameterName in ParameterNames)
-            {
-                hashCode ^= parameterName.ToUpperInvariant().GetHashCode();
-            }
 
-            return hashCode;
+            return ParameterNames.Aggregate(hashCode, (current, parameterName) => current ^ parameterName.ToUpperInvariant().GetHashCode());
         }
     }
 }

@@ -359,8 +359,11 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
             {
                 if (apiParameter.Source == ApiParameterSource.FromBody)
                 {
-                    var parameterType = apiParameter.ParameterDescriptor.ParameterType;
-                    apiModel.RequestModelDescription = modelGenerator.GetOrCreateModelDescription(parameterType);
+                    if (apiParameter.ParameterDescriptor != null)
+                    {
+                        var parameterType = apiParameter.ParameterDescriptor.ParameterType;
+                        apiModel.RequestModelDescription = modelGenerator.GetOrCreateModelDescription(parameterType);
+                    }
                     apiModel.RequestDocumentation = apiParameter.Documentation;
                 }
                 else if (apiParameter.ParameterDescriptor != null &&

@@ -146,7 +146,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
 
                 // Trim the generic parameter counts from the name
                 genericTypeName = genericTypeName.Substring(0, genericTypeName.IndexOf('`'));
-                string[] argumentTypeNames = genericArguments.Select(t => GetTypeName(t)).ToArray();
+                string[] argumentTypeNames = genericArguments.Select(GetTypeName).ToArray();
                 name = String.Format(CultureInfo.InvariantCulture, "{0}{{{1}}}", genericTypeName, String.Join(",", argumentTypeNames));
             }
             if (type.IsNested)

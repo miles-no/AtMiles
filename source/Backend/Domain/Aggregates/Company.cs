@@ -89,7 +89,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             if (IsCompanyAdmin(employeeToBeAdmin.Id)) throw new AlreadyExistingItemException("Already company admin");
 
             var ev = new CompanyAdminAdded(
-                companyId: _id,
+                companyId: Id,
                 companyName: _name,
                 newAdminId: employeeToBeAdmin.Id,
                 newAdminName: employeeToBeAdmin.Name,
@@ -105,7 +105,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             if (employeeToBeRemoved.Id == createdBy.Identifier) throw new NoAccessException("Cannot remove self");
 
             var ev = new CompanyAdminRemoved(
-                companyId: _id,
+                companyId: Id,
                 companyName: _name,
                 adminId: employeeToBeRemoved.Id,
                 adminName: employeeToBeRemoved.Name,
@@ -119,7 +119,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         public void AddNewEmployeeToCompany(Employee employee, Person createdBy, string correlationId)
         {
             var ev = new EmployeeAdded(
-                companyId: _id,
+                companyId: Id,
                 companyName: _name,
                 globalId: employee.Id,
                 name: employee.Name,
@@ -133,7 +133,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         public void RemoveEmployee(Employee employee, Person createdBy, string correlationId)
         {
             var ev = new EmployeeRemoved(
-                companyId: _id,
+                companyId: Id,
                 companyName: _name,
                 id: employee.Id,
                 name: employee.Name,
@@ -173,7 +173,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         [UsedImplicitly] //To keep resharper happy
         private void Apply(CompanyCreated ev)
         {
-            _id = ev.CompanyId;
+            Id = ev.CompanyId;
             _name = ev.CompanyName;
         }
 

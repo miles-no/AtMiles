@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace no.miles.at.Backend.Domain.Test
@@ -61,13 +62,7 @@ namespace no.miles.at.Backend.Domain.Test
             var events = new List<Event>();
             if (GivenEvents != null)
             {
-                foreach (var givenEvent in GivenEvents)
-                {
-                    if (givenEvent.StreamId == id)
-                    {
-                        events.Add((givenEvent.Event));
-                    }
-                }
+                events.AddRange(from givenEvent in GivenEvents where givenEvent.StreamId == id select (givenEvent.Event));
             }
             return events.ToArray();
         }

@@ -716,31 +716,34 @@ namespace no.miles.at.Backend.Domain.Test
 
         private void CompareIndexer(PropertyInfo info, object object1, object object2, string breadCrumb)
         {
-            string currentCrumb;
-            var indexerCount1 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object1, new object[] { });
-            var indexerCount2 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object2, new object[] { });
-
-            //Indexers must be the same length
-            if (indexerCount1 != indexerCount2)
+            if (info.ReflectedType != null)
             {
-                currentCrumb = AddBreadCrumb(breadCrumb, info.Name, string.Empty, -1);
-                Differences.Add(string.Format("object1{0}.Count != object2{0}.Count ({1},{2})", currentCrumb,
-                                              indexerCount1, indexerCount2));
+                var indexerCount1 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object1, new object[] { });
+                var indexerCount2 = (int)info.ReflectedType.GetProperty("Count").GetGetMethod().Invoke(object2, new object[] { });
 
-                if (Differences.Count >= MaxDifferences)
-                    return;
-            }
+                //Indexers must be the same length
+                string currentCrumb;
+                if (indexerCount1 != indexerCount2)
+                {
+                    currentCrumb = AddBreadCrumb(breadCrumb, info.Name, string.Empty, -1);
+                    Differences.Add(string.Format("object1{0}.Count != object2{0}.Count ({1},{2})", currentCrumb,
+                        indexerCount1, indexerCount2));
 
-            // Run on indexer
-            for (int i = 0; i < indexerCount1; i++)
-            {
-                currentCrumb = AddBreadCrumb(breadCrumb, info.Name, string.Empty, i);
-                object objectValue1 = info.GetValue(object1, new object[] { i });
-                object objectValue2 = info.GetValue(object2, new object[] { i });
-                Compare(objectValue1, objectValue2, currentCrumb);
+                    if (Differences.Count >= MaxDifferences)
+                        return;
+                }
 
-                if (Differences.Count >= MaxDifferences)
-                    return;
+                // Run on indexer
+                for (int i = 0; i < indexerCount1; i++)
+                {
+                    currentCrumb = AddBreadCrumb(breadCrumb, info.Name, string.Empty, i);
+                    var objectValue1 = info.GetValue(object1, new object[] { i });
+                    var objectValue2 = info.GetValue(object2, new object[] { i });
+                    Compare(objectValue1, objectValue2, currentCrumb);
+
+                    if (Differences.Count >= MaxDifferences)
+                        return;
+                }
             }
         }
 
@@ -1040,12 +1043,12 @@ namespace no.miles.at.Backend.Domain.Test
                 throw new Exception("Cannot compare objects with a non integer indexer for object " + breadCrumb);
             }
 
-            if (info.ReflectedType.GetProperty("Count") == null)
+            if (info.ReflectedType != null && info.ReflectedType.GetProperty("Count") == null)
             {
                 throw new Exception("Indexer must have a corresponding Count property for object " + breadCrumb);
             }
 
-            if (info.ReflectedType.GetProperty("Count").PropertyType != typeof(Int32))
+            if (info.ReflectedType != null && info.ReflectedType.GetProperty("Count").PropertyType != typeof(Int32))
             {
                 throw new Exception("Indexer must have a corresponding Count property that is an integer for object " + breadCrumb);
             }

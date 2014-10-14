@@ -230,9 +230,9 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.ModelDescriptions
             var nonSerialized = member.GetCustomAttribute<NonSerializedAttribute>();
             var apiExplorerSetting = member.GetCustomAttribute<ApiExplorerSettingsAttribute>();
 
-            bool hasMemberAttribute = member.DeclaringType.IsEnum ?
+            bool hasMemberAttribute = member.DeclaringType != null && (member.DeclaringType.IsEnum ?
                 member.GetCustomAttribute<EnumMemberAttribute>() != null :
-                member.GetCustomAttribute<DataMemberAttribute>() != null;
+                member.GetCustomAttribute<DataMemberAttribute>() != null);
 
             // Display member only if all the followings are true:
             // no JsonIgnoreAttribute

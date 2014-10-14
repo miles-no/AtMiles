@@ -121,7 +121,7 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             return employee;
         }
 
-        private async Task RemoveUsersNotInCvPartnerAnyMore(ImportDataFromCvPartner message, Company company, List<CvPartnerImportData> importData)
+        private async Task RemoveUsersNotInCvPartnerAnyMore(ImportDataFromCvPartner message, Company company, IEnumerable<CvPartnerImportData> importData)
         {
             var userIdList = company.GetAllUserIdsForUsersNotInList(importData);
             foreach (var userId in userIdList)

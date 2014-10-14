@@ -12,7 +12,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public CommandSession()
         {
-            _id = SessionStreamId;
+            Id = SessionStreamId;
         }
 
         public void AddRequestCommand(Command command)

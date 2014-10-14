@@ -82,6 +82,7 @@ namespace no.miles.at.Backend.Infrastructure
             return "";
         }
 
+// ReSharper disable once UnusedMethodReturnValue.Local
         private bool Connect()
         {
             if (_useSsl)

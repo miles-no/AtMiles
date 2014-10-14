@@ -99,14 +99,10 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
             Collection<MediaTypeFormatter> formatters;
             var enumerable = parameterNames as string[] ?? parameterNames.ToArray();
             var type = ResolveType(api, controllerName, actionName, enumerable, sampleDirection, out formatters);
-            var samples = new Dictionary<MediaTypeHeaderValue, object>();
 
             // Use the samples provided directly for actions
             var actionSamples = GetAllActionSamples(controllerName, actionName, enumerable, sampleDirection);
-            foreach (var actionSample in actionSamples)
-            {
-                samples.Add(actionSample.Key.MediaType, WrapSampleIfString(actionSample.Value));
-            }
+            var samples = actionSamples.ToDictionary(actionSample => actionSample.Key.MediaType, actionSample => WrapSampleIfString(actionSample.Value));
 
             // Do the sample generation based on formatters only if an action doesn't return an HttpResponseMessage.
             // Here we cannot rely on formatters because we don't know what's in the HttpResponseMessage, it might not even use formatters.
@@ -198,6 +194,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                             break;
                         }
                     }
+// ReSharper disable once EmptyGeneralCatchClause
                     catch
                     {
                         // Ignore any problems encountered in the factory; go on to the next one (if any).
@@ -417,17 +414,10 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         private IEnumerable<KeyValuePair<HelpPageSampleKey, object>> GetAllActionSamples(string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection)
         {
             var parameterNamesSet = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
-            foreach (var sample in ActionSamples)
-            {
-                HelpPageSampleKey sampleKey = sample.Key;
-                if (String.Equals(controllerName, sampleKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&
-                    String.Equals(actionName, sampleKey.ActionName, StringComparison.OrdinalIgnoreCase) &&
-                    (sampleKey.ParameterNames.SetEquals(new[] { "*" }) || parameterNamesSet.SetEquals(sampleKey.ParameterNames)) &&
-                    sampleDirection == sampleKey.SampleDirection)
-                {
-                    yield return sample;
-                }
-            }
+            return from sample in ActionSamples let sampleKey = sample.Key where String.Equals(controllerName, sampleKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&
+                                                                                 String.Equals(actionName, sampleKey.ActionName, StringComparison.OrdinalIgnoreCase) &&
+                                                                                 (sampleKey.ParameterNames.SetEquals(new[] { "*" }) || parameterNamesSet.SetEquals(sampleKey.ParameterNames)) &&
+                                                                                 sampleDirection == sampleKey.SampleDirection select sample;
         }
 
         private static object WrapSampleIfString(object sample)

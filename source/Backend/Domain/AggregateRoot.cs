@@ -7,13 +7,9 @@ namespace no.miles.at.Backend.Domain
         private readonly List<Event> _changes = new List<Event>();
         private readonly List<Event> _history = new List<Event>();
 
-        protected string _id;
-
-        public string Id
-        {
-            get { return _id; }
-        }
-        public int Version { get; internal set; }
+        public string Id { get; protected set; }
+        
+        public int Version { get; protected set; }
         public Event[] HistoryEvents { get { return _history.ToArray(); } }
 
         public IEnumerable<Event> GetUncommittedChanges()

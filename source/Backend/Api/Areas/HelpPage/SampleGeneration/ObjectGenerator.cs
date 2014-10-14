@@ -303,7 +303,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                 return asQueryableMethod.Invoke(null, new[] { list });
             }
 
-            return Queryable.AsQueryable((IEnumerable)list);
+            return ((IEnumerable)list).AsQueryable();
         }
 
         private static object GenerateCollection(Type collectionType, int size, Dictionary<Type, object> createdObjectReferences)
@@ -419,25 +419,16 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
                     { typeof(SByte), index => (SByte)64 },
                     { typeof(Single), index => (Single)(index + 0.1) },
                     { 
-                        typeof(String), index =>
-                        {
-                            return String.Format(CultureInfo.CurrentCulture, "sample string {0}", index);
-                        }
+                        typeof(String), index => String.Format(CultureInfo.CurrentCulture, "sample string {0}", index)
                     },
                     { 
-                        typeof(TimeSpan), index =>
-                        {
-                            return TimeSpan.FromTicks(1234567);
-                        }
+                        typeof(TimeSpan), index => TimeSpan.FromTicks(1234567)
                     },
                     { typeof(UInt16), index => (UInt16)(index % UInt16.MaxValue) },
                     { typeof(UInt32), index => (UInt32)(index % UInt32.MaxValue) },
                     { typeof(UInt64), index => (UInt64)index },
                     { 
-                        typeof(Uri), index =>
-                        {
-                            return new Uri(String.Format(CultureInfo.CurrentCulture, "http://webapihelppage{0}.com", index));
-                        }
+                        typeof(Uri), index => new Uri(String.Format(CultureInfo.CurrentCulture, "http://webapihelppage{0}.com", index))
                     },
                 };
             }

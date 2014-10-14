@@ -52,7 +52,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             var ev = new EmployeeTerminated(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: NameService.GetName(_firstName, _middleName, _lastName),
                 created: DateTime.UtcNow,
                 createdBy: createdBy,
@@ -67,7 +67,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
                 var ev = new ImportedFromCvPartner(
                     companyId: companyId,
                     companyName: companyName,
-                    employeeId: _id,
+                    employeeId: Id,
                     firstName: import.FirstName,
                     middleName: import.MiddleName,
                     lastName: import.LastName,
@@ -89,12 +89,12 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public void ConfirmBusyTimeEntries(string companyId, string companyName, Person createdBy, string correlationId)
         {
-            if (createdBy.Identifier != _id) throw new NoAccessException("Can only confirm busy-time entries on self");
+            if (createdBy.Identifier != Id) throw new NoAccessException("Can only confirm busy-time entries on self");
 
             var ev = new BusyTimeConfirmed(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: Name,
                 created: DateTime.UtcNow,
                 createdBy: createdBy,
@@ -104,7 +104,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public void AddBusyTime(string companyId, string companyName, DateTime start, DateTime? end, short percentageOccpied, string comment, Person createdBy, string correlationId)
         {
-            if (createdBy.Identifier != _id) throw new NoAccessException("Can only add busy-time to self");
+            if (createdBy.Identifier != Id) throw new NoAccessException("Can only add busy-time to self");
 
             if (end.HasValue)
             {
@@ -117,7 +117,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             var ev = new BusyTimeAdded(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: Name,
                 busyTimeId: busyTimeId,
                 start: start,
@@ -133,7 +133,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public void UpdateBusyTimeEnd(string companyId, string companyName, string busyTimeId, DateTime start, DateTime? end, short percentageOccpied, string comment, Person createdBy, string correlationId)
         {
-            if (createdBy.Identifier != _id) throw new NoAccessException("Can only update busy-time to self");
+            if (createdBy.Identifier != Id) throw new NoAccessException("Can only update busy-time to self");
             
             BusyTimeEntry busyTime = _busyTimeEntries.FirstOrDefault(b => b.Id == busyTimeId);
             if (busyTime == null) throw new UnknownItemException("Unknown ID for Busy time entry");
@@ -148,7 +148,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             var ev = new BusyTimeUpdated(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: Name,
                 busyTimeId: busyTime.Id,
                 start: start,
@@ -163,7 +163,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public void RemoveBusyTime(string companyId, string companyName, string busyTimeId, Person createdBy, string correlationId)
         {
-            if (createdBy.Identifier != _id) throw new NoAccessException("Can only add busy-time to self");
+            if (createdBy.Identifier != Id) throw new NoAccessException("Can only add busy-time to self");
 
             BusyTimeEntry busyTime = _busyTimeEntries.FirstOrDefault(b => b.Id == busyTimeId);
 
@@ -172,7 +172,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             var ev = new BusyTimeRemoved(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: Name,
                 busyTimeId: busyTime.Id,
                 start: busyTime.Start,
@@ -190,7 +190,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             var ev = new PrivateAddressSet(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: Name,
                 privateAddress: privateAddress,
                 created: DateTime.UtcNow,
@@ -204,7 +204,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             var ev = new DateOfBirthSet(
                 companyId: companyId,
                 companyName: companyName,
-                employeeId: _id,
+                employeeId: Id,
                 employeeName: Name,
                 dateOfBirth: dateOfBirth,
                 created: DateTime.UtcNow,
@@ -221,7 +221,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         [UsedImplicitly] //To keep resharper happy
         private void Apply(EmployeeCreated ev)
         {
-            _id = ev.EmployeeId;
+            Id = ev.EmployeeId;
             _firstName = ev.FirstName;
             _middleName = ev.MiddleName;
             _lastName = ev.LastName;

@@ -14,7 +14,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public Global()
         {
-            _id = GlobalId;
+            Id = GlobalId;
             _companies = new List<string>();
         }
 

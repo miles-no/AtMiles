@@ -37,14 +37,7 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             using (var session = _documentStore.OpenAsyncSession())
             {
                 var existing = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.EmployeeId));
-                if (existing != null)
-                {
-                    existing = Patch(existing, ev);
-                }
-                else
-                {
-                    existing = Convert(ev);
-                }
+                existing = existing != null ? Patch(existing, ev) : Convert(ev);
 
                 await session.StoreAsync(existing);
                 await session.SaveChangesAsync();
@@ -93,14 +86,7 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             using (var session = _documentStore.OpenAsyncSession())
             {
                 var existing = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.EmployeeId));
-                if (existing != null)
-                {
-                    existing = Patch(existing, ev);
-                }
-                else
-                {
-                    existing = Convert(ev);
-                }
+                existing = existing != null ? Patch(existing, ev) : Convert(ev);
                 await session.StoreAsync(existing);
                 await session.SaveChangesAsync();
             }

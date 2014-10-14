@@ -103,14 +103,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             using (var session = _documentStore.OpenAsyncSession())
             {
                 var existing = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
-                if (existing != null)
-                {
-                    existing = Patch(existing, ev);
-                }
-                else
-                {
-                    existing = ConvertTo(ev);
-                }
+                existing = existing != null ? Patch(existing, ev) : ConvertTo(ev);
 
                 await session.StoreAsync(existing);
                 await session.SaveChangesAsync();

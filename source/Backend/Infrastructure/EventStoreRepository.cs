@@ -45,11 +45,11 @@ namespace no.miles.at.Backend.Infrastructure
                 .LimitRetriesForOperationTo(20);
         }
 
-        public EventStoreRepository(string serverName, int portNumber, IEventPublisher publisher)
-        {
-            _endPoint = GetIpEndPoint(serverName, portNumber);
-            _publisher = publisher;
-        }
+        //public EventStoreRepository(string serverName, int portNumber, IEventPublisher publisher)
+        //{
+        //    _endPoint = GetIpEndPoint(serverName, portNumber);
+        //    _publisher = publisher;
+        //}
 
         public async Task SaveAsync(T aggregate, int expectedVersion)
         {
