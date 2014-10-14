@@ -13,7 +13,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
     /// </summary>
     public class ObjectGenerator
     {
-        internal const int DefaultCollectionSize = 2;
+        private const int DefaultCollectionSize = 2;
         private readonly SimpleTypeObjectGenerator _simpleObjectGenerator = new SimpleTypeObjectGenerator();
 
         /// <summary>

@@ -143,7 +143,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
             ApplyChange(ev);
         }
 
-        public IEnumerable<string> GetAllUserIdsForUsersNotInList(List<CvPartnerImportData> importData)
+        public IEnumerable<string> GetAllUserIdsForUsersNotInList(IEnumerable<CvPartnerImportData> importData)
         {
             return (from employee in _employees
                     where importData.All(i => i.Email != employee.LoginId.Email)

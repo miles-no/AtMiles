@@ -14,7 +14,7 @@ using no.miles.at.Backend.Infrastructure;
 
 namespace no.miles.at.Backend.Api.Utilities
 {
-    public class Helpers
+    public static class Helpers
     {
         // If this system should support more then one company, we have to shift this around a bit
         private static string _companyId;
@@ -71,7 +71,7 @@ namespace no.miles.at.Backend.Api.Utilities
             return id.Value;
         }
 
-        public static bool UserHasAccessToCompany(IIdentity user, string companyId, IResolveUserIdentity identityResolver)
+        public static bool UserHasAccessToCompany(string companyId)
         {
             // This doesnt really make sense before we have more than one company
             return companyId == _companyId;

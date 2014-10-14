@@ -123,7 +123,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// </summary>
         public HashSet<string> ParameterNames { get; private set; }
 
-        public Type ParameterType { get; private set; }
+        private Type ParameterType { get; set; }
 
         /// <summary>
         /// Gets the <see cref="SampleDirection"/>.

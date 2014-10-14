@@ -34,7 +34,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetDateOfBirthTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events = _fakeEmployeeRepository.GetThenEvents();
             if (events.Count == 1)
@@ -73,7 +73,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetDateOfBirthTests
             return events;
         }
 
-        public override SetDateOfBirth When()
+        protected override SetDateOfBirth When()
         {
             return new SetDateOfBirth(CompanyId, EmployeeId, _dateOfBirth, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
@@ -85,7 +85,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetDateOfBirthTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             var events = new List<Event>
                 {

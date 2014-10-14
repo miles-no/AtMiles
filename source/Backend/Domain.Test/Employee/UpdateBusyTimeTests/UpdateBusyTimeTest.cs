@@ -42,7 +42,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.UpdateBusyTimeTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events = _fakeEmployeeRepository.GetThenEvents();
             if (events.Count == 1)
@@ -83,7 +83,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.UpdateBusyTimeTests
             return events;
         }
 
-        public override UpdateBusyTime When()
+        protected override UpdateBusyTime When()
         {
             return new UpdateBusyTime(CompanyId, EmployeeId, BusyTimeId1, Start2, End2, Percentage2, Comment2, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
@@ -95,7 +95,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.UpdateBusyTimeTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             var events = new List<Event>
                 {

@@ -30,7 +30,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
         private const string AdminFirstName = "Admin";
         private const string AdminLastName = "Adminson";
 
-        public const string EmployeeId = "emp1";
+        private const string EmployeeId = "emp1";
 
         private readonly CvPartnerImportData _importData = new CvPartnerImportData(
             firstName: "Ole",
@@ -53,7 +53,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             yield break;
         }
@@ -101,7 +101,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             return events;
         }
 
-        public override ImportDataFromCvPartner When()
+        protected override ImportDataFromCvPartner When()
         {
             return new ImportDataFromCvPartner(CompanyId, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, Constants.IgnoreVersion);
         }
@@ -115,7 +115,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository, _fakeImporter);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             yield break;
         }

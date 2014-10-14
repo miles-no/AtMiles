@@ -31,6 +31,11 @@ namespace no.miles.at.Backend.Infrastructure
             Connect();
         }
 
+        ~RabbitMqCommandSender()
+        {
+            Dispose();
+        }
+
         public void Dispose()
         {
             Disconnect();

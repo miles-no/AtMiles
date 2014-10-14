@@ -52,7 +52,7 @@ namespace no.miles.at.Backend.Infrastructure
             catch (Exception) { }
         }
 
-        public bool IsRunning
+        protected bool IsRunning
         {
             get { return _running; }
         }

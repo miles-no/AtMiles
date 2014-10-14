@@ -33,7 +33,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.RemoveCompanyAdminTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
             return events;
@@ -67,7 +67,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.RemoveCompanyAdminTests
             return events;
         }
 
-        public override RemoveCompanyAdmin When()
+        protected override RemoveCompanyAdmin When()
         {
             var cmd = new RemoveCompanyAdmin(CompanyId, ExistingAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
             return cmd;
@@ -80,7 +80,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.RemoveCompanyAdminTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             yield break;
         }

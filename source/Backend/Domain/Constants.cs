@@ -1,6 +1,6 @@
 ﻿namespace no.miles.at.Backend.Domain
 {
-    public class Constants
+    public static class Constants
     {
         public const int IgnoreVersion = -2;
         public const int NewVersion = -1;

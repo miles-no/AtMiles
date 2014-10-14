@@ -44,7 +44,7 @@ namespace no.miles.at.Backend.Api.Controllers
             var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
             var res = Convert(employee);
 
-            if (Helpers.UserHasAccessToCompany(User.Identity, res.CompanyId, _identityResolver) == false)
+            if (Helpers.UserHasAccessToCompany(res.CompanyId) == false)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
                     "User does not have permission to view this employe");

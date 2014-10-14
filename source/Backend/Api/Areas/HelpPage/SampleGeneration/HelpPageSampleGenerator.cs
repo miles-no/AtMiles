@@ -37,17 +37,17 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <summary>
         /// Gets CLR types that are used as the content of <see cref="HttpRequestMessage"/> or <see cref="HttpResponseMessage"/>.
         /// </summary>
-        public IDictionary<HelpPageSampleKey, Type> ActualHttpMessageTypes { get; internal set; }
+        internal IDictionary<HelpPageSampleKey, Type> ActualHttpMessageTypes { get; set; }
 
         /// <summary>
         /// Gets the objects that are used directly as samples for certain actions.
         /// </summary>
-        public IDictionary<HelpPageSampleKey, object> ActionSamples { get; internal set; }
+        internal IDictionary<HelpPageSampleKey, object> ActionSamples { get; set; }
 
         /// <summary>
         /// Gets the objects that are serialized as samples by the supported formatters.
         /// </summary>
-        public IDictionary<Type, object> SampleObjects { get; internal set; }
+        internal IDictionary<Type, object> SampleObjects { get; set; }
 
         /// <summary>
         /// Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
@@ -59,7 +59,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
             Justification = "This is an appropriate nesting of generic types")]
-        public IList<Func<HelpPageSampleGenerator, Type, object>> SampleObjectFactories { get; private set; }
+        private IList<Func<HelpPageSampleGenerator, Type, object>> SampleObjectFactories { get; set; }
 
         /// <summary>
         /// Gets the request body samples for a given <see cref="ApiDescription"/>.
@@ -87,7 +87,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="api">The <see cref="ApiDescription"/>.</param>
         /// <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
         /// <returns>The samples keyed by media type.</returns>
-        public virtual IDictionary<MediaTypeHeaderValue, object> GetSample(ApiDescription api, SampleDirection sampleDirection)
+        protected virtual IDictionary<MediaTypeHeaderValue, object> GetSample(ApiDescription api, SampleDirection sampleDirection)
         {
             if (api == null)
             {
@@ -147,7 +147,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="mediaType">The media type.</param>
         /// <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
         /// <returns>The sample that matches the parameters.</returns>
-        public virtual object GetActionSample(string controllerName, string actionName, IEnumerable<string> parameterNames, Type type, MediaTypeFormatter formatter, MediaTypeHeaderValue mediaType, SampleDirection sampleDirection)
+        protected virtual object GetActionSample(string controllerName, string actionName, IEnumerable<string> parameterNames, Type type, MediaTypeFormatter formatter, MediaTypeHeaderValue mediaType, SampleDirection sampleDirection)
         {
             object sample;
 
@@ -176,7 +176,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <returns>The sample object.</returns>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
             Justification = "Even if all items in SampleObjectFactories throw, problem will be visible as missing sample.")]
-        public virtual object GetSampleObject(Type type)
+        protected virtual object GetSampleObject(Type type)
         {
             object sampleObject;
 
@@ -232,7 +232,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
         /// <param name="formatters">The formatters.</param>
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Justification = "This is only used in advanced scenarios.")]
-        public virtual Type ResolveType(ApiDescription api, string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection, out Collection<MediaTypeFormatter> formatters)
+        protected virtual Type ResolveType(ApiDescription api, string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection, out Collection<MediaTypeFormatter> formatters)
         {
             if (!Enum.IsDefined(typeof(SampleDirection), sampleDirection))
             {
@@ -285,7 +285,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="mediaType">Type of the media.</param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "The exception is recorded as InvalidSample.")]
-        public virtual object WriteSampleObjectUsingFormatter(MediaTypeFormatter formatter, object value, Type type, MediaTypeHeaderValue mediaType)
+        protected virtual object WriteSampleObjectUsingFormatter(MediaTypeFormatter formatter, object value, Type type, MediaTypeHeaderValue mediaType)
         {
             if (formatter == null)
             {

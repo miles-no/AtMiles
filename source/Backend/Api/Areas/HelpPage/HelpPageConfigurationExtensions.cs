@@ -177,7 +177,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage
         /// </summary>
         /// <param name="config">The <see cref="HttpConfiguration"/>.</param>
         /// <returns>The help page sample generator.</returns>
-        public static HelpPageSampleGenerator GetHelpPageSampleGenerator(this HttpConfiguration config)
+        private static HelpPageSampleGenerator GetHelpPageSampleGenerator(this HttpConfiguration config)
         {
             return (HelpPageSampleGenerator)config.Properties.GetOrAdd(
                 typeof(HelpPageSampleGenerator),

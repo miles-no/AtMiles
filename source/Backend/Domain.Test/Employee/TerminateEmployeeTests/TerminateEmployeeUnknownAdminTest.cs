@@ -37,7 +37,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.TerminateEmployeeTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events1 = _fakeEmployeeRepository.GetThenEvents();
             var events2 = _fakeCompanyRepository.GetThenEvents();
@@ -73,7 +73,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.TerminateEmployeeTests
             return events;
         }
 
-        public override TerminateEmployee When()
+        protected override TerminateEmployee When()
         {
             var cmd = new TerminateEmployee(CompanyId, EmployeeGlobalId, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId, 2);
             return cmd;
@@ -86,7 +86,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.TerminateEmployeeTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             yield break;
         }

@@ -36,7 +36,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             yield break;
         }
@@ -71,7 +71,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             yield break;
         }
 
-        public override AddNewCompanyToSystem When()
+        protected override AddNewCompanyToSystem When()
         {
             var admins = new List<SimpleUserInfo>
             {
@@ -90,7 +90,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository, _fakeImporter);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             yield break;
         }

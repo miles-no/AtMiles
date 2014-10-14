@@ -43,7 +43,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events1 = _fakeGlobalRepository.GetThenEvents();
             if (events1.Count == 1)
@@ -83,7 +83,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             return all;
         }
 
-        public override AddNewCompanyToSystem When()
+        protected override AddNewCompanyToSystem When()
         {
             var admins = new List<SimpleUserInfo>
             {
@@ -117,7 +117,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             yield break;
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
             var events = new List<Event>

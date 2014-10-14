@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace no.miles.at.Backend.Domain
 {
-    public class DelegateAdjuster
+    public static class DelegateAdjuster
     {
         public static Func<TBaseT, Task> CastArgument<TBaseT, TDerivedT>(Expression<Func<TDerivedT, Task>> source) where TDerivedT : TBaseT
         {

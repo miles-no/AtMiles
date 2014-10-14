@@ -1,6 +1,4 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,17 +10,17 @@ namespace no.miles.at.Backend.Domain.Test
     public abstract class EventSpecification<TCommand>
         where TCommand : Command
     {
-        public Exception CaughtException;
-        public abstract IEnumerable<Event> Produced();
+        private Exception _caughtException;
+        protected abstract IEnumerable<Event> Produced();
         public abstract IEnumerable<FakeStreamEvent> Given();
-        public abstract TCommand When();
+        protected abstract TCommand When();
         public abstract Handles<TCommand> OnHandler();
-        public abstract IEnumerable<Event> Expect();
-        public Exception ExpectedException;
+        protected abstract IEnumerable<Event> Expect();
+        protected Exception ExpectedException;
 
-        public async Task Setup()
+        protected async Task Setup()
         {
-            CaughtException = null;
+            _caughtException = null;
             var handler = OnHandler();
 
             try
@@ -36,13 +34,13 @@ namespace no.miles.at.Backend.Domain.Test
                 }
                 else
                 {
-                    CaughtException.ShouldBeEquivalentTo(ExpectedException);
+                    _caughtException.ShouldBeEquivalentTo(ExpectedException);
                 }
             }
             catch (Exception exception)
             {
-                CaughtException = exception;
-                CompareExceptions(CaughtException, ExpectedException);
+                _caughtException = exception;
+                CompareExceptions(_caughtException, ExpectedException);
             }
         }
 

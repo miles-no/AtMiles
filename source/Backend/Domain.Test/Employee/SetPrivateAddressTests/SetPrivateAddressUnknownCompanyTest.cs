@@ -36,7 +36,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetPrivateAddressTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events = _fakeEmployeeRepository.GetThenEvents();
             return events;
@@ -72,7 +72,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetPrivateAddressTests
             return events;
         }
 
-        public override SetPrivateAddress When()
+        protected override SetPrivateAddress When()
         {
             return new SetPrivateAddress(CompanyId2, CompanyName, _privateAddress, DateTime.UtcNow, new Person(EmployeeId, NameService.GetName(EmployeeFirstName, EmployeeLastName)), _correlationId, Constants.IgnoreVersion);
         }
@@ -84,7 +84,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.SetPrivateAddressTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             yield break;
         }

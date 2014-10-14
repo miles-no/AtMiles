@@ -23,7 +23,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.Controllers
             Configuration = config;
         }
 
-        public HttpConfiguration Configuration { get; private set; }
+        private HttpConfiguration Configuration { get; set; }
 
         public ActionResult Index()
         {

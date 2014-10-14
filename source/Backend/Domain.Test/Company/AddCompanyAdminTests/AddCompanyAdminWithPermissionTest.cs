@@ -36,7 +36,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddCompanyAdminTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
             if (events.Count == 1)
@@ -76,7 +76,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddCompanyAdminTests
             return events;
         }
 
-        public override AddCompanyAdmin When()
+        protected override AddCompanyAdmin When()
         {
             var cmd = new AddCompanyAdmin(CompanyId, NewAdminId, DateTime.UtcNow, new Person(ExistingAdminId, NameService.GetName(ExistingAdminFirstName, ExistingAdminLastName)), _correlationId, 2);
             return cmd;
@@ -89,7 +89,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddCompanyAdminTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             var events = new List<Event>
                 {

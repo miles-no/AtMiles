@@ -38,7 +38,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.AddEmployeeTests
             await Setup();
         }
 
-        public override IEnumerable<Event> Produced()
+        protected override IEnumerable<Event> Produced()
         {
             var events = _fakeCompanyRepository.GetThenEvents();
             return events;
@@ -71,7 +71,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.AddEmployeeTests
             return events;
         }
 
-        public override AddEmployee When()
+        protected override AddEmployee When()
         {
             var cmd = new AddEmployee(CompanyId, _employeeGlobalId,_employeeLoginId, EmployeeFirstName, string.Empty, EmployeeLastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)),_correlationId,2);
             return cmd;
@@ -84,7 +84,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.AddEmployeeTests
             return new CompanyCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository);
         }
 
-        public override IEnumerable<Event> Expect()
+        protected override IEnumerable<Event> Expect()
         {
             yield break;
         }
