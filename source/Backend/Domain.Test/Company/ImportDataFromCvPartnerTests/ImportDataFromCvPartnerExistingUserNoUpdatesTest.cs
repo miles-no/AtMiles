@@ -58,7 +58,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             yield break;
         }
 
-        public override IEnumerable<FakeStreamEvent> Given()
+        protected override IEnumerable<FakeStreamEvent> Given()
         {
             var c = GivenCompany();
             var e = GivenEmployee();

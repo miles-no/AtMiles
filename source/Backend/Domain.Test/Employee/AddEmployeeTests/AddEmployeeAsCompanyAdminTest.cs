@@ -55,7 +55,7 @@ namespace no.miles.at.Backend.Domain.Test.Employee.AddEmployeeTests
             return events1;
         }
 
-        public override IEnumerable<FakeStreamEvent> Given()
+        protected override IEnumerable<FakeStreamEvent> Given()
         {
             var c = GivenCompany();
             var e = GivenEmployee();

@@ -80,7 +80,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             return events1;
         }
 
-        public override IEnumerable<FakeStreamEvent> Given()
+        protected override IEnumerable<FakeStreamEvent> Given()
         {
             var c = GivenCompany();
             var e = GivenEmployee();

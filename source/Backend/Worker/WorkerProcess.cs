@@ -47,7 +47,7 @@ namespace no.miles.at.Backend.Worker
             if (_readStoreWorker != null) _readStoreWorker.Stop();
         }
 
-        public static async Task<LongRunningProcess> StartCommandHandler(Config config, ILog logger)
+        private static async Task<LongRunningProcess> StartCommandHandler(Config config, ILog logger)
         {
             LongRunningProcess worker = null;
             try
@@ -73,7 +73,7 @@ namespace no.miles.at.Backend.Worker
             return worker;
         }
 
-        public static async Task<LongRunningProcess> StartReadModelHandler(Config config, ILog logger)
+        private static async Task<LongRunningProcess> StartReadModelHandler(Config config, ILog logger)
         {
             LongRunningProcess reader = null;
             try

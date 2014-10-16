@@ -12,7 +12,7 @@ namespace no.miles.at.Backend.Domain.Test
     {
         private Exception _caughtException;
         protected abstract IEnumerable<Event> Produced();
-        public abstract IEnumerable<FakeStreamEvent> Given();
+        protected abstract IEnumerable<FakeStreamEvent> Given();
         protected abstract TCommand When();
         protected abstract Handles<TCommand> OnHandler();
         protected abstract IEnumerable<Event> Expect();
