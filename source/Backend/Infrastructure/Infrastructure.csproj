@@ -57,6 +57,7 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="EventLogger.cs" />
     <Compile Include="EventStoreDispatcher.cs" />
     <Compile Include="EventStoreGlobalPosition.cs" />
     <Compile Include="EventStoreRepository.cs" />

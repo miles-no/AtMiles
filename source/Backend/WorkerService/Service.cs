@@ -1,94 +1,32 @@
-﻿using System.Diagnostics;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-using no.miles.at.Backend.Domain.Aggregates;
-using no.miles.at.Backend.Domain.CommandHandlers;
-using no.miles.at.Backend.Import.CvPartner.CvPartner;
+﻿using System.ServiceProcess;
 using no.miles.at.Backend.Infrastructure;
-using no.miles.at.Backend.Infrastructure.Configuration;
-using no.miles.at.Backend.ReadStore;
-using no.miles.at.Backend.ReadStore.BusyTimeStore;
-using no.miles.at.Backend.ReadStore.SearchStore;
-using no.miles.at.Backend.ReadStore.SessionStore;
-using no.miles.at.Backend.ReadStore.UserStore;
+using no.miles.at.Backend.Worker;
 using WorkerService.Properties;
 
 namespace WorkerService
 {
     public partial class Service : ServiceBase
     {
-        private LongRunningProcess _commandWorker;
-        private LongRunningProcess _readStoreWorker;
-        private readonly EventLog _eventLogger;
+        private readonly ILog _logger;
+        private readonly WorkerProcess _process;
 
         public Service()
         {
             InitializeComponent();
-
-            //AutoLog = false;
-
-            _eventLogger = new EventLog();
-            if (!EventLog.SourceExists("MilesSource"))
-            {
-                EventLog.CreateEventSource(
-                    "MilesSource", "AtMilesLog");
-            }
-            _eventLogger.Source = "MilesSource";
-            _eventLogger.Log = "AtMilesLog";
+            _logger = new EventLogger();
+            _process = new WorkerProcess(_logger, Settings.Default.ConfigFile);
         }
 
         protected override void OnStart(string[] args)
         {
-            var configFilename = Settings.Default.ConfigFile;
-            var config = ConfigManager.GetConfig(configFilename);
-            var t1 = StartCommandHandler(config);
-            var t2 = StartReadModelHandler(config);
-            t1.Wait();
-            t2.Wait();
-            _commandWorker = t1.Result;
-            _readStoreWorker = t2.Result;
-            _eventLogger.WriteEntry("Running");
+            _process.Start();
+            _logger.Info("Running");
         }
 
         protected override void OnStop()
         {
-            if(_commandWorker != null) _commandWorker.Stop();
-            if (_readStoreWorker != null) _readStoreWorker.Stop();
-            _eventLogger.WriteEntry("Stopped");
-        }
-
-        private async Task<LongRunningProcess> StartCommandHandler(Config config)
-        {
-            var companyRepository = new EventStoreRepository<Company>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
-            var employeeRepository = new EventStoreRepository<Employee>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
-            var globalRepository = new EventStoreRepository<Global>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
-            var commandSessionRepository = new EventStoreRepository<CommandSession>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
-
-            var importer = new ImportMiles(config.CvPartnerToken);
-            var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer);
-            var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
-
-            var logger = new ConsoleLogger();
-            var worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandQueueName, logger, cmdReceiver.MessageHandler);
-
-            await worker.Start();
-            _eventLogger.WriteEntry("CommandWorker started");
-            return worker;
-        }
-
-        private async Task<LongRunningProcess> StartReadModelHandler(Config config)
-        {
-            var handlers = new ReadModelHandler();
-            var store = RavenDocumentStore.CreateStore(config.RavenDbUrl);
-            new EmployeeSearchStore(store).PrepareHandler(handlers);
-            new CommandStatusStore(store).PrepareHandler(handlers);
-            new UserLookupStore(store).PrepareHandler(handlers);
-            new BusyTimeStore(store).PrepareHandler(handlers);
-            var positionSaver = new PositionSaver(store);
-            var read = new EventStoreDispatcher(config.EventServerHost, config.EventServerUsername, config.EventServerPassword, handlers, new ConsoleLogger(), () => { }, positionSaver);
-            await read.Start();
-            _eventLogger.WriteEntry("ReadStoreWorker started");
-            return read;
+            _process.Stop();
+            _logger.Info("Stopped");
         }
     }
 }

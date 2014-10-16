@@ -25,7 +25,7 @@ namespace WorkerService.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\miles\\single_server.yaml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\AtMiles\\single_server.yaml")]
         public string ConfigFile {
             get {
                 return ((string)(this["ConfigFile"]));
