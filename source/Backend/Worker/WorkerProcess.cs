@@ -18,21 +18,16 @@ namespace no.miles.at.Backend.Worker
         private LongRunningProcess _commandWorker;
         private LongRunningProcess _readStoreWorker;
         private readonly ILog _logger;
-        private readonly string _configFilename;
 
-        public WorkerProcess(ILog logger, string configFilename)
+        public WorkerProcess(ILog logger)
         {
             if(logger == null) throw new Exception("Logger cannot be null");
-            _logger = logger;
-
-            if(string.IsNullOrEmpty(configFilename)) throw new Exception("ConfigFile path mus be set");
-            if(!System.IO.File.Exists(configFilename)) throw new Exception("ConfigFile does not exist");
-            _configFilename = configFilename;
+            _logger = logger;            
         }
 
         public void Start()
         {
-            var config = ConfigManager.GetConfig(_configFilename);
+            var config = ConfigManager.GetConfigUsingDefaultConfigFile();
             var t1 = StartCommandHandler(config, _logger);
             var t2 = StartReadModelHandler(config, _logger);
             t1.Wait();

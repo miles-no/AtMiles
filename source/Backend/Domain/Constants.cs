@@ -9,5 +9,6 @@
         public const string GoogleIdProvider = "google-apps";
         public const string SystemUserId = "SYSTEM";
         public const string JwtSubject = "sub";
+        public const string ConfigFilenameSetting = "ConfigFile";
     }
 }

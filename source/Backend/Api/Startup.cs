@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using Microsoft.Owin;
 using Microsoft.Practices.Unity;
 using no.miles.at.Backend.Api;
-using no.miles.at.Backend.Api.Properties;
 using no.miles.at.Backend.Api.Utilities;
 using no.miles.at.Backend.Domain;
 using no.miles.at.Backend.Infrastructure;
@@ -18,7 +17,7 @@ namespace no.miles.at.Backend.Api
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = ConfigManager.GetConfig(Settings.Default.ConfigFile);
+            var config = ConfigManager.GetConfigUsingDefaultConfigFile();
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

@@ -7,7 +7,6 @@ using no.miles.at.Backend.Domain.Services;
 using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Infrastructure;
 using no.miles.at.Backend.Infrastructure.Configuration;
-using no.miles.at.Backend.TestApp.Properties;
 
 namespace no.miles.at.Backend.TestApp
 {
@@ -17,7 +16,7 @@ namespace no.miles.at.Backend.TestApp
         static void Main()
         {
             bool quit = false;
-            var config = ConfigManager.GetConfig(Settings.Default.ConfigFile);
+            var config = ConfigManager.GetConfigUsingDefaultConfigFile();
             var logger = new ConsoleLogger();
 
             while (!quit)

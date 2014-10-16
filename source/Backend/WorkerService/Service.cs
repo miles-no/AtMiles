@@ -1,7 +1,6 @@
 ﻿using System.ServiceProcess;
 using no.miles.at.Backend.Infrastructure;
 using no.miles.at.Backend.Worker;
-using WorkerService.Properties;
 
 namespace WorkerService
 {
@@ -13,8 +12,9 @@ namespace WorkerService
         public Service()
         {
             InitializeComponent();
+
             _logger = new EventLogger("MilesSource", "AtMilesLog");
-            _process = new WorkerProcess(_logger, Settings.Default.ConfigFile);
+            _process = new WorkerProcess(_logger);
         }
 
         protected override void OnStart(string[] args)

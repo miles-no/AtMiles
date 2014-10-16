@@ -1,5 +1,4 @@
 ﻿using no.miles.at.Backend.Infrastructure;
-using no.miles.at.Backend.Worker.Properties;
 
 namespace no.miles.at.Backend.Worker
 {
@@ -10,9 +9,8 @@ namespace no.miles.at.Backend.Worker
         static void Main()
         {
             var logger = new ConsoleLogger();
-            var configFilename = Settings.Default.ConfigFile;
 
-            var worker = new WorkerProcess(logger, configFilename);
+            var worker = new WorkerProcess(logger);
 
             worker.Start();
 
