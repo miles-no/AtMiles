@@ -33,13 +33,14 @@ namespace no.miles.at.Backend.Api
             container.RegisterType(typeof(IResolveUserIdentity), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
             container.RegisterType(typeof(IResolveNameOfUser), typeof(UserLookupEngine), new ContainerControlledLifetimeManager());
 
+            var logger = new EventLogger("MilesSource", "AtMilesLog");
             container.RegisterInstance(typeof(ICommandSender),
                 new RabbitMqCommandSender(
                     config.RabbitMqHost,
                     config.RabbitMqUsername,
                     config.RabbitMqPassword,
                     config.RabbitMqCommandExchangeName,
-                    config.RabbitMqUseSsl));
+                    config.RabbitMqUseSsl, logger));
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
             return container;

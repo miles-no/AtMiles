@@ -57,9 +57,9 @@ namespace no.miles.at.Backend.Worker
                 var globalRepository = new EventStoreRepository<Global>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
                 var commandSessionRepository = new EventStoreRepository<CommandSession>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
 
-                var importer = new ImportMiles(config.CvPartnerToken);
+                var importer = new ImportMiles(config.CvPartnerToken, logger);
                 var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer);
-                var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository);
+                var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository, logger);
 
                 worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandQueueName, logger, cmdReceiver.MessageHandler);
 

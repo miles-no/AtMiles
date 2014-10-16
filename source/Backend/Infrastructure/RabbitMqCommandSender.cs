@@ -18,15 +18,18 @@ namespace no.miles.at.Backend.Infrastructure
         private IModel _model;
         private readonly ushort _heartbeatInterval;
         private readonly bool _useSsl;
+        private readonly ILog _logger;
 
-        public RabbitMqCommandSender(string hostName, string username, string password, string exchangeName, bool useSsl = false)
-        {
+        public RabbitMqCommandSender(string hostName, string username, string password, string exchangeName, bool useSsl, ILog logger)
+        {   
             _hostName = hostName;
             _username = username;
             _password = password;
             _exchangeName = exchangeName;
             _useSsl = useSsl;
             _heartbeatInterval = 30;
+
+            _logger = logger;
 
             Connect();
         }
@@ -67,14 +70,15 @@ namespace no.miles.at.Backend.Infrastructure
                     }
                     catch (Exception error)
                     {
+                        _logger.Error("Not able to send to queue", error);
                         throw new Exception("Not able to send to queue", error);
                     }
                 }
             }
-            //else
-            //{
-                //TODO: Log error
-            //}
+            else
+            {
+                _logger.Error("Not able to connect to RabbitMQ server");
+            }
         }
 
         private string GetRoutingKey()

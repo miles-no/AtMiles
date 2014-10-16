@@ -8,6 +8,7 @@ using no.miles.at.Backend.Domain;
 using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
+using no.miles.at.Backend.Infrastructure;
 using Convert = no.miles.at.Backend.Import.CvPartner.CvPartner.Converters.Convert;
 using Image = no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv.Image;
 
@@ -16,14 +17,17 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
     public class ImportMiles : IImportDataFromCvPartner
     {
         private readonly string _accessToken;
+        private readonly ILog _logger;
 
-        public ImportMiles(string accessToken)
+        public ImportMiles(string accessToken, ILog logger)
         {
             if (string.IsNullOrEmpty(accessToken))
             {
                 throw new ArgumentException("Access token must be set!");
             }
             _accessToken = accessToken;
+
+            _logger = logger;
         }
 
         public async Task<List<CvPartnerImportData>> GetImportData()
@@ -34,10 +38,11 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
-            Log("Download users from CvPartner...");
+            _logger.Debug("Download users from CvPartner");
             string employeesRaw = await client.DownloadStringTaskAsync("https://miles.cvpartner.no/api/v1/users");
             var employees = JsonConvert.DeserializeObject<List<Employee>>(employeesRaw);
-            Log("Done - " + employees.Count + " users");
+
+            _logger.Debug(string.Format("Done - {0} users", employees.Count));
 
             //TODO: Make this parallell using async
 
@@ -56,7 +61,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
         private async Task<Cv> DownloadCv(Employee employee, WebClient client)
         {
             var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
-            Log("Downloading CV for " + employee.Name + " on url " + url);
+            _logger.Debug(string.Format("Downloading CV for {0} on url {1}", employee.Name, url));
             string rawCv = await client.DownloadStringTaskAsync(url);
             var cv = JsonConvert.DeserializeObject<Cv>(rawCv);
             return cv;
@@ -80,14 +85,11 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
                     var urlWithoutQueryParameters = image.Url.Substring(0, image.Url.IndexOf("?", StringComparison.Ordinal));
                     extension = urlWithoutQueryParameters.Substring(image.Url.LastIndexOf(".", StringComparison.Ordinal))
                         .Replace(".", string.Empty);
-
-
-                    Log("Found image of " + "." + extension + " format");
+                    _logger.Debug(string.Format("Found image of . {0} format", extension));
                 }
                 catch (Exception ex)
                 {
-                    Log("Error downloading image:\n\n " + ex);
-
+                    _logger.Error("Error downloading image", ex);
                 }
                 if (picture != null)
                 {
@@ -96,11 +98,6 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
                 }
             }
             return photo;
-        }
-
-        private void Log(string message)
-        {
-            Console.WriteLine(message);
         }
     }
 }

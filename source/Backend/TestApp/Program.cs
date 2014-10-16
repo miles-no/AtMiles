@@ -18,6 +18,7 @@ namespace no.miles.at.Backend.TestApp
         {
             bool quit = false;
             var config = ConfigManager.GetConfig(Settings.Default.ConfigFile);
+            var logger = new ConsoleLogger();
 
             while (!quit)
             {
@@ -40,7 +41,7 @@ namespace no.miles.at.Backend.TestApp
                         quit = true;
                         break;
                     case ConsoleKey.I:
-                        SeedEmptyEventStore(config).Wait();
+                        SeedEmptyEventStore(config, logger).Wait();
                         break;
                     //Add more functions here
 
@@ -54,7 +55,7 @@ namespace no.miles.at.Backend.TestApp
             Console.WriteLine("Exited");
         }
 
-        private static async Task SeedEmptyEventStore(Config config)
+        private static async Task SeedEmptyEventStore(Config config, ILog logger)
         {
             string companyId = config.CompanyId;
             const string companyName = "Miles";
@@ -80,7 +81,7 @@ namespace no.miles.at.Backend.TestApp
                 initCorrelationId2, Constants.IgnoreVersion);
 
             var sender = new RabbitMqCommandSender(config.RabbitMqHost, config.RabbitMqUsername,
-                config.RabbitMqPassword, config.RabbitMqCommandExchangeName, config.RabbitMqUseSsl);
+                config.RabbitMqPassword, config.RabbitMqCommandExchangeName, config.RabbitMqUseSsl, logger);
             
 
 

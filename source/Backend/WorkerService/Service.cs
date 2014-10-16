@@ -13,7 +13,7 @@ namespace WorkerService
         public Service()
         {
             InitializeComponent();
-            _logger = new EventLogger();
+            _logger = new EventLogger("MilesSource", "AtMilesLog");
             _process = new WorkerProcess(_logger, Settings.Default.ConfigFile);
         }
 

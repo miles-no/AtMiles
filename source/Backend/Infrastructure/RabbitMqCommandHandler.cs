@@ -13,10 +13,13 @@ namespace no.miles.at.Backend.Infrastructure
     {
         private readonly MainCommandHandler _handler;
         private readonly IRepository<CommandSession> _commandSessionRepository;
-        public RabbitMqCommandHandler(MainCommandHandler handler, IRepository<CommandSession> commandSessionRepository)
+        private readonly ILog _logger;
+
+        public RabbitMqCommandHandler(MainCommandHandler handler, IRepository<CommandSession> commandSessionRepository, ILog logger)
         {
             _handler = handler;
             _commandSessionRepository = commandSessionRepository;
+            _logger = logger;
         }
 
 
@@ -61,7 +64,7 @@ namespace no.miles.at.Backend.Infrastructure
                     if (internalException != null)
                     {
                         session.AddException(new ValueException("Internal server error"), command.CreatedBy, command.CorrelationId);
-                        //TODO: Log error
+                        _logger.Error("Internal error handling command", internalException);
                     }
 
                     await _commandSessionRepository.SaveAsync(session, Constants.IgnoreVersion);

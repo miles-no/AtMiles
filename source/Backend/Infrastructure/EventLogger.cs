@@ -7,16 +7,16 @@ namespace no.miles.at.Backend.Infrastructure
     {
         private readonly EventLog _eventLogger;
 
-        public EventLogger()
+        public EventLogger(string source, string log)
         {
             _eventLogger = new EventLog();
-            if (!EventLog.SourceExists("MilesSource"))
+            if (!EventLog.SourceExists(source))
             {
                 EventLog.CreateEventSource(
-                    "MilesSource", "AtMilesLog");
+                    source, log);
             }
-            _eventLogger.Source = "MilesSource";
-            _eventLogger.Log = "AtMilesLog";
+            _eventLogger.Source = source;
+            _eventLogger.Log = log;
         }
 
         public void Debug(string message)
