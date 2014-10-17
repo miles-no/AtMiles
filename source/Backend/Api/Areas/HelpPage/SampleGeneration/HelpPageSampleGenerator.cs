@@ -87,7 +87,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="api">The <see cref="ApiDescription"/>.</param>
         /// <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
         /// <returns>The samples keyed by media type.</returns>
-        protected virtual IDictionary<MediaTypeHeaderValue, object> GetSample(ApiDescription api, SampleDirection sampleDirection)
+        protected IEnumerable<KeyValuePair<MediaTypeHeaderValue, object>> GetSample(ApiDescription api, SampleDirection sampleDirection)
         {
             if (api == null)
             {
@@ -143,7 +143,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="mediaType">The media type.</param>
         /// <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
         /// <returns>The sample that matches the parameters.</returns>
-        protected virtual object GetActionSample(string controllerName, string actionName, IEnumerable<string> parameterNames, Type type, MediaTypeFormatter formatter, MediaTypeHeaderValue mediaType, SampleDirection sampleDirection)
+        protected object GetActionSample(string controllerName, string actionName, IEnumerable<string> parameterNames, Type type, MediaTypeFormatter formatter, MediaTypeHeaderValue mediaType, SampleDirection sampleDirection)
         {
             object sample;
 
@@ -172,7 +172,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <returns>The sample object.</returns>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
             Justification = "Even if all items in SampleObjectFactories throw, problem will be visible as missing sample.")]
-        protected virtual object GetSampleObject(Type type)
+        protected object GetSampleObject(Type type)
         {
             object sampleObject;
 
@@ -210,7 +210,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// </summary>
         /// <param name="api">The <see cref="ApiDescription"/>.</param>
         /// <returns>The type.</returns>
-        public virtual Type ResolveHttpRequestMessageType(ApiDescription api)
+        public Type ResolveHttpRequestMessageType(ApiDescription api)
         {
             string controllerName = api.ActionDescriptor.ControllerDescriptor.ControllerName;
             string actionName = api.ActionDescriptor.ActionName;
@@ -229,7 +229,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
         /// <param name="formatters">The formatters.</param>
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Justification = "This is only used in advanced scenarios.")]
-        protected virtual Type ResolveType(ApiDescription api, string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection, out Collection<MediaTypeFormatter> formatters)
+        protected Type ResolveType(ApiDescription api, string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection, out Collection<MediaTypeFormatter> formatters)
         {
             if (!Enum.IsDefined(typeof(SampleDirection), sampleDirection))
             {
@@ -282,7 +282,7 @@ namespace no.miles.at.Backend.Api.Areas.HelpPage.SampleGeneration
         /// <param name="mediaType">Type of the media.</param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "The exception is recorded as InvalidSample.")]
-        protected virtual object WriteSampleObjectUsingFormatter(MediaTypeFormatter formatter, object value, Type type, MediaTypeHeaderValue mediaType)
+        protected object WriteSampleObjectUsingFormatter(MediaTypeFormatter formatter, object value, Type type, MediaTypeHeaderValue mediaType)
         {
             if (formatter == null)
             {

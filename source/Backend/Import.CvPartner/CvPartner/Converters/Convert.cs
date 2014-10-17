@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using no.miles.at.Backend.Domain;
-using no.miles.at.Backend.Domain.Commands;
 using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
@@ -128,41 +126,6 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
                 convertedTechologies.Add(convertedTechnology);
             }
             return convertedTechologies.ToArray();
-        }
-
-        public AddEmployee ToAddEmployee(string id, Cv cv, Employee employee, Picture employeePhoto)
-        {
-            string givenName = string.Empty, middleName = string.Empty;
-
-            var names = cv.Name.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-            string familyName = names.Last();
-
-            names = names.Take(names.Count() - 1).ToList();
-
-            // If you have 3 or more names, lets assume the second-to-last is your middlename. And hope we don't offent to many...
-            if (names.Count() > 2)
-            {
-                middleName = names.Last();
-            }
-            else
-            {
-                givenName = string.Join(" ", names);
-            }
-
-            var res = new AddEmployee(
-                companyId: _company,
-                globalId: id,
-                loginId: new Login(Constants.GoogleIdProvider, employee.Email),
-                firstName: givenName,
-                middleName: middleName,
-                lastName: familyName,
-                created: DateTime.UtcNow,
-                createdBy: _createdBy,
-                correlationId: new Guid().ToString(), 
-                basedOnVersion: Constants.IgnoreVersion);
-
-            return res;
         }
     }
 }
