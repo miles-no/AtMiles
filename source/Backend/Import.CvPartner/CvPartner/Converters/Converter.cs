@@ -7,19 +7,10 @@ using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
 
 namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 {
-    public class Convert
+    public static class Converter
 
     {
-        private readonly string _company;
-        private readonly Person _createdBy;
-
-        public Convert(string company, Person createdBy)
-        {
-            _company = company;
-            _createdBy = createdBy;
-        }
-
-        public CvPartnerImportData ToImportFromCvPartner(Cv cv, Employee employee, Picture employeePhoto)
+        public static CvPartnerImportData ToImportFromCvPartner(Cv cv, Employee employee, Picture employeePhoto)
         {
             string givenName = string.Empty, middleName = string.Empty, familyName = string.Empty;
 

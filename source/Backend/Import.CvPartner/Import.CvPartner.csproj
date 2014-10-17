@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CvPartner\Converters\Convert.cs" />
+    <Compile Include="CvPartner\Converters\Converter.cs" />
     <Compile Include="CvPartner\ImportMiles.cs" />
     <Compile Include="CvPartner\Models\Cv\Cv.cs" />
     <Compile Include="CvPartner\Models\Employee\Employee.cs" />

@@ -9,7 +9,7 @@ using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
 using no.miles.at.Backend.Infrastructure;
-using Convert = no.miles.at.Backend.Import.CvPartner.CvPartner.Converters.Convert;
+using Convert = no.miles.at.Backend.Import.CvPartner.CvPartner.Converters.Converter;
 using Image = no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv.Image;
 
 namespace no.miles.at.Backend.Import.CvPartner.CvPartner
@@ -34,7 +34,6 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
         {
             var importData = new List<CvPartnerImportData>();
 
-            var converter = new Convert("miles", null);
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
@@ -51,7 +50,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
                 var cv = await DownloadCv(employee, client);
                 Picture employeePhoto = await DownloadPhoto(cv.Image, cv.Name);
 
-                var importEmployee = converter.ToImportFromCvPartner(cv, employee, employeePhoto);
+                var importEmployee = Convert.ToImportFromCvPartner(cv, employee, employeePhoto);
                 importData.Add(importEmployee);
 
             }
