@@ -134,7 +134,10 @@ namespace no.miles.at.Backend.Infrastructure
             {
                 lock (_model)
                 {
-                    _model.Close(200, "Goodbye");
+                    if (_model.IsOpen)
+                    {
+                        _model.Close(200, "Goodbye");
+                    }
                     _model.Dispose();
                 }
                 _model = null;
@@ -144,7 +147,10 @@ namespace no.miles.at.Backend.Infrastructure
             {
                 lock (_connection)
                 {
-                    _connection.Close();
+                    if (_connection.IsOpen)
+                    {
+                        _connection.Close();
+                    }
                     _connection.Dispose();
                 }
                 _connection = null;
