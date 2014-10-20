@@ -18,6 +18,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         private Login _loginId;
         private DateTime _lastImportUpdateAt = DateTime.MinValue;
         private readonly List<BusyTimeEntry> _busyTimeEntries;
+        private byte[] _importedPictureMd5Hash;
 
         public string Name
         {
@@ -62,7 +63,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         public void ImportData(string companyId, string companyName, CvPartnerImportData import, Person createdBy, string correlationId)
         {
-            if (import.UpdatedAt > _lastImportUpdateAt)
+            if (IsImportDataNew(import))
             {
                 var ev = new ImportedFromCvPartner(
                     companyId: companyId,
@@ -85,6 +86,34 @@ namespace no.miles.at.Backend.Domain.Aggregates
                     correlationId: correlationId);
                 ApplyChange(ev);
             }
+        }
+
+        private bool IsImportDataNew(CvPartnerImportData import)
+        {
+            if (ShouldImportBecauseOfDate(import.UpdatedAt)) return true;
+            if (ShouldImportBecauseOfPhoto(import.Photo)) return true;
+            return false;
+        }
+
+        private bool ShouldImportBecauseOfPhoto(Picture photo)
+        {
+            if (photo == null && _importedPictureMd5Hash != null) return true;
+
+            if (photo != null)
+            {
+                if (photo.Md5Hash != null && _importedPictureMd5Hash == null) return true;
+                if (photo.Md5Hash == null && _importedPictureMd5Hash != null) return true;
+                if (photo.Md5Hash != null && _importedPictureMd5Hash != null)
+                {
+                    return !photo.Md5Hash.SequenceEqual(_importedPictureMd5Hash);
+                }
+            }
+            return false;
+        }
+
+        private bool ShouldImportBecauseOfDate(DateTime importDate)
+        {
+            return importDate > _lastImportUpdateAt;
         }
 
         public void ConfirmBusyTimeEntries(string companyId, string companyName, Person createdBy, string correlationId)
@@ -238,6 +267,10 @@ namespace no.miles.at.Backend.Domain.Aggregates
         private void Apply(ImportedFromCvPartner ev)
         {
             _lastImportUpdateAt = ev.UpdatedAt;
+            if (ev.Photo != null)
+            {
+                _importedPictureMd5Hash = ev.Photo.Md5Hash;
+            }
         }
 
         [UsedImplicitly] //To keep resharper happy
