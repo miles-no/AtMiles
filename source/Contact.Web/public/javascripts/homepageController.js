@@ -6,7 +6,8 @@
     $scope.queryTerm = "";
 
     $scope.errors = [];
-    
+
+    //TODO figure out when realoading - it works without re-login
     $scope.isAuthenticated = false;
     
     $scope.login = function () {
@@ -18,7 +19,12 @@
         }, function () {
             $scope.isAuthenticated = false;
         });
-    }
+    };
+
+    $scope.logout = function () {
+        //auth.logout();
+        $scope.isAuthenticated = false;
+    };
 
     var getCompany = function () {
         // Used to divide into companies. Useless just now
