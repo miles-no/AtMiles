@@ -3,8 +3,7 @@
 @import "../lib/foundation/scss/normalize";
 @import "../lib/foundation/scss/foundation";
 
-
-.img-panel {
+/*.img-panel {
   position: relative;
   padding-left: 6rem;
   margin-bottom: 2rem; 
@@ -12,7 +11,73 @@
   img {
     position: absolute;
     top: 1.7rem;
-    left: -($panel-padding * 1.5);
-    max-width: 6rem; 
+  //  left: -($panel-padding * 1.5);
+    max-width: 6rem;
+  }
+}*/
+
+/*.column.medium-centered {
+  margin-left: auto;
+  margin-right: auto;
+  float: none !important;
+}*/
+
+
+//Changes to the top bar
+.miles-top-bar {
+  @extend .top-bar;
+  @media #{$small-only} {
+    $topbar-height: 48px;
+    height: $topbar-height;
+    line-height: $topbar-height;
+  }
+  @media #{$medium-up} {
+    $topbar-height: 60px;
+    height: $topbar-height;
+    line-height: $topbar-height;
   }
 }
+
+//Top bar logo change in different grids
+.miles-top-bar-image {
+  @media #{$small-only} {
+    height: 34px;
+  }
+  @media #{$medium-up} {
+    height: 44px;
+    margin-top: ($topbar-button-top - 4px);
+  }
+}
+
+//customisation of the LogIn button
+.signin-button {
+  @extend .button;
+  background-image: url("../images/LoginIcon-01.svg");
+  background-repeat: no-repeat;
+  background-position: 95% 50%;
+  background-size: 14px 19px;
+  background-color: #ffffff;
+  border: #d9cfb8;
+  border-style: solid;
+  border-width: 2px;
+  color: #000000;
+  margin-right: 10px;
+  text-align: left !important;
+  padding-left: 5px !important;
+}
+
+.signout-button {
+  @extend .signin-button;
+  background-image: url("../images/LogOutIcon-01.svg");;
+}
+
+@media #{$medium-up} {
+  .centered-button-container {
+    text-align: center;
+  }
+}
+
+.banner {
+  background-color: #f2efe4;
+}
+ 
