@@ -1,4 +1,4 @@
-﻿var homepageController = function ($scope, $http, $timeout, $location, auth,store, $rootScope) {
+﻿var homepageController = function ($scope, $http, $timeout, $location, auth) {
 
     $scope.apiRoot = "http://milescontact.cloudapp.net/";
 
@@ -6,7 +6,7 @@
     $scope.queryTerm = "";
 
     $scope.errors = [];
-
+    
     $scope.isAuthenticated = false;
 
     $scope.$on('auth0.authenticated', function (prof) {
@@ -27,6 +27,11 @@
             $scope.isAuthenticated = false;
         });
     }
+
+    $scope.logout = function () {
+        //auth.logout();
+        $scope.isAuthenticated = false;
+    };
 
     var getCompany = function () {
         // Used to divide into companies. Useless just now
