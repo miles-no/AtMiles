@@ -1,25 +1,32 @@
 ﻿var homepageController = function ($scope, $http, $timeout, $location, auth) {
 
     $scope.apiRoot = "http://milescontact.cloudapp.net/";
-   
+
 
     $scope.queryTerm = "";
 
     $scope.errors = [];
-
-    //TODO figure out when realoading - it works without re-login
-    $scope.isAuthenticated = false;
     
+    $scope.isAuthenticated = false;
+
+    $scope.$on('auth0.authenticated', function (prof) {
+
+        $scope.isAuthenticated = true;
+
+    });
+
     $scope.login = function () {
-        
+
         auth.signin({
             popup: true
-        }, function () {
+        }, function (profile, id_token) {
+            store.set('profile', profile);
+            store.set('token', id_token);
             $scope.isAuthenticated = true;
         }, function () {
             $scope.isAuthenticated = false;
         });
-    };
+    }
 
     $scope.logout = function () {
         //auth.logout();
@@ -30,7 +37,7 @@
         // Used to divide into companies. Useless just now
         return '';
         //var p = $location.path().split("/");
-        //return p[1] || "Unknown";  
+        //return p[1] || "Unknown";
     }
     var lastQueryTerm = null;
     var maxSearchResults = 9;
@@ -55,7 +62,7 @@
                 skip = 0;
                 $scope.searchResult.Results.pop();
             }
-           
+
             return;
         }
         if (!add) {
@@ -106,7 +113,7 @@
         }, 250);
     };
 
-  
+
     $scope.showDetails = function (item) {
 
         var res = $http({
@@ -221,13 +228,15 @@
     }
 
     angular.element(document).ready(function () {
-       
+
     });
 
-   
+
 }
 
-var atMiles = angular.module('AtMiles', ['auth0']).config(function ($locationProvider, $httpProvider, authProvider) {
+var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])
+    .controller('homepageController', homepageController)
+    .config(function ($locationProvider, $httpProvider, authProvider) {
 
     $locationProvider.html5Mode({
         enabled: true,
@@ -240,11 +249,19 @@ var atMiles = angular.module('AtMiles', ['auth0']).config(function ($locationPro
     });
     $httpProvider.interceptors.push('authInterceptor');
 })
-
-.run(function (auth) {
+.run(function ($rootScope, auth, store) {
     // This hooks al auth events to check everything as soon as the app starts
-    auth.hookEvents();
+        auth.hookEvents();
+
+        $rootScope.$on('$locationChangeStart', function() {
+            if (!auth.isAuthenticated) {
+                var token = store.get('token');
+                if (token) {
+                    auth.authenticate(store.get('profile'), token);
+                }
+            }
+        });
+
+
+
 });
-
-
-atMiles.controller('homepageController', ['$scope', '$http', '$timeout','$location','auth', homepageController]);
