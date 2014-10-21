@@ -1,0 +1,24 @@
+{
+  "name": "atMiles",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "foundation": "zurb/bower-foundation",
+    "angular": "*"
+  },
+  "homepage": "https://github.com/miles-no/AtMiles",
+  "authors": [
+    "Miles"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

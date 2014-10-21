@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C9EE6D55-7258-4472-86AC-838F6AE045AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>no.miles.at.Backend.Domain</RootNamespace>
+    <AssemblyName>no.miles.at.Backend.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AggregateRoot.cs" />
+    <Compile Include="Aggregates\CommandSession.cs" />
+    <Compile Include="Aggregates\Company.cs" />
+    <Compile Include="Aggregates\Employee.cs" />
+    <Compile Include="Aggregates\Global.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="CommandHandlers\CompanyCommandHandler.cs" />
+    <Compile Include="CommandHandlers\GlobalCommandHandler.cs" />
+    <Compile Include="CommandHandlers\MainCommandHandler.cs" />
+    <Compile Include="CommandHandlers\MainCommandHandlerFactory.cs" />
+    <Compile Include="Commands\AddBusyTime.cs" />
+    <Compile Include="Commands\AddCompanyAdmin.cs" />
+    <Compile Include="Commands\AddEmployee.cs" />
+    <Compile Include="Commands\ConfirmBusyTimeEntries.cs" />
+    <Compile Include="Commands\ImportDataFromCvPartner.cs" />
+    <Compile Include="Commands\RemoveBusyTime.cs" />
+    <Compile Include="Commands\RemoveCompanyAdmin.cs" />
+    <Compile Include="Commands\AddNewCompanyToSystem.cs" />
+    <Compile Include="Commands\SetDateOfBirth.cs" />
+    <Compile Include="Commands\SetPrivateAddress.cs" />
+    <Compile Include="Commands\TerminateEmployee.cs" />
+    <Compile Include="Commands\UpdateBusyTime.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="DelegateAdjuster.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="Events\CommandSession\CommandException.cs" />
+    <Compile Include="Events\CommandSession\CommandRequested.cs" />
+    <Compile Include="Events\CommandSession\CommandSucceded.cs" />
+    <Compile Include="Events\Company\CompanyAdminAdded.cs" />
+    <Compile Include="Events\Company\CompanyAdminRemoved.cs" />
+    <Compile Include="Events\Company\CompanyCreated.cs" />
+    <Compile Include="Events\Company\EmployeeAdded.cs" />
+    <Compile Include="Events\Employee\DateOfBirthSet.cs" />
+    <Compile Include="Events\Employee\BusyTimeAdded.cs" />
+    <Compile Include="Events\Employee\BusyTimeConfirmed.cs" />
+    <Compile Include="Events\Employee\BusyTimeRemoved.cs" />
+    <Compile Include="Events\Employee\BusyTimeUpdated.cs" />
+    <Compile Include="Events\Employee\EmployeeCreated.cs" />
+    <Compile Include="Events\Company\EmployeeRemoved.cs" />
+    <Compile Include="Events\Employee\EmployeeTerminated.cs" />
+    <Compile Include="Events\Employee\PrivateAddressSet.cs" />
+    <Compile Include="Events\Global\CompanyCreated.cs" />
+    <Compile Include="Events\Import\ImportedFromCvPartner.cs" />
+    <Compile Include="Exceptions\AlreadyExistingItemException.cs" />
+    <Compile Include="Exceptions\DomainBaseException.cs" />
+    <Compile Include="Exceptions\ExistingChildItemsException.cs" />
+    <Compile Include="Exceptions\LastItemException.cs" />
+    <Compile Include="Exceptions\NoAccessException.cs" />
+    <Compile Include="Exceptions\UnknownItemException.cs" />
+    <Compile Include="Exceptions\ValueException.cs" />
+    <Compile Include="Handles.cs" />
+    <Compile Include="ICommandSender.cs" />
+    <Compile Include="IEventPublisher.cs" />
+    <Compile Include="IImportDataFromCvPartner.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="PrivateReflectionDynamicObject.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IdService.cs" />
+    <Compile Include="Services\NameService.cs" />
+    <Compile Include="ValueTypes\Address.cs" />
+    <Compile Include="ValueTypes\BusyTimeEntry.cs" />
+    <Compile Include="ValueTypes\CvPartnerImportData.cs" />
+    <Compile Include="ValueTypes\CvPartnerKeyPoint.cs" />
+    <Compile Include="ValueTypes\CvPartnerKeyQualification.cs" />
+    <Compile Include="ValueTypes\CvPartnerTechnology.cs" />
+    <Compile Include="ValueTypes\CvPartnerTechnologySkill.cs" />
+    <Compile Include="ValueTypes\EmployeeLoginInfo.cs" />
+    <Compile Include="ValueTypes\Login.cs" />
+    <Compile Include="ValueTypes\Person.cs" />
+    <Compile Include="ValueTypes\Picture.cs" />
+    <Compile Include="ValueTypes\SimpleUserInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -260,9 +260,12 @@
    
 }
 
-var atMiles = angular.module('AtMiles', ['ngAnimate','auth0']).config(function ($locationProvider, $httpProvider, authProvider) {
-    
-    $locationProvider.html5Mode(true);
+var atMiles = angular.module('AtMiles', ['auth0']).config(function ($locationProvider, $httpProvider, authProvider) {
+
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
     authProvider.init({
         domain: 'atmiles.auth0.com',
         clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',

@@ -14,15 +14,18 @@ block content
                     ul.left
                             img.miles-top-bar-image(src="../images/MilesIcon-01.png")
                     ul.right
-                        a.signin-button(ng-show="isAuthenticated == false" ng-click="login()") SIGN IN
+                        a.signin-button(ng-show="isAuthenticated == false" ng-click="login()")
+                            span.text-left SIGN IN
                         a.signout-button(ng-show="isAuthenticated == true" ng-click="logout()") SIGN OUT
-
-        .row
-            .medium-12.show-for-medium-up.small-centered.columns
-                img(src="../images/HomeSceneImage-01.jpg" height="370px")
-                a.button.large.radius(ng-click="login()") LOGIN AND SEARCH
-            .small-12.show-for-small-only.columns
-                img.twelve-columns(src="../images/HomeSceneImage-01.jpg" height="153px")
+        .row.banner
+            .show-for-medium-up
+                .medium-12.large-12.medium-centered.columns
+                    img(src="../images/HomeSceneImage-01.jpg" height="370px" width="100%")
+                .centered-button-container
+                    a.button.medium.radius(ng-click="login()") LOGIN AND SEARCH
+            .show-for-small-only
+                .small-12.small-centered.columns
+                    img.twelve-columns(src="../images/HomeSceneImageMobile-01.jpg" height="153px" width="100%")
         .row
             .large-12.small-12.columns
                  div(ng-repeat="error in errors")

@@ -21,15 +21,15 @@ public class SearchResultModel {
         public String PhoneNumber;
         public String Email;
         public String Thumb;
-        public Tag[] Competency;
-
-        public static class Tag {
-            public String Category;
-            public String Competency;
-            public String InternationalCategory;
-            public String InternationalCompentency;
-        }
+        public Address PrivateAddress;
     }
+
+    public static class Address {
+        public String Street;
+        public String PostalCode;
+        public String PostalName;
+    }
+
 }
 
 
