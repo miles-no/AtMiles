@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "foundation": "zurb/bower-foundation",
-    "angular": "*"
+    "angular": "*",
+    "a0-angular-storage": "*"
   },
   "homepage": "https://github.com/miles-no/AtMiles",
   "authors": [
