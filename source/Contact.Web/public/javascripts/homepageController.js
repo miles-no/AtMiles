@@ -29,7 +29,7 @@
     }
 
     $scope.logout = function () {
-        //auth.logout();
+        auth.signout();
         $scope.isAuthenticated = false;
     };
 
