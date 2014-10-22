@@ -87,13 +87,17 @@ $primary-color: #A01D04;
 
 .banner {
   background-color: #f2efe4;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
 }
 
 .banner2 {
   background-image: url("../images/BGTexture-01.jpg");
   background-size: 100% 100%;
   padding-top: 50px;
-  margin: 25px;
+  padding-bottom: 20px;
   margin-top: 0px;
   color: #ffffff;
   text-align: center;
@@ -101,4 +105,25 @@ $primary-color: #A01D04;
 .banner2-text {
     color: #ffffff;
 }
- 
+
+.banner2-image {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.banner3 {
+  background-color: #051d34;
+  background-size: 100% 100%;
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 20px;
+  padding-bottom: 100px;
+}
+
+.banner3-text {
+  color: #697785;
+}
+
+.banner3-link {
+  @extend .banner3-text;
+}

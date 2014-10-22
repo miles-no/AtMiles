@@ -6561,16 +6561,35 @@ th.hide-for-touch {
   .centered-button-container {
     text-align: center; } }
 .banner {
-  background-color: #f2efe4; }
+  background-color: #f2efe4;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: 0px !important;
+  margin-left: 0px !important; }
 
 .banner2 {
   background-image: url("../images/BGTexture-01.jpg");
   background-size: 100% 100%;
   padding-top: 50px;
-  margin: 25px;
+  padding-bottom: 20px;
   margin-top: 0px;
   color: #ffffff;
   text-align: center; }
 
 .banner2-text {
   color: #ffffff; }
+
+.banner2-image {
+  padding-right: 10px;
+  padding-left: 10px; }
+
+.banner3 {
+  background-color: #051d34;
+  background-size: 100% 100%;
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 20px;
+  padding-bottom: 100px; }
+
+.banner3-text, .banner3-link {
+  color: #697785; }
