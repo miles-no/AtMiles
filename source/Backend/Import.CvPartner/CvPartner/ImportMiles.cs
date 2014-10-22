@@ -35,7 +35,6 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
 
         public async Task<List<CvPartnerImportData>> GetImportData()
         {
-            //TODO: Test this code
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
@@ -45,14 +44,16 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
 
             _logger.Debug(string.Format("Done - {0} users", employees.Count));
 
-            var promises = employees.Select(employee => DownloadAdditionalData(employee, client)).ToList();
+            var promises = employees.Select(DownloadAdditionalData).ToList();
 
             await Task.WhenAll(promises);
             return promises.Select(promise => promise.Result).ToList();
         }
 
-        private async Task<CvPartnerImportData> DownloadAdditionalData(Employee employee, WebClient client)
+        private async Task<CvPartnerImportData> DownloadAdditionalData(Employee employee)
         {
+            var client = new WebClient();
+            client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
             var cv = await DownloadCv(employee, client);
             var employeePhoto = await DownloadPhoto(cv.Image, cv.Name);
 
