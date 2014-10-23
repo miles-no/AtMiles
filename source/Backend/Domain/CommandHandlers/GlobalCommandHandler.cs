@@ -94,6 +94,8 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
         {
             foreach (var cvPartnerImportData in importData)
             {
+                //TODO: Improve algorithm to support async better
+
                 var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
                 var employee = await _employeeRepository.GetByIdAsync(userId);
 
