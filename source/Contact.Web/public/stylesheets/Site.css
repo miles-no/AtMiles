@@ -6596,19 +6596,13 @@ th.hide-for-touch {
   height: 52px !important;
   margin-right: 20px !important;
   margin-bottom: 0px !important; }
-  @media only screen and (min-width: 64.063em) {
-    .main-header-search-input {
-      width: 535px !important; } }
-  @media only screen and (min-width: 40.063em) and (max-width: 64em) {
-    .main-header-search-input {
-      width: 235px !important; } }
+
+.main-header-search-container {
+  padding-top: 20px;
+  background-color: #b32404; }
 
 .main-header-search-button {
-  margin-bottom: 0px;
   background-image: url("../images/Search-01.svg");
-  background-size: 145px 52px;
-  width: 145px;
-  height: 52px;
-  font-size: 18pt;
-  padding-top: 10px;
-  padding-left: 40px; }
+  background-repeat: no-repeat;
+  width: 104px;
+  height: 37px; }
