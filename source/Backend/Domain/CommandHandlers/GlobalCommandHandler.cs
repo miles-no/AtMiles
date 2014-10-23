@@ -105,11 +105,8 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
 
         private async Task AddOrUpdateUser(ImportDataFromCvPartner message, Company company, CvPartnerImportData cvPartnerImportData)
         {
-                //TODO: Improve algorithm to support async better
-
             var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
             var employee = await _employeeRepository.GetByIdAsync(userId);
-
             if (employee == null)
             {
                 employee = await AddNewUserFromImport(message, company, cvPartnerImportData);
