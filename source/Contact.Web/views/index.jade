@@ -54,9 +54,21 @@ block content
                     h1.main-header-text Make contact
                     h3.main-header-text with other Miles consultants !
                     h5.main-header-text Search for name, last name or find consultants from the list below.
-                    div.medium-9.medium-centered.main-page-search-box.columns
-                        input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
-                        a.main-header-search-button(ng-click="search()") &nbsp;Search
+                    .row
+                        .small-12.columns
+                            .small-12.medium-9.columns.small-centered.main-header-search-container
+                                .small-8.medium-10.large-10.columns
+                                    label
+                                        input.left.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                                .small-4.medium-2.large-2.columns
+                                    label
+                                        a.main-header-search-button.postfix(ng-click="search()") &nbsp;Search
+                                div(style="clear:both;")
+
+
+                    //.small-9.small-centered.main-page-search-box.columns
+                    //    input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                    //    a.main-header-search-button(ng-click="search()") &nbsp;Search
             .row
                 .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
                     table.table.table-striped
