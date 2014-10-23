@@ -42,30 +42,21 @@ block content
                 a.banner3-link(href="http://www.miles.no") www.miles.no
                 span.banner3-text &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
                 a.banner3-link(href="mailto:webmaster@miles.no") webmaster@miles.no
-            .row
-                .large-12.small-12.columns
-                     div(ng-repeat="error in errors")
-                        p.error
-                            {{error}}
-                     #debug.div
-                        hr
-                        b debug
-                        br
-                        | isAuthenticated={{isAuthenticated}}
-                        br
-                        hr
-
-                     div(ng-show="isAuthenticated == false")
-                         p Some intro text and images
-                          a.button.small.radius(ng-click="login()") Log in
-
-
-
         #mainContent.row(ng-show="isAuthenticated")
             .large-12.columns
             .row
-                .small-12.large-4.columns
-                    input.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                .large-12.small-12.columns
+                    div(ng-repeat="error in errors")
+                        p.error
+                            {{error}}
+            .row
+                .small-12.main-header.columns
+                    h1.main-header-text Make contact
+                    h3.main-header-text with other Miles consultants !
+                    h5.main-header-text Search for name, last name or find consultants from the list below.
+                    div.medium-9.medium-centered.main-page-search-box.columns
+                        input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                        a.main-header-search-button(ng-click="search()") &nbsp;Search
             .row
                 .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
                     table.table.table-striped
