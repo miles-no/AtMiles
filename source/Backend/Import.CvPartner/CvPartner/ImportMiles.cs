@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
 {
     public class ImportMiles : IImportDataFromCvPartner
     {
+        private const string UsersUrl = "https://miles.cvpartner.no/api/v1/users";
+        private const string CvBaseUrl = "https://miles.cvpartner.no/api/v1/cvs/";
         private readonly string _accessToken;
         private readonly ILog _logger;
 
@@ -32,34 +35,35 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
 
         public async Task<List<CvPartnerImportData>> GetImportData()
         {
-            var importData = new List<CvPartnerImportData>();
-
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
 
             _logger.Debug("Download users from CvPartner");
-            string employeesRaw = await client.DownloadStringTaskAsync("https://miles.cvpartner.no/api/v1/users");
+            string employeesRaw = await client.DownloadStringTaskAsync(UsersUrl);
             var employees = JsonConvert.DeserializeObject<List<Employee>>(employeesRaw);
 
             _logger.Debug(string.Format("Done - {0} users", employees.Count));
 
-            //TODO: Make this parallell using async
+            var promises = employees.Select(DownloadAdditionalData).ToList();
 
-            foreach (var employee in employees)
-            {
-                var cv = await DownloadCv(employee, client);
-                Picture employeePhoto = await DownloadPhoto(cv.Image, cv.Name);
+            await Task.WhenAll(promises);
+            return promises.Select(promise => promise.Result).ToList();
+        }
 
-                var importEmployee = Convert.ToImportFromCvPartner(cv, employee, employeePhoto);
-                importData.Add(importEmployee);
+        private async Task<CvPartnerImportData> DownloadAdditionalData(Employee employee)
+        {
+            var client = new WebClient();
+            client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
+            var cv = await DownloadCv(employee, client);
+            var employeePhoto = await DownloadPhoto(cv.Image, cv.Name);
 
-            }
-            return importData;
+            var importEmployee = Convert.ToImportFromCvPartner(cv, employee, employeePhoto);
+            return importEmployee;
         }
 
         private async Task<Cv> DownloadCv(Employee employee, WebClient client)
         {
-            var url = "https://miles.cvpartner.no/api/v1/cvs/" + employee.UserId + "/" + employee.DefaultCvId;
+            var url = CvBaseUrl + employee.UserId + "/" + employee.DefaultCvId;
             _logger.Debug(string.Format("Downloading CV for {0} on url {1}", employee.Name, url));
             string rawCv = await client.DownloadStringTaskAsync(url);
             var cv = JsonConvert.DeserializeObject<Cv>(rawCv);
