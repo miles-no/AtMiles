@@ -85,22 +85,17 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
 
             if (importData != null)
             {
-                var promises = new List<Task>();
-
-                var promise1 =  AddOrUpdateUsers(message, importData, company);
-                promises.Add(promise1);
-
-                var promise2 = RemoveUsersNotInCvPartnerAnyMore(message, company, importData);
-                promises.Add(promise2);
-
-                await Task.WhenAll(promises);
+                await AddOrUpdateUsers(message, importData, company);
+                await RemoveUsersNotInCvPartnerAnyMore(message, company, importData);
             }
         }
 
         private async Task AddOrUpdateUsers(ImportDataFromCvPartner message, IEnumerable<CvPartnerImportData> importData, Company company)
         {
-            var promises = importData.Select(cvPartnerImportData => AddOrUpdateUser(message, company, cvPartnerImportData)).ToList();
-            await Task.WhenAll(promises);
+            foreach ( var employee in importData)
+            {
+                await AddOrUpdateUser(message, company, employee);
+            }
         }
 
         private async Task AddOrUpdateUser(ImportDataFromCvPartner message, Company company, CvPartnerImportData cvPartnerImportData)
