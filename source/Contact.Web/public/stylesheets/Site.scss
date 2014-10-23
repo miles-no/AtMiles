@@ -11,27 +11,7 @@ $primary-color: #A01D04;
 @import "../lib/foundation/scss/normalize";
 @import "../lib/foundation/scss/foundation";
 
-/*.img-panel {
-  position: relative;
-  padding-left: 6rem;
-  margin-bottom: 2rem; 
-
-  img {
-    position: absolute;
-    top: 1.7rem;
-  //  left: -($panel-padding * 1.5);
-    max-width: 6rem;
-  }
-}*/
-
-/*.column.medium-centered {
-  margin-left: auto;
-  margin-right: auto;
-  float: none !important;
-}*/
-
-
-//Changes to the top bar
+//START: Styles to the FIRST PAGE
 .miles-top-bar {
   @extend .top-bar;
   @media #{$small-only} {
@@ -126,4 +106,51 @@ $primary-color: #A01D04;
 
 .banner3-link {
   @extend .banner3-text;
+}
+//END: Styles to the FIRST PAGE
+
+
+//START: Styles to MAIN PAGE
+.main-header {
+  background-image: url("../images/MilesImage-01.jpg");
+  padding-top: 40px;
+}
+
+.main-header-text {
+  color: #ffffff;
+  text-align: center;
+}
+
+.main-page-search-box {
+  background-color: #b32404;
+  padding: 20px;
+  margin: 20px;
+}
+
+.main-header-search-input {
+  height: 52px !important;
+  margin-right: 20px !important;
+  margin-bottom: 0px !important;
+  @media #{$large-up} {
+    width: 535px !important;
+  }
+  @media #{$medium-only} {
+    width: 235px !important;
+  }
+
+}
+
+.main-header-search-button {
+  @extend .button;
+  margin-bottom: 0px;
+  //border: 2px solid white;
+  //background-color: #e12100;
+  background-image: url("../images/Search-01.svg");
+  background-size: 145px 52px;
+  width: 145px;
+  height: 52px;
+  font-size: 18pt;
+  //font-weight: bold;
+  padding-top: 10px;
+  padding-left: 40px;
 }
