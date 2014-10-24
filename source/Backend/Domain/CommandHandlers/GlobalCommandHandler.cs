@@ -101,8 +101,12 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
         private async Task AddOrUpdateUser(ImportDataFromCvPartner message, Company company, CvPartnerImportData cvPartnerImportData)
         {
             var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
-            var employee = await _employeeRepository.GetByIdAsync(userId);
-            if (employee == null)
+            Employee employee;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                employee = await _employeeRepository.GetByIdAsync(userId);
+            }
+            else
             {
                 employee = await AddNewUserFromImport(message, company, cvPartnerImportData);
             }
