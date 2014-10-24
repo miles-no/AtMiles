@@ -6606,3 +6606,49 @@ th.hide-for-touch {
   background-repeat: no-repeat;
   width: 104px;
   height: 37px; }
+
+.contact-results {
+  padding-top: 24px;
+  background-color: #fafaf6; }
+
+.contact-grid {
+  padding-left: 25px;
+  padding-right: 25px; }
+
+.contact-grid-item {
+  padding: 5px !important; }
+
+.contact-section {
+  padding-top: 20px;
+  padding-left: 0px !important;
+  background-color: #ffffff; }
+
+.contact-card {
+  background-image: url("../images/BGImageCircle-01.svg");
+  background-size: 93px 93px;
+  background-position: 10px 20px;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+  height: 150px;
+  width: 298;
+  margin: 10px;
+  border-bottom: 2px solid #e6e3e3;
+  border-right: 2px solid #e6e3e3;
+  padding-left: 10px; }
+
+.contact-image {
+  float: left;
+  padding-left: 6px;
+  padding-top: 26px;
+  padding-right: 15px; }
+
+.contact-text, .contact-email {
+  text-align: left;
+  margin-bottom: 0px !important;
+  font-size: 10pt;
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  white-space: nowrap; }
+
+.contact-email {
+  font-size: 9pt; }
