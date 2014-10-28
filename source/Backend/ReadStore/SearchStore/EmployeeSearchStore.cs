@@ -316,9 +316,14 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             {
                 return null;
             }
+
             Stream stream = new MemoryStream(photo.Content);
             using (var srcImage = Image.FromStream(stream))
             {
+                if (srcImage.Height == 0)
+                {
+                    return null;
+                }
 
                 // If height is not specified, calculate from width
                 if (height == 0)
