@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using no.miles.at.Backend.Domain.Aggregates;
 using no.miles.at.Backend.Domain.Commands;
@@ -85,28 +86,33 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             if (importData != null)
             {
                 await AddOrUpdateUsers(message, importData, company);
-
                 await RemoveUsersNotInCvPartnerAnyMore(message, company, importData);
             }
         }
 
         private async Task AddOrUpdateUsers(ImportDataFromCvPartner message, IEnumerable<CvPartnerImportData> importData, Company company)
         {
-            foreach (var cvPartnerImportData in importData)
+            foreach ( var employee in importData)
             {
-                //TODO: Improve algorithm to support async better
-
-                var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
-                var employee = await _employeeRepository.GetByIdAsync(userId);
-
-                if (employee == null)
-                {
-                    employee = await AddNewUserFromImport(message, company, cvPartnerImportData);
-                }
-                
-                employee.ImportData(company.Id, company.Name, cvPartnerImportData, message.CreatedBy, message.CorrelationId);
-                await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
+                await AddOrUpdateUser(message, company, employee);
             }
+        }
+
+        private async Task AddOrUpdateUser(ImportDataFromCvPartner message, Company company, CvPartnerImportData cvPartnerImportData)
+        {
+            var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, cvPartnerImportData.Email));
+            Employee employee;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                employee = await _employeeRepository.GetByIdAsync(userId);
+            }
+            else
+            {
+                employee = await AddNewUserFromImport(message, company, cvPartnerImportData);
+            }
+
+            employee.ImportData(company.Id, company.Name, cvPartnerImportData, message.CreatedBy, message.CorrelationId);
+            await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
         }
 
         private async Task<Employee> AddNewUserFromImport(ImportDataFromCvPartner message, Company company,

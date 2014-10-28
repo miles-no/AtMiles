@@ -52,6 +52,11 @@ $primary-color: #A01D04;
   margin-right: 10px;
   text-align: left !important;
   padding-left: 5px !important;
+  &:hover {
+    background-color: #ffffff;
+    border: 2px solid #3fd1f5;
+    color: #313a4c;
+  }
 }
 
 .signout-button {
@@ -114,6 +119,7 @@ $primary-color: #A01D04;
 .main-header {
   background-image: url("../images/MilesImage-01.jpg");
   padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .main-header-text {
@@ -137,7 +143,6 @@ $primary-color: #A01D04;
   @media #{$medium-only} {
    // width: 235px !important;
   }
-
 }
 
 .main-header-search-container
@@ -163,4 +168,78 @@ $primary-color: #A01D04;
  // padding-left: 40px;
 }
 
+.result-text {
+  text-align: center;
+  color: #838994;
+  padding-top: 15px;
+}
+.contact-results {
+  background-color: #fafaf6;
+}
 
+.contact-grid {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.contact-grid-item {
+  padding: 5px !important;
+}
+
+.contact-section {
+  padding-top: 20px;
+  padding-left: 0px !important;
+  background-color: #ffffff;
+}
+
+.contact-card {
+  background-image: url("../images/BGImageCircle-01.svg");
+  background-size: 93px 93px;
+  background-position: 10px 20px;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+  height: 150px;
+  width: 298;
+  margin: 10px;
+  border-bottom: 2px solid #e6e3e3;
+  border-right: 2px solid #e6e3e3;
+  padding-left: 10px;
+}
+
+.contact-image {
+  float: left;
+  padding-left: 6px;
+  padding-top: 26px;
+  padding-right: 15px;
+}
+
+.contact-text {
+  text-align: left;
+  margin-bottom: 0px !important;
+  font-size: 10pt;
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  white-space: nowrap;
+}
+
+.contact-email {
+  @extend .contact-text;
+  font-size: 9pt;
+}
+
+.more-button {
+  @extend .button;
+  background-color: #ffffff;
+  text-align: center;
+  border: 2px solid #ece7dc;
+  color: #313a4c;
+  padding: 5px;
+  padding-top: 15px;
+  width: 304px;
+  height: 50px;
+  &:hover {
+    background-color: #ffffff;
+    border: 2px solid #3fd1f5;
+    color: #313a4c;
+  }
+}
