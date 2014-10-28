@@ -49,7 +49,7 @@ namespace no.miles.at.Backend.Api.Controllers
                         JobTitle = entry.JobTitle,
                         PhoneNumber = entry.PhoneNumber,
                         Email = entry.Email,
-                        Thumb = entry.Thumb.Length < 100 ? Helpers.PlaceholderImage : entry.Thumb,
+                        Thumb = (entry.Thumb == null || entry.Thumb.Length < 100) ? Helpers.PlaceholderImage : entry.Thumb,
                         PrivateAddress = new Result.Address()
                     };
                     if (entry.PrivateAddress != null)
