@@ -52,6 +52,11 @@ $primary-color: #A01D04;
   margin-right: 10px;
   text-align: left !important;
   padding-left: 5px !important;
+  &:hover {
+    background-color: #ffffff;
+    border: 2px solid #3fd1f5;
+    color: #313a4c;
+  }
 }
 
 .signout-button {
@@ -162,8 +167,12 @@ $primary-color: #A01D04;
  // padding-left: 40px;
 }
 
+.result-text {
+  text-align: center;
+  color: #838994;
+  padding-top: 15px;
+}
 .contact-results {
-  padding-top: 24px;
   background-color: #fafaf6;
 }
 
@@ -215,4 +224,21 @@ $primary-color: #A01D04;
 .contact-email {
   @extend .contact-text;
   font-size: 9pt;
+}
+
+.more-button {
+  @extend .button;
+  background-color: #ffffff;
+  text-align: center;
+  border: 2px solid #ece7dc;
+  color: #313a4c;
+  padding: 5px;
+  padding-top: 15px;
+  width: 304px;
+  height: 50px;
+  &:hover {
+    background-color: #ffffff;
+    border: 2px solid #3fd1f5;
+    color: #313a4c;
+  }
 }
