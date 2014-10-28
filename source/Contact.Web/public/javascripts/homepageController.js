@@ -47,6 +47,7 @@
 
     $scope.selectedEmployee = null;
 
+    $scope.searchPerformed = false;
     $scope.moreSearchResults = false;
     $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
 
@@ -89,6 +90,8 @@
                                     $scope.searchResult.Results.pop();
                                 }
                                 $scope.selectedEmployee = null;
+                                $scope.totalHits = data.Total;
+                                $scope.searchPerformed = true;
                             }
 
                             for (var i = 0; i < data.Results.length; i++) {
@@ -97,7 +100,7 @@
 
                             if (data.Total > $scope.searchResult.Results.length) {
                                 skip = data.Skipped + data.Results.length;
-                                $scope.moreSearchResults = data.TotalResults - skip;
+                                $scope.moreSearchResults = data.Total - skip;
                             } else {
                                 skip = 0;
                                 $scope.moreSearchResults = false;

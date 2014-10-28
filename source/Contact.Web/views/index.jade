@@ -70,6 +70,7 @@ block content
                     //    input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
                     //    a.main-header-search-button(ng-click="search()") &nbsp;Search
             .row.contact-results
+                div.result-text(ng-show="searchPerformed == true") Miles Consultans {{searchResult.Results.length}} / {{totalHits}}
                 ul.large-block-grid-3.medium-block-grid-2.small-block-grid-1.contact-grid(ng-show="searchResult.Results.length > 0")
                     li.contact-grid-item(ng-repeat="item in searchResult.Results")
                         div.contact-card
@@ -77,8 +78,12 @@ block content
                             div.small-7.contact-section.columns
                                 b.contact-text {{item.Name}}
                                 p.contact-text {{item.JobTitle}}
-                                p.contact-text {{item.PhoneNumber}}
+                                a.contact-email(href="tel:{{item.PhoneNumber}}"){{item.PhoneNumber}}
+                                br
                                 a.contact-email(href="mailto:{{item.Email}}"){{item.Email}}
+                .row
+                    .small-12.small-text-center
+                        a.more-button.text-center(ng-show="moreSearchResults" href="#" ng-click="search('true'); $event.preventDefault();") SE FLERE
             //.row
             //    .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
             //        table.table.table-striped
