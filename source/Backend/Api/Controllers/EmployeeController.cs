@@ -19,7 +19,6 @@ using no.miles.at.Backend.ReadStore.SearchStore;
 
 namespace no.miles.at.Backend.Api.Controllers
 {
-    [Authorize]
     public class EmployeeController : ApiController
     {
         private readonly IResolveNameOfUser _nameResolver;
@@ -38,6 +37,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpGet]
         [Route("api/company/{companyId}/employee/{employeeId}")]
         [ResponseType(typeof(EmployeeDetailsResponse))]
+        [Authorize]
         public HttpResponseMessage GetEmployeeDetails(string employeeId)
         {
             var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
@@ -53,6 +53,7 @@ namespace no.miles.at.Backend.Api.Controllers
 
         [HttpGet]
         [Route("api/company/{companyId}/vcard/{employeeId}")]
+        
         public HttpResponseMessage GetEmployeeVcard(string employeeId)
         {
             var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
@@ -79,6 +80,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpGet]
         [Route("api/company/{companyId}/employee/busytime")]
         [ResponseType(typeof(BusyTimeResponse))]
+        [Authorize]
         public BusyTimeResponse GetBusyTime(string companyId)
         {
 
@@ -90,6 +92,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage AddBusyTime(string companyId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
             string correlationId = Helpers.CreateNewId();
@@ -109,6 +112,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpDelete]
         [Route("api/company/{companyId}/employee/busytime/{busyTimeId}")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage RemoveBusyTime(string companyId, string busyTimeId)
         {
             string correlationId = Helpers.CreateNewId();
@@ -127,6 +131,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime/{busyTimeId}")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage UpdateBusyTimeNewEnd(string companyId, string busyTimeId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
             string correlationId = Helpers.CreateNewId();
@@ -146,6 +151,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime/confirm")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage ConfirmBusyTimeEntries(string companyId)
         {
             string correlationId = Helpers.CreateNewId();
@@ -165,6 +171,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/setdateofbirth")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage SetDateOfBirth(string companyId, DateTime dateOfBirth)
         {
             string correlationId = Helpers.CreateNewId();
@@ -184,6 +191,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/setprivateaddress")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage SetPrivateAddress(string companyId, string street, string postalcode, string postalname)
         {
             string correlationId = Helpers.CreateNewId();
