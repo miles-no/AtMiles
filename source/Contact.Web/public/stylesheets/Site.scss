@@ -89,6 +89,7 @@ $primary-color: #A01D04;
 }
 .banner2-text {
     color: #ffffff;
+  font-size: 24pt;
 }
 
 .banner2-image {
@@ -168,13 +169,21 @@ $primary-color: #A01D04;
  // padding-left: 40px;
 }
 
+.busy-image {
+  //text-align: center;
+  //padding-top: 15px;
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+}
+
 .result-text {
   text-align: center;
   color: #838994;
   padding-top: 15px;
 }
 .contact-results {
-  background-color: #fafaf6;
+  //background-color: #fafaf6;
 }
 
 .contact-grid {
