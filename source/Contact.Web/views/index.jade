@@ -29,7 +29,7 @@ block content
                         img.twelve-columns(src="../images/HomeSceneImageMobile-01.jpg" height="153px" width="100%")
             .row.small-12.small-centered.banner2.columns
                 h3
-                    span.banner2-text "@Miles let you quickly search for consultants within Miles organisation. Look up name, phone number and view e-mail address.
+                    span.banner2-text @Miles let you quickly search for consultants within Miles organisation. Search for name, phone number and office location.
                     br
                     br
                     span.banner2-text Sign in with your Miles google account, and you are ready to go!
@@ -65,11 +65,12 @@ block content
                                         a.main-header-search-button.postfix(ng-click="search()") &nbsp;Search
                                 div(style="clear:both;")
 
-
                     //.small-9.small-centered.main-page-search-box.columns
                     //    input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
                     //    a.main-header-search-button(ng-click="search()") &nbsp;Search
             .row.contact-results
+                .small-12.columns.small-centered.text-center
+                        img.busy-image(src="../images/busy.gif" ng-show="dataLoading")
                 div.result-text(ng-show="searchPerformed == true") Miles Consultans {{searchResult.Results.length}} / {{totalHits}}
                 ul.large-block-grid-3.medium-block-grid-2.small-block-grid-1.contact-grid(ng-show="searchResult.Results.length > 0")
                     li.contact-grid-item(ng-repeat="item in searchResult.Results")

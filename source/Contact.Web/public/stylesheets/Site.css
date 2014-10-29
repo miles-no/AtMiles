@@ -6568,7 +6568,8 @@ th.hide-for-touch {
   text-align: center; }
 
 .banner2-text {
-  color: #ffffff; }
+  color: #ffffff;
+  font-size: 24pt; }
 
 .banner2-image {
   padding-right: 10px;
@@ -6614,13 +6615,16 @@ th.hide-for-touch {
   width: 104px;
   height: 37px; }
 
+.busy-image {
+  position: fixed;
+  /* or absolute */
+  top: 50%;
+  left: 50%; }
+
 .result-text {
   text-align: center;
   color: #838994;
   padding-top: 15px; }
-
-.contact-results {
-  background-color: #fafaf6; }
 
 .contact-grid {
   padding-left: 25px;
