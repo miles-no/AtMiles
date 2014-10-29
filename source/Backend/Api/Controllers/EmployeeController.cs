@@ -65,7 +65,7 @@ namespace no.miles.at.Backend.Api.Controllers
 
             var buffer = new StringBuilder();
             buffer.AppendLine("BEGIN:VCARD");
-            buffer.AppendLine("VERSION:2.1");
+            buffer.AppendLine("VERSION:3.0");
             buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
             buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
