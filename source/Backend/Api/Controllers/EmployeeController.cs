@@ -69,6 +69,17 @@ namespace no.miles.at.Backend.Api.Controllers
             buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
             buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
+
+            if (employee.Thumb != null && employee.Thumb.Length > 100)
+            {
+                var filetype = employee.Thumb.Substring(employee.Thumb.IndexOf("/"), employee.Thumb.IndexOf(";") - employee.Thumb.IndexOf("/")).Replace("/", string.Empty).Replace(";", string.Empty).ToUpper();
+                var image = employee.Thumb.Substring(employee.Thumb.IndexOf(",") + 1);
+                
+                buffer.AppendFormat("PHOTO;ENCODING=BASE64;TYPE={0}:{1}\r\n", filetype, image);
+            }
+          
+            
+            
             buffer.AppendLine("END:VCARD");
             
             var res = new HttpResponseMessage(HttpStatusCode.OK)
