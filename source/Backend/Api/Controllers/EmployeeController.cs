@@ -53,7 +53,6 @@ namespace no.miles.at.Backend.Api.Controllers
 
         [HttpGet]
         [Route("api/company/{companyId}/vcard/{employeeId}")]
-        [ResponseType(typeof(EmployeeDetailsResponse))]
         public HttpResponseMessage GetEmployeeVcard(string employeeId)
         {
             var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
