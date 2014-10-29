@@ -71,6 +71,7 @@
             skip = 0;
         }
 
+
         $timeout(function () {
             if (tmpTerm == $scope.queryTerm) {
                 $scope.dataLoading = true;
