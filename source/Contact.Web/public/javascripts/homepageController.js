@@ -40,12 +40,13 @@
         //return p[1] || "Unknown";
     }
     var lastQueryTerm = null;
-    var maxSearchResults = 9;
+    var maxSearchResults = 21;
 
     var skip = 0;
     var take = maxSearchResults;
 
     $scope.selectedEmployee = null;
+    $scope.dataLoading = false; //used to detect when we're waiting for data
 
     $scope.searchPerformed = false;
     $scope.moreSearchResults = false;
@@ -72,6 +73,7 @@
 
         $timeout(function () {
             if (tmpTerm == $scope.queryTerm) {
+                $scope.dataLoading = true;
                 var res = $http({
                     method: 'GET',
                     url: $scope.apiRoot + getCompany() +"/api/Search/fulltext?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(tmpTerm),
@@ -79,6 +81,8 @@
                 });
 
                 res.success(function (data) {
+                    $scope.dataLoading = false;
+
                     if (data.Error) {
                         $scope.errors.push(data.Error);
                         return;
@@ -106,9 +110,10 @@
                                 $scope.moreSearchResults = false;
                             }
                             lastQueryTerm = tmpTerm;
-                            if ($scope.searchResult.Results.length == 1) {
-                                $scope.showDetails($scope.searchResult.Results[0]);
-                            }
+                            //Disabled until we want to display a person
+                            //if ($scope.searchResult.Results.length == 1) {
+                            //    $scope.showDetails($scope.searchResult.Results[0]);
+                            //}
                         }
                     }
                 });
