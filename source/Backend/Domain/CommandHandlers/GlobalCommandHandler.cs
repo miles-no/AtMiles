@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using no.miles.at.Backend.Domain.Aggregates;
 using no.miles.at.Backend.Domain.Commands;

@@ -508,5 +508,10 @@
             </summary>
             <param name="id"></param>
         </member>
+        <member name="F:no.miles.at.Backend.Api.Utilities.Helpers.PlaceholderImage">
+            <summary>
+            For empty images
+            </summary>
+        </member>
     </members>
 </doc>

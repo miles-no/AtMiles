@@ -82,6 +82,8 @@ block content
                                 a.contact-email(href="tel:{{item.PhoneNumber}}"){{item.PhoneNumber}}
                                 br
                                 a.contact-email(href="mailto:{{item.Email}}"){{item.Email}}
+                                br
+                                a.contact-email(href="{{apiRoot}}api/company/miles/vcard/{{item.GlobalId}}") Card
                 .row
                     .small-12.small-text-center
                         a.more-button.text-center(ng-show="moreSearchResults" href="#" ng-click="search('true'); $event.preventDefault();") SE FLERE

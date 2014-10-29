@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using no.miles.at.Backend.Api.Models.Api.Busy;
@@ -18,7 +20,6 @@ using no.miles.at.Backend.ReadStore.SearchStore;
 
 namespace no.miles.at.Backend.Api.Controllers
 {
-    [Authorize]
     public class EmployeeController : ApiController
     {
         private readonly IResolveNameOfUser _nameResolver;
@@ -36,7 +37,8 @@ namespace no.miles.at.Backend.Api.Controllers
 
         [HttpGet]
         [Route("api/company/{companyId}/employee/{employeeId}")]
-        [ResponseType(typeof(Response))]
+        [ResponseType(typeof(EmployeeDetailsResponse))]
+        [Authorize]
         public HttpResponseMessage GetEmployeeDetails(string employeeId)
         {
             var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
@@ -51,8 +53,52 @@ namespace no.miles.at.Backend.Api.Controllers
         }
 
         [HttpGet]
+        [Route("api/company/{companyId}/vcard/{employeeId}")]
+        
+        public HttpResponseMessage GetEmployeeVcard(string employeeId)
+        {
+            var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
+            if (employee == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee is not found");
+            }
+
+            var buffer = new StringBuilder();
+            buffer.AppendLine("BEGIN:VCARD");
+            buffer.AppendLine("VERSION:3.0");
+            buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
+            buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
+            buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
+
+            if (employee.Thumb != null && employee.Thumb.Length > 100)
+            {
+                var filetype = employee.Thumb.Substring(employee.Thumb.IndexOf("/"), employee.Thumb.IndexOf(";") - employee.Thumb.IndexOf("/")).Replace("/", string.Empty).Replace(";", string.Empty).ToUpper();
+                var image = employee.Thumb.Substring(employee.Thumb.IndexOf(",") + 1);
+                
+                buffer.AppendFormat("PHOTO;ENCODING=BASE64;TYPE={0}:{1}\r\n", filetype, image);
+            }
+          
+            
+            
+            buffer.AppendLine("END:VCARD");
+            
+            var res = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(buffer.ToString(), Encoding.UTF8, "text/x-vcard")
+            };
+
+            res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = employee.Name
+            };
+
+            return res;
+        }
+
+        [HttpGet]
         [Route("api/company/{companyId}/employee/busytime")]
         [ResponseType(typeof(BusyTimeResponse))]
+        [Authorize]
         public BusyTimeResponse GetBusyTime(string companyId)
         {
 
@@ -64,6 +110,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage AddBusyTime(string companyId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
             string correlationId = Helpers.CreateNewId();
@@ -83,6 +130,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpDelete]
         [Route("api/company/{companyId}/employee/busytime/{busyTimeId}")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage RemoveBusyTime(string companyId, string busyTimeId)
         {
             string correlationId = Helpers.CreateNewId();
@@ -101,6 +149,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime/{busyTimeId}")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage UpdateBusyTimeNewEnd(string companyId, string busyTimeId, DateTime start, DateTime? end, short percentageOccupied, string comment)
         {
             string correlationId = Helpers.CreateNewId();
@@ -120,6 +169,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/busytime/confirm")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage ConfirmBusyTimeEntries(string companyId)
         {
             string correlationId = Helpers.CreateNewId();
@@ -139,6 +189,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/setdateofbirth")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage SetDateOfBirth(string companyId, DateTime dateOfBirth)
         {
             string correlationId = Helpers.CreateNewId();
@@ -158,6 +209,7 @@ namespace no.miles.at.Backend.Api.Controllers
         [HttpPost]
         [Route("api/company/{companyId}/employee/setprivateaddress")]
         [ResponseType(typeof(Response))]
+        [Authorize]
         public HttpResponseMessage SetPrivateAddress(string companyId, string street, string postalcode, string postalname)
         {
             string correlationId = Helpers.CreateNewId();
@@ -221,6 +273,8 @@ namespace no.miles.at.Backend.Api.Controllers
                 response.CompanyId = searchResult.CompanyId;
                 response.OfficeName = searchResult.OfficeName;
                 response.Name = searchResult.Name;
+                response.FirstName = searchResult.FirstName;
+                response.LastName = searchResult.LastName;
                 response.DateOfBirth = searchResult.DateOfBirth;
                 response.JobTitle = searchResult.JobTitle;
                 response.PhoneNumber = searchResult.PhoneNumber;

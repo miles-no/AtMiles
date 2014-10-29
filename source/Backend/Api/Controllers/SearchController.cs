@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using no.miles.at.Backend.Api.Models.Api.Search;
+using no.miles.at.Backend.Api.Utilities;
 using no.miles.at.Backend.ReadStore.SearchStore;
 
 namespace no.miles.at.Backend.Api.Controllers
@@ -48,7 +49,7 @@ namespace no.miles.at.Backend.Api.Controllers
                         JobTitle = entry.JobTitle,
                         PhoneNumber = entry.PhoneNumber,
                         Email = entry.Email,
-                        Thumb = entry.Thumb,
+                        Thumb = (entry.Thumb == null || entry.Thumb.Length < 100) ? Helpers.PlaceholderImage : entry.Thumb,
                         PrivateAddress = new Result.Address()
                     };
                     if (entry.PrivateAddress != null)
@@ -62,5 +63,9 @@ namespace no.miles.at.Backend.Api.Controllers
             }
             return result;
         }
+
+        
     }
+
+    
 }
