@@ -56,5 +56,8 @@ namespace no.miles.at.Backend.Api.Models.Api.Employee
             public string InternationalCompentency;
             public string InternationalCategory;
         }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
