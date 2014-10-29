@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using no.miles.at.Backend.Api.Models.Api.Busy;
@@ -48,6 +49,31 @@ namespace no.miles.at.Backend.Api.Controllers
                     "User does not have permission to view this employe");
             }
             return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+
+        [HttpGet]
+        [Route("api/company/{companyId}/employee/{employeeId}.vcard")]
+        public HttpResponseMessage GetEmployeeVcard(string employeeId)
+        {
+            var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
+            if (employee == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee is not found");
+            }
+
+            var buffer = new StringBuilder();
+            buffer.AppendLine("BEGIN:VCARD");
+            buffer.AppendLine("VERSION:2.1");
+            buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
+            buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
+            buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
+            buffer.AppendLine("END:VCARD");
+            
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(buffer.ToString(), Encoding.UTF8, "text/x-vcard")
+            };
+
         }
 
         [HttpGet]
@@ -221,6 +247,8 @@ namespace no.miles.at.Backend.Api.Controllers
                 response.CompanyId = searchResult.CompanyId;
                 response.OfficeName = searchResult.OfficeName;
                 response.Name = searchResult.Name;
+                response.FirstName = searchResult.FirstName;
+                response.LastName = searchResult.LastName;
                 response.DateOfBirth = searchResult.DateOfBirth;
                 response.JobTitle = searchResult.JobTitle;
                 response.PhoneNumber = searchResult.PhoneNumber;
