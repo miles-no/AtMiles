@@ -26,7 +26,8 @@ namespace no.miles.at.Backend.Infrastructure
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach (var handler in handlers)
             {
-                handler(@event);
+                //Try to await here to make sure we don't get data written over.
+                handler(@event).Wait();
             }
         }
     }
