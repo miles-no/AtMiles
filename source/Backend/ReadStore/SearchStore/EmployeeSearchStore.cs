@@ -196,6 +196,9 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 GlobalId = ev.EmployeeId,
                 CompanyId = ev.CompanyId,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
+                FirstName = ev.FirstName,
+                MiddleName = ev.MiddleName,
+                LastName = ev.LastName,
                 BusyTimeEntriesConfirmed = DateTime.MinValue,
                 Competency = null,
                 KeyQualifications = new List<string>(),
@@ -214,6 +217,9 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 GlobalId = ev.EmployeeId,
                 CompanyId = ev.CompanyId,
                 Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName),
+                FirstName = ev.FirstName,
+                MiddleName = ev.MiddleName,
+                LastName = ev.LastName,
                 DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue,
                 JobTitle = ev.Title,
                 PhoneNumber = ev.Phone,
@@ -233,6 +239,9 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
         private static EmployeeSearchModel Patch(EmployeeSearchModel model, ImportedFromCvPartner ev)
         {
             model.Name = NameService.GetName(ev.FirstName, ev.MiddleName, ev.LastName);
+            model.FirstName = ev.FirstName;
+            model.MiddleName = ev.MiddleName;
+            model.LastName = ev.LastName;
             if (!model.DateOfBirthSetManually)
             {
                 model.DateOfBirth = ev.DateOfBirth.HasValue ? ev.DateOfBirth.Value : DateTime.MinValue;
