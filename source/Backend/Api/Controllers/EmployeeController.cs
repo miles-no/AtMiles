@@ -36,7 +36,7 @@ namespace no.miles.at.Backend.Api.Controllers
 
         [HttpGet]
         [Route("api/company/{companyId}/employee/{employeeId}")]
-        [ResponseType(typeof(Response))]
+        [ResponseType(typeof(EmployeeDetailsResponse))]
         public HttpResponseMessage GetEmployeeDetails(string employeeId)
         {
             var employee = _employeeEngine.GetEmployeeSearchModel(employeeId);
