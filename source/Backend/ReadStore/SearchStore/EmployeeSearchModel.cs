@@ -15,6 +15,9 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
         public string CompanyId { get; set; }
         public string OfficeName { get; set; }
         public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string JobTitle { get; set; }
         public string PhoneNumber { get; set; }

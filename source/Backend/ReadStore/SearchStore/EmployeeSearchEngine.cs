@@ -21,7 +21,6 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 return session.Load<EmployeeSearchModel>(EmployeeSearchStore.GetRavenId(employeeId));
             }
         }
-
    
         public IEnumerable<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {
@@ -54,10 +53,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 
                 total = stats.TotalResults;
             }
-
             return results;
         }
-
-     
     }
 }
