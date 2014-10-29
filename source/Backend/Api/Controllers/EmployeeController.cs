@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -70,11 +71,17 @@ namespace no.miles.at.Backend.Api.Controllers
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
             buffer.AppendLine("END:VCARD");
             
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            var res = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent(buffer.ToString(), Encoding.UTF8, "text/x-vcard")
             };
 
+            res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = employee.Name
+            };
+
+            return res;
         }
 
         [HttpGet]
