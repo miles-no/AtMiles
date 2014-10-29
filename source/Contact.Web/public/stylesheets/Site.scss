@@ -14,6 +14,7 @@ $primary-color: #A01D04;
 //START: Styles to the FIRST PAGE
 .miles-top-bar {
   @extend .top-bar;
+  margin-top: 11px;
   @media #{$small-only} {
     $topbar-height: 48px;
     height: $topbar-height;
@@ -47,14 +48,15 @@ $primary-color: #A01D04;
   background-color: #ffffff;
   border: #d9cfb8;
   border-style: solid;
-  border-width: 2px;
+  border-width: 1px;
   color: #000000;
   margin-right: 10px;
+  margin-top: 5px;
   text-align: left !important;
   padding-left: 5px !important;
   &:hover {
     background-color: #ffffff;
-    border: 2px solid #3fd1f5;
+    border: 1px solid #3fd1f5;
     color: #313a4c;
   }
 }
@@ -135,14 +137,18 @@ $primary-color: #A01D04;
 }
 
 .main-header-search-input {
-  height: 52px !important;
-  margin-right: 20px !important;
+  //height: 19px !important;
+  /*margin-right: 20px !important;
   margin-bottom: 0px !important;
   @media #{$large-up} {
    // width: 535px !important;
   }
   @media #{$medium-only} {
    // width: 235px !important;
+  }*/
+  &:focus {
+    border: 2px solid #3fd1f5 !important;
+    color: #000000 !important;
   }
 }
 

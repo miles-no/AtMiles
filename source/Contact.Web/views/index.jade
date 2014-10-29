@@ -21,7 +21,7 @@ block content
             .row.banner
                 .show-for-medium-up
                     .medium-12.large-12.medium-centered.banner.columns
-                        img(src="../images/HomeSceneImage-01.jpg" height="370px" width="100%")
+                        img(src="../images/MilesHomeImage.png" height="370px" width="100%")
                     .centered-button-container
                         a.button.medium.radius(ng-click="login()") LOGIN AND SEARCH
                 .show-for-small-only
@@ -59,7 +59,7 @@ block content
                             .small-12.medium-9.columns.small-centered.main-header-search-container
                                 .small-8.medium-10.large-10.columns
                                     label
-                                        input.left.input-lg(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                                        input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
                                 .small-4.medium-2.large-2.columns
                                     label
                                         a.main-header-search-button.postfix(ng-click="search()") &nbsp;Search

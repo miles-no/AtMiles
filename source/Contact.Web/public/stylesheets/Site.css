@@ -6510,14 +6510,16 @@ th.hide-for-touch {
 
   th.show-for-print {
     display: table-cell !important; } }
-@media only screen and (max-width: 40em) {
-  .miles-top-bar {
-    height: 48px;
-    line-height: 48px; } }
-@media only screen and (min-width: 40.063em) {
-  .miles-top-bar {
-    height: 60px;
-    line-height: 60px; } }
+.miles-top-bar {
+  margin-top: 11px; }
+  @media only screen and (max-width: 40em) {
+    .miles-top-bar {
+      height: 48px;
+      line-height: 48px; } }
+  @media only screen and (min-width: 40.063em) {
+    .miles-top-bar {
+      height: 60px;
+      line-height: 60px; } }
 
 @media only screen and (max-width: 40em) {
   .miles-top-bar-image {
@@ -6535,14 +6537,15 @@ th.hide-for-touch {
   background-color: #ffffff;
   border: #d9cfb8;
   border-style: solid;
-  border-width: 2px;
+  border-width: 1px;
   color: #000000;
   margin-right: 10px;
+  margin-top: 5px;
   text-align: left !important;
   padding-left: 5px !important; }
   .signin-button:hover, .signout-button:hover {
     background-color: #ffffff;
-    border: 2px solid #3fd1f5;
+    border: 1px solid #3fd1f5;
     color: #313a4c; }
 
 .signout-button {
@@ -6601,9 +6604,17 @@ th.hide-for-touch {
   margin: 20px; }
 
 .main-header-search-input {
-  height: 52px !important;
-  margin-right: 20px !important;
-  margin-bottom: 0px !important; }
+  /*margin-right: 20px !important;
+  margin-bottom: 0px !important;
+  @media only screen and (min-width:64.063em) {
+   // width: 535px !important;
+  }
+  @media only screen and (min-width:40.063em) and (max-width:64em) {
+   // width: 235px !important;
+  }*/ }
+  .main-header-search-input:focus {
+    border: 2px solid #3fd1f5 !important;
+    color: #000000 !important; }
 
 .main-header-search-container {
   padding-top: 20px;
