@@ -1,6 +1,6 @@
 ﻿var homepageController = function ($scope, $http, $timeout, $location, auth, store) {
 
-    $scope.apiRoot = "http://api-at.miles.no";
+    $scope.apiRoot = "https://api-at.miles.no";
 
 
     $scope.queryTerm = "";
