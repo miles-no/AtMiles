@@ -13,6 +13,7 @@ using no.miles.at.Backend.Api.Models.Api.Tasks;
 using no.miles.at.Backend.Api.Utilities;
 using no.miles.at.Backend.Domain;
 using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Services;
 using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Infrastructure;
 using no.miles.at.Backend.ReadStore.BusyTimeStore;
@@ -83,15 +84,14 @@ namespace no.miles.at.Backend.Api.Controllers
             var buffer = new StringBuilder();
             buffer.AppendLine("BEGIN:VCARD");
             buffer.AppendLine("VERSION:3.0");
-            buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
+            buffer.AppendFormat("N:{0};{1}\r\n", employee.LastName, employee.FirstName); // Last;First as specified in VCARD 3.0
+            buffer.AppendFormat("FN:{0}\r\n", NameService.GetName(employee.FirstName, employee.MiddleName, employee.LastName)); // Last;First as specified in VCARD 3.0
             buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
             buffer.AppendFormat("ORG:Miles;{0}\r\n", employee.OfficeName);
             buffer.AppendFormat("TITLE:{0}\r\n", employee.JobTitle);
             buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
-            //buffer.AppendFormat("NOTE:{0}\r\n", employee.OfficeName);
             buffer.AppendLine("URL:http://www.miles.no\r\n");
-            //buffer.AppendFormat("LOGO;TYPE=PNG;ENCODING=BASE64:{0}\r\n", Constants.MilesLogoAsBase64);
 
             if (employee.Thumb != null && employee.Thumb.Length > 100)
             {
