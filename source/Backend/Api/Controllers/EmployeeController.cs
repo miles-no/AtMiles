@@ -13,6 +13,7 @@ using no.miles.at.Backend.Api.Models.Api.Tasks;
 using no.miles.at.Backend.Api.Utilities;
 using no.miles.at.Backend.Domain;
 using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.Services;
 using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Infrastructure;
 using no.miles.at.Backend.ReadStore.BusyTimeStore;
@@ -63,36 +64,50 @@ namespace no.miles.at.Backend.Api.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee is not found");
             }
 
-            var buffer = new StringBuilder();
-            buffer.AppendLine("BEGIN:VCARD");
-            buffer.AppendLine("VERSION:3.0");
-            buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
-            buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
-            buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
+            var vcard = GenerateVcardString(employee);
 
-            if (employee.Thumb != null && employee.Thumb.Length > 100)
-            {
-                var filetype = employee.Thumb.Substring(employee.Thumb.IndexOf("/"), employee.Thumb.IndexOf(";") - employee.Thumb.IndexOf("/")).Replace("/", string.Empty).Replace(";", string.Empty).ToUpper();
-                var image = employee.Thumb.Substring(employee.Thumb.IndexOf(",") + 1);
-                
-                buffer.AppendFormat("PHOTO;ENCODING=BASE64;TYPE={0}:{1}\r\n", filetype, image);
-            }
-          
-            
-            
-            buffer.AppendLine("END:VCARD");
-            
             var res = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(buffer.ToString(), Encoding.UTF8, "text/x-vcard")
+                Content = new StringContent(vcard, Encoding.UTF8, "text/vcard")
             };
 
             res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = employee.Name
+                FileName = string.Format("{0}.vcf",employee.Name)
             };
 
             return res;
+        }
+
+        private static string GenerateVcardString(EmployeeSearchModel employee)
+        {
+            var buffer = new StringBuilder();
+            buffer.AppendLine("BEGIN:VCARD");
+            buffer.AppendLine("VERSION:3.0");
+            buffer.AppendFormat("N:{0};{1}\r\n", employee.LastName, employee.FirstName); // Last;First as specified in VCARD 3.0
+            buffer.AppendFormat("FN:{0}\r\n", NameService.GetName(employee.FirstName, employee.MiddleName, employee.LastName)); // Last;First as specified in VCARD 3.0
+            buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
+            buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
+            buffer.AppendFormat("ORG:Miles;{0}\r\n", employee.OfficeName);
+            buffer.AppendFormat("TITLE:{0}\r\n", employee.JobTitle);
+            buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
+            buffer.AppendLine("URL:http://www.miles.no\r\n");
+
+            if (employee.Thumb != null && employee.Thumb.Length > 100)
+            {
+                var filetype =
+                    employee.Thumb.Substring(employee.Thumb.IndexOf("/"),
+                        employee.Thumb.IndexOf(";") - employee.Thumb.IndexOf("/"))
+                        .Replace("/", string.Empty)
+                        .Replace(";", string.Empty)
+                        .ToUpper();
+                var image = employee.Thumb.Substring(employee.Thumb.IndexOf(",") + 1);
+
+                buffer.AppendFormat("PHOTO;ENCODING=BASE64;TYPE={0}:{1}\r\n", filetype, image);
+            }
+
+            buffer.AppendLine("END:VCARD");
+            return buffer.ToString();
         }
 
         [HttpGet]
