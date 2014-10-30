@@ -129,7 +129,7 @@
             method: 'GET',
             //TODO: fix getCompany to avoid hard-coding
             //url: $scope.apiRoot + "api/company/"+ getCompany() + "/employee/" + item.GlobalId,
-            url: $scope.apiRoot + "api/company/miles/employee/" + item.GlobalId,
+            url: $scope.apiRoot + "/api/company/miles/employee/" + item.GlobalId,
             withCredentials: true
         });
         res.success(function (data) {
