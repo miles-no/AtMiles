@@ -86,11 +86,11 @@ namespace no.miles.at.Backend.Api.Controllers
             buffer.AppendFormat("N:{0};{1}\r\n", employee.FirstName, employee.LastName);
             buffer.AppendFormat("EMAIL:{0}\r\n", employee.Email);
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
-            buffer.AppendLine("ORG:Miles");
+            buffer.AppendFormat("ORG:Miles;{0}\r\n", employee.OfficeName);
             buffer.AppendFormat("TITLE:{0}\r\n", employee.JobTitle);
             buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
-            buffer.AppendFormat("NOTE:{0}\r\n", employee.OfficeName);
-            buffer.AppendLine("URL:http://www.miles.no");
+            //buffer.AppendFormat("NOTE:{0}\r\n", employee.OfficeName);
+            buffer.AppendLine("URL:http://www.miles.no\r\n");
             //buffer.AppendFormat("LOGO;TYPE=PNG;ENCODING=BASE64:{0}\r\n", Constants.MilesLogoAsBase64);
 
             if (employee.Thumb != null && employee.Thumb.Length > 100)
