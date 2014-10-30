@@ -6645,7 +6645,8 @@ th.hide-for-touch {
   position: fixed;
   /* or absolute */
   top: 50%;
-  left: 50%; }
+  left: 50%;
+  z-index: 5; }
 
 .result-text {
   text-align: center;
