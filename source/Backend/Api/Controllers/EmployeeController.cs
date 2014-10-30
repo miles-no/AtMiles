@@ -67,12 +67,12 @@ namespace no.miles.at.Backend.Api.Controllers
 
             var res = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(vcard, Encoding.UTF8, "text/x-vcard")
+                Content = new StringContent(vcard, Encoding.UTF8, "text/vcard")
             };
 
             res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = employee.Name
+                FileName = string.Format("{0}.vcf",employee.Name)
             };
 
             return res;
@@ -88,6 +88,7 @@ namespace no.miles.at.Backend.Api.Controllers
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
             buffer.AppendLine("ORG:Miles\r\n");
             buffer.AppendFormat("TITLE:{0}\r\n", employee.JobTitle);
+            buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
             buffer.AppendFormat("NOTE:{0}\r\n", employee.OfficeName);
 
             if (employee.Thumb != null && employee.Thumb.Length > 100)
