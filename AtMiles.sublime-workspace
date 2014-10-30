@@ -391,16 +391,40 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "source/Backend/Domain/Aggregates/Company.cs",
+			"settings":
+			{
+				"buffer_size": 6788,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 308.0,
 		"selected_items":
 		[
 			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"IN",
+				"Package Control: Install Package"
+			],
+			[
 				"in",
 				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"packa",
+				"Package Control: Upgrade Package"
 			],
 			[
 				"inst",
@@ -408,10 +432,6 @@
 			],
 			[
 				"ins",
-				"Package Control: Install Package"
-			],
-			[
-				"insta",
 				"Package Control: Install Package"
 			],
 			[
@@ -452,10 +472,37 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/royveshovda/src/AtMiles"
+		"/Users/royveshovda/src/AtMiles",
+		"/Users/royveshovda/src/AtMiles/source/Backend",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Aggregates",
+		"/Users/royveshovda/src/AtMiles/source/iOSClient"
 	],
 	"file_history":
 	[
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/views/index.jade",
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/web.config",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Aggregates/Company.cs",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Controllers/EmployeeController.cs",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Aggregates/Employee.cs",
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/public/lib/modernizr/feature-detects/elem-progress-meter.js",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Event.cs",
+		"/Users/royveshovda/src/AtMiles/AtMiles.sublime-project",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Areas/HelpPage/Views/Help/DisplayTemplates/ApiGroup.cshtml",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/AggregateRoot.cs",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Web.Release.config",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Areas/HelpPage/Views/Web.config",
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/public/lib/modernizr/.editorconfig",
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/.idea/inspectionProfiles/profiles_settings.xml",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Web.config",
+		"/Users/royveshovda/src/AtMiles/source/Web.sln",
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/public/lib/modernizr/feature-detects/webgl-extensions.js",
+		"/Users/royveshovda/src/AtMiles/.idea/workspace.xml",
+		"/Users/royveshovda/src/AtMiles/README.md",
+		"/Users/royveshovda/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/PrivateReflectionDynamicObject.cs",
+		"/Users/royveshovda/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Infrastructure/config_example.yaml",
 		"/Users/royveshovda/src/AtMiles/source/Contact.Web/package.json",
 		"/Users/royveshovda/Downloads/test.txt",
 		"/Users/royveshovda/Documents/searchResult.json",
@@ -560,34 +607,11 @@
 		"/Users/royveshovda/Library/Application Support/Sublime Text 3/Packages/User/xbuild.sublime-build",
 		"/Users/royveshovda/Erlang/Rosalind/src/basic.erl",
 		"/Users/royveshovda/Erlang/Rosalind/src/test.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/fib_tests.erl",
-		"/Users/royveshovda/Downloads/B5ZC00.fasta",
-		"/Users/royveshovda/Erlang/Rosalind/src/dna.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/prot.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/hamm_tests.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/prot_tests.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/revc.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/rna.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/gc_tests.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/gc.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/dna_tests.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/hamm.erl",
-		"/Users/royveshovda/Erlang/Rosalind/src/rna_tests.erl",
-		"/Users/royveshovda/Erlang/Rosalind/rosalind_gc_short.txt",
-		"/Users/royveshovda/Erlang/Rosalind/src/convert.erl",
-		"/Users/royveshovda/Erlang/Rosaling/src/dna.erl",
-		"/Users/royveshovda/Erlang/Rosaling/dna.erl",
-		"/Users/royveshovda/Erlang/Rosaling/subs.erl",
-		"/Users/royveshovda/Erlang/Rosaling/hamm.erl",
-		"/Users/royveshovda/Erlang/testdata.fasta.txt",
-		"/Users/royveshovda/Erlang/dna.erl",
-		"/Users/royveshovda/Erlang/prot.erl",
-		"/Users/royveshovda/Erlang/FASTA.txt",
-		"/Users/royveshovda/Erlang/countingdna.erl"
+		"/Users/royveshovda/Erlang/Rosalind/src/fib_tests.erl"
 	],
 	"find":
 	{
-		"height": 22.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -601,6 +625,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Apply(",
+			"Apply",
+			"csproj",
 			"Linux",
 			":",
 			"nuget",
@@ -628,14 +655,45 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "source/Backend/Domain/Aggregates/Company.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6788,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								826,
+								826
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 252.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 22.0
+		"height": 26.0
 	},
 	"input":
 	{
@@ -675,7 +733,7 @@
 	"project": "AtMiles.sublime-project",
 	"replace":
 	{
-		"height": 40.0
+		"height": 48.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -683,16 +741,20 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"emp",
+				"source/Backend/Api/Controllers/EmployeeController.cs"
+			]
 		],
 		"width": 0.0
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"select_symbol":
 	{
