@@ -1,6 +1,6 @@
 ﻿var homepageController = function ($scope, $http, $timeout, $location, auth, store) {
 
-    $scope.apiRoot = "http://milescontact.cloudapp.net/";
+    $scope.apiRoot = "https://api-at.miles.no/";
 
 
     $scope.queryTerm = "";
