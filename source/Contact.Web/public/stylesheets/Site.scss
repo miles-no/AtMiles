@@ -16,7 +16,7 @@ $primary-color: #A01D04;
   @extend .top-bar;
   margin-top: 11px;
   @media #{$small-only} {
-    $topbar-height: 48px;
+    $topbar-height: 43px;
     height: $topbar-height;
     line-height: $topbar-height;
   }
@@ -30,11 +30,11 @@ $primary-color: #A01D04;
 //Top bar logo change in different grids
 .miles-top-bar-image {
   @media #{$small-only} {
-    height: 34px;
+    height: 28px;
   }
   @media #{$medium-up} {
-    height: 44px;
-    margin-top: ($topbar-button-top - 4px);
+    height: 40px;
+    margin-top: ($topbar-button-top - 8px);
   }
 }
 
