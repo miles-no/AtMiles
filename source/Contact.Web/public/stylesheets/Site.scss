@@ -242,6 +242,17 @@ $primary-color: #A01D04;
   font-size: 9pt;
 }
 
+.contact-vcard {
+  background-image: url("../images/VCardIcon-01.svg");
+  height: 17px;
+  width: 24px;
+  margin-right: 10px;
+  margin-top: 10px;
+  &:hover {
+    background-image: url("../images/VCardIconHover-01.svg");
+  }
+}
+
 .more-button {
   @extend .button;
   background-color: #ffffff;
