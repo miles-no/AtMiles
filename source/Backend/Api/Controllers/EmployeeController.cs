@@ -90,6 +90,7 @@ namespace no.miles.at.Backend.Api.Controllers
             buffer.AppendFormat("TITLE:{0}\r\n", employee.JobTitle);
             buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
             buffer.AppendFormat("NOTE:{0}\r\n", employee.OfficeName);
+            buffer.AppendFormat("LOGO;TYPE=PNG;ENCODING=B:{0}\r\n", Constants.MilesLogoAsBase64);
 
             if (employee.Thumb != null && employee.Thumb.Length > 100)
             {
