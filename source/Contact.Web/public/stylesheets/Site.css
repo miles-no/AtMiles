@@ -6571,8 +6571,10 @@ th.hide-for-touch {
   text-align: center; }
 
 .banner2-text {
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: #ffffff;
-  font-size: 18pt; }
+  font-size: 18pt;
+  line-height: 18pt; }
 
 .banner2-image {
   padding-right: 10px;
