@@ -6514,8 +6514,8 @@ th.hide-for-touch {
   margin-top: 11px; }
   @media only screen and (max-width: 40em) {
     .miles-top-bar {
-      height: 48px;
-      line-height: 48px; } }
+      height: 43px;
+      line-height: 43px; } }
   @media only screen and (min-width: 40.063em) {
     .miles-top-bar {
       height: 60px;
@@ -6523,11 +6523,11 @@ th.hide-for-touch {
 
 @media only screen and (max-width: 40em) {
   .miles-top-bar-image {
-    height: 34px; } }
+    height: 28px; } }
 @media only screen and (min-width: 40.063em) {
   .miles-top-bar-image {
-    height: 44px;
-    margin-top: 11px; } }
+    height: 40px;
+    margin-top: 7px; } }
 
 .signin-button, .signout-button {
   background-image: url("../images/LoginIcon-01.svg");
