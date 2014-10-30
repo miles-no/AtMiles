@@ -76,14 +76,14 @@ block content
                     li.contact-grid-item(ng-repeat="item in searchResult.Results")
                         div.contact-card
                             img.contact-image(src="{{item.Thumb}}")
+                            a(ng-href="{{apiRoot}}api/company/miles/vcard/{{item.GlobalId}}")
+                                img.contact-vcard.right(title="Download vCard")
                             div.small-7.contact-section.columns
                                 b.contact-text {{item.Name}}
                                 p.contact-text {{item.JobTitle}}
                                 a.contact-email(href="tel:{{item.PhoneNumber}}"){{item.PhoneNumber}}
                                 br
                                 a.contact-email(href="mailto:{{item.Email}}"){{item.Email}}
-                                br
-                                a.contact-email(href="{{apiRoot}}api/company/miles/vcard/{{item.GlobalId}}") Card
                 .row
                     .small-12.small-text-center
                         a.more-button.text-center(ng-show="moreSearchResults" href="#" ng-click="search('true'); $event.preventDefault();") SE FLERE

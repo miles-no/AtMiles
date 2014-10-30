@@ -6679,6 +6679,15 @@ th.hide-for-touch {
 .contact-email {
   font-size: 9pt; }
 
+.contact-vcard {
+  background-image: url("../images/VCardIcon-01.svg");
+  height: 17px;
+  width: 24px;
+  margin-right: 10px;
+  margin-top: 10px; }
+  .contact-vcard:hover {
+    background-image: url("../images/VCardIconHover-01.svg"); }
+
 .more-button {
   background-color: #ffffff;
   text-align: center;
