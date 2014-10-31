@@ -14,3 +14,6 @@ We allow ourself to to "all-out" on ideas, to learn and master techniques, to la
 The only thing we regret is the fact that this problem/domain is not a perfect match for **CQRS/ES**. In almost every situation, this is a typical CRUD-domain, and should be treated that way. The domain lacks the typical concurrent actions that is found in good canditate for CQRS.
 However an event driven architecture is almost never wrong.
 We decided to bend this rule of "best practice" to test out some infrastructure stuff, and in general get some experience with CQRS and EventSourcing.
+
+
+
