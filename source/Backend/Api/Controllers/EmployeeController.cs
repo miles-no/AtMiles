@@ -90,7 +90,7 @@ namespace no.miles.at.Backend.Api.Controllers
             buffer.AppendFormat("TEL;TYPE=cell:{0}\r\n", employee.PhoneNumber);
             buffer.AppendFormat("ORG:Miles;{0}\r\n", employee.OfficeName);
             buffer.AppendFormat("TITLE:{0}\r\n", employee.JobTitle);
-            buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
+       //     buffer.AppendFormat("BDAY:{0}\r\n", employee.DateOfBirth.ToString("yyyyMMdd"));
             buffer.AppendLine("URL:http://www.miles.no\r\n");
 
             if (employee.Thumb != null && employee.Thumb.Length > 100)
