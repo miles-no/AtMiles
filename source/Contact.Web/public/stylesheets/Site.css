@@ -6523,10 +6523,12 @@ th.hide-for-touch {
 
 @media only screen and (max-width: 40em) {
   .miles-top-bar-image {
-    height: 28px; } }
+    height: 28px;
+    width: 103px; } }
 @media only screen and (min-width: 40.063em) {
   .miles-top-bar-image {
     height: 40px;
+    width: 142px;
     margin-top: 7px; } }
 
 .signin-button, .signout-button {
