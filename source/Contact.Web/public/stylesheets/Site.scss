@@ -31,9 +31,11 @@ $primary-color: #A01D04;
 .miles-top-bar-image {
   @media #{$small-only} {
     height: 28px;
+    width: 103px;
   }
   @media #{$medium-up} {
     height: 40px;
+    width: 142px;
     margin-top: ($topbar-button-top - 8px);
   }
 }
