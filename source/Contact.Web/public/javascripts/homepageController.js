@@ -12,7 +12,7 @@
     $scope.$on('auth0.authenticated', function (prof) {
 
         $scope.isAuthenticated = true;
-
+        $scope.search(false);
     });
 
     $scope.login = function () {
@@ -23,6 +23,7 @@
             store.set('profile', profile);
             store.set('token', id_token);
             $scope.isAuthenticated = true;
+            $scope.search(false);
         }, function () {
             $scope.isAuthenticated = false;
         });
@@ -58,19 +59,9 @@
         }
         var tmpTerm = $scope.queryTerm;
 
-        if (!tmpTerm || tmpTerm == '') {
-            $scope.selectedEmployee = null;
-            while ($scope.searchResult.Results.length > 0) {
-                skip = 0;
-                $scope.searchResult.Results.pop();
-            }
-
-            return;
-        }
         if (!add) {
             skip = 0;
         }
-
 
         $timeout(function () {
             if (tmpTerm == $scope.queryTerm) {
