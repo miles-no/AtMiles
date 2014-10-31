@@ -395,14 +395,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "source/Backend/Api/Controllers/EmployeeController.cs",
-			"settings":
-			{
-				"buffer_size": 14772,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -512,12 +504,15 @@
 		"/Users/royveshovda/src/AtMiles/source",
 		"/Users/royveshovda/src/AtMiles/source/Backend",
 		"/Users/royveshovda/src/AtMiles/source/Backend/Api",
-		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Controllers"
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Controllers",
+		"/Users/royveshovda/src/AtMiles/source/Contact.Web/public"
 	],
 	"file_history":
 	[
-		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Constants.cs",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Controllers/RootController.cs",
+		"/Users/royveshovda/src/AtMiles/docs/README.md",
 		"/Users/royveshovda/src/AtMiles/source/Backend/Api/Controllers/EmployeeController.cs",
+		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Constants.cs",
 		"/Users/royveshovda/src/AtMiles/source/Contact.Web/config.rb",
 		"/Users/royveshovda/src/AtMiles/source/Backend/Domain.Test/CompareObjects.cs",
 		"/Users/royveshovda/src/AtMiles/source/Backend/Domain/Aggregates/Company.cs",
@@ -641,9 +636,7 @@
 		"/Users/royveshovda/src/angular-seed-master/app/js/directives.js",
 		"/Users/royveshovda/src/angular-seed-master/app/js/filters.js",
 		"/Applications/Android Studio.app/sdk/extras/google/google_play_services/source.properties",
-		"/Users/royveshovda/Erlang/Rosalind/src/revp.erl",
-		"/Users/royveshovda/Erlang/Rosalind/testdata/Rosalind_24.txt",
-		"/Users/royveshovda/Erlang/Rosalind/src/subs.erl"
+		"/Users/royveshovda/Erlang/Rosalind/src/revp.erl"
 	],
 	"find":
 	{
@@ -692,39 +685,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "source/Backend/Api/Controllers/EmployeeController.cs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14772,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3450,
-								3450
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1602.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
