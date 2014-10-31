@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Raven.Abstractions.Data;
 using Raven.Client;
 
 namespace no.miles.at.Backend.ReadStore.SearchStore
@@ -25,6 +26,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
         public IEnumerable<EmployeeSearchModel> FulltextSearch(string searchString, int take, int skip, out int total)
         {
             searchString = searchString ?? string.Empty;
+            var empty = (searchString.Trim() == string.Empty) || (searchString.Trim() == "*");
             //Maybe more special character handling is needed here
             searchString = searchString.Replace("#", "sharp");
 
@@ -40,12 +42,21 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
 
                 tmp = search.Aggregate(tmp, (current, s) => current.Search(x => x.Content, s, 1, SearchOptions.And, EscapeQueryOptions.AllowPostfixWildcard));
 
+                if (empty)
+                {
+                    results = tmp.OrderBy(o => o.Name).Skip(skip).Take(take)
+                        .As<EmployeeSearchModel>().ToList();
+                }
 
-                results = tmp
-                        .Skip(skip) 
+                else
+                {
+                    results = tmp
+                        .Skip(skip)
                         .Take(take)
                         .As<EmployeeSearchModel>().ToList();
-                
+
+                }
+
                 foreach (var personSearchModel in results)
                 {
                     personSearchModel.Score = session.Advanced.GetMetadataFor(personSearchModel).Value<double>("Temp-Index-Score");

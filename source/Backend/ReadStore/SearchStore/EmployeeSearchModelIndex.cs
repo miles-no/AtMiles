@@ -11,6 +11,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
         {
             public object Content { get; set; }
             public string Company { get; set; }
+            public string Name { get; set; }
         }
 
         public EmployeeSearchModelIndex()
@@ -21,6 +22,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 select new
                 {
                     Company = person.CompanyId,
+                    Name = person.Name,
                     Content = new[] { person.Name, person.Name, person.OfficeName, person.JobTitle, person.Email, 
                         string.Join<object>(" ", person.Competency.Select(s => s.InternationalCompentency)).Replace("#","sharp"), 
                         string.Join<object>(" ", person.Competency.Select(s => s.Competency)).Replace("#","sharp"),
@@ -30,6 +32,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
 
             Index(p => p.Content, FieldIndexing.Analyzed);
             Index(p => p.Company, FieldIndexing.NotAnalyzed);
+            Index(p => p.Name, FieldIndexing.NotAnalyzed);
         }
     }
 
