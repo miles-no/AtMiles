@@ -36,9 +36,9 @@ block content
                     img.banner2-image(src="../images/GirlIcon-01.svg" height="96px" width="96px")
             .row.small-12.small-centered.banner3.columns
                 span.banner3-text Miles AS Copyright 2014&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-                a.banner3-link(href="http://www.miles.no") www.miles.no
+                a.banner3-link(href="http://www.miles.no" target="_blank") www.miles.no
                 span.banner3-text &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-                a.banner3-link(href="mailto:webmaster@miles.no") webmaster@miles.no
+                a.banner3-link(href="https://miles-no.socialcast.com/groups/111332-appmiles" target="_blank") feedback @ SocialCast
         #mainContent.row(ng-show="isAuthenticated")
             .large-12.columns
             .row
@@ -84,7 +84,14 @@ block content
                 .row
                     .small-12.small-text-center
                         a.more-button.text-center(ng-show="moreSearchResults" href="#" ng-click="search('true'); $event.preventDefault();") SE FLERE
-            //.row
+                .row.small-12.small-centered.banner3.columns
+                    span.banner3-text Miles AS Copyright 2014&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                    a.banner3-link(href="http://www.miles.no" target="_blank") www.miles.no
+                    span.banner3-text &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                    a.banner3-link(href="https://miles-no.socialcast.com/groups/111332-appmiles" target="_blank") feedback @ SocialCast
+
+
+             //.row
             //    .large-4.small-12.columns(ng-show="searchResult.Results.length > 0")
             //        table.table.table-striped
             //            tr(ng-repeat="item in searchResult.Results" ng-click="showDetails(item); $event.preventDefault();")
