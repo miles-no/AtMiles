@@ -12,9 +12,9 @@ block content
                             a(href="/" target="_self")
                                 img.miles-top-bar-image(src="../images/MilesIcon-01.svg")
                     ul.right
-                        a.signin-button(ng-show="isAuthenticated == false" ng-click="login()")
+                        a.signin-button(ng-show="isAuthenticated == false" ng-cloak ng-click="login()")
                             span.text-left SIGN IN
-                        a.signout-button(ng-show="isAuthenticated == true" ng-click="logout()") SIGN OUT
+                        a.signout-button(ng-show="isAuthenticated == true" ng-cloak ng-click="logout()") SIGN OUT
         #firstPage.row(ng-show="isAuthenticated == false")
             .row.banner
                 .show-for-medium-up
@@ -40,7 +40,7 @@ block content
                 a.banner3-link(href="http://www.miles.no" target="_blank") www.miles.no
                 span.banner3-text &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
                 a.banner3-link(href="https://miles-no.socialcast.com/groups/111332-appmiles" target="_blank") feedback @ SocialCast
-        #mainContent.row(ng-show="isAuthenticated")
+        #mainContent.row(ng-show="isAuthenticated" ng-cloak)
             .large-12.columns
             .row
                 .large-12.small-12.columns
