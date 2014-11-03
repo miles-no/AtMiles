@@ -201,17 +201,24 @@ $primary-color: #A01D04;
 .main-header-search-button {
   @extend .button;
 //  margin-bottom: 0px;
-  //border: 2px solid white;
- // background-color: transparent;
-  background-image: url("../images/Search-01.svg");
+  border: 2px solid white !important;
+  background-color: #e12100;
+  background-image: url("../images/SearchIcon-01.svg");
   background-repeat: no-repeat;
+  background-position: 8px 6px;
+  background-size: 20px 20px;
 
-  width: 104px;
+  width: 95px;
   height: 37px;
   //font-size: 18pt;
   //font-weight: bold;
- // padding-top: 10px;
  // padding-left: 40px;
+}
+
+.main-header-search-button-label {
+  color: #ffffff;
+  margin-left: 20px;
+  margin-top: 6px;
 }
 
 .busy-image {

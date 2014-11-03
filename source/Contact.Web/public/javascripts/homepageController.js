@@ -1,4 +1,4 @@
-﻿var homepageController = function ($scope, $http, $timeout, $location, auth, store) {
+﻿var homepageController = function ($scope, $http, $timeout, $location, auth, store, $window) {
 
     $scope.apiRoot = "https://api-at.miles.no";
 
@@ -52,6 +52,19 @@
     $scope.searchPerformed = false;
     $scope.moreSearchResults = false;
     $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
+
+    //$scope.searchWidth = 100;
+
+    $(window).resize(function() {
+        $scope.$apply(function() {
+            calculateSearchFieldWidth();
+        });
+    });
+
+    function calculateSearchFieldWidth() {
+        var searchContainer = $('#searchContainer');
+        $scope.searchWidth =  searchContainer.width() - $('#searchButton').width() - 30;
+    }
 
     $scope.search = function (add) {
         if ($scope.queryTerm == lastQueryTerm && !add) {
@@ -228,10 +241,8 @@
     }
 
     angular.element(document).ready(function () {
-
+        calculateSearchFieldWidth();
     });
-
-
 }
 
 var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])

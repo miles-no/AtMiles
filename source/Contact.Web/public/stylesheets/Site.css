@@ -6653,10 +6653,19 @@ th.hide-for-touch {
   background-color: #b32404; }
 
 .main-header-search-button {
-  background-image: url("../images/Search-01.svg");
+  border: 2px solid white !important;
+  background-color: #e12100;
+  background-image: url("../images/SearchIcon-01.svg");
   background-repeat: no-repeat;
-  width: 104px;
+  background-position: 8px 6px;
+  background-size: 20px 20px;
+  width: 95px;
   height: 37px; }
+
+.main-header-search-button-label {
+  color: #ffffff;
+  margin-left: 20px;
+  margin-top: 6px; }
 
 .busy-image {
   position: fixed;
