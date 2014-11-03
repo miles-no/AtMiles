@@ -1,4 +1,4 @@
-﻿var homepageController = function ($scope, $http, $timeout, $location, auth, store, $window) {
+﻿var homepageController = function ($scope, $http, $timeout, $location, auth, store) {
 
     $scope.apiRoot = "https://api-at.miles.no";
 
@@ -6,7 +6,7 @@
     $scope.queryTerm = "";
 
     $scope.errors = [];
-    
+
     $scope.isAuthenticated = false;
 
     $scope.$on('auth0.authenticated', function (prof) {
@@ -53,20 +53,27 @@
     $scope.moreSearchResults = false;
     $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
 
-    //$scope.searchWidth = 100;
-
     $(window).resize(function() {
-        $scope.$apply(function() {
-            calculateSearchFieldWidth();
-        });
-    });
+     $scope.$apply(function() {
+     calculateSearchFieldWidth();
+     });
+     });
 
-    function calculateSearchFieldWidth() {
-        var searchContainer = $('#searchContainer');
-        $scope.searchWidth =  searchContainer.width() - $('#searchButton').width() - 30;
-    }
+     $scope.$watch('isAuthenticated', function(newVal, oldVal) {
+     setTimeout(function(){
+     $scope.$apply(function (){
+     calculateSearchFieldWidth();
+     });
+     },20);
+     });
+
+     function calculateSearchFieldWidth() {
+     var searchContainer = $('#searchContainer');
+     $scope.searchWidth =  searchContainer.width() - $('#searchButton').width() - 30;
+     }
 
     $scope.search = function (add) {
+        console.log("search string=" + $scope.queryTerm + " add=" + add);
         if ($scope.queryTerm == lastQueryTerm && !add) {
             return;
         }
@@ -249,19 +256,19 @@ var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])
     .controller('homepageController', homepageController)
     .config(function ($locationProvider, $httpProvider, authProvider) {
 
-    $locationProvider.html5Mode({
-        enabled: true,
-        requireBase: false
-    });
-    authProvider.init({
-        domain: 'atmiles.auth0.com',
-        clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',
-        callbackURL: location.href
-    });
-    $httpProvider.interceptors.push('authInterceptor');
-})
-.run(function ($rootScope, auth, store) {
-    // This hooks al auth events to check everything as soon as the app starts
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
+        authProvider.init({
+            domain: 'atmiles.auth0.com',
+            clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',
+            callbackURL: location.href
+        });
+        $httpProvider.interceptors.push('authInterceptor');
+    })
+    .run(function ($rootScope, auth, store) {
+        // This hooks al auth events to check everything as soon as the app starts
         auth.hookEvents();
 
         $rootScope.$on('$locationChangeStart', function() {
@@ -272,7 +279,4 @@ var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])
                 }
             }
         });
-
-
-
-});
+    });
