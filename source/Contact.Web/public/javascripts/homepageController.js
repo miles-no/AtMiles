@@ -73,7 +73,6 @@
      }
 
     $scope.search = function (add) {
-        console.log("search string=" + $scope.queryTerm + " add=" + add);
         if ($scope.queryTerm == lastQueryTerm && !add) {
             return;
         }
