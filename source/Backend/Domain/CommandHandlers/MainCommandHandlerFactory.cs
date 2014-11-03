@@ -12,6 +12,9 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             var globalCommandHandler = new GlobalCommandHandler(repositoryCompany, repositoryEmployee, repositoryGlobal, cvPartnerImporter);
 
             cmdHandler.RegisterHandler<ImportDataFromCvPartner>(globalCommandHandler.Handle);
+            cmdHandler.RegisterHandler<EnrichFromAuth0>(globalCommandHandler.Handle);
+            cmdHandler.RegisterHandler<EnrichEmployeeFromAuth0>(globalCommandHandler.Handle);
+            
             cmdHandler.RegisterHandler<AddNewCompanyToSystem>(globalCommandHandler.Handle);
 
 

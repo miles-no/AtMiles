@@ -8,6 +8,7 @@ using no.miles.at.Backend.Api.Models.Api.Tasks;
 using no.miles.at.Backend.Api.Utilities;
 using no.miles.at.Backend.Domain;
 using no.miles.at.Backend.Domain.Commands;
+using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Infrastructure;
 using no.miles.at.Backend.ReadStore.UserStore;
 
@@ -49,6 +50,48 @@ namespace no.miles.at.Backend.Api.Controllers
             }
             
         }
+
+        [HttpPost]
+        [Route("api/company/{companyId}/enrichFromAuth0")]
+        [ResponseType(typeof(Response))]
+        public HttpResponseMessage EnrichFromAuth0(string companyId)
+        {
+            string correlationId = Helpers.CreateNewId();
+            try
+            {
+                var command = new EnrichFromAuth0(companyId, DateTime.UtcNow, Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver), correlationId, Constants.IgnoreVersion);
+
+                return Helpers.Send(Request, _commandSender, command);
+
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("api/company/{companyId}/employee/{employeeId}/enrichFromAuth0")]
+        [ResponseType(typeof(Response))]
+        public HttpResponseMessage EnrichUserFromAuth0(string companyId, string employeeId)
+        {
+            string correlationId = Helpers.CreateNewId();
+            try
+            {
+                var command = new EnrichEmployeeFromAuth0(companyId, employeeId, DateTime.UtcNow, Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver), correlationId, Constants.IgnoreVersion);
+
+                return Helpers.Send(Request, _commandSender, command);
+
+            }
+            catch (Exception ex)
+            {
+                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
+            }
+
+        }
+
+
 
         [HttpGet]
         [Route("api/company/{companyId}/admin")]
@@ -122,4 +165,6 @@ namespace no.miles.at.Backend.Api.Controllers
             return response;
         }
     }
+
+  
 }

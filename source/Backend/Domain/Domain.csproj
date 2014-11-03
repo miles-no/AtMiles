@@ -58,6 +58,8 @@
     <Compile Include="Commands\AddCompanyAdmin.cs" />
     <Compile Include="Commands\AddEmployee.cs" />
     <Compile Include="Commands\ConfirmBusyTimeEntries.cs" />
+    <Compile Include="Commands\EnrichFromAuth0.cs" />
+    <Compile Include="Commands\EnrichEmployeeFromAuth0.cs" />
     <Compile Include="Commands\ImportDataFromCvPartner.cs" />
     <Compile Include="Commands\RemoveBusyTime.cs" />
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
@@ -118,7 +120,12 @@
     <Compile Include="ValueTypes\Picture.cs" />
     <Compile Include="ValueTypes\SimpleUserInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Import.Auth0\Import.Auth0.csproj">
+      <Project>{6E0950E9-5930-4AD4-938E-7D09ADED2D84}</Project>
+      <Name>Import.Auth0</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
