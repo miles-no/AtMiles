@@ -21,6 +21,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         private DateTime _lastImportUpdateFromCvPartnerAt = DateTime.MinValue;
         private readonly List<BusyTimeEntry> _busyTimeEntries;
         private byte[] _importedPictureMd5Hash;
+        private string _lastAuth0Etag = string.Empty;
 
         public string Name
         {
@@ -92,7 +93,9 @@ namespace no.miles.at.Backend.Domain.Aggregates
         
         public void EnrichData(EnrichFromAuth0 message, Auth0User user, Company company, Person createdBy, string correlationId)
         {
-            var ev = new EnrichedFromAuth0(
+            if (_lastAuth0Etag != user.Etag)
+            {
+                var ev = new EnrichedFromAuth0(
                     companyId: company.Id,
                     employeeId: Id,
                     firstName: user.GivenName,
@@ -105,7 +108,8 @@ namespace no.miles.at.Backend.Domain.Aggregates
                     createdBy: createdBy,
                     correlationId: correlationId);
 
-            ApplyChange(ev);
+                ApplyChange(ev);
+            }
         }
 
         private bool IsImportDataNew(CvPartnerImportData import)
@@ -291,6 +295,12 @@ namespace no.miles.at.Backend.Domain.Aggregates
             {
                 _importedPictureMd5Hash = ev.Photo.Md5Hash;
             }
+        }
+
+        [UsedImplicitly] //To keep resharper happy
+        private void Apply(EnrichedFromAuth0 ev)
+        {
+            _lastAuth0Etag = ev.Etag;
         }
 
         [UsedImplicitly] //To keep resharper happy

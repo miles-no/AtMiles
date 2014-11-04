@@ -102,6 +102,7 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
                 {
                     var employee = await _employeeRepository.GetByIdAsync(userId);
                     EnrichUserFromAuth0(employee, user, message, company);
+                    await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
                 }
             }
 

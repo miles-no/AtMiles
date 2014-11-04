@@ -23,9 +23,16 @@ namespace no.miles.at.Backend.Domain.Services
                     picture = await client.DownloadDataTaskAsync(imageUrl);
                     contentType = client.ResponseHeaders["Content-Type"];
 
-                    var urlWithoutQueryParameters = imageUrl.Substring(0, imageUrl.IndexOf("?", StringComparison.Ordinal));
+                    var urlWithoutQueryParameters = imageUrl;
+
+                    if (imageUrl.IndexOf("?", StringComparison.Ordinal) >= 0)
+                    {
+                        urlWithoutQueryParameters = imageUrl.Substring(0, imageUrl.IndexOf("?", StringComparison.Ordinal));
+                    }
+
                     extension = urlWithoutQueryParameters.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal))
                         .Replace(".", string.Empty);
+                    
                     info(string.Format("Found image of . {0} format", extension));
                 }
                 catch (Exception ex)

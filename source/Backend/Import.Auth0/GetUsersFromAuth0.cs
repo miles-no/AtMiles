@@ -26,7 +26,6 @@ namespace Import.Auth0
 
         public async Task<List<Auth0User>> GetUsers()
         {
-
             token = await GetToken();
             return await GetFromAuth0();
         }
