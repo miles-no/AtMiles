@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Import.Auth0;
 using no.miles.at.Backend.Domain.Aggregates;
 using no.miles.at.Backend.Domain.CommandHandlers;
 using no.miles.at.Backend.Import.CvPartner.CvPartner;
@@ -53,7 +54,8 @@ namespace no.miles.at.Backend.Worker
                 var commandSessionRepository = new EventStoreRepository<CommandSession>(config.EventServerHost, null, config.EventServerUsername, config.EventServerPassword);
 
                 var importer = new ImportMiles(config.CvPartnerToken, logger);
-                var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer);
+                var enricher = new GetUsersFromAuth0(config.Auth0Audience, config.Auth0Secret, "https://atmiles.auth0.com");
+                var cmdHandler = MainCommandHandlerFactory.Initialize(companyRepository, employeeRepository, globalRepository, importer, enricher);
                 var cmdReceiver = new RabbitMqCommandHandler(cmdHandler, commandSessionRepository, logger);
 
                 worker = new QueueWorker(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandQueueName, logger, cmdReceiver.MessageHandler);

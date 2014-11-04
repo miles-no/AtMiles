@@ -83,6 +83,10 @@
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Import.Auth0\Import.Auth0.csproj">
+      <Project>{6E0950E9-5930-4AD4-938E-7D09ADED2D84}</Project>
+      <Name>Import.Auth0</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Import.CvPartner\Import.CvPartner.csproj">
       <Project>{b544efbd-81e6-44a0-9423-84abcf1c0b46}</Project>
       <Name>Import.CvPartner</Name>

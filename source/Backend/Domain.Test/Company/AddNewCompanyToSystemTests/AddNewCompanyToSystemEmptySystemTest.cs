@@ -99,7 +99,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.AddNewCompanyToSystemTests
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
             _fakeGlobalRepository = new FakeRepository<Global>(GivenGlobal());
             _fakeImporter = new FakeCvPartnerImporter(new List<CvPartnerImportData>());
-            return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository,_fakeImporter);
+            return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository,_fakeImporter, new FakeEnrichFromAuth0());
         }
 
         private IEnumerable<FakeStreamEvent> GivenGlobal()
