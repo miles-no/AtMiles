@@ -203,9 +203,12 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
                 Competency = null,
                 KeyQualifications = new List<string>(),
                 BusyTimeEntries = new List<EmployeeSearchModel.BusyTime>(),
-                DateOfBirthSetManually = false
+                DateOfBirthSetManually = false,
             };
-
+            if (ev.LoginId != null)
+            {
+                model.Email = ev.LoginId.Email;
+            }
             return model;
         }
 

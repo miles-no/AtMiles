@@ -72,6 +72,8 @@ namespace no.miles.at.Backend.Api
                                     }
                                 }
 
+                                //TODO: Try to get name from identity here
+
                                 var userId = Helpers.GetUserIdentity(subject, resolveUserIdentity);
                                 if (string.IsNullOrEmpty(userId))
                                 {
