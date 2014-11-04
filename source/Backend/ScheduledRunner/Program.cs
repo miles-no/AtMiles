@@ -32,13 +32,14 @@ namespace ScheduledRunner
 
         private static void ImportDataFromAuth0(RabbitMqCommandSender sender, string companyId, ILog logger)
         {
-            logger.Info("Auth0");
-            //var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
-            //var correlationId = IdService.CreateNewId();
-            //var cmd = new ImportDataFromCvPartner(config.CompanyId, DateTime.UtcNow, systemAsPerson, correlationId, Constants.IgnoreVersion);
+            logger.Info("Auth0 starting");
+            var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
+            var correlationId = IdService.CreateNewId();
+            //var cmd = new EnrichWithDataFromAuth0(config.CompanyId, DateTime.UtcNow, systemAsPerson, correlationId, Constants.IgnoreVersion);
             try
             {
                 //sender.Send(cmd);
+                logger.Info("Auth0 completed");
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace ScheduledRunner
             try
             {
                 sender.Send(cmd);
-                logger.Info("CvPartner finish");
+                logger.Info("CvPartner completed");
             }
             catch (Exception ex)
             {
