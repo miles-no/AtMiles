@@ -10,12 +10,17 @@ module.exports = function(app) {
         //res.redirect("/miles"); // defaults to /miles
         res.render('index', {redirectUrl: req.url, notAuthenticated: true })
     });
-    app.get('/test', function(req, res) {
-        res.render('test', { company: req.params.company, redirectUrl: req.url, notAuthenticated: true });
+
+    app.get('/partial/:name', function(req, res) {
+        var name = req.params.name;
+        res.render(name);
     });
-    app.get('/:company', function(req, res) {
-        res.render('index', { company: req.params.company, redirectUrl: req.url, notAuthenticated: true });
+    /*app.get('/login', function(req, res) {
+        res.render('login', { redirectUrl: req.url, notAuthenticated: true });
     });
+    app.get('/search', function(req, res) {
+        res.render('search', { redirectUrl: req.url, notAuthenticated: true });
+    });*/
 
     // route for logging out
     app.get('/logout', function(req, res) {
@@ -24,4 +29,4 @@ module.exports = function(app) {
     });
 
 
-}
+};
