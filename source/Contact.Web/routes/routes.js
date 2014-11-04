@@ -7,7 +7,8 @@ module.exports = function(app) {
 
     // route for home page
     app.get('/', function(req, res) {
-        res.redirect("/miles"); // defaults to /miles 
+        //res.redirect("/miles"); // defaults to /miles
+        res.render('index', {redirectUrl: req.url, notAuthenticated: true })
     });
     app.get('/test', function(req, res) {
         res.render('test', { company: req.params.company, redirectUrl: req.url, notAuthenticated: true });

@@ -252,7 +252,7 @@
     });
 }
 
-var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])
+var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage', 'ngRoute'])
     .controller('homepageController', homepageController)
     .config(function ($locationProvider, $httpProvider, authProvider) {
 
