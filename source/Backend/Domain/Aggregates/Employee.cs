@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Import.Auth0.Model;
 using no.miles.at.Backend.Domain.Annotations;
+using no.miles.at.Backend.Domain.Commands;
 using no.miles.at.Backend.Domain.Events.Employee;
 using no.miles.at.Backend.Domain.Events.Import;
 using no.miles.at.Backend.Domain.Exceptions;
@@ -16,7 +18,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         private string _middleName;
         private string _lastName;
         private Login _loginId;
-        private DateTime _lastImportUpdateAt = DateTime.MinValue;
+        private DateTime _lastImportUpdateFromCvPartnerAt = DateTime.MinValue;
         private readonly List<BusyTimeEntry> _busyTimeEntries;
         private byte[] _importedPictureMd5Hash;
 
@@ -87,6 +89,24 @@ namespace no.miles.at.Backend.Domain.Aggregates
                 ApplyChange(ev);
             }
         }
+        
+        public void EnrichData(EnrichFromAuth0 message, Auth0User user, Company company, Person createdBy, string correlationId)
+        {
+            var ev = new EnrichedFromAuth0(
+                    companyId: company.Id,
+                    employeeId: Id,
+                    firstName: user.GivenName,
+                    lastName: user.FamilyName,
+                    etag: user.Etag,
+                    email: user.PrimaryEmail,
+                    phone: (user.Phones != null && user.Phones.Any()) ? user.Phones.First().Value : null,
+                    photo: user.Picture,
+                    created: DateTime.UtcNow,
+                    createdBy: createdBy,
+                    correlationId: correlationId);
+
+            ApplyChange(ev);
+        }
 
         private bool IsImportDataNew(CvPartnerImportData import)
         {
@@ -113,7 +133,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
 
         private bool ShouldImportBecauseOfDate(DateTime importDate)
         {
-            return importDate > _lastImportUpdateAt;
+            return importDate > _lastImportUpdateFromCvPartnerAt;
         }
 
         public void ConfirmBusyTimeEntries(string companyId, string companyName, Person createdBy, string correlationId)
@@ -266,7 +286,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
         [UsedImplicitly] //To keep resharper happy
         private void Apply(ImportedFromCvPartner ev)
         {
-            _lastImportUpdateAt = ev.UpdatedAt;
+            _lastImportUpdateFromCvPartnerAt = ev.UpdatedAt;
             if (ev.Photo != null)
             {
                 _importedPictureMd5Hash = ev.Photo.Md5Hash;
@@ -312,5 +332,8 @@ namespace no.miles.at.Backend.Domain.Aggregates
         {
             //Empty for now
         }
+       
     }
+
+    
 }

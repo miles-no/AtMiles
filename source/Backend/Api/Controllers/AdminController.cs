@@ -68,29 +68,7 @@ namespace no.miles.at.Backend.Api.Controllers
             {
                 return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
             }
-
         }
-
-        [HttpPost]
-        [Route("api/company/{companyId}/employee/{employeeId}/enrichFromAuth0")]
-        [ResponseType(typeof(Response))]
-        public HttpResponseMessage EnrichUserFromAuth0(string companyId, string employeeId)
-        {
-            string correlationId = Helpers.CreateNewId();
-            try
-            {
-                var command = new EnrichEmployeeFromAuth0(companyId, employeeId, DateTime.UtcNow, Helpers.GetCreatedBy(companyId, User.Identity, _nameResolver), correlationId, Constants.IgnoreVersion);
-
-                return Helpers.Send(Request, _commandSender, command);
-
-            }
-            catch (Exception ex)
-            {
-                return Helpers.CreateErrorResponse(Request, correlationId, ex.Message);
-            }
-
-        }
-
 
 
         [HttpGet]

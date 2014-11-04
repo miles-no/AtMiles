@@ -1,19 +1,19 @@
-﻿using no.miles.at.Backend.Domain.Aggregates;
+﻿using Import.Auth0;
+using no.miles.at.Backend.Domain.Aggregates;
 using no.miles.at.Backend.Domain.Commands;
 
 namespace no.miles.at.Backend.Domain.CommandHandlers
 {
     public static class MainCommandHandlerFactory
     {
-        public static MainCommandHandler Initialize(IRepository<Company> repositoryCompany, IRepository<Employee> repositoryEmployee, IRepository<Global> repositoryGlobal, IImportDataFromCvPartner cvPartnerImporter)
+        public static MainCommandHandler Initialize(IRepository<Company> repositoryCompany, IRepository<Employee> repositoryEmployee, IRepository<Global> repositoryGlobal, IImportDataFromCvPartner cvPartnerImporter, IGetUsersFromAuth0 getUsersFromAuth0)
         {
             var cmdHandler = new MainCommandHandler();
 
-            var globalCommandHandler = new GlobalCommandHandler(repositoryCompany, repositoryEmployee, repositoryGlobal, cvPartnerImporter);
+            var globalCommandHandler = new GlobalCommandHandler(repositoryCompany, repositoryEmployee, repositoryGlobal, cvPartnerImporter,getUsersFromAuth0);
 
             cmdHandler.RegisterHandler<ImportDataFromCvPartner>(globalCommandHandler.Handle);
             cmdHandler.RegisterHandler<EnrichFromAuth0>(globalCommandHandler.Handle);
-            cmdHandler.RegisterHandler<EnrichEmployeeFromAuth0>(globalCommandHandler.Handle);
             
             cmdHandler.RegisterHandler<AddNewCompanyToSystem>(globalCommandHandler.Handle);
 

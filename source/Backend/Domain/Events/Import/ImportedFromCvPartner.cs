@@ -1,4 +1,5 @@
 ﻿using System;
+using Import.Auth0.Model;
 using no.miles.at.Backend.Domain.ValueTypes;
 
 namespace no.miles.at.Backend.Domain.Events.Import

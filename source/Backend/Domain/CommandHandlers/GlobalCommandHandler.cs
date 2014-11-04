@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Import.Auth0;
+using Import.Auth0.Model;
 using no.miles.at.Backend.Domain.Aggregates;
 using no.miles.at.Backend.Domain.Commands;
 using no.miles.at.Backend.Domain.Exceptions;
@@ -13,8 +14,7 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
     public class GlobalCommandHandler :
         Handles<AddNewCompanyToSystem>,
         Handles<ImportDataFromCvPartner>,
-        Handles<EnrichFromAuth0>,
-        Handles<EnrichEmployeeFromAuth0>,
+        Handles<EnrichFromAuth0>
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
@@ -89,35 +89,29 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
             }
         }
 
-       
-
 
         public async Task Handle(EnrichFromAuth0 message)
         {
             var company = await GetCompanyForAdmin(message, message.CompanyId);
-
-
-
-        }
-
-        public async Task Handle(EnrichEmployeeFromAuth0 message)
-        {
-             var company = await GetCompanyForAdmin(message, message.CompanyId);
-            var user = _getUsersFromAuth0.GetUser(message.Email);
- 
-            var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, message.Email));
-
-            if (string.IsNullOrEmpty(userId) == false)
+            var users = await _getUsersFromAuth0.GetUsers();
+            foreach (var user in users)
             {
-                var employee = await _employeeRepository.GetByIdAsync(userId);
-                
-                employee.Name
+                var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, user.PrimaryEmail));
+
+                if (string.IsNullOrEmpty(userId) == false)
+                {
+                    var employee = await _employeeRepository.GetByIdAsync(userId);
+                    EnrichUserFromAuth0(employee, user, message, company);
+                }
             }
-            if (user)
-    
 
         }
-        
+
+        private void EnrichUserFromAuth0(Employee employee, Auth0User user, EnrichFromAuth0 message, Company company)
+        {
+            employee.EnrichData(message, user, company, message.CreatedBy, message.CorrelationId);
+        }
+
         private async Task<Company> GetCompanyForAdmin(Command message, string companyId)
         {
             var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
