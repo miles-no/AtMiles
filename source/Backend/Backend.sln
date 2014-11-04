@@ -22,6 +22,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "WorkerService\WorkerService.csproj", "{183CE247-16CA-4FFF-A053-4383883AB318}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Import.Auth0", "Import.Auth0\Import.Auth0.csproj", "{6E0950E9-5930-4AD4-938E-7D09ADED2D84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledRunner", "ScheduledRunner\ScheduledRunner.csproj", "{39D433E5-C301-467C-8C99-E262620D33E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +70,10 @@ Global
 		{6E0950E9-5930-4AD4-938E-7D09ADED2D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E0950E9-5930-4AD4-938E-7D09ADED2D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E0950E9-5930-4AD4-938E-7D09ADED2D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D433E5-C301-467C-8C99-E262620D33E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D433E5-C301-467C-8C99-E262620D33E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D433E5-C301-467C-8C99-E262620D33E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D433E5-C301-467C-8C99-E262620D33E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

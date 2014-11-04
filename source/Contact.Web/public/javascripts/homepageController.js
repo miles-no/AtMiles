@@ -6,7 +6,7 @@
     $scope.queryTerm = "";
 
     $scope.errors = [];
-    
+
     $scope.isAuthenticated = false;
 
     $scope.$on('auth0.authenticated', function (prof) {
@@ -52,6 +52,25 @@
     $scope.searchPerformed = false;
     $scope.moreSearchResults = false;
     $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
+
+    $(window).resize(function() {
+     $scope.$apply(function() {
+     calculateSearchFieldWidth();
+     });
+     });
+
+     $scope.$watch('isAuthenticated', function(newVal, oldVal) {
+     setTimeout(function(){
+     $scope.$apply(function (){
+     calculateSearchFieldWidth();
+     });
+     },20);
+     });
+
+     function calculateSearchFieldWidth() {
+     var searchContainer = $('#searchContainer');
+     $scope.searchWidth =  searchContainer.width() - $('#searchButton').width() - 30;
+     }
 
     $scope.search = function (add) {
         if ($scope.queryTerm == lastQueryTerm && !add) {
@@ -228,29 +247,27 @@
     }
 
     angular.element(document).ready(function () {
-
+        calculateSearchFieldWidth();
     });
-
-
 }
 
 var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])
     .controller('homepageController', homepageController)
     .config(function ($locationProvider, $httpProvider, authProvider) {
 
-    $locationProvider.html5Mode({
-        enabled: true,
-        requireBase: false
-    });
-    authProvider.init({
-        domain: 'atmiles.auth0.com',
-        clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',
-        callbackURL: location.href
-    });
-    $httpProvider.interceptors.push('authInterceptor');
-})
-.run(function ($rootScope, auth, store) {
-    // This hooks al auth events to check everything as soon as the app starts
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
+        authProvider.init({
+            domain: 'atmiles.auth0.com',
+            clientID: '6jsWdVCPDiKSdSKi2n7naqmy7eeO703H',
+            callbackURL: location.href
+        });
+        $httpProvider.interceptors.push('authInterceptor');
+    })
+    .run(function ($rootScope, auth, store) {
+        // This hooks al auth events to check everything as soon as the app starts
         auth.hookEvents();
 
         $rootScope.$on('$locationChangeStart', function() {
@@ -261,7 +278,4 @@ var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage'])
                 }
             }
         });
-
-
-
-});
+    });
