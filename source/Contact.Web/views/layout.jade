@@ -6,7 +6,7 @@ html
     title @Miles
     link(rel='stylesheet', href='/stylesheets/Site.css')
     block css
-  body
+  body(ng-app="AtMiles")
     
     block content
     
@@ -14,8 +14,9 @@ html
     script(src='/lib/foundation/js/vendor/jquery.js')
     script(src='/lib/foundation/js/vendor/fastclick.js')
     script(src='/lib/foundation/js/foundation.js')
-    script(src='/lib/angular/angular.js')
+    script(src='/lib/angular/angular.min.js')
     script(src='/lib/a0-angular-storage/dist/angular-storage.js')
+    script(src='/lib/angular-route/angular-route.min.js')
 
     script
         $(document).foundation();
