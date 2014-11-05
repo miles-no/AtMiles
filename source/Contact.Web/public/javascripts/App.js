@@ -1,4 +1,4 @@
-var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage', 'ngRoute']);
+var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage', 'ngRoute', 'infinite-scroll']);
 atMiles.config(function ($locationProvider, $httpProvider, authProvider, $routeProvider) {
 
     $locationProvider.html5Mode({
