@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using no.miles.at.Backend.Domain;
+using no.miles.at.Backend.Domain.Services;
 using no.miles.at.Backend.Domain.ValueTypes;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
@@ -55,7 +56,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
             var client = new WebClient();
             client.Headers[HttpRequestHeader.Authorization] = "Token token=\"" + _accessToken + "\"";
             var cv = await DownloadCv(employee, client);
-            var employeePhoto = await DownloadPhoto(cv.Image, cv.Name);
+            var employeePhoto = await DownloadService.DownloadPhoto(cv.Image != null ? cv.Image.Url: null, cv.Name, _logger.Debug, _logger.Error);
 
             var importEmployee = Convert.ToImportFromCvPartner(cv, employee, employeePhoto);
             return importEmployee;
@@ -69,38 +70,6 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner
             var cv = JsonConvert.DeserializeObject<Cv>(rawCv);
             return cv;
         }
-
-        private async Task<Picture> DownloadPhoto(Image image, string name)
-        {
-            Picture photo = null;
-            if (image != null && image.Url != null)
-            {
-                byte[] picture = null;
-                string extension = null;
-                string contentType = string.Empty;
-
-                try
-                {
-                    var client = new WebClient();
-                    picture = await client.DownloadDataTaskAsync(image.Url);
-                    contentType = client.ResponseHeaders["Content-Type"];
-
-                    var urlWithoutQueryParameters = image.Url.Substring(0, image.Url.IndexOf("?", StringComparison.Ordinal));
-                    extension = urlWithoutQueryParameters.Substring(image.Url.LastIndexOf(".", StringComparison.Ordinal))
-                        .Replace(".", string.Empty);
-                    _logger.Debug(string.Format("Found image of . {0} format", extension));
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error("Error downloading image", ex);
-                }
-                if (picture != null)
-                {
-                    var hash = MD5.Create().ComputeHash(picture);
-                    photo = new Picture(name, extension, picture, contentType, hash);
-                }
-            }
-            return photo;
-        }
+       
     }
 }

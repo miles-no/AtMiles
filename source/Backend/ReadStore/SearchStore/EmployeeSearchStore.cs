@@ -35,6 +35,7 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
         {
             handler.RegisterHandler<EmployeeCreated>(HandleEmployeeCreated); 
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
+            handler.RegisterHandler<EnrichedFromAuth0>(HandleEnrich);
            
             handler.RegisterHandler<BusyTimeAdded>(HandleBusyTimeAdded);
             handler.RegisterHandler<BusyTimeConfirmed>(HandleBusyTimeConfirmed);
@@ -42,6 +43,23 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             handler.RegisterHandler<BusyTimeUpdated>(HandleBusyTimeUpdated);
             handler.RegisterHandler<DateOfBirthSet>(HandleBirthDateSet);
             handler.RegisterHandler<PrivateAddressSet>(HandlePrivateAddressSet);
+        }
+
+        private async Task HandleEnrich(EnrichedFromAuth0 ev)
+        {
+            using (var session = _documentStore.OpenAsyncSession())
+            {
+                var existing = await session.LoadAsync<EmployeeSearchModel>(GetRavenId(ev.EmployeeId));
+                if (existing == null)
+                {
+                    return;
+                }
+
+                existing = await Patch(existing, ev);
+
+                await session.StoreAsync(existing);
+                await session.SaveChangesAsync();
+            }
         }
 
         private static List<string> CreateKeyQalifications(IEnumerable<CvPartnerKeyQualification> keyQualifications)
@@ -257,6 +275,35 @@ namespace no.miles.at.Backend.ReadStore.SearchStore
             model.Competency = CreateCompetency(ev.Technologies);
             model.KeyQualifications = CreateKeyQalifications(ev.KeyQualifications);
             model.Descriptions = CreateDescritpions(ev.KeyQualifications);
+            return model;
+        }
+
+        private static async Task<EmployeeSearchModel> Patch(EmployeeSearchModel model, EnrichedFromAuth0 ev)
+        {
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                model.Name = ev.FirstName + " " + ev.LastName;
+                model.FirstName = ev.FirstName;
+                model.LastName = ev.LastName;
+            }
+
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                model.Email = ev.Email;
+            }
+
+            if (string.IsNullOrEmpty(model.PhoneNumber))
+            {
+                model.PhoneNumber = ev.Phone;
+            }
+
+            if ((string.IsNullOrEmpty(model.Thumb) || model.Thumb.Length < 100) && string.IsNullOrEmpty(ev.Photo)== false)
+            {
+                var photo = await DownloadService.DownloadPhoto(ev.Photo, ev.FirstName, Console.WriteLine, (s, ex) => Console.WriteLine("{0}:\n{1}", s, ex.ToString()));
+
+                model.Thumb = CreateThumb(photo, 80);
+            }
+
             return model;
         }
 

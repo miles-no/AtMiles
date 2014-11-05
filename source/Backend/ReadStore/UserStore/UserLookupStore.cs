@@ -30,6 +30,24 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             handler.RegisterHandler<CompanyAdminAdded>(HandleCompanyAdminAdded);
             handler.RegisterHandler<CompanyAdminRemoved>(HandleCompanyAdminRemoved);
             handler.RegisterHandler<ImportedFromCvPartner>(HandleImportCvPartner);
+            handler.RegisterHandler<EnrichedFromAuth0>(EnrichFromCvPartner);
+        }
+
+        private async Task EnrichFromCvPartner(EnrichedFromAuth0 ev)
+        {
+            using (var session = _documentStore.OpenAsyncSession())
+            {
+                var existing = await session.LoadAsync<UserLookupModel>(GetRavenId(ev.EmployeeId));
+                if (existing == null)
+                {
+                    return;
+                }
+
+                existing = Patch(existing, ev);
+
+                await session.StoreAsync(existing);
+                await session.SaveChangesAsync();
+            }
         }
 
         private async Task HandleImportCvPartner(ImportedFromCvPartner ev)
@@ -122,6 +140,20 @@ namespace no.miles.at.Backend.ReadStore.UserStore
             };
         }
 
+        private static UserLookupModel Patch(UserLookupModel model, EnrichedFromAuth0 ev)
+        {
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                model.Name = ev.FirstName + " " + ev.LastName;
+            }
+
+
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                model.Email = ev.Email;
+            }
+            return model;
+        }
 // ReSharper disable once UnusedParameter.Local
         private static UserLookupModel Patch(UserLookupModel model, ImportedFromCvPartner ev)
         {

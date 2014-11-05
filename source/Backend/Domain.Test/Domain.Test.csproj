@@ -78,6 +78,7 @@
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeUnknownAdminTest.cs" />
     <Compile Include="Employee\AddEmployeeTests\AddEmployeeWithoutPermissionTest.cs" />
     <Compile Include="Employee\ConfirmBusyTimeEntriesTests\ConfirmBusyTimeEntriesTest.cs" />
+    <Compile Include="Employee\EnrichFromAuth0\EnrichCommandTest.cs" />
     <Compile Include="Employee\RemoveBusyTimeTests\RemoveBusyTimeTest.cs" />
     <Compile Include="Employee\RemoveBusyTimeTests\RemoveBusyTimeTestNotSelf.cs" />
     <Compile Include="Employee\RemoveBusyTimeTests\RemoveBusyTimeUnknownTest.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Employee\UpdateBusyTimeTests\UpdateBusyTimeUnknownTest.cs" />
     <Compile Include="EventSpecification.cs" />
     <Compile Include="FakeCvPartnerImporter.cs" />
+    <Compile Include="FakeEnrichFromAuth0.cs" />
     <Compile Include="FakeRepository.cs" />
     <Compile Include="FakeStreamEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +114,10 @@
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{c9ee6d55-7258-4472-86ac-838f6ae045ab}</Project>
       <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Import.Auth0\Import.Auth0.csproj">
+      <Project>{6E0950E9-5930-4AD4-938E-7D09ADED2D84}</Project>
+      <Name>Import.Auth0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

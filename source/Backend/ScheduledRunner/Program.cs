@@ -35,10 +35,10 @@ namespace ScheduledRunner
             logger.Info("Auth0 starting");
             var systemAsPerson = new Person(Constants.SystemUserId, Constants.SystemUserId);
             var correlationId = IdService.CreateNewId();
-            //var cmd = new EnrichWithDataFromAuth0(config.CompanyId, DateTime.UtcNow, systemAsPerson, correlationId, Constants.IgnoreVersion);
+            var cmd = new EnrichFromAuth0(companyId, DateTime.UtcNow, systemAsPerson, correlationId, Constants.IgnoreVersion);
             try
             {
-                //sender.Send(cmd);
+                sender.Send(cmd);
                 logger.Info("Auth0 completed");
             }
             catch (Exception ex)

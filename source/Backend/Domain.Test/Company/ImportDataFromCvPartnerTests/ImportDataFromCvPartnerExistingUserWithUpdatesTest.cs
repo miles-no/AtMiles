@@ -134,7 +134,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             _fakeEmployeeRepository = new FakeRepository<Aggregates.Employee>(GivenEmployee());
             _fakeGlobalRepository = new FakeRepository<Global>(GivenGlobal());
             _fakeImporter = new FakeCvPartnerImporter(new List<CvPartnerImportData>(new[]{_importData2} ));
-            return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository, _fakeImporter);
+            return new GlobalCommandHandler(_fakeCompanyRepository, _fakeEmployeeRepository, _fakeGlobalRepository, _fakeImporter, new FakeEnrichFromAuth0());
         }
 
         protected override IEnumerable<Event> Expect()
