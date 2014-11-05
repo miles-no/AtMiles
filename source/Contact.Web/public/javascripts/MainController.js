@@ -1,39 +1,41 @@
 ﻿(function (module) {
     module.controller('MainController', function ($scope, $http, $timeout, $location, auth, store, $rootScope) {
-        $scope.apiRoot = "https://api-at.miles.no";
 
         $rootScope.isAuthenticated = false;
 
+        //pick up login from Auth0
         $scope.$on('auth0.authenticated', function (prof) {
 
             $rootScope.isAuthenticated = true;
         });
 
-        $scope.$on("loggedIn", function(event, id_token) {
-            $rootScope.isAuthenticated = true;
+        //listen to event from LoginController when user click login on page
+        $rootScope.$on("doLogin", function() {
+            $scope.login();
+        });
+        $rootScope.$on("doLogout", function() {
+            $scope.logout();
         });
 
-        $scope.$on("loggedOut", function(event, id_token) {
-            $rootScope.isAuthenticated = false;
-        });
+        $scope.login = function () {
 
-        var getCompany = function () {
-            // Used to divide into companies. Useless just now
-            return '';
-            //var p = $location.path().split("/");
-            //return p[1] || "Unknown";
+            auth.signin({
+                popup: true
+            }, function (profile, id_token) {
+                store.set('profile', profile);
+                store.set('token', id_token);
+                $rootScope.isAuthenticated = true;
+                $location.path('/search');
+            }, function () {
+                $rootScope.isAuthenticated = false;
+                $location.path('/login');
+            });
         }
-        var lastQueryTerm = null;
-        var maxSearchResults = 21;
 
-        var skip = 0;
-        var take = maxSearchResults;
-
-        $scope.selectedEmployee = null;
-        $scope.dataLoading = false; //used to detect when we're waiting for data
-
-        $scope.searchPerformed = false;
-        $scope.moreSearchResults = false;
-        $scope.searchResult = { Results: [], Skipped: 0, Total: 0 };
+        $scope.logout = function () {
+            auth.signout();
+            $rootScope.isAuthenticated = false;
+            $location.path('/login');
+        };
     });
 }(angular.module('AtMiles')));

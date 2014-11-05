@@ -1,12 +1,14 @@
 row#atMilesPage
-   #firstPage.row(ng-show="isAuthenticated == false")
+   #firstPage.row
       .row.banner
          .show-for-medium-up
             .medium-12.large-12.medium-centered.banner.columns.text-center
                img(src="../images/MilesHomeImage.png" height="366px")
             .centered-button-container
-               a.button.medium.radius(ng-click="login()") LOGIN AND SEARCH
-         .show-for-small-only
+
+               a.button.medium.radius(ng-hide="isAuthenticated" ng-click="doLogin()") LOGIN AND SEARCH
+               a.button.medium.radius(ng-show="isAuthenticated" ng-click="doLogout()") LOGOUT
+          .show-for-small-only
             .small-12.small-centered.columns
                img.twelve-columns(src="../images/HomeSceneImageMobile-01.jpg" height="153px" width="100%")
       .row.small-12.small-centered.banner2.columns

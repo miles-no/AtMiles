@@ -1,13 +1,14 @@
 ﻿extends layout
 
 block scripts
-    script(src='/javascripts/homepageController.js')
+    script(src='/javascripts/App.js')
+    script(src='/javascripts/MainController.js')
+    script(src='/javascripts/SearchController.js')
+    script(src='/javascripts/LoginController.js')
+    script(src='/javascripts/DataFactory.js')
+
 
 block content
-    a(href="/login") login
-    br
-    a(href="/search") search
-
     div.contain-to-grid(ng-controller="MainController")
         nav.miles-top-bar
             section
@@ -18,5 +19,5 @@ block content
                     a.signin-button(ng-show="isAuthenticated == false" ng-cloak ng-click="login()")
                         span.text-left SIGN IN
                     a.signout-button(ng-show="isAuthenticated == true" ng-cloak ng-click="logout()") SIGN OUT
-    div(ng-view)
+     div(ng-view)
 

@@ -1,38 +1,16 @@
 (function(module) {
-     var SearchController = function ($scope, $http, $timeout, $location, auth, store) {
-        $scope.apiRoot = "https://api-at.miles.no";
+     var SearchController = function ($scope, $http, $timeout, $location, auth, store, $rootScope, DataFactory) {
 
+        //redirect to login page if not authenticated
+        if($rootScope.isAuthenticated == false) {
+            $location.path('/login');
+        }
+
+        $scope.apiRoot = "https://api-at.miles.no";
 
         $scope.queryTerm = "";
 
         $scope.errors = [];
-
-        $scope.isAuthenticated = false;
-
-        $scope.$on('auth0.authenticated', function (prof) {
-
-            $scope.isAuthenticated = true;
-            $scope.search(false);
-        });
-
-        $scope.login = function () {
-
-            auth.signin({
-                popup: true
-            }, function (profile, id_token) {
-                store.set('profile', profile);
-                store.set('token', id_token);
-                $scope.isAuthenticated = true;
-                $scope.search(false);
-            }, function () {
-                $scope.isAuthenticated = false;
-            });
-        }
-
-        $scope.logout = function () {
-            auth.signout();
-            $scope.isAuthenticated = false;
-        };
 
         var getCompany = function () {
             // Used to divide into companies. Useless just now
@@ -85,14 +63,11 @@
             $timeout(function () {
                 if (tmpTerm == $scope.queryTerm) {
                     $scope.dataLoading = true;
-                    var res = $http({
-                        method: 'GET',
-                        url: $scope.apiRoot + getCompany() +"/api/Search/fulltext?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(tmpTerm),
-                        withCredentials: true
-                    });
+                    var res = DataFactory.search($scope.apiRoot, tmpTerm,take, skip);
 
                     res.success(function (data) {
                         $scope.dataLoading = false;
+                        console.log(data);
 
                         if (data.Error) {
                             $scope.errors.push(data.Error);
@@ -249,7 +224,11 @@
         angular.element(document).ready(function () {
             calculateSearchFieldWidth();
         });
-    };
+
+         //trigger initial search
+         $scope.search(false);
+
+     };
 
     module.controller('SearchController', SearchController);
 
