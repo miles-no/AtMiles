@@ -10,6 +10,8 @@ $primary-color: #A01D04;
 
 @import "../lib/foundation/scss/normalize";
 @import "../lib/foundation/scss/foundation";
+@import "messenger.css";
+@import "messenger-theme-air.css";
 
 //START: Styles to the FIRST PAGE
 .miles-top-bar {
