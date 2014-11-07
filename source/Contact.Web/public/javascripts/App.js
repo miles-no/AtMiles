@@ -1,4 +1,4 @@
-var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage', 'ngRoute', 'infinite-scroll']);
+var atMiles = angular.module('AtMiles', ['auth0', 'angular-storage', 'ngRoute', 'infinite-scroll', 'debounce']);
 atMiles.config(function ($locationProvider, $httpProvider, authProvider, $routeProvider) {
 
     $locationProvider.html5Mode({
@@ -29,3 +29,8 @@ atMiles.run(function ($rootScope, auth, store) {
         }
     });
 });
+
+Messenger.options = {
+    extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+    theme: 'air'
+}

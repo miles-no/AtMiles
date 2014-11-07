@@ -1,11 +1,6 @@
 #mainContent.row(ng-show="isAuthenticated" ng-cloak)
    .large-12.columns
    .row
-      .large-12.small-12.columns
-         div(ng-repeat="error in errors")
-            p.error
-            {{error}}
-   .row
       .small-12.main-header.columns
          h1.main-header-text1 Make contact
          h3.main-header-text2 with other Miles consultants !
@@ -14,15 +9,11 @@
             .small-12.columns
                #searchContainer.small-12.medium-9.columns.small-centered.main-header-search-container
                   label
-                     input.left.input-lg.main-header-search-input(ng-style="{'width' : searchWidth}" ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
+                     input.left.input-lg.main-header-search-input(ng-style="{'width' : searchWidth}" ng-model="queryTerm" debounce="250" type="text" placeholder="Search for employee..")
                   #searchButton.right.a.main-header-search-button.postfix(ng-click="search()")
                      label.main-header-search-button-label Search
                   div(style="clear:both;")
-
-         //.small-9.small-centered.main-page-search-box.columns
-         //    input.left.input-lg.main-header-search-input(ng-keyup="search()" ng-model="queryTerm" ng-model-options="{debounce: 250}" type="text" placeholder="Search for employee..")
-         //    a.main-header-search-button(ng-click="search()") &nbsp;Search
-   .row.contact-results
+   .row.contact-results(infinite-scroll="search('true')" infinite-scroll-disabled="searching")
       .small-12.columns.small-centered.text-center
          img.busy-image(src="../images/busy.gif" ng-show="dataLoading")
       div.result-text(ng-show="searchPerformed == true") Miles Consultants {{searchResult.Results.length}} / {{totalHits}}
@@ -38,14 +29,12 @@
                   a.contact-email(href="tel:{{item.PhoneNumber}}"){{item.PhoneNumber}}
                   br
                   a.contact-email(href="mailto:{{item.Email}}"){{item.Email}}
-      .row
-         .small-12.small-text-center
-            a.more-button.text-center(ng-show="moreSearchResults" href="#" ng-click="search('true'); $event.preventDefault();") SE FLERE
-      .row.small-12.small-centered.banner3.columns
-         span.banner3-text Miles AS Copyright 2014&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-         a.banner3-link(href="http://www.miles.no" target="_blank") www.miles.no
-         span.banner3-text &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-         a.banner3-link(href="https://miles-no.socialcast.com/groups/111332-appmiles" target="_blank") feedback @ SocialCast
+   .row
+      .small-12.small-centered.banner3.columns
+          span.banner3-text Miles AS Copyright 2014&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+          a.banner3-link(href="http://www.miles.no" target="_blank") www.miles.no
+          span.banner3-text &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+          a.banner3-link(href="https://miles-no.socialcast.com/groups/111332-appmiles" target="_blank") feedback @ SocialCast
 
             //    .large-8.small-12.columns.panel(ng-show="selectedEmployee")
                        //        h3(ng-bind="selectedEmployee.name")
