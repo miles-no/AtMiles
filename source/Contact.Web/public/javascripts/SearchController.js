@@ -9,8 +9,12 @@
         $scope.apiRoot = "https://api-at.miles.no";
 
         $scope.queryTerm = "";
+        $scope.$watch('queryTerm', function() {
+            $scope.search(false);
+        });
 
-        $scope.errors = [];
+
+        $scope.searching = false;  //monitor for making search execute in one instance
 
         var getCompany = function () {
             // Used to divide into companies. Useless just now
@@ -19,7 +23,7 @@
             //return p[1] || "Unknown";
         }
         var lastQueryTerm = null;
-        var maxSearchResults = 21;
+        var maxSearchResults = 9;
 
         var skip = 0;
         var take = maxSearchResults;
@@ -51,7 +55,20 @@
         }
 
         $scope.search = function (add) {
+            //mointor to avoid multiple searches starting simultaneously
+            //this was needed after introducing infinite-scroll
+            if($scope.searching) {
+                return;
+            }
+            $scope.searching = true;
+
+            if(add && $scope.moreSearchResults == false) {
+                $scope.searching = false;
+                return;
+            }
+
             if ($scope.queryTerm == lastQueryTerm && !add) {
+                $scope.searching = false;
                 return;
             }
             var tmpTerm = $scope.queryTerm;
@@ -67,10 +84,14 @@
 
                     res.success(function (data) {
                         $scope.dataLoading = false;
-                        console.log(data);
 
                         if (data.Error) {
-                            $scope.errors.push(data.Error);
+                            Messenger().post({
+                                message: 'Error retrieving data: ' + data.Error,
+                                type: 'error',
+                                showCloseButton: true
+                            });
+                            $scope.searching = false;
                             return;
                         }
                         if (tmpTerm == $scope.queryTerm) {
@@ -100,11 +121,40 @@
                                 //if ($scope.searchResult.Results.length == 1) {
                                 //    $scope.showDetails($scope.searchResult.Results[0]);
                                 //}
+                                $scope.searching = false;
                             }
+                            else {
+                                $scope.searching = false;
+                            }
+                         }
+                        else {
+                            $scope.searching = false;
                         }
+                    }).error( function(data, status, headers, config) {
+                        console.log("Error retrieving data:");
+                        console.log("data:");
+                        console.log(data);
+                        console.log("status:");
+                        console.log(status);
+                        console.log("headers:");
+                        console.log(headers);
+                        console.log("config:");
+                        console.log(config);
+                        $scope.dataLoading = false;
+                        $timeout(function(){
+                            $scope.searching = false;
+                        }, 5000);
+                        Messenger().post({
+                            message: 'Failed to retrieve data. Please try again. Check console for errors and report back',
+                            type: 'error',
+                            showCloseButton: true
+                        });
                     });
                 }
-            }, 250);
+                else {
+                    $scope.searching = false;
+                }
+             }, 250);
         };
 
 
@@ -224,10 +274,6 @@
         angular.element(document).ready(function () {
             calculateSearchFieldWidth();
         });
-
-         //trigger initial search
-         $scope.search(false);
-
      };
 
     module.controller('SearchController', SearchController);
