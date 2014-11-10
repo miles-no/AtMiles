@@ -1,11 +1,6 @@
 (function(module) {
      var SearchController = function ($scope, $http, $timeout, $location, auth, store, $rootScope, DataFactory) {
 
-        //redirect to login page if not authenticated
-        if($rootScope.isAuthenticated == false) {
-            $location.path('/login');
-        }
-
         $scope.apiRoot = "https://api-at.miles.no";
 
         $scope.queryTerm = "";
