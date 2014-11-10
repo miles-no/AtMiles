@@ -32,6 +32,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+
 import no.miles.atmiles.employee.EmployeeDetailsResponse;
 import no.miles.atmiles.employee.SearchResultModel;
 
@@ -70,7 +75,7 @@ public class EmployeeDetailFragment extends Fragment {
             final String token = new AuthenticationHelper().getJsonWebToken(getActivity());
 
             //TODO: Get base from a more central place
-            String searchUrl = "http://milescontact.cloudapp.net/api/company/miles/employee/" + URLEncoder.encode(employeeId);
+            String searchUrl = "https://api-at.miles.no/api/company/miles/employee/" + URLEncoder.encode(employeeId);
 
             //TODO: Save reference to be able to cancel if new search is started before the previous is completed
             new CallSearchApi().execute(searchUrl, token);
@@ -175,6 +180,7 @@ public class EmployeeDetailFragment extends Fragment {
 
     private void updateDataInView(View rootView) {
         if(mItem != null) {
+
             if(mItem.Name != null) {
                 ((TextView) rootView.findViewById(R.id.employee_detail)).setText(mItem.Name);
             }
@@ -203,10 +209,65 @@ public class EmployeeDetailFragment extends Fragment {
             public void run() {
                 mItem = data;
                 if (mItem != null) {
+
+                    getActivity().setTitle(mItem.Name);
+
                     Bitmap decodedByte = ConvertToImage(mItem.Thumb);
 
                     ((ImageView) getActivity().findViewById(R.id.employee_thumbnail)).setImageBitmap(decodedByte);
                     ((TextView) getActivity().findViewById(R.id.employee_detail)).setText(mItem.Name);
+
+
+                    if(mItem.JobTitle != null){
+                        ((TextView) getActivity().findViewById(R.id.employee_title)).setText(mItem.JobTitle);
+                    }
+
+                    if(mItem.Descriptions != null && mItem.Descriptions.length > 0){
+                        TextView qualificationView = (TextView) getActivity().findViewById(R.id.employee_qualifications);
+
+                        EmployeeDetailsResponse.Description description = mItem.Descriptions[0];
+
+
+
+                        if(description.InternationalDescription  != null && description.InternationalDescription.length() > 0){
+                            qualificationView.setText(description.InternationalDescription);
+                        }else{
+                            qualificationView.setText(description.LocalDescription);
+                        }
+
+                    }
+
+                    TextView phone = ((TextView) getActivity().findViewById(R.id.employee_phone));
+                    phone.setText(mItem.PhoneNumber);
+                    phone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                            callIntent.setData(Uri.parse("tel:" + mItem.PhoneNumber));
+                            startActivity(callIntent);
+                        }
+                    });
+
+                    TextView mail = ((TextView) getActivity().findViewById(R.id.employee_mail));
+                    mail.setText(mItem.Email);
+                    mail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
+                            mailIntent.setType("text/plain");
+                            mailIntent.setData(Uri.parse("mailto:" + mItem.Email));
+                            startActivity(mailIntent);
+                        }
+                    });
+
+                    TextView share = ((TextView) getActivity().findViewById(R.id.employee_share));
+                    share.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            return;
+                        }
+                    });
+
                 }
             }
         });

@@ -5,13 +5,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <fragment
-        android:id="@+id/search_fragment"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="no.miles.atmiles.SearchFragment"
-        tools:context=".SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        android:gravity="center_horizontal"/>
+
 
     <fragment
     android:id="@+id/employee_list"

@@ -1,23 +1,16 @@
 package no.miles.atmiles;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +23,7 @@ import java.net.URLEncoder;
 import no.miles.atmiles.employee.SearchResultModel;
 
 public class EmployeeListActivity extends Activity
-        implements EmployeeListFragment.Callbacks, OnSearchStringChangeListener {
+        implements EmployeeListFragment.Callbacks, SearchView.OnQueryTextListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +46,16 @@ public class EmployeeListActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(this);
+
+
+
         return true;
     }
 
@@ -109,27 +112,6 @@ public class EmployeeListActivity extends Activity
         //TODO: Restore state
     }
 
-    @Override
-    public void OnSearchStringChanged(String searchString) {
-        if (!searchString.isEmpty()) {
-
-            //TODO: Remove after proper implementation
-            //showToastOnUiThread(this, searchString);
-
-            final String token = new AuthenticationHelper().getJsonWebToken(this);
-
-            //TODO: Get base from a more central place
-            //TODO: Implement paging
-            //String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query=" + URLEncoder.encode(searchString);
-            String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query=" + URLEncoder.encode(searchString)+"&take=200";
-
-
-            //TODO: Save reference to be able to cancel if new search is started before the previous is completed
-            new CallSearchApi().execute(searchUrl, token);
-        } else {
-            emptyListOnUIThread();
-        }
-    }
 
     private void emptyListOnUIThread() {
         runOnUiThread(new Runnable() {
@@ -145,6 +127,35 @@ public class EmployeeListActivity extends Activity
                 ((EmployeeListFragment) getFragmentManager().findFragmentById(R.id.employee_list)).updateEmployees(data);
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (!query.isEmpty()) {
+
+            //TODO: Remove after proper implementation
+            //showToastOnUiThread(this, searchString);
+
+            final String token = new AuthenticationHelper().getJsonWebToken(this);
+
+            //TODO: Get base from a more central place
+            //TODO: Implement paging
+            //String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query=" + URLEncoder.encode(searchString);
+            String searchUrl = "https://api-at.miles.no/api/search/Fulltext?query=" + URLEncoder.encode(query)+"&take=200";
+
+
+            //TODO: Save reference to be able to cancel if new search is started before the previous is completed
+            new CallSearchApi().execute(searchUrl, token);
+        } else {
+            emptyListOnUIThread();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        return false;
     }
 
 
