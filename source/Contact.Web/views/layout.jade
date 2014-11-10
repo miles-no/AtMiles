@@ -1,12 +1,11 @@
-﻿doctype html
-html
+﻿html
   head
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
     title @Miles
     link(rel='stylesheet', href='/stylesheets/Site.css')
     block css
-  body
+  body(ng-app="AtMiles")
     
     block content
     
@@ -14,8 +13,13 @@ html
     script(src='/lib/foundation/js/vendor/jquery.js')
     script(src='/lib/foundation/js/vendor/fastclick.js')
     script(src='/lib/foundation/js/foundation.js')
-    script(src='/lib/angular/angular.js')
+    script(src='/lib/angular/angular.min.js')
     script(src='/lib/a0-angular-storage/dist/angular-storage.js')
+    script(src='/lib/angular-route/angular-route.min.js')
+    script(src='/lib/nginfinitescroll/src/ng-infinite-scroll.min.js')
+    script(src='/lib/messenger.min.js')
+    script(src='/lib/messenger-theme-future.js')
+    script(src='/lib/ng-debounce/angular-debounce.js')
 
     script
         $(document).foundation();

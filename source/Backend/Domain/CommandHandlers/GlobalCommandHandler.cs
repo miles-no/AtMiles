@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Import.Auth0;
+using Import.Auth0.Model;
 using no.miles.at.Backend.Domain.Aggregates;
 using no.miles.at.Backend.Domain.Commands;
 using no.miles.at.Backend.Domain.Exceptions;
@@ -11,19 +13,22 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
 {
     public class GlobalCommandHandler :
         Handles<AddNewCompanyToSystem>,
-        Handles<ImportDataFromCvPartner>
+        Handles<ImportDataFromCvPartner>,
+        Handles<EnrichFromAuth0>
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly IRepository<Employee> _employeeRepository;
         private readonly IRepository<Global> _globalRepository;
         private readonly IImportDataFromCvPartner _cvPartnerImporter;
+        private readonly IGetUsersFromAuth0 _getUsersFromAuth0;
 
-        public GlobalCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository, IRepository<Global> globalRepository, IImportDataFromCvPartner cvPartnerImporter)
+        public GlobalCommandHandler(IRepository<Company> companyRepository, IRepository<Employee> employeeRepository, IRepository<Global> globalRepository, IImportDataFromCvPartner cvPartnerImporter, IGetUsersFromAuth0 getUsersFromAuth0 )
         {
             _companyRepository = companyRepository;
             _employeeRepository = employeeRepository;
             _globalRepository = globalRepository;
             _cvPartnerImporter = cvPartnerImporter;
+            _getUsersFromAuth0 = getUsersFromAuth0;
         }
 
         public async Task Handle(AddNewCompanyToSystem message)
@@ -73,12 +78,7 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
 
         public async Task Handle(ImportDataFromCvPartner message)
         {
-            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
-            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
-
-            var company = await _companyRepository.GetByIdAsync(message.CompanyId);
-            if (company == null) throw new UnknownItemException("Unknown ID for company");
-            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
+            var company = await GetCompanyForAdmin(message, message.CompanyId);
 
             List<CvPartnerImportData> importData = await _cvPartnerImporter.GetImportData();
 
@@ -87,6 +87,41 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
                 await AddOrUpdateUsers(message, importData, company);
                 await RemoveUsersNotInCvPartnerAnyMore(message, company, importData);
             }
+        }
+
+
+        public async Task Handle(EnrichFromAuth0 message)
+        {
+            var company = await GetCompanyForAdmin(message, message.CompanyId);
+            var users = await _getUsersFromAuth0.GetUsers();
+            foreach (var user in users)
+            {
+                var userId = company.GetUserIdByLoginId(new Login(Constants.GoogleIdProvider, user.PrimaryEmail));
+
+                if (string.IsNullOrEmpty(userId) == false)
+                {
+                    var employee = await _employeeRepository.GetByIdAsync(userId);
+                    EnrichUserFromAuth0(employee, user, message, company);
+                    await _employeeRepository.SaveAsync(employee, Constants.IgnoreVersion);
+                }
+            }
+
+        }
+
+        private void EnrichUserFromAuth0(Employee employee, Auth0User user, EnrichFromAuth0 message, Company company)
+        {
+            employee.EnrichData(message, user, company, message.CreatedBy, message.CorrelationId);
+        }
+
+        private async Task<Company> GetCompanyForAdmin(Command message, string companyId)
+        {
+            var admin = await _employeeRepository.GetByIdAsync(message.CreatedBy.Identifier);
+            if (admin == null) throw new UnknownItemException("Unknown ID for admin");
+
+            var company = await _companyRepository.GetByIdAsync(companyId);
+            if (company == null) throw new UnknownItemException("Unknown ID for company");
+            if (!company.IsCompanyAdmin(admin.Id)) throw new NoAccessException("No access to complete this operation");
+            return company;
         }
 
         private async Task AddOrUpdateUsers(ImportDataFromCvPartner message, IEnumerable<CvPartnerImportData> importData, Company company)
@@ -137,5 +172,6 @@ namespace no.miles.at.Backend.Domain.CommandHandlers
                 company.RemoveEmployee(employee, message.CreatedBy, message.CorrelationId);
             }
         }
+
     }
 }

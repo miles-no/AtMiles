@@ -58,6 +58,7 @@
     <Compile Include="Commands\AddCompanyAdmin.cs" />
     <Compile Include="Commands\AddEmployee.cs" />
     <Compile Include="Commands\ConfirmBusyTimeEntries.cs" />
+    <Compile Include="Commands\EnrichFromAuth0.cs" />
     <Compile Include="Commands\ImportDataFromCvPartner.cs" />
     <Compile Include="Commands\RemoveBusyTime.cs" />
     <Compile Include="Commands\RemoveCompanyAdmin.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Events\Employee\EmployeeTerminated.cs" />
     <Compile Include="Events\Employee\PrivateAddressSet.cs" />
     <Compile Include="Events\Global\CompanyCreated.cs" />
+    <Compile Include="Events\Import\EnrichedFromAuth0.cs" />
     <Compile Include="Events\Import\ImportedFromCvPartner.cs" />
     <Compile Include="Exceptions\AlreadyExistingItemException.cs" />
     <Compile Include="Exceptions\DomainBaseException.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="PrivateReflectionDynamicObject.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DownloadService.cs" />
     <Compile Include="Services\IdService.cs" />
     <Compile Include="Services\NameService.cs" />
     <Compile Include="ValueTypes\Address.cs" />
@@ -117,6 +120,12 @@
     <Compile Include="ValueTypes\Person.cs" />
     <Compile Include="ValueTypes\Picture.cs" />
     <Compile Include="ValueTypes\SimpleUserInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Import.Auth0\Import.Auth0.csproj">
+      <Project>{6E0950E9-5930-4AD4-938E-7D09ADED2D84}</Project>
+      <Name>Import.Auth0</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
