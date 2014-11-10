@@ -1,8 +1,8 @@
 (function (module) {
-    module.controller('LoginController', function($scope, $rootScope){
+    module.controller('LoginController', function($scope, $rootScope, $location){
         //redirect to search page if authenticated
         if($rootScope.isAuthenticated) {
-            $location.path('/search');
+            //$location.path('/search');
         }
 
         $scope.doLogin = function () {
