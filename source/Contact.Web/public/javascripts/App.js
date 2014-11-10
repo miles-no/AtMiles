@@ -14,7 +14,7 @@ atMiles.config(function ($locationProvider, $httpProvider, authProvider, $routeP
     $routeProvider
         .when("/login", {templateUrl: "partial/login", controller: "LoginController"})
         .when("/search", {templateUrl: "partial/search", controller: "SearchController"})
-        .otherwise({ redirectTo: "/search"});
+        .otherwise({ redirectTo: "/login"});
 });
 atMiles.run(function ($rootScope, auth, store) {
     // This hooks al auth events to check everything as soon as the app starts
