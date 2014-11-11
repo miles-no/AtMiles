@@ -5,6 +5,8 @@ public class EmployeeDetailsResponse {
     public String GlobalId;
     public String CompanyId;
     public String OfficeName;
+    public String FirstName;
+    public String LastName;
     public String Name;
     public String DateOfBirth;
     public String JobTitle;

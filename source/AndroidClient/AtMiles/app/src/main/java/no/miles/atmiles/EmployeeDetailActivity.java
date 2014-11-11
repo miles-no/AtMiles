@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import android.widget.Toast;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link EmployeeDetailFragment}.
  */
-public class EmployeeDetailActivity extends Activity {
+public class EmployeeDetailActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,30 +60,6 @@ public class EmployeeDetailActivity extends Activity {
     protected void onResume() {
         super.onResume();
         new AuthenticationHelper().checkLogin(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.employee, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean handled = true;
-        int id = item.getItemId();
-
-        switch(id){
-            case R.id.action_menu_favorites:
-                startActivity(new Intent(this, FavoritesActivity.class));
-                break;
-            case R.id.action_menu_profile:
-                startActivity(new Intent(this, ProfileActivity.class));
-                break;
-            default:
-                handled = super.onOptionsItemSelected(item);
-        }
-        return handled;
     }
 
     @Override
