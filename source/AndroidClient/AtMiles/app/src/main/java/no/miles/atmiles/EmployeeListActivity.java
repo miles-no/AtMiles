@@ -1,6 +1,7 @@
 package no.miles.atmiles;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import no.miles.atmiles.employee.SearchResultModel;
 public class EmployeeListActivity extends Activity
         implements EmployeeListFragment.Callbacks, SearchView.OnQueryTextListener {
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,10 @@ public class EmployeeListActivity extends Activity
         if (savedInstanceState != null) {
             restoreState(savedInstanceState);
         }
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
     }
 
     @Override
@@ -68,24 +75,6 @@ public class EmployeeListActivity extends Activity
         Intent detailIntent = new Intent(this, EmployeeDetailActivity.class);
         detailIntent.putExtra(EmployeeDetailFragment.ARG_ITEM_ID, id);
         startActivity(detailIntent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean handled = true;
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_menu_favorites:
-                startActivity(new Intent(this, FavoritesActivity.class));
-                break;
-            case R.id.action_menu_profile:
-                startActivity(new Intent(this, ProfileActivity.class));
-                break;
-            default:
-                handled = super.onOptionsItemSelected(item);
-        }
-        return handled;
     }
 
     @Override
@@ -143,9 +132,11 @@ public class EmployeeListActivity extends Activity
             //String searchUrl = "http://milescontact.cloudapp.net/api/search/Fulltext?query=" + URLEncoder.encode(searchString);
             String searchUrl = "https://api-at.miles.no/api/search/Fulltext?query=" + URLEncoder.encode(query)+"&take=200";
 
+            CallSearchApi callSearch = new CallSearchApi();
+            callSearch.setProgressDialog(progress);
 
             //TODO: Save reference to be able to cancel if new search is started before the previous is completed
-            new CallSearchApi().execute(searchUrl, token);
+            callSearch.execute(searchUrl, token);
         } else {
             emptyListOnUIThread();
         }
@@ -161,6 +152,17 @@ public class EmployeeListActivity extends Activity
 
     //TODO: Move to service
     private class CallSearchApi extends AsyncTask<String, String, String> {
+
+        private ProgressDialog bar;
+
+        public void setProgressDialog(ProgressDialog bar){
+            this.bar = bar;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            bar.show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -201,6 +203,7 @@ public class EmployeeListActivity extends Activity
                 e.printStackTrace();
             }
             updateListOnUIThread(resultObject);
+            bar.dismiss();
         }
     }
 }

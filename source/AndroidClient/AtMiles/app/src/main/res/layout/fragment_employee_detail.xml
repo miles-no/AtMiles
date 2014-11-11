@@ -51,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:src="@android:drawable/ic_menu_call"/>
                     <TextView
+                        android:paddingTop="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/employee_phone"/>
@@ -65,6 +66,7 @@
                         android:layout_height="wrap_content"
                         android:src="@android:drawable/sym_action_email"/>
                     <TextView
+                        android:paddingTop="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/employee_mail"/>
@@ -79,6 +81,7 @@
                         android:layout_height="wrap_content"
                         android:src="@android:drawable/ic_menu_share"/>
                     <TextView
+                        android:paddingTop="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/employee_share"

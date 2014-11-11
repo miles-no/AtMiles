@@ -1,6 +1,7 @@
 package no.miles.atmiles;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +11,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
-
 import no.miles.atmiles.employee.EmployeeDetailsResponse;
-import no.miles.atmiles.employee.SearchResultModel;
 
 /**
  * A fragment representing a single Employee detail screen.
@@ -69,6 +63,11 @@ public class EmployeeDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        ProgressDialog progress = new ProgressDialog(getActivity());
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+
         if (getArguments().containsKey(ARG_ITEM_ID)) {
 
             String employeeId = getArguments().getString(ARG_ITEM_ID);
@@ -77,8 +76,12 @@ public class EmployeeDetailFragment extends Fragment {
             //TODO: Get base from a more central place
             String searchUrl = "https://api-at.miles.no/api/company/miles/employee/" + URLEncoder.encode(employeeId);
 
+            CallSearchApi callSearch = new CallSearchApi();
+
+            callSearch.setProgressBar(progress);
+
             //TODO: Save reference to be able to cancel if new search is started before the previous is completed
-            new CallSearchApi().execute(searchUrl, token);
+            callSearch.execute(searchUrl, token);
             //TODO: Download data
             mItem = new EmployeeDetailsResponse();
             mItem.GlobalId= employeeId;
@@ -86,32 +89,44 @@ public class EmployeeDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        boolean call = true;
-        //TODO: Check if employee has phone-number
-        if(call) {
-            getActivity().getMenuInflater().inflate(R.menu.call_employee, menu);
-        }
-        getActivity().getMenuInflater().inflate(R.menu.add_employee_to_contacts, menu);
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add(0, v.getId(), 0, "Add to contacts");
+        menu.add(0, v.getId(),1, "Share by email");
     }
 
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean handled = true;
-        int id = item.getItemId();
-
-        switch(id){
-            case R.id.action_menu_call_employee:
-                transferToPhone();
-                break;
-            case R.id.action_menu_add_employee_to_contatcs:
-                addToContacts();
-                break;
-            default:
-                handled = super.onOptionsItemSelected(item);
+    public boolean onContextItemSelected(MenuItem item){
+        if(item.getTitle() == "Add to contacts"){
+            addToContacts();
         }
-        return handled;
+        if(item.getTitle() == "Share by email"){
+            shareByMail();
+        }
+
+        return true;
+    }
+
+    private void shareByMail() {
+        Intent mailIntent = new Intent(Intent.ACTION_SEND);
+        mailIntent.setType("text/plain");
+//        mailIntent.setData(Uri.parse("mailto:" + mItem.Email));
+        startActivity(mailIntent);
+
+        String body = "";
+        if(mItem!=null){
+            body += mItem.Name;
+            body += "\n";
+            body += mItem.JobTitle;
+            body += "\n";
+            body += mItem.PhoneNumber;
+            body += "\n";
+            body += mItem.Email;
+        }
+
+        mailIntent.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(mailIntent);
     }
 
     private void addToContacts() {
@@ -150,18 +165,6 @@ public class EmployeeDetailFragment extends Fragment {
         }
         else{
             Toast.makeText(getActivity(),"No data set", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void transferToPhone() {
-        if(mItem != null && mItem.PhoneNumber != null) {
-            String phoneNumber = mItem.PhoneNumber;
-            Intent callIntent = new Intent(Intent.ACTION_DIAL);
-            callIntent.setData(Uri.parse("tel:" + Uri.encode(phoneNumber.trim())));
-            startActivity(callIntent);
-        }
-        else{
-            Toast.makeText(getActivity(),"No PhoneNumber set", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -264,7 +267,9 @@ public class EmployeeDetailFragment extends Fragment {
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            return;
+                            registerForContextMenu(v);
+                            getActivity().openContextMenu(v);
+                            unregisterForContextMenu(v);
                         }
                     });
 
@@ -274,6 +279,17 @@ public class EmployeeDetailFragment extends Fragment {
     }
 
     private class CallSearchApi extends AsyncTask<String, String, String> {
+
+        ProgressDialog bar;
+
+        public void setProgressBar(ProgressDialog bar){
+            this.bar = bar;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            bar.show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -314,6 +330,9 @@ public class EmployeeDetailFragment extends Fragment {
                 e.printStackTrace();
             }
             updateDataOnUIThread(resultObject);
+            bar.dismiss();
         }
+
+
     }
 }
