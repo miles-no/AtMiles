@@ -9,4 +9,8 @@
     <string name="menu_item_call_employee">Call</string>
     <string name="menu_item_add_employee_to_contacts">Save</string>
     <string name="menu_item_profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="hint">Name</string>
+    <string name="qualifications">Qualifications</string>
+    <string name="share">Share</string>
 </resources>
