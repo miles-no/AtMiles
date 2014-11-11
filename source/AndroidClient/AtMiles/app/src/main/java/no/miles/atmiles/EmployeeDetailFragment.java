@@ -1,6 +1,7 @@
 package no.miles.atmiles;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +11,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +33,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import no.miles.atmiles.employee.EmployeeDetailsResponse;
-import no.miles.atmiles.employee.SearchResultModel;
 
 /**
  * A fragment representing a single Employee detail screen.
@@ -64,16 +63,25 @@ public class EmployeeDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        ProgressDialog progress = new ProgressDialog(getActivity());
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+
         if (getArguments().containsKey(ARG_ITEM_ID)) {
 
             String employeeId = getArguments().getString(ARG_ITEM_ID);
             final String token = new AuthenticationHelper().getJsonWebToken(getActivity());
 
             //TODO: Get base from a more central place
-            String searchUrl = "http://milescontact.cloudapp.net/api/company/miles/employee/" + URLEncoder.encode(employeeId);
+            String searchUrl = "https://api-at.miles.no/api/company/miles/employee/" + URLEncoder.encode(employeeId);
+
+            CallSearchApi callSearch = new CallSearchApi();
+
+            callSearch.setProgressBar(progress);
 
             //TODO: Save reference to be able to cancel if new search is started before the previous is completed
-            new CallSearchApi().execute(searchUrl, token);
+            callSearch.execute(searchUrl, token);
             //TODO: Download data
             mItem = new EmployeeDetailsResponse();
             mItem.GlobalId= employeeId;
@@ -81,32 +89,44 @@ public class EmployeeDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        boolean call = true;
-        //TODO: Check if employee has phone-number
-        if(call) {
-            getActivity().getMenuInflater().inflate(R.menu.call_employee, menu);
-        }
-        getActivity().getMenuInflater().inflate(R.menu.add_employee_to_contacts, menu);
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add(0, v.getId(), 0, "Add to contacts");
+        menu.add(0, v.getId(),1, "Share by email");
     }
 
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean handled = true;
-        int id = item.getItemId();
-
-        switch(id){
-            case R.id.action_menu_call_employee:
-                transferToPhone();
-                break;
-            case R.id.action_menu_add_employee_to_contatcs:
-                addToContacts();
-                break;
-            default:
-                handled = super.onOptionsItemSelected(item);
+    public boolean onContextItemSelected(MenuItem item){
+        if(item.getTitle() == "Add to contacts"){
+            addToContacts();
         }
-        return handled;
+        if(item.getTitle() == "Share by email"){
+            shareByMail();
+        }
+
+        return true;
+    }
+
+    private void shareByMail() {
+        Intent mailIntent = new Intent(Intent.ACTION_SEND);
+        mailIntent.setType("text/plain");
+//        mailIntent.setData(Uri.parse("mailto:" + mItem.Email));
+        startActivity(mailIntent);
+
+        String body = "";
+        if(mItem!=null){
+            body += mItem.Name;
+            body += "\n";
+            body += mItem.JobTitle;
+            body += "\n";
+            body += mItem.PhoneNumber;
+            body += "\n";
+            body += mItem.Email;
+        }
+
+        mailIntent.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(mailIntent);
     }
 
     private void addToContacts() {
@@ -148,18 +168,6 @@ public class EmployeeDetailFragment extends Fragment {
         }
     }
 
-    private void transferToPhone() {
-        if(mItem != null && mItem.PhoneNumber != null) {
-            String phoneNumber = mItem.PhoneNumber;
-            Intent callIntent = new Intent(Intent.ACTION_DIAL);
-            callIntent.setData(Uri.parse("tel:" + Uri.encode(phoneNumber.trim())));
-            startActivity(callIntent);
-        }
-        else{
-            Toast.makeText(getActivity(),"No PhoneNumber set", Toast.LENGTH_LONG).show();
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -175,6 +183,7 @@ public class EmployeeDetailFragment extends Fragment {
 
     private void updateDataInView(View rootView) {
         if(mItem != null) {
+
             if(mItem.Name != null) {
                 ((TextView) rootView.findViewById(R.id.employee_detail)).setText(mItem.Name);
             }
@@ -203,16 +212,84 @@ public class EmployeeDetailFragment extends Fragment {
             public void run() {
                 mItem = data;
                 if (mItem != null) {
+
+                    getActivity().setTitle(mItem.Name);
+
                     Bitmap decodedByte = ConvertToImage(mItem.Thumb);
 
                     ((ImageView) getActivity().findViewById(R.id.employee_thumbnail)).setImageBitmap(decodedByte);
                     ((TextView) getActivity().findViewById(R.id.employee_detail)).setText(mItem.Name);
+
+
+                    if(mItem.JobTitle != null){
+                        ((TextView) getActivity().findViewById(R.id.employee_title)).setText(mItem.JobTitle);
+                    }
+
+                    if(mItem.Descriptions != null && mItem.Descriptions.length > 0){
+                        TextView qualificationView = (TextView) getActivity().findViewById(R.id.employee_qualifications);
+
+                        EmployeeDetailsResponse.Description description = mItem.Descriptions[0];
+
+
+
+                        if(description.InternationalDescription  != null && description.InternationalDescription.length() > 0){
+                            qualificationView.setText(description.InternationalDescription);
+                        }else{
+                            qualificationView.setText(description.LocalDescription);
+                        }
+
+                    }
+
+                    TextView phone = ((TextView) getActivity().findViewById(R.id.employee_phone));
+                    phone.setText(mItem.PhoneNumber);
+                    phone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                            callIntent.setData(Uri.parse("tel:" + mItem.PhoneNumber));
+                            startActivity(callIntent);
+                        }
+                    });
+
+                    TextView mail = ((TextView) getActivity().findViewById(R.id.employee_mail));
+                    mail.setText(mItem.Email);
+                    mail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
+                            mailIntent.setType("text/plain");
+                            mailIntent.setData(Uri.parse("mailto:" + mItem.Email));
+                            startActivity(mailIntent);
+                        }
+                    });
+
+                    TextView share = ((TextView) getActivity().findViewById(R.id.employee_share));
+                    share.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            registerForContextMenu(v);
+                            getActivity().openContextMenu(v);
+                            unregisterForContextMenu(v);
+                        }
+                    });
+
                 }
             }
         });
     }
 
     private class CallSearchApi extends AsyncTask<String, String, String> {
+
+        ProgressDialog bar;
+
+        public void setProgressBar(ProgressDialog bar){
+            this.bar = bar;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            bar.show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -253,6 +330,9 @@ public class EmployeeDetailFragment extends Fragment {
                 e.printStackTrace();
             }
             updateDataOnUIThread(resultObject);
+            bar.dismiss();
         }
+
+
     }
 }
