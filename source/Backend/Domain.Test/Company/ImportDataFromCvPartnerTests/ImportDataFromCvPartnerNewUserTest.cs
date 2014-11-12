@@ -48,6 +48,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             updatedAt: new DateTime(2014, 6, 6),
             keyQualifications: new[] { new CvPartnerKeyQualification("Tester", "Tester", null) },
             technologies: null,
+            projects: null,
             photo: null
         );
 
@@ -128,7 +129,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             var events = new List<Event>
                 {
                     new EmployeeCreated(CompanyId, CompanyName, _employeeId, new Login(Constants.GoogleIdProvider,_importData.Email), _importData.FirstName, _importData.MiddleName, _importData.LastName, _timestamp1, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId),
-                    new ImportedFromCvPartner(CompanyId, CompanyName, _employeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo, _timestamp2, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
+                    new ImportedFromCvPartner(CompanyId, CompanyName, _employeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth ,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Projects, _importData.Photo, _timestamp2, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)
                 };
             return events;
         }
