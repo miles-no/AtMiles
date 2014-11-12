@@ -83,6 +83,7 @@ namespace no.miles.at.Backend.Domain.Aggregates
                     updatedAt: import.UpdatedAt,
                     keyQualifications: import.KeyQualifications,
                     technologies: import.Technologies,
+                    projects: import.Projects,
                     photo: import.Photo,
                     created: DateTime.UtcNow,
                     createdBy: createdBy,

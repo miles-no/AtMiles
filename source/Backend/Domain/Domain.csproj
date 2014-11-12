@@ -113,6 +113,7 @@
     <Compile Include="ValueTypes\CvPartnerImportData.cs" />
     <Compile Include="ValueTypes\CvPartnerKeyPoint.cs" />
     <Compile Include="ValueTypes\CvPartnerKeyQualification.cs" />
+    <Compile Include="ValueTypes\CvPartnerProjectInfo.cs" />
     <Compile Include="ValueTypes\CvPartnerTechnology.cs" />
     <Compile Include="ValueTypes\CvPartnerTechnologySkill.cs" />
     <Compile Include="ValueTypes\EmployeeLoginInfo.cs" />

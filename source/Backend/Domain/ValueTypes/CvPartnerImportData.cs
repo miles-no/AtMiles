@@ -15,11 +15,12 @@ namespace no.miles.at.Backend.Domain.ValueTypes
         public readonly DateTime UpdatedAt;
         public readonly CvPartnerKeyQualification[] KeyQualifications;
         public readonly CvPartnerTechnology[] Technologies;
+        public readonly CvPartnerProjectInfo[] Projects;
         public readonly Picture Photo;
 
         public CvPartnerImportData(string firstName, string middleName, string lastName, DateTime? dateOfBirth,
             string email, string phone, string title, string officeName, DateTime updatedAt,
-            CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo)
+            CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, CvPartnerProjectInfo[] projects, Picture photo)
         {
             FirstName = firstName;
             MiddleName = middleName;
@@ -32,6 +33,7 @@ namespace no.miles.at.Backend.Domain.ValueTypes
             UpdatedAt = updatedAt;
             KeyQualifications = keyQualifications;
             Technologies = technologies;
+            Projects = projects;
             Photo = photo;
         }
     }

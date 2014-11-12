@@ -44,6 +44,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
             updatedAt: new DateTime(2014, 6, 6),
             keyQualifications: new[] { new CvPartnerKeyQualification("Tester", "Tester", null) },
             technologies: null,
+            projects: null,
             photo: null
         );
 
@@ -84,7 +85,7 @@ namespace no.miles.at.Backend.Domain.Test.Company.ImportDataFromCvPartnerTests
                 {
                     new FakeStreamEvent(AdminId, new EmployeeCreated(CompanyId, CompanyName, AdminId, null, AdminFirstName, string.Empty, AdminLastName, DateTime.UtcNow, new Person(Constants.SystemUserId, Constants.SystemUserId), _correlationId)),
                     new FakeStreamEvent(EmployeeId, new EmployeeCreated(CompanyId, CompanyName, EmployeeId, new Login(Constants.GoogleIdProvider,_importData.Email), _importData.FirstName, _importData.MiddleName, _importData.LastName, DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), _correlationId)),
-                    new FakeStreamEvent(EmployeeId, new ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Photo,DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), "IMPORT1"))
+                    new FakeStreamEvent(EmployeeId, new ImportedFromCvPartner(CompanyId, CompanyName, EmployeeId, _importData.FirstName, _importData.MiddleName, _importData.LastName, _importData.DateOfBirth,_importData.Email, _importData.Phone, _importData.Title, _importData.OfficeName, _importData.UpdatedAt, _importData.KeyQualifications, _importData.Technologies, _importData.Projects, _importData.Photo,DateTime.UtcNow, new Person(AdminId, NameService.GetName(AdminFirstName, AdminLastName)), "IMPORT1"))
                 };
             return events;
         }
