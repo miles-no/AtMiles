@@ -78,6 +78,8 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 
         private static CvPartnerProjectInfo ConvertCvProject(ProjectExperience projectExperience)
         {
+            var excludedTags = (string[]) projectExperience.ExcludeTags;
+            var tags = (string[]) projectExperience.IntTags;
             var project = new CvPartnerProjectInfo
             {
                 Customer = (string) projectExperience.IntCustomer,
@@ -85,7 +87,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
                 CustomerValueProposition = (string) projectExperience.IntCustomerValueProposition,
                 Description = (string)projectExperience.IntDescription,
                 Disabled = projectExperience.Disabled,
-                ExcludeTags = (string[]) projectExperience.ExcludeTags,
+                ExcludeTags = excludedTags,
                 ExpectedRollOffDate = (string) projectExperience.ExpectedRollOffDate,
                 Industry = (string) projectExperience.IntIndustry,
                 LongDescription = projectExperience.IntLongDescription,
@@ -94,12 +96,10 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
                 Order = projectExperience.Order,
                 Roles = ConvertCvProjectRoles(projectExperience.Roles),
                 Starred = projectExperience.Starred,
-                Tags = (string[]) projectExperience.IntTags,
+                Tags = tags,
                 YearFrom = projectExperience.IntYearFrom,
                 YearTo = projectExperience.IntYearTo
             };
-
-
             return project;
         }
 
