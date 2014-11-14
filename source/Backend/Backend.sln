@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "WorkerServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Import.Auth0", "Import.Auth0\Import.Auth0.csproj", "{6E0950E9-5930-4AD4-938E-7D09ADED2D84}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ScheduledRunnerFSharp", "ScheduledRunnerFSharp\ScheduledRunnerFSharp.fsproj", "{CDC30BF4-9BE0-4692-85BF-E6B53977D2AF}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ScheduledRunner", "ScheduledRunner\ScheduledRunner.fsproj", "{CDC30BF4-9BE0-4692-85BF-E6B53977D2AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
