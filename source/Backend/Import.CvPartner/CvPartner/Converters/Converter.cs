@@ -78,8 +78,9 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 
         private static CvPartnerProjectInfo ConvertCvProject(ProjectExperience projectExperience)
         {
-            var excludedTags = (string[]) projectExperience.ExcludeTags;
-            var tags = (string[]) projectExperience.IntTags;
+            //TODO: Fix
+            string[] excludedTags = null;//(string[]) projectExperience.ExcludeTags;
+            string[] tags = null;//(string[]) projectExperience.IntTags;
             var project = new CvPartnerProjectInfo
             {
                 Customer = (string) projectExperience.IntCustomer,
