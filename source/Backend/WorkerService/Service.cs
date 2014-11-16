@@ -1,6 +1,5 @@
 ﻿using System.ServiceProcess;
 using no.miles.at.Backend.Infrastructure;
-using no.miles.at.Backend.Worker;
 
 namespace WorkerService
 {
