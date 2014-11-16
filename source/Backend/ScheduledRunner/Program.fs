@@ -27,19 +27,20 @@ let CreateAuth0Command companyId =
     let correlationId = IdService.CreateNewId()
     new EnrichFromAuth0(companyId, System.DateTime.UtcNow, systemAsPerson, correlationId, Constants.IgnoreVersion)
 
-let ImportData (sender:RabbitMqCommandSender) (companyId:string) (logger:ILog) commandCreator loggerInfo key =
+let CommandSender (sender:RabbitMqCommandSender) (logger:ILog) loggerInfo command =
+    logger.Info(loggerInfo + " starting")
+    try
+        sender.Send(command)
+        logger.Info(loggerInfo + " completed")
+    with
+        | ex -> logger.Error("Error starting import from " + loggerInfo, ex)
+    None
+
+let ImportData commandSender loggerInfo key command =
     match ReadSetting(key) with
         | true ->
-            logger.Info(loggerInfo + " starting")
-            let cmd = commandCreator companyId
-            try
-                sender.Send(cmd)
-                logger.Info(loggerInfo + " completed")
-            with
-                | ex -> logger.Error("Error starting import from " + loggerInfo, ex)
-            None
+            commandSender loggerInfo command
         | false ->
-            logger.Info(loggerInfo + ": Not running")
             None
 
 [<EntryPoint>]
@@ -49,6 +50,8 @@ let main argv =
     let logger = no.miles.at.Backend.Infrastructure.EventLogger("MilesSource", "AtMilesLog")
     use sender = new RabbitMqCommandSender(config.RabbitMqHost, config.RabbitMqUsername, config.RabbitMqPassword, config.RabbitMqCommandExchangeName, config.RabbitMqUseSsl, logger)
 
-    ImportData sender config.CompanyId logger CreateAuth0Command "Auth0" Auth0SettingsKey |> ignore
-    ImportData sender config.CompanyId logger CreateCvPartnerCommand "CvPartner" CvPartnerSettingsKey |> ignore
+    let commandSender loggerInfo command = CommandSender sender logger loggerInfo command
+
+    ImportData commandSender "Auth0" Auth0SettingsKey (CreateAuth0Command config.CompanyId) |> ignore
+    ImportData commandSender "CvPartner" CvPartnerSettingsKey (CreateCvPartnerCommand config.CompanyId) |> ignore
     0
