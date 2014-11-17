@@ -22,7 +22,8 @@ let printPoster workerRunning (message: string) =
         Console.ResetColor()
         Console.WriteLine ""
 
-    Console.WriteLine "Select action:"        
+    Console.WriteLine "Select action:"
+    Console.WriteLine "<i>: Information"
     Console.WriteLine "<1>: Start worker"
     Console.WriteLine "<2>: Stop worker"
     Console.WriteLine "<3>: Prepare EventStore with seed data"
@@ -30,7 +31,7 @@ let printPoster workerRunning (message: string) =
     Console.WriteLine "<5>: Import data from Auth0"
     Console.WriteLine "<Q>: Quit"
     Console.WriteLine "====================================================="
-    Console.Write "Select action:"
+    Console.WriteLine "Select action:"
 
 let startWorker (worker:WorkerService.WorkerProcess) running = 
     match running with
@@ -43,6 +44,7 @@ let stopWorker (worker:WorkerService.WorkerProcess) running =
     match running with
     | false -> (false, true, "Worker already stopped")
     | true ->
+        Console.WriteLine "Stopping..."
         worker.Stop()
         (false, true, "Stopped worker")
 
@@ -94,10 +96,9 @@ let resolveAction config worker logger running key =
     | ConsoleKey.NumPad4 -> importCvPartner running logger config
     | ConsoleKey.D5 -> importAuth0 running logger config
     | ConsoleKey.NumPad5 -> importAuth0 running logger config
-    | ConsoleKey.Q ->
-        (running, false, "Quit")
-    | _ ->
-        (running, true, "Unknown command")
+    | ConsoleKey.Q -> (running, false, "Quit")
+    | ConsoleKey.I -> (running, true, "Information")
+    | _ -> (running, true, "Unknown command")
 
 let rec loop config (worker:WorkerService.WorkerProcess) logger running message =
     printPoster running message
