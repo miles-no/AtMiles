@@ -1,0 +1,501 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		76D0C30E1A19EFEE007FB100 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C30D1A19EFEE007FB100 /* AppDelegate.swift */; };
+		76D0C3101A19EFEE007FB100 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C30F1A19EFEE007FB100 /* ViewController.swift */; };
+		76D0C3131A19EFEE007FB100 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76D0C3111A19EFEE007FB100 /* Main.storyboard */; };
+		76D0C3151A19EFEE007FB100 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76D0C3141A19EFEE007FB100 /* Images.xcassets */; };
+		76D0C3181A19EFEE007FB100 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D0C3161A19EFEE007FB100 /* LaunchScreen.xib */; };
+		76D0C3241A19EFEE007FB100 /* AtMilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C3231A19EFEE007FB100 /* AtMilesTests.swift */; };
+		76D0C32E1A1A1083007FB100 /* MyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C32D1A1A1083007FB100 /* MyApplication.swift */; };
+		76D0C3311A1A1B87007FB100 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C3301A1A1B87007FB100 /* SearchController.swift */; };
+		76D0C3331A1A29E2007FB100 /* Employee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C3321A1A29E2007FB100 /* Employee.swift */; };
+		A1BBF5D42D3C6FE44033FFB6 /* libPods-AtMiles.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A77D0C42EF57CEB4B085DFF6 /* libPods-AtMiles.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		76D0C31E1A19EFEE007FB100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76D0C3001A19EFEE007FB100 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76D0C3071A19EFEE007FB100;
+			remoteInfo = AtMiles;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		178A3F95BC4057C3A54E1C8E /* Pods-AtMiles.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtMiles.release.xcconfig"; path = "Pods/Target Support Files/Pods-AtMiles/Pods-AtMiles.release.xcconfig"; sourceTree = "<group>"; };
+		76D0C3081A19EFEE007FB100 /* AtMiles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtMiles.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		76D0C30C1A19EFEE007FB100 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76D0C30D1A19EFEE007FB100 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		76D0C30F1A19EFEE007FB100 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		76D0C3121A19EFEE007FB100 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		76D0C3141A19EFEE007FB100 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		76D0C3171A19EFEE007FB100 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		76D0C31D1A19EFEE007FB100 /* AtMilesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AtMilesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		76D0C3221A19EFEE007FB100 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76D0C3231A19EFEE007FB100 /* AtMilesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtMilesTests.swift; sourceTree = "<group>"; };
+		76D0C32D1A1A1083007FB100 /* MyApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyApplication.swift; sourceTree = "<group>"; };
+		76D0C32F1A1A1157007FB100 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		76D0C3301A1A1B87007FB100 /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
+		76D0C3321A1A29E2007FB100 /* Employee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Employee.swift; sourceTree = "<group>"; };
+		7DB0153E26E0E34E2B6306F7 /* Pods-AtMiles.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtMiles.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AtMiles/Pods-AtMiles.debug.xcconfig"; sourceTree = "<group>"; };
+		A77D0C42EF57CEB4B085DFF6 /* libPods-AtMiles.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AtMiles.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		76D0C3051A19EFEE007FB100 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1BBF5D42D3C6FE44033FFB6 /* libPods-AtMiles.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76D0C31A1A19EFEE007FB100 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		76D0C2FF1A19EFEE007FB100 = {
+			isa = PBXGroup;
+			children = (
+				76D0C30A1A19EFEE007FB100 /* AtMiles */,
+				76D0C3201A19EFEE007FB100 /* AtMilesTests */,
+				76D0C3091A19EFEE007FB100 /* Products */,
+				B0F12FFA5A08137BF2948082 /* Pods */,
+				B1C87C8097B54EC4DB629B4A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		76D0C3091A19EFEE007FB100 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				76D0C3081A19EFEE007FB100 /* AtMiles.app */,
+				76D0C31D1A19EFEE007FB100 /* AtMilesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		76D0C30A1A19EFEE007FB100 /* AtMiles */ = {
+			isa = PBXGroup;
+			children = (
+				76D0C30D1A19EFEE007FB100 /* AppDelegate.swift */,
+				76D0C30F1A19EFEE007FB100 /* ViewController.swift */,
+				76D0C3111A19EFEE007FB100 /* Main.storyboard */,
+				76D0C3141A19EFEE007FB100 /* Images.xcassets */,
+				76D0C3161A19EFEE007FB100 /* LaunchScreen.xib */,
+				76D0C30B1A19EFEE007FB100 /* Supporting Files */,
+				76D0C32D1A1A1083007FB100 /* MyApplication.swift */,
+				76D0C32F1A1A1157007FB100 /* Header.h */,
+				76D0C3301A1A1B87007FB100 /* SearchController.swift */,
+				76D0C3321A1A29E2007FB100 /* Employee.swift */,
+			);
+			path = AtMiles;
+			sourceTree = "<group>";
+		};
+		76D0C30B1A19EFEE007FB100 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				76D0C30C1A19EFEE007FB100 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		76D0C3201A19EFEE007FB100 /* AtMilesTests */ = {
+			isa = PBXGroup;
+			children = (
+				76D0C3231A19EFEE007FB100 /* AtMilesTests.swift */,
+				76D0C3211A19EFEE007FB100 /* Supporting Files */,
+			);
+			path = AtMilesTests;
+			sourceTree = "<group>";
+		};
+		76D0C3211A19EFEE007FB100 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				76D0C3221A19EFEE007FB100 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B0F12FFA5A08137BF2948082 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7DB0153E26E0E34E2B6306F7 /* Pods-AtMiles.debug.xcconfig */,
+				178A3F95BC4057C3A54E1C8E /* Pods-AtMiles.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B1C87C8097B54EC4DB629B4A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A77D0C42EF57CEB4B085DFF6 /* libPods-AtMiles.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		76D0C3071A19EFEE007FB100 /* AtMiles */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76D0C3271A19EFEE007FB100 /* Build configuration list for PBXNativeTarget "AtMiles" */;
+			buildPhases = (
+				514920A3198D0E87431A03AE /* Check Pods Manifest.lock */,
+				76D0C3041A19EFEE007FB100 /* Sources */,
+				76D0C3051A19EFEE007FB100 /* Frameworks */,
+				76D0C3061A19EFEE007FB100 /* Resources */,
+				14134429DAC840D86946FF39 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AtMiles;
+			productName = AtMiles;
+			productReference = 76D0C3081A19EFEE007FB100 /* AtMiles.app */;
+			productType = "com.apple.product-type.application";
+		};
+		76D0C31C1A19EFEE007FB100 /* AtMilesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76D0C32A1A19EFEE007FB100 /* Build configuration list for PBXNativeTarget "AtMilesTests" */;
+			buildPhases = (
+				76D0C3191A19EFEE007FB100 /* Sources */,
+				76D0C31A1A19EFEE007FB100 /* Frameworks */,
+				76D0C31B1A19EFEE007FB100 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				76D0C31F1A19EFEE007FB100 /* PBXTargetDependency */,
+			);
+			name = AtMilesTests;
+			productName = AtMilesTests;
+			productReference = 76D0C31D1A19EFEE007FB100 /* AtMilesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		76D0C3001A19EFEE007FB100 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Thorfinn Sørensen";
+				TargetAttributes = {
+					76D0C3071A19EFEE007FB100 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					76D0C31C1A19EFEE007FB100 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = 76D0C3071A19EFEE007FB100;
+					};
+				};
+			};
+			buildConfigurationList = 76D0C3031A19EFEE007FB100 /* Build configuration list for PBXProject "AtMiles" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 76D0C2FF1A19EFEE007FB100;
+			productRefGroup = 76D0C3091A19EFEE007FB100 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				76D0C3071A19EFEE007FB100 /* AtMiles */,
+				76D0C31C1A19EFEE007FB100 /* AtMilesTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		76D0C3061A19EFEE007FB100 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76D0C3131A19EFEE007FB100 /* Main.storyboard in Resources */,
+				76D0C3181A19EFEE007FB100 /* LaunchScreen.xib in Resources */,
+				76D0C3151A19EFEE007FB100 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76D0C31B1A19EFEE007FB100 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		14134429DAC840D86946FF39 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AtMiles/Pods-AtMiles-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		514920A3198D0E87431A03AE /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		76D0C3041A19EFEE007FB100 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76D0C3101A19EFEE007FB100 /* ViewController.swift in Sources */,
+				76D0C32E1A1A1083007FB100 /* MyApplication.swift in Sources */,
+				76D0C30E1A19EFEE007FB100 /* AppDelegate.swift in Sources */,
+				76D0C3331A1A29E2007FB100 /* Employee.swift in Sources */,
+				76D0C3311A1A1B87007FB100 /* SearchController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76D0C3191A19EFEE007FB100 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76D0C3241A19EFEE007FB100 /* AtMilesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		76D0C31F1A19EFEE007FB100 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 76D0C3071A19EFEE007FB100 /* AtMiles */;
+			targetProxy = 76D0C31E1A19EFEE007FB100 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		76D0C3111A19EFEE007FB100 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76D0C3121A19EFEE007FB100 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		76D0C3161A19EFEE007FB100 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76D0C3171A19EFEE007FB100 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		76D0C3251A19EFEE007FB100 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		76D0C3261A19EFEE007FB100 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		76D0C3281A19EFEE007FB100 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7DB0153E26E0E34E2B6306F7 /* Pods-AtMiles.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = AtMiles/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = AtMiles/Header.h;
+			};
+			name = Debug;
+		};
+		76D0C3291A19EFEE007FB100 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 178A3F95BC4057C3A54E1C8E /* Pods-AtMiles.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = AtMiles/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = AtMiles/Header.h;
+			};
+			name = Release;
+		};
+		76D0C32B1A19EFEE007FB100 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = AtMilesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AtMiles.app/AtMiles";
+			};
+			name = Debug;
+		};
+		76D0C32C1A19EFEE007FB100 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = AtMilesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AtMiles.app/AtMiles";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		76D0C3031A19EFEE007FB100 /* Build configuration list for PBXProject "AtMiles" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76D0C3251A19EFEE007FB100 /* Debug */,
+				76D0C3261A19EFEE007FB100 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76D0C3271A19EFEE007FB100 /* Build configuration list for PBXNativeTarget "AtMiles" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76D0C3281A19EFEE007FB100 /* Debug */,
+				76D0C3291A19EFEE007FB100 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76D0C32A1A19EFEE007FB100 /* Build configuration list for PBXNativeTarget "AtMilesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76D0C32B1A19EFEE007FB100 /* Debug */,
+				76D0C32C1A19EFEE007FB100 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 76D0C3001A19EFEE007FB100 /* Project object */;
+}

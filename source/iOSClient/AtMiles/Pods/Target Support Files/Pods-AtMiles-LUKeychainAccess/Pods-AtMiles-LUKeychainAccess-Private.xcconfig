@@ -1,0 +1,5 @@
+#include "Pods-AtMiles-LUKeychainAccess.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Build" "${PODS_ROOT}/Headers/Build/LUKeychainAccess" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/BDBOAuth1Manager" "${PODS_ROOT}/Headers/Public/Bolts" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK" "${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK" "${PODS_ROOT}/Headers/Public/ISO8601DateFormatter" "${PODS_ROOT}/Headers/Public/JWTDecode" "${PODS_ROOT}/Headers/Public/LUKeychainAccess" "${PODS_ROOT}/Headers/Public/Lock" "${PODS_ROOT}/Headers/Public/MBProgressHUD" "${PODS_ROOT}/Headers/Public/NSData+Base64" "${PODS_ROOT}/Headers/Public/OAuthCore" "${PODS_ROOT}/Headers/Public/ObjectiveSugar" "${PODS_ROOT}/Headers/Public/PSAlertView" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/SimpleKeychain" "${PODS_ROOT}/Headers/Public/TWReverseAuth" "${PODS_ROOT}/Headers/Public/libextobjc"
+OTHER_LDFLAGS = ${PODS_ATMILES_LUKEYCHAINACCESS_OTHER_LDFLAGS} -ObjC
+PODS_ROOT = ${SRCROOT}
