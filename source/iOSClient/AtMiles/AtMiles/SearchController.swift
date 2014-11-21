@@ -10,10 +10,12 @@ import UIKit
 
 class SearchController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate{
     
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchBar: UISearchBar!;
     
-    @IBOutlet var welcomeLabel: UILabel?
+    @IBOutlet var welcomeLabel: UILabel?;
     
+    var loader : UIActivityIndicatorView?;
+
     var Employees = [Employee]();
 
     
@@ -25,6 +27,12 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
         self.welcomeLabel?.text = "Welcome \(profile.name)!"
         
         searchBar.delegate = self;
+        
+        loader = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50)) as UIActivityIndicatorView;
+        loader?.center = self.view.center;
+        loader?.hidesWhenStopped = true;
+        loader?.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+        view.addSubview(loader!);
         
     }
     
@@ -40,10 +48,9 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
     
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        self.Employees.removeAll(keepCapacity: false);
-        
         if(searchBar.text != nil){
             performEmployeeSearch(searchBar.text);
+            searchBar.resignFirstResponder();
         }
     }
     
@@ -62,12 +69,14 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
         
         cell.textLabel.text = Employees[indexPath.row].Name;
         cell.detailTextLabel?.text = Employees[indexPath.row].Title;
+        cell.imageView.image = Employees[indexPath.row].Thumb;
         
         return cell;
         
     }
     
     private func performEmployeeSearch(searchString : String){
+        self.loader?.startAnimating();
         
         var query = searchString.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet());
         let searchUrl = "https://api-at.miles.no/api/search/Fulltext?query=" + query! + "&take=200";
@@ -83,8 +92,6 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
         
         request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization");
         
-        println(token);
-        
         let session = NSURLSession.sharedSession().configuration;
 
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
@@ -99,18 +106,51 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
                 
                 dispatch_async(dispatch_get_main_queue(), {
                 
+                    self.Employees.removeAll(keepCapacity: false);
+                    
                     for employee : AnyObject in result{
+                        
+                        var tmpEmployee : Employee;
                         
                         
                         var name : NSString = employee["Name"] as NSString;
-                        var title : NSString! = employee["JobTitle"] as NSString!;
                         
-                        self.Employees.append(Employee(Name: name, Title: title));
+                        var id : NSString = employee["GlobalId"] as NSString;
+                        
+                        //has to be one space to avoid messing up the graphics
+                        var title = " ";
+                        
+                        if let tmpTitle = employee["JobTitle"] as? String{
+                            title = tmpTitle;
+                        }
+                        
+                        if let tmpThumb = employee["Thumb"] as? String{
+                            
+                            var replacedstring = tmpThumb.stringByReplacingOccurrencesOfString("data:image/png;base64,", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil);
+                            
+                            replacedstring = replacedstring.stringByReplacingOccurrencesOfString("data:image/jpg;base64,", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil);
+                            
+                            let imagedata = NSData(base64EncodedString: replacedstring, options: NSDataBase64DecodingOptions(rawValue: 0));
+                            
+                            var decodedImage : UIImage?;
+                            
+                            if(imagedata == nil){
+                                decodedImage = nil;
+                            }else{
+                                decodedImage = UIImage(data: imagedata!);
+                            }
+                            tmpEmployee = Employee(Name: name, Title: title, Thumb: decodedImage, Id: id);
+                            
+                        }else{
+                            tmpEmployee = Employee(Name: name, Title: title, Thumb: nil, Id: id);
+                        }
+                        
+                        
+                        self.Employees.append(tmpEmployee);
                         
                     }
                    self.tableView.reloadData()
-                
-
+                   self.loader?.stopAnimating();
                 })
             }
         }
@@ -118,8 +158,19 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
         
         task.resume();
         
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        var detailsViewController : DetailsController = segue.destinationViewController as DetailsController;
+        
+        var selectedItem = self.tableView!.indexPathForSelectedRow()!.row;
+        
+        var selectedEmployee = self.Employees[selectedItem];
 
+        detailsViewController.EmployeeId = selectedEmployee.Id;
+        
         
     }
+    
 
 }

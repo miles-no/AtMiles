@@ -9,4 +9,6 @@
 struct Employee{
     let Name : String;
     let Title : String;
+    let Thumb : UIImage?;
+    let Id : String;
 }

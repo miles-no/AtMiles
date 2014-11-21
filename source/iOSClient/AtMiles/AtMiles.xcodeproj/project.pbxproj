@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76BADCC41A1CA0E2005160C8 /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BADCC31A1CA0E2005160C8 /* DetailsController.swift */; };
+		76BADCC61A1CC1DF005160C8 /* EmployeeDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BADCC51A1CC1DF005160C8 /* EmployeeDetails.swift */; };
 		76D0C30E1A19EFEE007FB100 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C30D1A19EFEE007FB100 /* AppDelegate.swift */; };
 		76D0C3101A19EFEE007FB100 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D0C30F1A19EFEE007FB100 /* ViewController.swift */; };
 		76D0C3131A19EFEE007FB100 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76D0C3111A19EFEE007FB100 /* Main.storyboard */; };
@@ -31,6 +33,8 @@
 
 /* Begin PBXFileReference section */
 		178A3F95BC4057C3A54E1C8E /* Pods-AtMiles.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AtMiles.release.xcconfig"; path = "Pods/Target Support Files/Pods-AtMiles/Pods-AtMiles.release.xcconfig"; sourceTree = "<group>"; };
+		76BADCC31A1CA0E2005160C8 /* DetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
+		76BADCC51A1CC1DF005160C8 /* EmployeeDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmployeeDetails.swift; sourceTree = "<group>"; };
 		76D0C3081A19EFEE007FB100 /* AtMiles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtMiles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76D0C30C1A19EFEE007FB100 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76D0C30D1A19EFEE007FB100 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +105,8 @@
 				76D0C32F1A1A1157007FB100 /* Header.h */,
 				76D0C3301A1A1B87007FB100 /* SearchController.swift */,
 				76D0C3321A1A29E2007FB100 /* Employee.swift */,
+				76BADCC31A1CA0E2005160C8 /* DetailsController.swift */,
+				76BADCC51A1CC1DF005160C8 /* EmployeeDetails.swift */,
 			);
 			path = AtMiles;
 			sourceTree = "<group>";
@@ -198,6 +204,7 @@
 				TargetAttributes = {
 					76D0C3071A19EFEE007FB100 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 2KC59EF3VV;
 					};
 					76D0C31C1A19EFEE007FB100 = {
 						CreatedOnToolsVersion = 6.1;
@@ -286,7 +293,9 @@
 				76D0C32E1A1A1083007FB100 /* MyApplication.swift in Sources */,
 				76D0C30E1A19EFEE007FB100 /* AppDelegate.swift in Sources */,
 				76D0C3331A1A29E2007FB100 /* Employee.swift in Sources */,
+				76BADCC41A1CA0E2005160C8 /* DetailsController.swift in Sources */,
 				76D0C3311A1A1B87007FB100 /* SearchController.swift in Sources */,
+				76BADCC61A1CC1DF005160C8 /* EmployeeDetails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
