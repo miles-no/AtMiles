@@ -16,4 +16,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <AFNetworking/AFHTTPRequestOperation.h>
 
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+
 #endif

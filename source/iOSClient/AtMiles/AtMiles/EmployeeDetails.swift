@@ -14,4 +14,6 @@ struct EmployeeDetails{
     let Phone : String?;
     let Email : String?;
     let Office : String?;
+    let FirstName : String?;
+    let LastName : String?;
 }

@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AtMiles/DetailsController.swift"
-            timestampString = "438254120.530577"
+            timestampString = "438268075.99969"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "phoneTouched()"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AtMiles/DetailsController.swift"
-            timestampString = "438254120.530577"
+            timestampString = "438268075.99969"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
             landmarkName = "phoneTouched()"
             landmarkType = "5">
             <Locations>
@@ -310,11 +310,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AtMiles/DetailsController.swift"
-            timestampString = "438254120.530577"
+            timestampString = "438268075.99969"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
             landmarkName = "phoneTouched()"
             landmarkType = "5">
          </BreakpointContent>

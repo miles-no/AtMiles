@@ -183,9 +183,16 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="TRg-q2-zk2"/>
+                    <navigationItem key="navigationItem" id="TRg-q2-zk2">
+                        <barButtonItem key="rightBarButtonItem" title="Add to contacts" id="xeQ-sK-c0n">
+                            <connections>
+                                <action selector="addToContacts" destination="NCW-9O-LFM" id="Z4c-9v-OG6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="AddToContacts" destination="xeQ-sK-c0n" id="D9a-7n-kfQ"/>
                         <outlet property="Call" destination="0XQ-b7-1Uw" id="DAU-O2-eBK"/>
                         <outlet property="Description" destination="dcx-pg-Nah" id="Gax-XR-8a3"/>
                         <outlet property="Email" destination="c7A-sc-vmR" id="PJs-F2-cQL"/>

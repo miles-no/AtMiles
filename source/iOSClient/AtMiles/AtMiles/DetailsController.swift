@@ -11,6 +11,7 @@ import UIKit;
 class DetailsController : UIViewController{
 
 
+    @IBOutlet weak var AddToContacts: UIBarButtonItem!
 
     @IBOutlet weak var EmployeeImage: UIImageView!
 
@@ -35,6 +36,8 @@ class DetailsController : UIViewController{
 
     var loader : UIActivityIndicatorView?;
     
+    var adbk : ABAddressBook?;
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         
@@ -48,6 +51,100 @@ class DetailsController : UIViewController{
         
         fetchEmployeeDetails();
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+            let stat = ABAddressBookGetAuthorizationStatus()
+            switch stat {
+            case .Denied, .Restricted:
+                println("no access")
+            case .Authorized, .NotDetermined:
+                var err : Unmanaged<CFError>? = nil
+                var adbk : ABAddressBook? = ABAddressBookCreateWithOptions(nil, &err).takeRetainedValue()
+                if adbk == nil {
+                    println(err)
+                    return
+                }
+                ABAddressBookRequestAccessWithCompletion(adbk) {
+                    (granted:Bool, err:CFError!) in
+                    if granted {
+                        self.adbk = adbk
+                    } else {
+                        println(err)
+                    }//if
+                }//ABAddressBookReqeustAccessWithCompletion
+            }//case
+    }//viewDidAppear
+    
+    @IBAction func addToContacts(){
+
+        var description = "Are you sure you want to add " + self.details.Name + " to your contacts ?";
+        
+        var alert = UIAlertController(title: "Add to contacts", message: description, preferredStyle: UIAlertControllerStyle.Alert);
+        
+        self.presentViewController(alert, animated: true, completion: nil);
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+            switch action.style{
+            case .Default:
+                self.addContact();
+            case .Cancel:
+                println("cancel")
+            case .Destructive:
+                println("destructive")
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil));
+
+        
+    }
+    
+    private func addContact(){
+        var newContact:ABRecordRef! = ABPersonCreate().takeRetainedValue()
+        var success:Bool = false
+        
+        var error: Unmanaged<CFErrorRef>? = nil
+        
+        success = ABRecordSetValue(newContact, kABPersonFirstNameProperty, self.details.FirstName, &error)
+        println("setting first name was successful? \(success)")
+        success = ABRecordSetValue(newContact, kABPersonLastNameProperty, self.details.LastName, &error)
+        println("setting last name was successful? \(success)")
+        
+        let multiPhone:ABMutableMultiValue = ABMultiValueCreateMutable(
+            ABPropertyType(kABStringPropertyType)).takeRetainedValue();
+        
+        ABMultiValueAddValueAndLabel(multiPhone, self.details.Phone, kABPersonPhoneMobileLabel, nil);
+        
+        success = ABRecordSetValue(newContact, kABPersonPhoneProperty, multiPhone,nil);
+        
+        let multiEmail:ABMutableMultiValue = ABMultiValueCreateMutable(
+            ABPropertyType(kABStringPropertyType)).takeRetainedValue();
+        
+        ABMultiValueAddValueAndLabel(multiEmail, self.details.Email, kABWorkLabel, nil);
+        
+        success = ABRecordSetValue(newContact, kABPersonEmailProperty, multiEmail, &error);
+        
+        var image : NSData = UIImagePNGRepresentation(self.details.Thumb);
+        success = ABPersonSetImageData(newContact, image, &error);
+        
+        success = ABAddressBookAddRecord(adbk, newContact, &error);
+        success = ABAddressBookSave(adbk, &error);
+        
+        
+        var description = self.details.Name + " was successfully added to your contact list";
+        
+        if(success){
+            var alert = UIAlertController(title: "Contact added", message: description, preferredStyle: UIAlertControllerStyle.Alert);
+            
+            self.presentViewController(alert, animated: true, completion: nil);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: nil));
+            
+        }
+        
+
+    }
+    
 
     private func setViewProperties(){
         self.EmployeeImage.image = self.details.Thumb;
@@ -127,7 +224,7 @@ class DetailsController : UIViewController{
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
             switch action.style{
             case .Default:
-                println("Sendmail");
+                self.sendMail();
             case .Cancel:
                 println("cancel")
             case .Destructive:
@@ -138,6 +235,12 @@ class DetailsController : UIViewController{
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil));
 
         
+    }
+    
+    private func sendMail(){
+        var sendMailString = "mailto:" + self.details.Email!;
+        
+        UIApplication.sharedApplication().openURL(NSURL(string: sendMailString)!);
     }
     
     private func fetchEmployeeDetails(){
@@ -177,6 +280,9 @@ class DetailsController : UIViewController{
                     
                     var name : String = jsonResult["Name"] as String;
 
+                    var firstName : String = jsonResult["FirstName"] as String;
+                    var lastName : String = jsonResult["LastName"] as String;
+                    
                     var description : String! = "";
                     
                     var descriptionArray : NSArray! = jsonResult["Descriptions"] as NSArray!;
@@ -219,9 +325,9 @@ class DetailsController : UIViewController{
                         }else{
                             decodedImage = UIImage(data: imagedata!);
                         }
-                        self.details = EmployeeDetails(Name: name, Title: title, Thumb: decodedImage, Description: description, Phone: phone, Email: email, Office: office);
+                        self.details = EmployeeDetails(Name: name, Title: title, Thumb: decodedImage, Description: description, Phone: phone, Email: email, Office: office, FirstName : firstName, LastName : lastName);
                     }else{
-                        self.details = EmployeeDetails(Name: name, Title: title, Thumb: nil, Description: description, Phone: phone, Email: email, Office: office);
+                        self.details = EmployeeDetails(Name: name, Title: title, Thumb: nil, Description: description, Phone: phone, Email: email, Office: office, FirstName : firstName, LastName : lastName);
                     }
                     
                     self.setViewProperties();
