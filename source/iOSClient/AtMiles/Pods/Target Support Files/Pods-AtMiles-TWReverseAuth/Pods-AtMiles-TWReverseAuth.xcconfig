@@ -1,0 +1,1 @@
+PODS_ATMILES_TWREVERSEAUTH_OTHER_LDFLAGS = -framework "Accounts" -framework "Social"
