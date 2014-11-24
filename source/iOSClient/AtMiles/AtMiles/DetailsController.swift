@@ -46,58 +46,123 @@ class DetailsController : UIViewController{
         loader?.hidesWhenStopped = true;
         loader?.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
         view.addSubview(loader!);
-
+        
         self.Description.editable = false;
         
         fetchEmployeeDetails();
     }
     
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-            let stat = ABAddressBookGetAuthorizationStatus()
-            switch stat {
-            case .Denied, .Restricted:
-                println("no access")
-            case .Authorized, .NotDetermined:
-                var err : Unmanaged<CFError>? = nil
-                var adbk : ABAddressBook? = ABAddressBookCreateWithOptions(nil, &err).takeRetainedValue()
-                if adbk == nil {
-                    println(err)
-                    return
-                }
-                ABAddressBookRequestAccessWithCompletion(adbk) {
-                    (granted:Bool, err:CFError!) in
-                    if granted {
-                        self.adbk = adbk
-                    } else {
-                        println(err)
-                    }//if
-                }//ABAddressBookReqeustAccessWithCompletion
-            }//case
-    }//viewDidAppear
+        super.viewDidAppear(animated);
+        
+        checkContactAuthorization();
+     }//viewDidAppear
+    
+    private func checkContactAuthorization() -> Bool{
+        let stat = ABAddressBookGetAuthorizationStatus()
+        switch stat {
+        case .Denied, .Restricted:
+            return false;
+        case .Authorized, .NotDetermined:
+            var err : Unmanaged<CFError>? = nil
+            var adbk : ABAddressBook? = ABAddressBookCreateWithOptions(nil, &err).takeRetainedValue()
+            if adbk == nil {
+                return false;
+            }
+            ABAddressBookRequestAccessWithCompletion(adbk) {
+                (granted:Bool, err:CFError!) in
+                if granted {
+                    self.adbk = adbk
+                } else {
+                    println(err);
+                }//if
+            }//ABAddressBookReqeustAccessWithCompletion
+        }//case
+        return true;
+    }
     
     @IBAction func addToContacts(){
-
-        var description = "Are you sure you want to add " + self.details.Name + " to your contacts ?";
+        var auth : Bool = checkContactAuthorization();
         
-        var alert = UIAlertController(title: "Add to contacts", message: description, preferredStyle: UIAlertControllerStyle.Alert);
-        
-        self.presentViewController(alert, animated: true, completion: nil);
-        
-        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
-            switch action.style{
-            case .Default:
-                self.addContact();
-            case .Cancel:
-                println("cancel")
-            case .Destructive:
-                println("destructive")
+        if(auth == true){
+    
+            dispatch_async(dispatch_get_main_queue()){
+                var exists : Bool = self.checkIfContactExists();
+    
+                if(exists == true){
+                    var alert = UIAlertController(title: "Exists", message: "The contact allready exist on your device", preferredStyle: UIAlertControllerStyle.Alert);
+                    
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: nil));
+                    self.presentViewController(alert, animated: true, completion: nil);
+                }else{
+                    var description = "Are you sure you want to add " + self.details.Name + " to your contacts ?";
+                    
+                    var alert = UIAlertController(title: "Add to contacts", message: description, preferredStyle: UIAlertControllerStyle.Alert);
+                    
+                    self.presentViewController(alert, animated: true, completion: nil);
+                    
+                    alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+                        switch action.style{
+                        case .Default:
+                            self.addContact();
+                        case .Cancel:
+                            println("cancel")
+                        case .Destructive:
+                            println("destructive")
+                        }
+                    }))
+                    
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil));
+                }
+                
             }
-        }))
+            
+    
+            
+        }else{
+            var alert = UIAlertController(title: "Error", message: "The application lacks the priviliges to add new contacts, to enable, go to settings -> AtMiles -> Enable contacts", preferredStyle: UIAlertControllerStyle.Alert);
+            
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: nil));
+            self.presentViewController(alert, animated: true, completion: nil);
+        }
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil));
+    }
+    
+    private func checkIfContactExists() -> Bool{
+        let contacts = ABAddressBookCopyArrayOfAllPeople(adbk).takeRetainedValue() as NSArray as [ABRecord];
+        
+        for contact in contacts{
+            var phones : ABMultiValueRef = ABRecordCopyValue(contact, kABPersonPhoneProperty).takeRetainedValue();
+            
+            let count : Int = ABMultiValueGetCount(phones);
+            
+            for i in 0..<count{
+                let value : String = ABMultiValueCopyValueAtIndex(phones, i)!.takeRetainedValue() as AnyObject as String;
+                let isEqual = value == self.details.Phone;
+                
+                //Check if phonenumber allready exist
+                if(isEqual == true){
+                    return true;
+                }
+                
+                
+                //Check if phonenumber exist with different format
+                var trimmedValue = value.stringByReplacingOccurrencesOfString("+47", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil);
 
-        
+                //this is not a whitespace (copy paste from println)
+                trimmedValue = trimmedValue.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil);
+                
+                //remove whitespace
+                trimmedValue = trimmedValue.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil);
+                
+                var trimmedContactValue = self.details.Phone!.stringByReplacingOccurrencesOfString("+47", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil);
+                
+                if(trimmedValue == trimmedContactValue){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     private func addContact(){
