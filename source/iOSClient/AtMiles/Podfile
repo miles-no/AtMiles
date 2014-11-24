@@ -1,0 +1,17 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, '6.0'
+
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'AtMiles' do
+    pod "Lock", "~> 1.4", :inhibit_warnings => true
+    pod "SDWebImage", "~> 3.7.1"
+    pod "JWTDecode", "~> 0.2"
+    pod "SimpleKeychain", "~> 0.2"
+    pod "MBProgressHUD", "~> 0.8"
+end
+
+target 'AtMilesTests' do
+
+end
+
