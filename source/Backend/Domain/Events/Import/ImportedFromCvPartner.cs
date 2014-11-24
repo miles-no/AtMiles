@@ -20,12 +20,13 @@ namespace no.miles.at.Backend.Domain.Events.Import
         public readonly DateTime UpdatedAt;
         public readonly CvPartnerKeyQualification[] KeyQualifications;
         public readonly CvPartnerTechnology[] Technologies;
+        public readonly CvPartnerProjectInfo[] Projects;
         public readonly Picture Photo;
 
 
 
         public ImportedFromCvPartner(string companyId, string companyName,
-            string employeeId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string email, string phone, string title, string officeName, DateTime updatedAt, CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, Picture photo, DateTime created, Person createdBy, string correlationId) :
+            string employeeId, string firstName, string middleName, string lastName, DateTime? dateOfBirth, string email, string phone, string title, string officeName, DateTime updatedAt, CvPartnerKeyQualification[] keyQualifications, CvPartnerTechnology[] technologies, CvPartnerProjectInfo[] projects, Picture photo, DateTime created, Person createdBy, string correlationId) :
             base(created, createdBy, correlationId)
         {
             CompanyId = companyId;
@@ -42,6 +43,7 @@ namespace no.miles.at.Backend.Domain.Events.Import
             UpdatedAt = updatedAt;
             KeyQualifications = keyQualifications;
             Technologies = technologies;
+            Projects = projects;
             Photo = photo;
         }
     }

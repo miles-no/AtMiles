@@ -12,7 +12,7 @@ using no.miles.at.Backend.ReadStore.SearchStore;
 using no.miles.at.Backend.ReadStore.SessionStore;
 using no.miles.at.Backend.ReadStore.UserStore;
 
-namespace no.miles.at.Backend.Worker
+namespace WorkerService
 {
     public class WorkerProcess
     {
@@ -22,8 +22,8 @@ namespace no.miles.at.Backend.Worker
 
         public WorkerProcess(ILog logger)
         {
-            if(logger == null) throw new Exception("Logger cannot be null");
-            _logger = logger;            
+            if (logger == null) throw new Exception("Logger cannot be null");
+            _logger = logger;
         }
 
         public void Start()

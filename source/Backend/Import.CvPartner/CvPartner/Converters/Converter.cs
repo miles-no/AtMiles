@@ -8,7 +8,6 @@ using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
 namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 {
     public static class Converter
-
     {
         public static CvPartnerImportData ToImportFromCvPartner(Cv cv, Employee employee, Picture employeePhoto)
         {
@@ -18,7 +17,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 
             if (!string.IsNullOrEmpty(cv.Name))
             {
-                var names = cv.Name.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var names = cv.Name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 familyName = names.Last();
 
@@ -43,6 +42,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
 
             var technologies = ConvertCvTechnologies(cv.Technologies);
             var keyQualifications = ConvertCvKeyCompetence(cv.KeyQualifications);
+            CvPartnerProjectInfo[] projects = ConvertCvProjects(cv.ProjectExperiences);
             var res = new CvPartnerImportData(
                 firstName: givenName,
                 middleName: middleName,
@@ -55,9 +55,71 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
                 updatedAt: cv.UpdatedAt,
                 keyQualifications: keyQualifications,
                 technologies: technologies,
+                projects: projects,
                 photo: employeePhoto
             );
             return res;
+        }
+
+        private static CvPartnerProjectInfo[] ConvertCvProjects(IEnumerable<ProjectExperience> projectExperiences)
+        {
+            var projects = new List<CvPartnerProjectInfo>();
+            if (projectExperiences == null) return projects.ToArray();
+            projects.AddRange(projectExperiences.Select(ConvertCvProject));
+            return projects.ToArray();
+        }
+
+        private static CvPartnerProjectInfo ConvertCvProject(ProjectExperience projectExperience)
+        {
+            var project = new CvPartnerProjectInfo
+            {
+                Customer = (string)projectExperience.IntCustomer,
+                CustomerDescription = (string)projectExperience.IntCustomerDescription,
+                CustomerValueProposition = (string)projectExperience.IntCustomerValueProposition,
+                Description = (string)projectExperience.IntDescription,
+                Disabled = projectExperience.Disabled,
+                ExcludeTags = projectExperience.ExcludeTags == null ? null : projectExperience.ExcludeTags.Select(Convert.ToString).ToArray(),
+                ExpectedRollOffDate = (string)projectExperience.ExpectedRollOffDate,
+                Industry = (string)projectExperience.IntIndustry,
+                LongDescription = projectExperience.IntLongDescription,
+                MonthFrom = projectExperience.IntMonthFrom,
+                MonthTo = projectExperience.IntMonthTo,
+                Order = projectExperience.Order,
+                Roles = ConvertCvProjectRoles(projectExperience.Roles),
+                Starred = projectExperience.Starred,
+                YearFrom = projectExperience.IntYearFrom,
+                YearTo = projectExperience.IntYearTo,
+                Tags = projectExperience.IntTags == null ? null : projectExperience.IntTags.Select(Convert.ToString).ToArray()
+            };
+            return project;
+        }
+
+        private static CvPartnerProjectInfo.Role[] ConvertCvProjectRoles(IEnumerable<Role> roles)
+        {
+            var convertedRoles = new List<CvPartnerProjectInfo.Role>();
+
+            if (roles == null) return convertedRoles.ToArray();
+
+            foreach (var role in roles)
+            {
+                convertedRoles.Add(ConvertCvProjectRole(role));
+            }
+
+            return convertedRoles.ToArray();
+        }
+
+        private static CvPartnerProjectInfo.Role ConvertCvProjectRole(Role role)
+        {
+            var convertedRole = new CvPartnerProjectInfo.Role
+            {
+                Name = (string)role.IntName,
+                LongDescription = (string)role.IntLongDescription,
+                Disabled = role.Disabled,
+                Order = role.Order,
+                Starred = role.Starred
+            };
+
+            return convertedRole;
         }
 
         private static CvPartnerKeyQualification[] ConvertCvKeyCompetence(IEnumerable<KeyQualification> keyQualifications)
@@ -81,7 +143,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
                         let kpLocalDescription = keyPoint.LocalDescription
                         select new CvPartnerKeyPoint(kpIntName, kpLocalName, kpIntDescription, kpLocalDescription));
                 }
-                var convertedQualification = new CvPartnerKeyQualification(internationalDescription,localDescription, convertedKeyPoints.ToArray());
+                var convertedQualification = new CvPartnerKeyQualification(internationalDescription, localDescription, convertedKeyPoints.ToArray());
                 convertedQualifications.Add(convertedQualification);
             }
             return convertedQualifications.ToArray();
@@ -91,7 +153,7 @@ namespace no.miles.at.Backend.Import.CvPartner.CvPartner.Converters
         {
             var convertedTechologies = new List<CvPartnerTechnology>();
             if (technologies == null) return convertedTechologies.ToArray();
-            
+
             foreach (var technology in technologies)
             {
                 var internationalCategory = technology.IntCategory;

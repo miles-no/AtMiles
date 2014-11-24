@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using no.miles.at.Backend.Domain;
@@ -12,7 +11,6 @@ using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv;
 using no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Employee;
 using no.miles.at.Backend.Infrastructure;
 using Convert = no.miles.at.Backend.Import.CvPartner.CvPartner.Converters.Converter;
-using Image = no.miles.at.Backend.Import.CvPartner.CvPartner.Models.Cv.Image;
 
 namespace no.miles.at.Backend.Import.CvPartner.CvPartner
 {
