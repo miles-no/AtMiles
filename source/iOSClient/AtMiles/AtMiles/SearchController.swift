@@ -67,9 +67,9 @@ class SearchController: UITableViewController, UISearchBarDelegate, UISearchCont
             cell = UITableViewCell(style: .Default, reuseIdentifier: "NameCell");
         }
         
-        cell.textLabel.text = Employees[indexPath.row].Name;
+        cell.textLabel!.text = Employees[indexPath.row].Name;
         cell.detailTextLabel?.text = Employees[indexPath.row].Title;
-        cell.imageView.image = Employees[indexPath.row].Thumb;
+        cell.imageView!.image = Employees[indexPath.row].Thumb;
         
         return cell;
         
