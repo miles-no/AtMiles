@@ -5,6 +5,8 @@ open no.miles.at.Backend.Domain.ValueTypes
 open no.miles.at.Backend.Domain.Services
 open no.miles.at.Backend.Infrastructure
 open no.miles.at.Backend.Infrastructure.Configuration
+open no.miles.at.Backend.ReadStore.SearchStore
+open no.miles.at.Backend.ReadStore
 open WorkerService
 
 let printPoster workerRunning (message: string) = 
@@ -29,6 +31,7 @@ let printPoster workerRunning (message: string) =
     Console.WriteLine "<3>: Prepare EventStore with seed data"
     Console.WriteLine "<4>: Import data from CV-partner"
     Console.WriteLine "<5>: Import data from Auth0"
+    Console.WriteLine "<T>: TEST"
     Console.WriteLine "<Q>: Quit"
     Console.WriteLine "====================================================="
     Console.WriteLine "Select action:"
@@ -84,6 +87,14 @@ let importAuth0 running (logger : ILog) (config:Config) =
     commandSender.Send importCommand
     (running, true, "Imported from Auth0")
 
+let testVCard running (logger : ILog) (config:Config) =
+    let store = RavenDocumentStore.CreateStore(config.RavenDbUrl)
+    let search = new EmployeeSearchEngine(store)
+    let employeeId = "NpqIBLNfEWgnjypAwdwMw"
+    let res = search.GetEmployeeSearchModel(employeeId)
+    Console.WriteLine(res)
+    (running, true, "OK")
+
 let resolveAction config worker logger running key = 
     match key with
     | ConsoleKey.D1 -> startWorker worker running
@@ -96,6 +107,7 @@ let resolveAction config worker logger running key =
     | ConsoleKey.NumPad4 -> importCvPartner running logger config
     | ConsoleKey.D5 -> importAuth0 running logger config
     | ConsoleKey.NumPad5 -> importAuth0 running logger config
+    | ConsoleKey.T -> testVCard running logger config
     | ConsoleKey.Q -> (running, false, "Quit")
     | ConsoleKey.I -> (running, true, "Information")
     | _ -> (running, true, "Unknown command")
