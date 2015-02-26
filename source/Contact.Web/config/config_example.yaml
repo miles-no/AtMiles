@@ -1,0 +1,5 @@
+cvPartnerBaseUrl: https://miles.cvpartner.no
+cvPartnerUsersUrl: /api/v1/users
+cvPartnerCvUrl: /api/v1/cvs/
+cvPartnerToken: security_token
+companyId: your_company

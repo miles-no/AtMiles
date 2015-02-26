@@ -184,3 +184,5 @@ source/Backend/Api/output/no.miles.at.Backend.Api.zip
 source/Backend/Worker/output/Worker.zip
 **/.idea/**
 AtMiles.sublime-workspace
+source/Contact.Web/config/config.yaml
+source/Contact.Web/data/*/**

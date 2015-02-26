@@ -3,7 +3,7 @@
  * GET home page.
  */
 
-module.exports = function(app) {
+module.exports = function(app, esClient, config) {
 
     // route for home page
     app.get('/', function(req, res) {
@@ -27,6 +27,7 @@ module.exports = function(app) {
         req.logout();
         res.redirect('/');
     });
+    
 
     app.use(function(req,res) {
        res.render('index');
