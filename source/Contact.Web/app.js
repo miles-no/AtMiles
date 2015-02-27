@@ -14,7 +14,7 @@ console.log(hostname);
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
   host: hostname === 'milescontact' ? 'localhost:9200' : 'milescontact.cloudapp.net:9200',
-  //log: 'trace'
+  log: 'trace'
 });
 
 
