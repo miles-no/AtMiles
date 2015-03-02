@@ -28,6 +28,15 @@ module.exports = function(app, esClient, config) {
         res.redirect('/');
     });
     
+    app.get('/thumb/:size/:user', function(req, res) {
+        res.sendfile('./data/' + config.companyId +'/thumbs/' + req.params.size + "/" +req.params.user);
+    });
+    
+    app.get('/vcard/:user', function(req, res) {
+        res.header("Content-Type", "text/vcard");
+        res.sendfile('./data/'+config.companyId + '/' + req.params.user);
+    });
+    
 
     app.use(function(req,res) {
        res.render('index');

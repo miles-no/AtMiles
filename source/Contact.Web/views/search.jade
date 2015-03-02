@@ -20,8 +20,8 @@
       ul.large-block-grid-3.medium-block-grid-2.small-block-grid-1.contact-grid(ng-show="searchResult.Results.length > 0")
          li.contact-grid-item(ng-repeat="item in searchResult.Results")
             div.contact-card
-               img.contact-image(src="{{item.Thumb}}")
-               a.vcard-link(ng-href="{{apiRoot}}/api/company/miles/vcard/{{item.GlobalId}}")
+               img.contact-image(src="{{item.Thumb}}" height="100" width="100")
+               a.vcard-link(ng-href="{{item.VCard}}")
                   img.contact-vcard.right(title="Download vCard")
                div.small-7.contact-section.columns
                   b.contact-text {{item.Name}}

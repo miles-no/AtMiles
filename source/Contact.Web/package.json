@@ -13,7 +13,12 @@
     "elasticsearch": "*",
     "js-yaml": "*",
     "promise": "*",
-    "request-promise": "*"
+    "request-promise": "*",
+    "cookie-parser":"*",
+    "express-session":"*",
+    "passport":"*",
+    "passport-auth0":"*",
+    "underscore": "*"
   
   }
 }

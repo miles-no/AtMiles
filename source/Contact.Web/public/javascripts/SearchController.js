@@ -1,7 +1,7 @@
 (function(module) {
      var SearchController = function ($scope, $http, $timeout, $location, auth, store, $rootScope, DataFactory) {
 
-        $scope.apiRoot = "https://api-at.miles.no";
+        $scope.apiRoot = "/api";
 
         $scope.queryTerm = "";
         $scope.$watch('queryTerm', function() {

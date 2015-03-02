@@ -3,3 +3,8 @@ cvPartnerUsersUrl: /api/v1/users
 cvPartnerCvUrl: /api/v1/cvs/
 cvPartnerToken: security_token
 companyId: your_company
+appSecret: sessionSecret
+auth0Issuer: https://yourcompany.auth0.com/
+auth0Audience: auth0audience
+auth0Secret: auth0secret
+

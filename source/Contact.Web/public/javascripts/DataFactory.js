@@ -4,7 +4,7 @@
            search: function(apiRoot, searchTerm, take, skip) {
                return $http({
                    method: 'GET',
-                   url: apiRoot +"/api/Search/fulltext?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(searchTerm),
+                   url: apiRoot +"/search?take=" + take + "&skip=" + skip + "&query=" + encodeURIComponent(searchTerm),
                    withCredentials: true
                });
            }
