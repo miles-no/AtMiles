@@ -18,7 +18,8 @@
     "express-session":"*",
     "passport":"*",
     "passport-auth0":"*",
-    "underscore": "*"
+    "underscore": "*",
+    "rwlock":"*"
   
   }
 }

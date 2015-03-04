@@ -7,6 +7,7 @@
  var rp = require('request-promise');
  var fs = require('fs');
  var _ = require('underscore');
+ var ReadWriteLock = require('rwlock');
  
  var tokenGet = function(host, path, token){
    var options = {
@@ -21,14 +22,16 @@
    
  }
  
- var saveVCard = function(info, filename){
+ var lock = {};
+ 
+ var saveVCard = function(info, filename, config){
   
     var card = 'BEGIN:VCARD\nVERSION:3.0\n';
     card += 'N:'+info.lastName + ';' + info.firstName + '\n';
     card += 'FN:'+info.fullName + '\n';
     card += 'EMAIL:'+info.email + '\n';
     card += 'TEL;TYPE=cell:'+info.phone + '\n';
-    card += 'ORG:'+info.companyId+';'+info.office + '\n';
+    card += 'ORG:Miles'+';'+info.office + '\n';
     card += 'TITLE:'+info.title + '\n';
     card += 'URL:http://'+info.companyId + '.no\n';
     card += 'END:VCARD';
@@ -38,7 +41,23 @@
       } else {
           console.log("vcard saved");
         }
-    }); 
+    });
+    var all = './data/' + config.companyId + '/all_'+info.office+ '.vcf';
+    
+    if (!lock[info.office]){
+      lock[info.office] = new ReadWriteLock();
+      fs.closeSync(fs.openSync(all,'w'));
+    }
+    
+    lock[info.office].writeLock(function (release) {
+  
+      fs.appendFile(all, '\n' + card, function(appendErr){
+        if (appendErr){console.log(appendErr);}
+        release();
+              
+      });
+  
+    });
           
  }
  
@@ -84,7 +103,9 @@ module.exports = function(app, esClient, config, passport) {
     
       tokenGet(config.cvPartnerBaseUrl, config.cvPartnerUsersUrl,config.cvPartnerToken)
               .then(function(body){
+              
                   var allUsers = JSON.parse(body);
+                  console.log(allUsers.length + ' found');
                   var dic = {};
                   for (var i = 0; i < allUsers.length; i++) {
                     var user = allUsers[i];
@@ -114,9 +135,9 @@ module.exports = function(app, esClient, config, passport) {
                                   
                                   download(cv.image.small_thumb.url, './data/' + config.companyId + '/thumbs/small/' + cv._id + smallExt, function(){ console.log(cv.image.url + " downloaded")});
                                 }
-                                
-                                saveVCard({firstName: cv.navn.split(' ')[0], lastName:  _.last(cv.navn.split(' ')),  fullName: cv.navn, email:cv.email, phone: cv.telefon, companyId:config.companyId, office:cv.office_name, title: cv.local_title},
-                                './data/' + config.companyId + '/' + cv._id + '.vcard');
+                                var lastName = _.last(cv.navn.split(' '));
+                                saveVCard({firstName: cv.navn.replace(lastName,'').trim(), lastName:  lastName,  fullName: cv.navn, email:cv.email, phone: cv.telefon, companyId:config.companyId, office:cv.office_name, title: cv.local_title},
+                                './data/' + config.companyId + '/' + cv._id + '.vcf', config);
                                 esClient.index({
                                   index: config.companyId,
                                   type: 'cv',
@@ -231,7 +252,7 @@ module.exports = function(app, esClient, config, passport) {
                 PhoneNumber: hit.fields.telefon ? hit.fields.telefon[0] : '',
                 Email: hit.fields.email ? hit.fields.email[0] : ':',
                 Thumb: "/thumb/small/"+hit.fields._id +  hit.fields.imageSmallExt,
-                VCard: "/vcard/"+hit.fields._id +  '.vcard',
+                VCard: "/vcard/"+hit.fields._id +  '.vcf',
               }})
             };
 
