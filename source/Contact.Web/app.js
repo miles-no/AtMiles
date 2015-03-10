@@ -44,6 +44,7 @@ var createDir = function(dir){
     }
 }
 
+// create data directories if not present
 createDir('./data/' + config.companyId);
 createDir('./data/' + config.companyId + '/thumbs');
 createDir('./data/' + config.companyId + '/thumbs/small');
