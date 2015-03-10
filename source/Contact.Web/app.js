@@ -4,24 +4,35 @@
  */
 
 var express = require('express');
-
 var os = require("os");
 var hostname = os.hostname();
+
 console.log(hostname);
-
-
-//var routes = require('./routes/routes.js');
-var elasticsearch = require('elasticsearch');
-var client = new elasticsearch.Client({
-  host: hostname === 'milescontact' ? 'localhost:9200' : 'milescontact.cloudapp.net:9200',
-  log: 'trace'
-});
 
 
 yaml = require('js-yaml');
 fs   = require('fs');
+
+// download config file if not exists
+if (!fs.existsSync('config/config.yaml')){
+  console.log('config not found. Downloading')
+  var finished = false;
+  var location = yaml.safeLoad(fs.readFileSync('config/config_location.yaml', 'utf8')).yamlLocation;
+  var request = require('sync-request');
+  var res = request('GET', location);
+  console.log(res.getBody());
+  fs.writeFileSync('config/config.yaml', res.getBody());
+}
+
 var config = yaml.safeLoad(fs.readFileSync('config/config.yaml', 'utf8'));
 console.log(config);
+
+var elasticsearch = require('elasticsearch');
+var client = new elasticsearch.Client({
+  host: config.searchUrl,
+  log: 'trace'
+});
+
 
 // create thumbs dir if not exists
 var createDir = function(dir){

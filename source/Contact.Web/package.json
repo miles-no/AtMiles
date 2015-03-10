@@ -19,7 +19,8 @@
     "passport":"*",
     "passport-auth0":"*",
     "underscore": "*",
-    "rwlock":"*"
+    "rwlock":"*",
+    "sync-request":"*"
   
   }
 }

@@ -7,4 +7,6 @@ appSecret: sessionSecret
 auth0Issuer: https://yourcompany.auth0.com/
 auth0Audience: auth0audience
 auth0Secret: auth0secret
+searchUrl: elasticsearch.server:9200
+
 

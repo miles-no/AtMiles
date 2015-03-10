@@ -247,10 +247,10 @@ module.exports = function(app, esClient, config, passport) {
                 if (!hit.fields) return{};
                 return {
                 
-                Name : hit.fields.navn ? hit.fields.navn[0] : '',
-                JobTitle:hit.fields.title ? hit.fields.title[0] : '',
-                PhoneNumber: hit.fields.telefon ? hit.fields.telefon[0] : '',
-                Email: hit.fields.email ? hit.fields.email[0] : ':',
+                Name : hit.fields.navn ? hit.fields.navn : '',
+                JobTitle:hit.fields.title ? hit.fields.title : '',
+                PhoneNumber: hit.fields.telefon ? hit.fields.telefon : '',
+                Email: hit.fields.email ? hit.fields.email : ':',
                 Thumb: "/thumb/small/"+hit.fields._id +  hit.fields.imageSmallExt,
                 VCard: "/vcard/"+hit.fields._id +  '.vcf',
               }})
