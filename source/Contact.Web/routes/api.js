@@ -137,7 +137,7 @@ module.exports = function(app, esClient, config, passport) {
                                 }
                                 var lastName = _.last(cv.navn.split(' '));
                                 saveVCard({firstName: cv.navn.replace(lastName,'').trim(), lastName:  lastName,  fullName: cv.navn, email:cv.email, phone: cv.telefon, companyId:config.companyId, office:cv.office_name, title: cv.local_title},
-                                './data/' + config.companyId + '/' + cv._id + '.vcf', config);
+                                './data/' + config.companyId + '/' + cv.navn+'_'+cv.office_name + '.vcf', config);
                                 esClient.index({
                                   index: config.companyId,
                                   type: 'cv',
@@ -252,7 +252,7 @@ module.exports = function(app, esClient, config, passport) {
                 PhoneNumber: hit.fields.telefon ? hit.fields.telefon : '',
                 Email: hit.fields.email ? hit.fields.email : ':',
                 Thumb: "/thumb/small/"+hit.fields._id +  hit.fields.imageSmallExt,
-                VCard: "/vcard/"+hit.fields._id +  '.vcf',
+                VCard: "/vcard/"+ hit.fields.navn +'_'+hit.fields.office_name hit.fields._id +  '.vcf',
               }})
             };
 

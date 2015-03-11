@@ -33,8 +33,10 @@ module.exports = function(app, esClient, config) {
     });
     
     app.get('/vcard/:user', function(req, res) {
-        res.header("Content-Type", "text/vcard");
-        res.sendfile('./data/'+config.companyId + '/' + req.params.user);
+        res.setHeader("Content-Type", "text/vcard");;
+        res.setHeader('Content-disposition', 'attachment; filename='+req.params.user);
+        var filestream = fs.createReadStream('./data/'+config.companyId + '/' + req.params.user);
+        filestream.pipe(res);
     });
     
 
@@ -42,5 +44,5 @@ module.exports = function(app, esClient, config) {
        res.render('index');
     });
 
-
+// 
 };
