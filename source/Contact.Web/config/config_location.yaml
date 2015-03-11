@@ -1,1 +1,2 @@
-yamlLocation: http://10.119.240.28/config.yaml
+# can be file location or url
+yamlLocation: ../config/config.yaml

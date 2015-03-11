@@ -20,7 +20,8 @@
     "passport-auth0":"*",
     "underscore": "*",
     "rwlock":"*",
-    "sync-request":"*"
+    "sync-request":"*",
+    "valid-url": "*"
   
   }
 }

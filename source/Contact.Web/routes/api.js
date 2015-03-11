@@ -252,7 +252,7 @@ module.exports = function(app, esClient, config, passport) {
                 PhoneNumber: hit.fields.telefon ? hit.fields.telefon : '',
                 Email: hit.fields.email ? hit.fields.email : ':',
                 Thumb: "/thumb/small/"+hit.fields._id +  hit.fields.imageSmallExt,
-                VCard: "/vcard/"+ hit.fields.navn +'_'+hit.fields.office_name hit.fields._id +  '.vcf',
+                VCard: "/vcard/"+ hit.fields.navn +'_'+hit.fields.office_name +  '.vcf',
               }})
             };
 

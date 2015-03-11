@@ -13,16 +13,24 @@ console.log(hostname);
 yaml = require('js-yaml');
 fs   = require('fs');
 
-// download config file if not exists
-if (!fs.existsSync('config/config.yaml')){
-  console.log('config not found. Downloading')
-  var finished = false;
-  var location = yaml.safeLoad(fs.readFileSync('config/config_location.yaml', 'utf8')).yamlLocation;
+// download config or copy config file
+  
+var location = yaml.safeLoad(fs.readFileSync('config/config_location.yaml', 'utf8')).yamlLocation;
+
+var isUrl = require('valid-url').isUri(location);
+
+if (isUrl){
+  console.log('downloading config');
   var request = require('sync-request');
   var res = request('GET', location);
   console.log(res.getBody());
   fs.writeFileSync('config/config.yaml', res.getBody());
 }
+else{
+  console.log('cpåying file');
+  fs.writeFileSync('config/config.yaml', fs.readFileSync(location, 'utf8'));
+}
+
 
 var config = yaml.safeLoad(fs.readFileSync('config/config.yaml', 'utf8'));
 console.log(config);
