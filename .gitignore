@@ -186,3 +186,4 @@ source/Backend/Worker/output/Worker.zip
 AtMiles.sublime-workspace
 source/Contact.Web/config/config.yaml
 source/Contact.Web/data/*/**
+source/config/config.yaml

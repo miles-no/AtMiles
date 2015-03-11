@@ -15,13 +15,7 @@ module.exports = function(app, esClient, config) {
         var name = req.params.name;
         res.render(name);
     });
-    /*app.get('/login', function(req, res) {
-        res.render('login', { redirectUrl: req.url, notAuthenticated: true });
-    });
-    app.get('/search', function(req, res) {
-        res.render('search', { redirectUrl: req.url, notAuthenticated: true });
-    });*/
-
+  
     // route for logging out
     app.get('/logout', function(req, res) {
         req.logout();
@@ -35,8 +29,8 @@ module.exports = function(app, esClient, config) {
     app.get('/vcard/:user', function(req, res) {
         res.setHeader("Content-Type", "text/vcard");;
         res.setHeader('Content-disposition', 'attachment; filename='+req.params.user);
-        var filestream = fs.createReadStream('./data/'+config.companyId + '/' + req.params.user);
-        filestream.pipe(res);
+        res.sendFile('./data/'+config.companyId + '/' + req.params.user);
+        
     });
     
 

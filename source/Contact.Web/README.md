@@ -1,12 +1,16 @@
-﻿# Contact.Web
+﻿# Contact.Web 
+Simplified approach.
+
+web-app with elasticsearch
+
+requires a config yaml file in the location specified in config/config_location.yaml
+
 Install node.js
 http://nodejs.org/
 
 Install packages:
 run: npm install
 
-Requires tools for Visual Studio:
-http://nodejstools.codeplex.com/
 
 Uses Foundation and sass. Read instruction here for more details
 http://foundation.zurb.com/docs/sass.html

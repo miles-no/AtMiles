@@ -110,12 +110,10 @@ module.exports = function(app, esClient, config, passport) {
                   for (var i = 0; i < allUsers.length; i++) {
                     var user = allUsers[i];
                     dic[user.email] = user;
-                //    console.log(user.user_id);
                     tokenGet(config.cvPartnerBaseUrl, config.cvPartnerCvUrl + user.user_id + "/" + user.default_cv_id,config.cvPartnerToken)
                              .then(function(cvData){
                                 var cv = JSON.parse(cvData);
                                 
-                    //            console.log(cv._id);
                                 var add = dic[cv.email];
                                 if (add){
                                   console.log(add.office_name);
@@ -172,8 +170,6 @@ module.exports = function(app, esClient, config, passport) {
         var take = req.query.take ? parseInt(req.query.take) : 10;
         
         var phrases = query.match(/(["'])(?:(?=(\\?))\2.)*?\1/g);
-        console.log('phrases: ');
-        console.log(phrases);
         
         var searchString = '';
         
@@ -202,8 +198,6 @@ module.exports = function(app, esClient, config, passport) {
             searchString += "(" + term + "^3 OR "+ term + "~0.7 )";
           }
         }
-        
-    
         
         console.log('searchstring ' + searchString);
         

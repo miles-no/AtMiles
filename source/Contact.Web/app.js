@@ -27,7 +27,7 @@ if (isUrl){
   fs.writeFileSync('config/config.yaml', res.getBody());
 }
 else{
-  console.log('cpåying file');
+  console.log('copying config file');
   fs.writeFileSync('config/config.yaml', fs.readFileSync(location, 'utf8'));
 }
 

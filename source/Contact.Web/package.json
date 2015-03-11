@@ -14,14 +14,17 @@
     "js-yaml": "*",
     "promise": "*",
     "request-promise": "*",
-    "cookie-parser":"*",
-    "express-session":"*",
-    "passport":"*",
-    "passport-auth0":"*",
+    "cookie-parser": "*",
+    "express-session": "*",
+    "passport": "*",
+    "passport-auth0": "*",
     "underscore": "*",
-    "rwlock":"*",
-    "sync-request":"*",
+    "rwlock": "*",
+    "sync-request": "*",
     "valid-url": "*"
-  
+  },
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-contrib-compass": "^1.0.1"
   }
 }
