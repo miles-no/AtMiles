@@ -29,7 +29,7 @@ module.exports = function(app, esClient, config) {
     app.get('/vcard/:user', function(req, res) {
         res.setHeader("Content-Type", "text/vcard");;
         res.setHeader('Content-disposition', 'attachment; filename='+req.params.user);
-        res.sendFile('./data/'+config.companyId + '/' + req.params.user);
+        res.sendfile('./data/'+config.companyId + '/' + req.params.user);
         
     });
     
